@@ -1,0 +1,10 @@
+package com.gmail.fukushima.kai.virtualryuugaku2.virtualryuugaku2;
+
+public final class Settings {
+	public static boolean debugMessage = true;
+	public static boolean debugStage = true;
+
+	public static boolean toggleDebug() {
+		return !debugMessage;
+	}
+}
