@@ -27,8 +27,8 @@ public class DataManagerStage {
 				String name = file.getName().substring(0, file.getName().length() - extension.length());
 				UtilitiesProgramming.printDebugMessage(name, new Exception());
 				ConfigHandlerStage config = new ConfigHandlerStage(file);
-				List<Map<?, ?>> listMap = config.config.getMapList("TALKER");
 				String creator = config.config.getString("CREATOR");
+				List<Map<?, ?>> listMap = config.config.getMapList("TALKER");
 				List<Talker> listTalker = new ArrayList<Talker>();
 				for(Map<?, ?> map : listMap) {
 					for(Object key : map.keySet()) {
