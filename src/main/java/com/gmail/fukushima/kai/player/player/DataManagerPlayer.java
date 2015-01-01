@@ -1,4 +1,4 @@
-package com.gmail.fukushima.kai.common.common;
+package com.gmail.fukushima.kai.player.player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,7 +50,6 @@ public class DataManagerPlayer {
 			done.add(id);
 			data.done = done;
 			putDataPlayer(data);
-			UtilitiesProgramming.printDebugDataPlayer(data);
 		} else {
 			UtilitiesProgramming.printDebugMessage("This Talker has already been added.", new Exception());
 		}

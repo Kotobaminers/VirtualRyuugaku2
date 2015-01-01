@@ -1,10 +1,10 @@
 package com.gmail.fukushima.kai.utilities.utilities;
 
-import com.gmail.fukushima.kai.common.common.DataManagerPlayer;
-import com.gmail.fukushima.kai.common.common.DataPlayer;
 import com.gmail.fukushima.kai.common.common.Sentence;
 import com.gmail.fukushima.kai.mystage.mystage.Stage;
 import com.gmail.fukushima.kai.mystage.talker.Talker;
+import com.gmail.fukushima.kai.player.player.DataManagerPlayer;
+import com.gmail.fukushima.kai.player.player.DataPlayer;
 import com.gmail.fukushima.kai.virtualryuugaku2.virtualryuugaku2.Settings;
 
 
@@ -24,7 +24,7 @@ public class UtilitiesProgramming {
 		System.out.println("[Debug Stage] " + stage.name);
 		System.out.println(" Creator: " + stage.creator);
 		for(Talker talker : stage.listTalker) {
-			talker.printDebug();
+			printDebugTalker(talker);
 			for(Sentence sentence : talker.listSentence) {
 				sentence.printDebug();
 			}
@@ -41,5 +41,17 @@ public class UtilitiesProgramming {
 		System.out.println("[Debug DataPlayer] " + data.name);
 		System.out.println(" LINE: " + data.line);
 		System.out.println(" SELECT: " + data.select);
+	}
+	public static void printDebugTalker(Talker talker) {
+		System.out.println("[Debug Talker]" + talker.name);
+		System.out.println(" ID: " + talker.id);
+		for(Sentence sentence : talker.listSentence) {
+			System.out.println(" SEN: " + sentence.loadEn());
+			System.out.println(" SEN: " + sentence.loadJp());
+		}
+		System.out.println(" QUE: " + talker.question.loadEn());
+		System.out.println(" QUE: " + talker.question.loadJp());
+		System.out.println(" ANS: " + talker.answer.loadEn());
+		System.out.println(" ANS: " + talker.answer.loadJp());
 	}
 }

@@ -4,8 +4,8 @@ import net.citizensnpcs.api.npc.NPC;
 
 import org.bukkit.entity.Player;
 
-import com.gmail.fukushima.kai.common.common.DataManagerPlayer;
-import com.gmail.fukushima.kai.common.common.DataPlayer;
+import com.gmail.fukushima.kai.player.player.DataManagerPlayer;
+import com.gmail.fukushima.kai.player.player.DataPlayer;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class EventTalker {

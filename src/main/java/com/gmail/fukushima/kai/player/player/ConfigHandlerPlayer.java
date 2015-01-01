@@ -1,4 +1,4 @@
-package com.gmail.fukushima.kai.common.common;
+package com.gmail.fukushima.kai.player.player;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.List;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.gmail.fukushima.kai.common.common.DataPlayer.Language;
+import com.gmail.fukushima.kai.player.player.DataPlayer.Language;
 import com.gmail.fukushima.kai.utilities.utilities.ConfigHandler;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 

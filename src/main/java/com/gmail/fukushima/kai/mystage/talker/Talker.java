@@ -5,9 +5,10 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import com.gmail.fukushima.kai.common.common.DataManagerPlayer;
-import com.gmail.fukushima.kai.common.common.DataPlayer;
 import com.gmail.fukushima.kai.common.common.Sentence;
+import com.gmail.fukushima.kai.player.player.DataManagerPlayer;
+import com.gmail.fukushima.kai.player.player.DataPlayer;
+import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class Talker {
 	public String name;
@@ -15,10 +16,6 @@ public class Talker {
 	public List<Sentence> listSentence = new ArrayList<Sentence>();
 	public Sentence question = new Sentence();
 	public Sentence answer = new Sentence();
-	public void printDebug() {
-		System.out.println(" [Debug Talker]" + name);
-		System.out.println("  ID: " + id);
-	}
 	public void talkNext(Player player, DataPlayer data) {
 		Integer line = data.line;
 		if(listSentence.size() - 1 < line) {
@@ -52,14 +49,14 @@ public class Talker {
 		String message = "(JP) " + sentence.loadJp();
 		player.sendMessage(message);
 	}
-	public Boolean hasAnswerEn(Player player) {
+	public Boolean hasAnswerEn() {
 		if(0 < answer.en.size()) return true;
-		player.sendMessage("No Answer in EN");
+		UtilitiesProgramming.printDebugMessage("No Answer in EN", new Exception());
 		return false;
 	}
-	public Boolean hasAnswerJp(Player player) {
+	public Boolean hasAnswerJp() {
 		if(0 < answer.kanji.size() && 0 < answer.kana.size()) return true;
-		player.sendMessage("No Answer in JP");
+		UtilitiesProgramming.printDebugMessage("No Answer in JP", new Exception());
 		return false;
 	}
 }

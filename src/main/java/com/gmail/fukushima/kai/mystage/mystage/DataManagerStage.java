@@ -49,7 +49,6 @@ public class DataManagerStage {
 		Talker talker = new Talker();
 		for(Stage stage : listStage) {
 			for(Talker search : stage.listTalker) {
-				search.printDebug();
 				if(search.id.equals(id)) {
 					return search;
 				}
@@ -57,6 +56,17 @@ public class DataManagerStage {
 		}
 		UtilitiesProgramming.printDebugMessage("Couldn't find the talker: ID = " + id , new Exception());
 		return talker;
+	}
+	public static Stage loadStageById(Integer id) {
+		for(Stage stage : listStage) {
+			for(Talker search : stage.listTalker) {
+				if(search.id.equals(id)) {
+					return stage;
+				}
+			}
+		}
+		UtilitiesProgramming.printDebugMessage("Couldn't find the stage: ID = " + id , new Exception());
+		return new Stage();
 	}
 
 

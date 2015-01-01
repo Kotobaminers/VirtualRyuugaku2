@@ -1,4 +1,4 @@
-package com.gmail.fukushima.kai.common.common;
+package com.gmail.fukushima.kai.player.player;
 
 import java.util.ArrayList;
 import java.util.List;

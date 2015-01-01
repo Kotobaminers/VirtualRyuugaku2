@@ -1,4 +1,4 @@
-package com.gmail.fukushima.kai.common.common;
+package com.gmail.fukushima.kai.mystage.talker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,9 +6,11 @@ import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-import com.gmail.fukushima.kai.common.common.DataPlayer.Language;
+import com.gmail.fukushima.kai.common.common.MyCommand;
 import com.gmail.fukushima.kai.mystage.mystage.DataManagerStage;
-import com.gmail.fukushima.kai.mystage.talker.Talker;
+import com.gmail.fukushima.kai.player.player.DataManagerPlayer;
+import com.gmail.fukushima.kai.player.player.DataPlayer;
+import com.gmail.fukushima.kai.player.player.DataPlayer.Language;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesGeneral;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
@@ -17,7 +19,7 @@ public class CommandTalker extends MyCommand {
 		super(player, command, args);
 	}
 	public enum Commands {
-		NONE, ANSWER, EDIT, ADD, REMOVE, LANGUAGE;
+		NONE, ANSWER, EDIT, ADD, REMOVE, LANGUAGE, DEBUG;
 		public static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -47,11 +49,19 @@ public class CommandTalker extends MyCommand {
 			case LANGUAGE:
 				commandLanguage();
 				break;
+			case DEBUG:
+				commandDebug();
+				break;
 			default:
 				break;
 			}
 
 		}
+	}
+	private void commandDebug() {
+		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
+		Talker talker = DataManagerStage.loadTalkerById(data.select);
+		UtilitiesProgramming.printDebugTalker(talker);
 	}
 	private void commandLanguage() {
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
@@ -86,22 +96,22 @@ public class CommandTalker extends MyCommand {
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
 		Integer id = data.select;
 		Talker talker = DataManagerStage.loadTalkerById(id);
-		if(!talker.hasAnswerEn(player) || !talker.hasAnswerJp(player)) return;
+		if(!talker.hasAnswerEn() || !talker.hasAnswerJp()) return;
 		Boolean valid = false;
 		switch(data.language) {
 		case EN:
-			valid = talker.question.validEn(answer);
+			valid = talker.answer.validEn(answer);
 			break;
 		case JP:
-			valid = talker.question.validJp(answer);
+			valid = talker.answer.validJp(answer);
 			break;
 		default:
 			break;
 		}
-		talker.printDebug();
 		if(valid) {
 			player.sendMessage("Correct");
 			DataManagerPlayer.addDone(player, id);
+			DataManagerStage.loadStageById(id).printInformation(player);
 		} else {
 			player.sendMessage("Wrong");
 		}

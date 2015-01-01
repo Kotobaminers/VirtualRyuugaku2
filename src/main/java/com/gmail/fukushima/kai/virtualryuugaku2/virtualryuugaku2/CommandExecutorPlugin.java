@@ -5,8 +5,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.gmail.fukushima.kai.common.common.CommandTalker;
+import com.gmail.fukushima.kai.common.common.CommandEmpty;
 import com.gmail.fukushima.kai.common.common.MyCommand;
+import com.gmail.fukushima.kai.mystage.mystage.CommandStage;
+import com.gmail.fukushima.kai.mystage.talker.CommandTalker;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class CommandExecutorPlugin implements CommandExecutor {
@@ -47,6 +49,7 @@ public class CommandExecutorPlugin implements CommandExecutor {
 			case NONE:
 				break;
 			case STAGE:
+				myCommand = new CommandStage(player, command, args);
 				break;
 			case STAGEOP:
 				break;
@@ -57,11 +60,13 @@ public class CommandExecutorPlugin implements CommandExecutor {
 				break;
 			case VIRTUALRYUUGAKU:
 				break;
-			case VIRTUALRYUUGAKUOP:
-				break;
 			case VRG:
 				break;
+			case VIRTUALRYUUGAKUOP:
+				myCommand = new CommandVirtualRyuugakuOP(player, command, args);
+				break;
 			case VRGOP:
+				myCommand = new CommandVirtualRyuugakuOP(player, command, args);
 				break;
 			default:
 				break;
