@@ -1,6 +1,8 @@
-package com.gmail.fukushima.kai.common.common;
+package com.gmail.fukushima.kai.player.player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.entity.Player;
@@ -14,6 +16,8 @@ public class DataManagerPlayer {
 		DataPlayer data = new DataPlayer();
 		if(mapDataPlayer.containsKey(player.getName())) {
 			data = mapDataPlayer.get(player.getName());
+		} else {
+			data.name = player.getName();
 		}
 		return data;
 	}
@@ -25,10 +29,29 @@ public class DataManagerPlayer {
 			mapDataPlayer.put(key, data);
 		}
 	}
-	public static void saveDataPlayer() {
+	public static void saveMapDataPlayer() {
 		for(DataPlayer data : mapDataPlayer.values()) {
-			ConfigHandlerPlayer.putDataPlayer(data);
+			ConfigHandlerPlayer.saveDataPlayer(data);
 		}
 		ConfigHandlerPlayer.save();
+	}
+	public static void saveDataPlayer(DataPlayer data) {
+		ConfigHandlerPlayer.saveDataPlayer(data);
+	}
+	public static void putDataPlayer(DataPlayer data) {
+		mapDataPlayer.put(data.name, data);
+	}
+
+	public static void addDone(Player player, Integer id) {
+		DataPlayer data = getDataPlayer(player);
+		List<Integer> done = new ArrayList<Integer>();
+		done.addAll(data.done);
+		if(!done.contains(id)) {
+			done.add(id);
+			data.done = done;
+			putDataPlayer(data);
+		} else {
+			UtilitiesProgramming.printDebugMessage("This Talker has already been added.", new Exception());
+		}
 	}
 }
