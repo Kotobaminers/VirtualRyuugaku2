@@ -35,6 +35,14 @@ public abstract class Description {
 		sendJp(player);
 		sendTips(player);
 	}
+	public String loadEn() {
+		String message = UtilitiesGeneral.joinListListString(Arrays.asList(en), colorsSingle);
+		return message;
+	}
+	public String loadJp() {
+		String message = UtilitiesGeneral.joinListListString(Arrays.asList(kanji, kana, romaji), colorsJp);
+		return message;
+	}
 	public void sendEn(Player player) {
 		player.sendMessage(UtilitiesGeneral.joinListListString(Arrays.asList(en), colorsSingle));
 	}

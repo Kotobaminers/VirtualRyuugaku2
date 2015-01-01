@@ -4,12 +4,15 @@ import net.citizensnpcs.api.npc.NPC;
 
 import org.bukkit.entity.Player;
 
+import com.gmail.fukushima.kai.common.common.DataManagerPlayer;
+import com.gmail.fukushima.kai.common.common.DataPlayer;
 import com.gmail.fukushima.kai.utilities.utilities.Event;
+import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class EventTalker extends Event {
-	NPC npc;
-	Talker talker;
-	Player player;
+	public NPC npc;
+	public Talker talker;
+	public Player player;
 	public EventTalker(NPC npc, Talker talker, Player player) {
 		this.npc = npc;
 		this.talker = talker;
@@ -18,6 +21,19 @@ public class EventTalker extends Event {
 
 	@Override
 	public void runEvent() {
-		
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
+		if(!data.select.equals(npc.getId())) {
+			data.select = npc.getId();
+			DataManagerPlayer.saveDataPlayer(data);
+			printSelect();
+			return;
+		} else {
+			talker.talkNext(player, data);
+			return;
+		}
+	}
+	public void printSelect() {
+		player.sendMessage("You selected " + npc.getFullName());
 	}
 }

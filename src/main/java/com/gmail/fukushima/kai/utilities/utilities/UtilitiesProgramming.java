@@ -39,6 +39,7 @@ public class UtilitiesProgramming {
 	public static void printDebugDataPlayer(DataPlayer data) {
 		if(!Settings.debugPlayer) return;
 		System.out.println("[Debug DataPlayer] " + data.name);
-		System.out.println(" LINE " + data.line);
+		System.out.println(" LINE: " + data.line);
+		System.out.println(" SELECT: " + data.select);
 	}
 }

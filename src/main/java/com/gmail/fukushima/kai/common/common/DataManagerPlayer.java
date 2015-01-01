@@ -14,6 +14,8 @@ public class DataManagerPlayer {
 		DataPlayer data = new DataPlayer();
 		if(mapDataPlayer.containsKey(player.getName())) {
 			data = mapDataPlayer.get(player.getName());
+		} else {
+			data.name = player.getName();
 		}
 		return data;
 	}
@@ -25,10 +27,13 @@ public class DataManagerPlayer {
 			mapDataPlayer.put(key, data);
 		}
 	}
-	public static void saveDataPlayer() {
+	public static void saveMapDataPlayer() {
 		for(DataPlayer data : mapDataPlayer.values()) {
-			ConfigHandlerPlayer.putDataPlayer(data);
+			ConfigHandlerPlayer.saveDataPlayer(data);
 		}
 		ConfigHandlerPlayer.save();
+	}
+	public static void saveDataPlayer(DataPlayer data) {
+		ConfigHandlerPlayer.saveDataPlayer(data);
 	}
 }

@@ -34,6 +34,6 @@ public final class DataManagerPlugin {
 	}
 
 	public static void savePlugin() {
-		DataManagerPlayer.saveDataPlayer();
+		DataManagerPlayer.saveMapDataPlayer();
 	}
 }
