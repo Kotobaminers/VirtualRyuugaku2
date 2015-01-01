@@ -10,7 +10,7 @@ public class VirtualRyuugaku2 extends JavaPlugin {
 	public void onEnable() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataManagerPlugin.initializeLoader(this);
-		DataManagerPlugin.loadPlugin();
+//		DataManagerPlugin.loadPlugin();
 
 		getServer().getPluginManager().registerEvents(new Events(), this);
 		for(Commands command : Commands.values()) {
@@ -18,7 +18,7 @@ public class VirtualRyuugaku2 extends JavaPlugin {
 		}
 
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		DataManagerPlugin.savePlugin();
+//		DataManagerPlugin.savePlugin();
 	}
 	@Override
 	public void onDisable() {

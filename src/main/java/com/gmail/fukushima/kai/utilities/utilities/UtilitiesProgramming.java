@@ -1,5 +1,7 @@
 package com.gmail.fukushima.kai.utilities.utilities;
 
+import org.bukkit.Bukkit;
+
 import com.gmail.fukushima.kai.common.common.Sentence;
 import com.gmail.fukushima.kai.mystage.mystage.Stage;
 import com.gmail.fukushima.kai.mystage.talker.Talker;
@@ -13,11 +15,15 @@ public class UtilitiesProgramming {
 		if(!Settings.debugMessage) return;
 		StackTraceElement element = exception.getStackTrace()[0];
 		String nameClass = element.getClassName();
-		String[] splited = nameClass.split("\\.");
+		String[] splited = nameClass.split("//.");
 		String nameMethod = element.getMethodName();
 		String line = String.valueOf(element.getLineNumber());
 		String[] broadcast = {message, splited[splited.length-1], nameMethod, line};
-		System.out.println(UtilitiesGeneral.joinStringsWithSpace(broadcast));
+		if(Settings.debugMessageBroadcast) {
+			Bukkit.broadcastMessage(UtilitiesGeneral.joinStringsWithSpace(broadcast));
+		} else {
+			System.out.println(UtilitiesGeneral.joinStringsWithSpace(broadcast));
+		}
 	}
 	public static void printDebugStage(Stage stage) {
 		if(!Settings.debugStage) return;

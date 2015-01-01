@@ -16,7 +16,7 @@ import com.gmail.fukushima.kai.virtualryuugaku2.virtualryuugaku2.DataManagerPlug
 
 public class DataManagerStage {
 	public static List<Stage> listStage = new ArrayList<Stage>();
-	private static String baseDirectory = DataManagerPlugin.plugin.getDataFolder() + "\\" + ConfigHandlerStage.DIRECTORY + "\\";
+	private static String baseDirectory = DataManagerPlugin.plugin.getDataFolder() + "//" + ConfigHandlerStage.DIRECTORY + "//";
 	private static final String extension = ".yml";
 	public static void importStage() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -84,7 +84,7 @@ public class DataManagerStage {
 		Talker talker = new Talker();
 		NPC npc = DataManagerCitizens.npcs.getById(id);
 		if(npc == null) {
-			System.out.println("Error: Invalid ID: DataNabagerStage");
+			UtilitiesProgramming.printDebugMessage("Error: Invalid ID: DataNabagerStage", new Exception());
 		} else {
 			talker.name = npc.getFullName();
 			talker.id = id;

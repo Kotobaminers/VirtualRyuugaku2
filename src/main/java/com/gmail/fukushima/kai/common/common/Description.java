@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesGeneral;
+import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public abstract class Description {
 	public List<String> kanji = new ArrayList<String>();
@@ -54,7 +55,7 @@ public abstract class Description {
 	}
 	public abstract void sendMessage(Player player);
 	public void printDebug() {
-		System.out.println("  " + kanji + kana + en + romaji + tips);
+		UtilitiesProgramming.printDebugMessage("  " + kanji + kana + en + romaji + tips, new Exception());
 	}
 	public Boolean validEn(String answer) {
 		for(String search : en) {

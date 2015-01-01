@@ -2,18 +2,19 @@ package com.gmail.fukushima.kai.common.common;
 
 import java.io.File;
 
-import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
-
 import net.citizensnpcs.api.npc.NPCDataStore;
 import net.citizensnpcs.api.npc.SimpleNPCDataStore;
 import net.citizensnpcs.api.util.Storage;
 import net.citizensnpcs.api.util.YamlStorage;
 import net.citizensnpcs.npc.CitizensNPCRegistry;
 
+import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
+import com.gmail.fukushima.kai.virtualryuugaku2.virtualryuugaku2.DataManagerPlugin;
+
 
 public class DataManagerCitizens {
 	public static CitizensNPCRegistry npcs;
-	private static final String citizensDataFolder = "C:\\Users\\ŠC\\Downloads\\Minecraft\\plugins\\Citizens\\saves.yml";
+	private static String citizensDataFolder = DataManagerPlugin.plugin.getDataFolder().getParent() + "//Citizens//saves.yml";
 
 	public static void importCitizens() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());

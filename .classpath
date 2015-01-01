@@ -32,7 +32,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/海/Downloads/Minecraft/plugins/Citizens.jar"/>
+	<classpathentry kind="lib" path="C:/Others/Minecraft/plugins/Citizens.jar"/>
 	<classpathentry kind="lib" path="C:/Users/海/Downloads/pleiades-e4.3-java-jre_20140321/pleiades/MyAPI/citizensapi-2.0.14-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

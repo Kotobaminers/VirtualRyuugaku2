@@ -28,7 +28,7 @@ public class DataManagerCommon {
 	private static final String NAME_FILE = "ROMAJI_TABLE.txt";
 	private static final String DELIMITTER = "[Type]";
 	public static void importRomaji() throws IOException {
-		String path = DataManagerPlugin.plugin.getDataFolder() + "\\" + NAME_DIRECTORY + "\\" + NAME_FILE;
+		String path = DataManagerPlugin.plugin.getDataFolder() + "//" + NAME_DIRECTORY + "//" + NAME_FILE;
 		File file = new File(path);
 		String lineJoined = "";
 		InputStream str = new FileInputStream(file);

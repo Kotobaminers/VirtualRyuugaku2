@@ -16,6 +16,11 @@
    </plugins>
  </build>
 
+  <properties>
+   <!-- Compiler properties -->
+   <encoding>UTF-8</encoding>
+  </properties>
+
   <repositories>
    <repository>
      <id>bukkit-repo</id>
