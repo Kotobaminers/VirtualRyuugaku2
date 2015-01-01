@@ -1,7 +1,7 @@
 package com.gmail.fukushima.kai.common.common;
 
-import com.gmail.fukushima.kai.common.common.UtilitiesGeneral;
-import com.gmail.fukushima.kai.common.common.UtilitiesProgramming;
+import com.gmail.fukushima.kai.utilities.utilities.UtilitiesGeneral;
+import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class Letters {
 	private String hiragana = "";

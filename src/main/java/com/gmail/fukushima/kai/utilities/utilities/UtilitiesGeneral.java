@@ -1,4 +1,4 @@
-package com.gmail.fukushima.kai.common.common;
+package com.gmail.fukushima.kai.utilities.utilities;
 
 import java.util.List;
 import java.util.Map;
@@ -8,6 +8,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
+import com.gmail.fukushima.kai.common.common.DataManagerCommon;
+import com.gmail.fukushima.kai.common.common.Letters;
 import com.gmail.fukushima.kai.common.common.DataManagerCommon.TypeLetters;
 
 public class UtilitiesGeneral {

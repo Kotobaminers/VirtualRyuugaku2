@@ -9,14 +9,6 @@ public class Talker {
 	public String name;
 	public Integer id;
 	public List<Sentence> listSentence = new ArrayList<Sentence>();
-
-	public Talker() {
-	}
-
-	public void toMap() {
-		// TODO Auto-generated method stub
-	}
-
 	public void printDebug() {
 		System.out.println(" [Debug Talker]" + name);
 		System.out.println("  ID: " + id);

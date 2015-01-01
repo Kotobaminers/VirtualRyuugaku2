@@ -9,15 +9,15 @@ import net.citizensnpcs.api.npc.NPC;
 
 import com.gmail.fukushima.kai.common.common.DataManagerCitizens;
 import com.gmail.fukushima.kai.common.common.Sentence;
-import com.gmail.fukushima.kai.common.common.UtilitiesProgramming;
+import com.gmail.fukushima.kai.mystage.mystage.ConfigHandlerStage.Path;
 import com.gmail.fukushima.kai.mystage.talker.Talker;
+import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 import com.gmail.fukushima.kai.virtualryuugaku2.virtualryuugaku2.DataManagerPlugin;
 
 public class DataManagerStage {
 	public static List<Stage> listStage = new ArrayList<Stage>();
-	private static String baseDirectory = DataManagerPlugin.plugin.getDataFolder() + "\\" + "STAGE" + "\\";
+	private static String baseDirectory = DataManagerPlugin.plugin.getDataFolder() + "\\" + ConfigHandlerStage.DIRECTORY + "\\";
 	private static final String extension = ".yml";
-
 	public static void importStage() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		for(File file : new File(baseDirectory).listFiles()) {
@@ -27,22 +27,21 @@ public class DataManagerStage {
 				String name = file.getName().substring(0, file.getName().length() - extension.length());
 				UtilitiesProgramming.printDebugMessage(name, new Exception());
 				ConfigHandlerStage config = new ConfigHandlerStage(file);
-				String creator = config.config.getString("CREATOR");
-				List<Map<?, ?>> listMap = config.config.getMapList("TALKER");
+				String creator = config.config.getString(Path.CREATOR.toString());
+				List<Map<?, ?>> listMap = config.config.getMapList(Path.TALKER.toString());
 				List<Talker> listTalker = new ArrayList<Talker>();
-				for(Map<?, ?> map : listMap) {
-					for(Object key : map.keySet()) {
+				for(Map<?, ?> mapTalker : listMap) {
+					for(Object key : mapTalker.keySet()) {
 						Integer id = (Integer) key;
-						Map<?, ?> mapTalker = (Map<?, ?>) map.get(key);
-						Talker talker = createTalker(id, mapTalker);
+						Map<?, ?> mapSentence = (Map<?, ?>) mapTalker.get(key);
+						Talker talker = createTalker(id, mapSentence);
 						if(0 < talker.listSentence.size()) {
 							listTalker.add(talker);
 						}
 					}
-					Stage stage = new Stage(name, creator, listTalker);
-					UtilitiesProgramming.printDebugStage(stage);
-					listStage.add(stage);
 				}
+				Stage stage = new Stage(name, creator, listTalker);
+				listStage.add(stage);
 			}
 		}
 	}
@@ -56,7 +55,6 @@ public class DataManagerStage {
 	}
 	public static void removeTalker(Stage stage) {
 	}
-
 	public static Talker createTalker(Integer id, Map<?, ?> map) {
 		Talker talker = new Talker();
 		NPC npc = DataManagerCitizens.npcs.getById(id);
@@ -67,7 +65,6 @@ public class DataManagerStage {
 			talker.id = id;
 			for(Object key : map.keySet()) {
 				Map<?, ?> mapSentence = (Map<?, ?>) map.get(key);
-				Integer number = (Integer) key;
 				Sentence sentence = createSentence(mapSentence);
 				if(0 < sentence.en.size() || 0 < sentence.kanji.size() || 0 < sentence.kana.size()) {
 					talker.listSentence.add(sentence);
@@ -76,7 +73,6 @@ public class DataManagerStage {
 		}
 		return talker;
 	}
-
 	private static Sentence createSentence(Map<?, ?> map) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		List<String> kanji = new ArrayList<String>();

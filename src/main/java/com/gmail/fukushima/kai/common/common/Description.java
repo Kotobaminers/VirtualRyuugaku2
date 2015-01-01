@@ -7,6 +7,8 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import com.gmail.fukushima.kai.utilities.utilities.UtilitiesGeneral;
+
 public abstract class Description {
 	public List<String> kanji;
 	public List<String> kana;
@@ -44,6 +46,6 @@ public abstract class Description {
 	}
 	public abstract void sendMessage(Player player);
 	public void printDebug() {
-		System.out.println("" + kanji + kana + en + romaji + tips);
+		System.out.println("  " + kanji + kana + en + romaji + tips);
 	}
 }

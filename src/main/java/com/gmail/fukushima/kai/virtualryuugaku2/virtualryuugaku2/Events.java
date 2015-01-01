@@ -10,13 +10,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import com.gmail.fukushima.kai.common.common.Event;
 import com.gmail.fukushima.kai.common.common.EventEmpty;
-import com.gmail.fukushima.kai.common.common.UtilitiesProgramming;
 import com.gmail.fukushima.kai.mystage.mystage.DataManagerStage;
 import com.gmail.fukushima.kai.mystage.mystage.Stage;
 import com.gmail.fukushima.kai.mystage.talker.EventTalker;
 import com.gmail.fukushima.kai.mystage.talker.Talker;
+import com.gmail.fukushima.kai.utilities.utilities.Event;
+import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class Events implements Listener {
 	@EventHandler
@@ -43,10 +43,6 @@ public class Events implements Listener {
 				}
 			}
 		}
-//		if() {
-//			Player player = event.getClicker();
-//			return new EventTalker();
-//		}
 		return new EventEmpty();
 	}
 }
