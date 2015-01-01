@@ -6,10 +6,9 @@ import org.bukkit.entity.Player;
 
 import com.gmail.fukushima.kai.common.common.DataManagerPlayer;
 import com.gmail.fukushima.kai.common.common.DataPlayer;
-import com.gmail.fukushima.kai.utilities.utilities.Event;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
-public class EventTalker extends Event {
+public class EventTalker {
 	public NPC npc;
 	public Talker talker;
 	public Player player;
@@ -19,13 +18,12 @@ public class EventTalker extends Event {
 		this.player = player;
 	}
 
-	@Override
-	public void runEvent() {
+	public void talk() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
 		if(!data.select.equals(npc.getId())) {
 			data.select = npc.getId();
-			DataManagerPlayer.saveDataPlayer(data);
+			DataManagerPlayer.putDataPlayer(data);
 			printSelect();
 			return;
 		} else {
@@ -33,6 +31,20 @@ public class EventTalker extends Event {
 			return;
 		}
 	}
+	public void quest() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
+		if(!data.select.equals(npc.getId())) {
+			data.select = npc.getId();
+			DataManagerPlayer.putDataPlayer(data);
+			printSelect();
+			return;
+		} else {
+			talker.quest(player, data);
+			return;
+		}
+	}
+
 	public void printSelect() {
 		player.sendMessage("You selected " + npc.getFullName());
 	}

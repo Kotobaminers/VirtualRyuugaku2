@@ -10,11 +10,11 @@ import org.bukkit.entity.Player;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesGeneral;
 
 public abstract class Description {
-	public List<String> kanji;
-	public List<String> kana;
-	public List<String> en;
-	public List<String> romaji;
-	public List<String> tips;
+	public List<String> kanji = new ArrayList<String>();
+	public List<String> kana = new ArrayList<String>();
+	public List<String> en = new ArrayList<String>();
+	public List<String> romaji = new ArrayList<String>();
+	public List<String> tips = new ArrayList<String>();
 	private final List<ChatColor> colorsJp = Arrays.asList(ChatColor.WHITE, ChatColor.GRAY, ChatColor.DARK_GRAY);
 	private final List<ChatColor> colorsSingle = Arrays.asList(ChatColor.WHITE);
 	public Description() {
@@ -55,5 +55,31 @@ public abstract class Description {
 	public abstract void sendMessage(Player player);
 	public void printDebug() {
 		System.out.println("  " + kanji + kana + en + romaji + tips);
+	}
+	public Boolean validEn(String answer) {
+		for(String search : en) {
+			if(search.equalsIgnoreCase(answer)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	public Boolean validJp(String answer) {
+		for(String search : romaji) {
+			if(search.equalsIgnoreCase(answer)) {
+				return true;
+			}
+		}
+		for(String search : kana) {
+			if(search.equalsIgnoreCase(answer)) {
+				return true;
+			}
+		}
+		for(String search : kanji) {
+			if(search.equalsIgnoreCase(answer)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

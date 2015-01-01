@@ -45,6 +45,21 @@ public class DataManagerStage {
 			}
 		}
 	}
+	public static Talker loadTalkerById(Integer id) {
+		Talker talker = new Talker();
+		for(Stage stage : listStage) {
+			for(Talker search : stage.listTalker) {
+				search.printDebug();
+				if(search.id.equals(id)) {
+					return search;
+				}
+			}
+		}
+		UtilitiesProgramming.printDebugMessage("Couldn't find the talker: ID = " + id , new Exception());
+		return talker;
+	}
+
+
 	public static void saveStage() {
 	}
 	public static void addStage(String name) {
@@ -65,9 +80,17 @@ public class DataManagerStage {
 			talker.id = id;
 			for(Object key : map.keySet()) {
 				Map<?, ?> mapSentence = (Map<?, ?>) map.get(key);
+				Integer num = Integer.valueOf(key.toString());
+				UtilitiesProgramming.printDebugMessage(num.toString(), new Exception());
 				Sentence sentence = createSentence(mapSentence);
 				if(0 < sentence.en.size() || 0 < sentence.kanji.size() || 0 < sentence.kana.size()) {
-					talker.listSentence.add(sentence);
+					if(num > 0) {
+						talker.listSentence.add(sentence);
+					} else if(num.equals(0)) {
+						talker.question = sentence;
+					} else if(num < 0) {
+						talker.answer = sentence;
+					}
 				}
 			}
 		}
