@@ -6,6 +6,7 @@ public final class Settings {
 	public static boolean debugPlayer = true;
 	public static boolean protectionCommandOP = true;
 	public static boolean debugMessageBroadcast = false;
+	public static boolean debugCitizens = true;
 
 	public static boolean toggleDebug() {
 		return !debugMessage;

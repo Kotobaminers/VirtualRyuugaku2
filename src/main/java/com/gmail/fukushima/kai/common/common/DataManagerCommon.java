@@ -13,7 +13,7 @@ import java.util.Map;
 
 import com.gmail.fukushima.kai.virtualryuugaku2.virtualryuugaku2.DataManagerPlugin;
 
-public class DataManagerCommon {
+public class DataManagerCommon implements DataManager {
 	public enum TypeLetters {
 		TTSULARGESMALL,
 		LARGESMALL,
@@ -22,12 +22,12 @@ public class DataManagerCommon {
 		DAKUTEN,
 		SIGNS,
 		}
-	public static Map<String, List<Letters>> mapLetters;
+	public static Map<String, List<Letters>> mapLetters = new HashMap<String, List<Letters>>();
 
 	private static final String NAME_DIRECTORY = "COMMON";
 	private static final String NAME_FILE = "ROMAJI_TABLE.txt";
 	private static final String DELIMITTER = "[Type]";
-	public static void importRomaji() throws IOException {
+	private static void importRomaji() throws IOException {
 		String path = DataManagerPlugin.plugin.getDataFolder() + "//" + NAME_DIRECTORY + "//" + NAME_FILE;
 		File file = new File(path);
 		String lineJoined = "";
@@ -36,12 +36,12 @@ public class DataManagerCommon {
 		BufferedReader buffer = new BufferedReader(reader);
 		List<Letters> listLetters = new ArrayList<Letters>();
 		String type = "";
-		Map<String, List<Letters>> mapLetters = new HashMap<String, List<Letters>>();
+		Map<String, List<Letters>> map = new HashMap<String, List<Letters>>();
 		while((lineJoined = buffer.readLine()) != null){
 			String[] line = lineJoined.split("\t");
 			if(line[0].equalsIgnoreCase(DELIMITTER)) {
 				if(0 < listLetters.size()) {
-					mapLetters.put(type, listLetters);
+					map.put(type, listLetters);
 				}
 				listLetters = new ArrayList<Letters>();
 				type = line[1];
@@ -54,10 +54,26 @@ public class DataManagerCommon {
 				listLetters.add(letters);
 			}
 		}
-		mapLetters.put(type, listLetters);
+		map.put(type, listLetters);
 		buffer.close();
 		reader.close();
 		str.close();
-		DataManagerCommon.mapLetters = mapLetters;
+		mapLetters = map;
+	}
+	@Override
+	public void initialize() {
+		mapLetters = new HashMap<String, List<Letters>>();
+	}
+	@Override
+	public void load() {
+		initialize();
+		try {
+			importRomaji();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	@Override
+	public void saveAll() {
 	}
 }

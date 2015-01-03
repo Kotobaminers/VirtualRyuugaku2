@@ -22,8 +22,16 @@ public class Talker {
 			line = 0;
 		} else {
 			Sentence sentence = listSentence.get(line);
-			printEnMessage(player, sentence);
-			printJpMessage(player, sentence);
+			switch(data.language) {
+			case EN:
+				printMessageEn(player, sentence);
+				break;
+			case JP:
+				printMessageJp(player, sentence);
+				break;
+			default:
+				break;
+			}
 			if(listSentence.size() - 1 <= line) {
 				line = 0;
 			} else {
@@ -35,18 +43,34 @@ public class Talker {
 	}
 	public void quest(Player player, DataPlayer data) {
 		if(0 < question.en.size() || 0 < question.kanji.size() || 0 < question.kana.size()) {
-			printEnMessage(player, question);
-			printJpMessage(player, question);
+			switch(data.language) {
+			case EN:
+				printQuestionEn(player);
+				break;
+			case JP:
+				printQuestionJp(player);
+				break;
+			default:
+				break;
+			}
 		} else {
 			player.sendMessage("No Question.");
 		}
 	}
-	private void printEnMessage(Player player, Sentence sentence) {
-		String message = "(EN) " + sentence.loadEn();
+	private void printMessageEn(Player player, Sentence sentence) {
+		String message = name + ": " + sentence.loadEn();
 		player.sendMessage(message);
 	}
-	private void printJpMessage(Player player, Sentence sentence) {
-		String message = "(JP) " + sentence.loadJp();
+	private void printMessageJp(Player player, Sentence sentence) {
+		String message = name + ": " + sentence.loadJp();
+		player.sendMessage(message);
+	}
+	private void printQuestionEn(Player player) {
+		String message = "[Question] " + question.loadEn();
+		player.sendMessage(message);
+	}
+	private void printQuestionJp(Player player) {
+		String message = "[Question] " + question.loadJp();
 		player.sendMessage(message);
 	}
 	public Boolean hasAnswerEn() {

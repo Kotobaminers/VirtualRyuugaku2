@@ -10,7 +10,9 @@ public class VirtualRyuugaku2 extends JavaPlugin {
 	public void onEnable() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataManagerPlugin.initializeLoader(this);
-//		DataManagerPlugin.loadPlugin();
+
+		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Loading Plugin Data", new Exception());
+		DataManagerPlugin.loadPlugin();
 
 		getServer().getPluginManager().registerEvents(new Events(), this);
 		for(Commands command : Commands.values()) {

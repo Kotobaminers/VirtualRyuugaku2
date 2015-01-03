@@ -2,6 +2,7 @@ package com.gmail.fukushima.kai.utilities.utilities;
 
 import org.bukkit.Bukkit;
 
+import com.gmail.fukushima.kai.citizens.citizens.DataCitizens;
 import com.gmail.fukushima.kai.common.common.Sentence;
 import com.gmail.fukushima.kai.mystage.mystage.Stage;
 import com.gmail.fukushima.kai.mystage.talker.Talker;
@@ -15,10 +16,11 @@ public class UtilitiesProgramming {
 		if(!Settings.debugMessage) return;
 		StackTraceElement element = exception.getStackTrace()[0];
 		String nameClass = element.getClassName();
-		String[] splited = nameClass.split("//.");
+		String[] split = nameClass.split("\\.");
+		nameClass = split[split.length - 1];
 		String nameMethod = element.getMethodName();
 		String line = String.valueOf(element.getLineNumber());
-		String[] broadcast = {message, splited[splited.length-1], nameMethod, line};
+		String[] broadcast = {message, nameClass, nameMethod, line};
 		if(Settings.debugMessageBroadcast) {
 			Bukkit.broadcastMessage(UtilitiesGeneral.joinStringsWithSpace(broadcast));
 		} else {
@@ -59,5 +61,9 @@ public class UtilitiesProgramming {
 		System.out.println(" QUE: " + talker.question.loadJp());
 		System.out.println(" ANS: " + talker.answer.loadEn());
 		System.out.println(" ANS: " + talker.answer.loadJp());
+	}
+	public static void printDebugCitizens(DataCitizens citizens) {
+		if(!Settings.debugCitizens) return;
+		System.out.println("ID: " + citizens.id + " Name: " + citizens.name);
 	}
 }

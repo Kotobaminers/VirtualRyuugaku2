@@ -1,8 +1,6 @@
 package com.gmail.fukushima.kai.virtualryuugaku2.virtualryuugaku2;
 
-import java.io.IOException;
-
-import com.gmail.fukushima.kai.common.common.DataManagerCitizens;
+import com.gmail.fukushima.kai.citizens.citizens.DataManagerCitizens;
 import com.gmail.fukushima.kai.common.common.DataManagerCommon;
 import com.gmail.fukushima.kai.mystage.mystage.DataManagerStage;
 import com.gmail.fukushima.kai.player.player.ConfigHandlerPlayer;
@@ -15,28 +13,24 @@ public final class DataManagerPlugin {
 		DataManagerPlugin.plugin = plugin;
 	}
 	public static void loadPlugin() {
-		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Loading Plugin", new Exception());
-		DataManagerCitizens.importCitizens();
+		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Loading Citizens", new Exception());
+		new DataManagerCitizens().load();
 
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		try {
-			UtilitiesProgramming.printDebugMessage("", new Exception());
-			DataManagerCommon.importRomaji();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Loading Common", new Exception());
+		new DataManagerCommon().load();
 
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		DataManagerStage.importStage();//This needs importRomaji() and importCitizens()
+		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Loading Stage", new Exception());
+		new DataManagerStage().load();//This needs importRomaji() and importCitizens()
 
+		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Loading Player", new Exception());
 		new ConfigHandlerPlayer().initialize(plugin);
-		DataManagerPlayer.importDataPlayer();//This needs ConfigHandlerPlayer().initialize(plugin)
+		new DataManagerPlayer().load();//This needs ConfigHandlerPlayer().initialize(plugin)
 
-		UtilitiesProgramming.printDebugMessage("", new Exception());
+		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Successfully Loaded Plugin Data", new Exception());
 	}
 
 	public static void savePlugin() {
-		DataManagerPlayer.saveMapDataPlayer();
+//		DataManagerPlayer.saveMapDataPlayer();
 		//TODO DataManager.save***();
 	}
 }

@@ -7,9 +7,10 @@ import java.util.Map;
 
 import org.bukkit.entity.Player;
 
+import com.gmail.fukushima.kai.common.common.DataManager;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
-public class DataManagerPlayer {
+public class DataManagerPlayer implements DataManager {
 	public static Map<String, DataPlayer> mapDataPlayer = new HashMap<String, DataPlayer>();
 
 	public static DataPlayer getDataPlayer(Player player) {
@@ -21,15 +22,16 @@ public class DataManagerPlayer {
 		}
 		return data;
 	}
-
-	public static void importDataPlayer() {
+	private static void importDataPlayer() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
+		Map<String, DataPlayer> map = new HashMap<String, DataPlayer>();
 		for(String key : ConfigHandlerPlayer.config.getKeys(false)) {
 			DataPlayer data = ConfigHandlerPlayer.loadDataPlayer(key);
-			mapDataPlayer.put(key, data);
+			map.put(key, data);
+			mapDataPlayer = map;
 		}
 	}
-	public static void saveMapDataPlayer() {
+	private static void saveMapDataPlayer() {
 		for(DataPlayer data : mapDataPlayer.values()) {
 			ConfigHandlerPlayer.saveDataPlayer(data);
 		}
@@ -41,7 +43,6 @@ public class DataManagerPlayer {
 	public static void putDataPlayer(DataPlayer data) {
 		mapDataPlayer.put(data.name, data);
 	}
-
 	public static void addDone(Player player, Integer id) {
 		DataPlayer data = getDataPlayer(player);
 		List<Integer> done = new ArrayList<Integer>();
@@ -53,5 +54,18 @@ public class DataManagerPlayer {
 		} else {
 			UtilitiesProgramming.printDebugMessage("This Talker has already been added.", new Exception());
 		}
+	}
+	@Override
+	public void initialize() {
+		mapDataPlayer = new HashMap<String, DataPlayer>();
+	}
+	@Override
+	public void load() {
+		initialize();
+		importDataPlayer();
+	}
+	@Override
+	public void saveAll() {
+		saveMapDataPlayer();
 	}
 }

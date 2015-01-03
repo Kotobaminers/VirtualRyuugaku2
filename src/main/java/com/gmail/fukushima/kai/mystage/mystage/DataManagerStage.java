@@ -5,21 +5,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import net.citizensnpcs.api.npc.NPC;
-
-import com.gmail.fukushima.kai.common.common.DataManagerCitizens;
+import com.gmail.fukushima.kai.citizens.citizens.DataManagerCitizens;
+import com.gmail.fukushima.kai.common.common.DataManager;
 import com.gmail.fukushima.kai.common.common.Sentence;
 import com.gmail.fukushima.kai.mystage.mystage.ConfigHandlerStage.Path;
 import com.gmail.fukushima.kai.mystage.talker.Talker;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 import com.gmail.fukushima.kai.virtualryuugaku2.virtualryuugaku2.DataManagerPlugin;
 
-public class DataManagerStage {
+public class DataManagerStage implements DataManager {
 	public static List<Stage> listStage = new ArrayList<Stage>();
 	private static String baseDirectory = DataManagerPlugin.plugin.getDataFolder() + "//" + ConfigHandlerStage.DIRECTORY + "//";
 	private static final String extension = ".yml";
-	public static void importStage() {
+	private static void importStage() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
+		listStage = new ArrayList<Stage>();
 		for(File file : new File(baseDirectory).listFiles()) {
 			UtilitiesProgramming.printDebugMessage("", new Exception());
 			if(file.getName().endsWith(extension)) {
@@ -82,25 +82,25 @@ public class DataManagerStage {
 	}
 	public static Talker createTalker(Integer id, Map<?, ?> map) {
 		Talker talker = new Talker();
-		NPC npc = DataManagerCitizens.npcs.getById(id);
-		if(npc == null) {
-			UtilitiesProgramming.printDebugMessage("Error: Invalid ID: DataNabagerStage", new Exception());
-		} else {
-			talker.name = npc.getFullName();
-			talker.id = id;
-			for(Object key : map.keySet()) {
-				Map<?, ?> mapSentence = (Map<?, ?>) map.get(key);
-				Integer num = Integer.valueOf(key.toString());
-				UtilitiesProgramming.printDebugMessage(num.toString(), new Exception());
-				Sentence sentence = createSentence(mapSentence);
-				if(0 < sentence.en.size() || 0 < sentence.kanji.size() || 0 < sentence.kana.size()) {
-					if(num > 0) {
-						talker.listSentence.add(sentence);
-					} else if(num.equals(0)) {
-						talker.question = sentence;
-					} else if(num < 0) {
-						talker.answer = sentence;
-					}
+		if(!DataManagerCitizens.isValidId(id)) {
+			UtilitiesProgramming.printDebugMessage("Error: Invalid ID: " + id, new Exception());
+			return talker;
+		}
+		String name = DataManagerCitizens.loadNameById(id);
+		talker.name = name;
+		talker.id = id;
+		for(Object key : map.keySet()) {
+			Map<?, ?> mapSentence = (Map<?, ?>) map.get(key);
+			Integer num = Integer.valueOf(key.toString());
+			UtilitiesProgramming.printDebugMessage(num.toString(), new Exception());
+			Sentence sentence = createSentence(mapSentence);
+			if(0 < sentence.en.size() || 0 < sentence.kanji.size() || 0 < sentence.kana.size()) {
+				if(num > 0) {
+					talker.listSentence.add(sentence);
+				} else if(num.equals(0)) {
+					talker.question = sentence;
+				} else if(num < 0) {
+					talker.answer = sentence;
 				}
 			}
 		}
@@ -133,5 +133,18 @@ public class DataManagerStage {
 			}
 		}
 		return new Sentence(kanji, kana, en, hint);
+	}
+	@Override
+	public void initialize() {
+		listStage = new ArrayList<Stage>();
+	}
+	@Override
+	public void load() {
+		initialize();importStage();
+	}
+	@Override
+	public void saveAll() {
+		// TODO Auto-generated method stub
+
 	}
 }
