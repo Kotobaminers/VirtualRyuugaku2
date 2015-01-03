@@ -3,9 +3,9 @@ package com.gmail.fukushima.kai.mystage.mystage;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-import com.gmail.fukushima.kai.common.common.MyCommand;
 import com.gmail.fukushima.kai.player.player.DataManagerPlayer;
 import com.gmail.fukushima.kai.player.player.DataPlayer;
+import com.gmail.fukushima.kai.utilities.utilities.MyCommand;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class CommandStage extends MyCommand {

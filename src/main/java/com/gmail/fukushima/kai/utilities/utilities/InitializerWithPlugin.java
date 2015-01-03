@@ -1,4 +1,4 @@
-package com.gmail.fukushima.kai.common.common;
+package com.gmail.fukushima.kai.utilities.utilities;
 
 import org.bukkit.plugin.java.JavaPlugin;
 

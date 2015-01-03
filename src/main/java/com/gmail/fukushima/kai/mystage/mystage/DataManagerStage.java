@@ -2,24 +2,27 @@ package com.gmail.fukushima.kai.mystage.mystage;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.gmail.fukushima.kai.citizens.citizens.DataManagerCitizens;
-import com.gmail.fukushima.kai.common.common.DataManager;
 import com.gmail.fukushima.kai.common.common.Sentence;
 import com.gmail.fukushima.kai.mystage.mystage.ConfigHandlerStage.Path;
+import com.gmail.fukushima.kai.mystage.talker.DataManagerTalker;
 import com.gmail.fukushima.kai.mystage.talker.Talker;
+import com.gmail.fukushima.kai.mystage.talker.Talker.TypeTalker;
+import com.gmail.fukushima.kai.utilities.utilities.DataManager;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 import com.gmail.fukushima.kai.virtualryuugaku2.virtualryuugaku2.DataManagerPlugin;
 
 public class DataManagerStage implements DataManager {
-	public static List<Stage> listStage = new ArrayList<Stage>();
+	public static Map<String, Stage> mapStage = new HashMap<String, Stage>();
 	private static String baseDirectory = DataManagerPlugin.plugin.getDataFolder() + "//" + ConfigHandlerStage.DIRECTORY + "//";
 	private static final String extension = ".yml";
 	private static void importStage() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		listStage = new ArrayList<Stage>();
+		mapStage = new HashMap<String, Stage>();
 		for(File file : new File(baseDirectory).listFiles()) {
 			UtilitiesProgramming.printDebugMessage("", new Exception());
 			if(file.getName().endsWith(extension)) {
@@ -29,38 +32,27 @@ public class DataManagerStage implements DataManager {
 				ConfigHandlerStage config = new ConfigHandlerStage(file);
 				String creator = config.config.getString(Path.CREATOR.toString());
 				List<Map<?, ?>> listMap = config.config.getMapList(Path.TALKER.toString());
-				List<Talker> listTalker = new ArrayList<Talker>();
+				List<Integer> listId = new ArrayList<Integer>();
 				for(Map<?, ?> mapTalker : listMap) {
 					for(Object key : mapTalker.keySet()) {
-						Integer id = (Integer) key;
+						Integer id = Integer.valueOf(key.toString());
 						Map<?, ?> mapSentence = (Map<?, ?>) mapTalker.get(key);
-						Talker talker = createTalker(id, mapSentence);
+						Talker talker = createTalker(id, creator, mapSentence);
 						if(0 < talker.listSentence.size()) {
-							listTalker.add(talker);
+							DataManagerTalker.importTalker(talker);
+							listId.add(id);
 						}
 					}
 				}
-				Stage stage = new Stage(name, creator, listTalker);
-				listStage.add(stage);
+				Stage stage = new Stage(name, creator, listId);
+				mapStage.put(name, stage);
 			}
 		}
-	}
-	public static Talker loadTalkerById(Integer id) {
-		Talker talker = new Talker();
-		for(Stage stage : listStage) {
-			for(Talker search : stage.listTalker) {
-				if(search.id.equals(id)) {
-					return search;
-				}
-			}
-		}
-		UtilitiesProgramming.printDebugMessage("Couldn't find the talker: ID = " + id , new Exception());
-		return talker;
 	}
 	public static Stage loadStageById(Integer id) {
-		for(Stage stage : listStage) {
-			for(Talker search : stage.listTalker) {
-				if(search.id.equals(id)) {
+		for(Stage stage : mapStage.values()) {
+			for(Integer idSearch : stage.listId) {
+				if(id.equals(idSearch)) {
 					return stage;
 				}
 			}
@@ -80,7 +72,7 @@ public class DataManagerStage implements DataManager {
 	}
 	public static void removeTalker(Stage stage) {
 	}
-	public static Talker createTalker(Integer id, Map<?, ?> map) {
+	private static Talker createTalker(Integer id, String owner, Map<?, ?> map) {
 		Talker talker = new Talker();
 		if(!DataManagerCitizens.isValidId(id)) {
 			UtilitiesProgramming.printDebugMessage("Error: Invalid ID: " + id, new Exception());
@@ -89,10 +81,11 @@ public class DataManagerStage implements DataManager {
 		String name = DataManagerCitizens.loadNameById(id);
 		talker.name = name;
 		talker.id = id;
+		talker.type = TypeTalker.STAGE;
+		talker.owner = owner;
 		for(Object key : map.keySet()) {
 			Map<?, ?> mapSentence = (Map<?, ?>) map.get(key);
 			Integer num = Integer.valueOf(key.toString());
-			UtilitiesProgramming.printDebugMessage(num.toString(), new Exception());
 			Sentence sentence = createSentence(mapSentence);
 			if(0 < sentence.en.size() || 0 < sentence.kanji.size() || 0 < sentence.kana.size()) {
 				if(num > 0) {
@@ -106,7 +99,7 @@ public class DataManagerStage implements DataManager {
 		}
 		return talker;
 	}
-	private static Sentence createSentence(Map<?, ?> map) {
+	public static Sentence createSentence(Map<?, ?> map) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		List<String> kanji = new ArrayList<String>();
 		List<String> kana = new ArrayList<String>();
@@ -136,7 +129,7 @@ public class DataManagerStage implements DataManager {
 	}
 	@Override
 	public void initialize() {
-		listStage = new ArrayList<Stage>();
+		mapStage = new HashMap<String, Stage>();
 	}
 	@Override
 	public void load() {

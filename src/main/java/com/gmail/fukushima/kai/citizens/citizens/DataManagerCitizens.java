@@ -7,7 +7,7 @@ import java.util.Map;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.gmail.fukushima.kai.common.common.DataManager;
+import com.gmail.fukushima.kai.utilities.utilities.DataManager;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 import com.gmail.fukushima.kai.virtualryuugaku2.virtualryuugaku2.DataManagerPlugin;
 

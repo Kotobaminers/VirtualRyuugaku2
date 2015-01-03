@@ -1,4 +1,4 @@
-package com.gmail.fukushima.kai.common.common;
+package com.gmail.fukushima.kai.utilities.utilities;
 
 public interface DataManager {
 	public void initialize();

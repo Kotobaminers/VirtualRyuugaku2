@@ -74,6 +74,6 @@ public class ConfigHandlerPlayer extends ConfigHandler {
 		config.set(pathLanguage, data.language.toString());
 		String pathDone = name + "." + PathPlayer.DONE;
 		config.set(pathDone, data.done);
-		UtilitiesProgramming.printDebugDataPlayer(data);
+		UtilitiesProgramming.printDebugPlayer(data);
 	}
 }

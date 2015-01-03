@@ -7,18 +7,17 @@ import java.util.Map;
 
 import org.bukkit.entity.Player;
 
-import com.gmail.fukushima.kai.common.common.DataManager;
+import com.gmail.fukushima.kai.utilities.utilities.DataManager;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class DataManagerPlayer implements DataManager {
 	public static Map<String, DataPlayer> mapDataPlayer = new HashMap<String, DataPlayer>();
 
 	public static DataPlayer getDataPlayer(Player player) {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataPlayer data = new DataPlayer();
 		if(mapDataPlayer.containsKey(player.getName())) {
 			data = mapDataPlayer.get(player.getName());
-		} else {
-			data.name = player.getName();
 		}
 		return data;
 	}
@@ -28,8 +27,8 @@ public class DataManagerPlayer implements DataManager {
 		for(String key : ConfigHandlerPlayer.config.getKeys(false)) {
 			DataPlayer data = ConfigHandlerPlayer.loadDataPlayer(key);
 			map.put(key, data);
-			mapDataPlayer = map;
 		}
+		mapDataPlayer = map;
 	}
 	private static void saveMapDataPlayer() {
 		for(DataPlayer data : mapDataPlayer.values()) {
@@ -41,6 +40,7 @@ public class DataManagerPlayer implements DataManager {
 		ConfigHandlerPlayer.saveDataPlayer(data);
 	}
 	public static void putDataPlayer(DataPlayer data) {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
 		mapDataPlayer.put(data.name, data);
 	}
 	public static void addDone(Player player, Integer id) {

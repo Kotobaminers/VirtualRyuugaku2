@@ -1,4 +1,4 @@
-package com.gmail.fukushima.kai.common.common;
+package com.gmail.fukushima.kai.utilities.utilities;
 
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;

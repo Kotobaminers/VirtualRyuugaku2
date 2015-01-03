@@ -6,16 +6,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.gmail.fukushima.kai.common.common.CommandEmpty;
-import com.gmail.fukushima.kai.common.common.MyCommand;
 import com.gmail.fukushima.kai.mystage.mystage.CommandStage;
 import com.gmail.fukushima.kai.mystage.talker.CommandTalker;
+import com.gmail.fukushima.kai.mystage.talker.CommandTalkerOP;
+import com.gmail.fukushima.kai.utilities.utilities.MyCommand;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class CommandExecutorPlugin implements CommandExecutor {
 	public enum Commands {
 		NONE,
 		VIRTUALRYUUGAKU, VRG,
-		VIRTUALRYUUGAKUOP, VRGOP,
+		VIRTUALRYUUGAKUOP, VRGOP, VRGCO,
 		STAGE, STAGEOP,
 		TALKER, TALKEROP;
 		public static Commands lookup(String name) {
@@ -33,6 +34,11 @@ public class CommandExecutorPlugin implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
+		Commands commands = Commands.lookup(label);
+		if(commands.equals(Commands.VRGCO)) {
+			new CommandVirturalRyuugakuConsole().printDebug(args);
+			return true;
+		}
 		if(sender instanceof Player) {
 			UtilitiesProgramming.printDebugMessage("", new Exception());
 			Player player = (Player) sender;
@@ -43,7 +49,6 @@ public class CommandExecutorPlugin implements CommandExecutor {
 					return false;
 				}
 			}
-			Commands commands = Commands.lookup(label);
 			MyCommand myCommand = new CommandEmpty(player, command, args);
 			switch(commands) {
 			case NONE:
@@ -57,6 +62,7 @@ public class CommandExecutorPlugin implements CommandExecutor {
 				myCommand = new CommandTalker(player, command, args);
 				break;
 			case TALKEROP:
+				myCommand = new CommandTalkerOP(player, command, args);
 				break;
 			case VIRTUALRYUUGAKU:
 				break;
@@ -72,6 +78,7 @@ public class CommandExecutorPlugin implements CommandExecutor {
 				break;
 			}
 			myCommand.runCommand();
+			return true;
 		}
 		return false;
 	}

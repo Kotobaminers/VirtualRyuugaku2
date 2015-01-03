@@ -34,7 +34,11 @@ public class EventTalker {
 	public void quest() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
+		if(!data.isValid()) return;
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		UtilitiesProgramming.printDebugPlayer(data);
 		if(!data.select.equals(npc.getId())) {
+			UtilitiesProgramming.printDebugMessage("", new Exception());
 			data.select = npc.getId();
 			DataManagerPlayer.putDataPlayer(data);
 			printSelect();
@@ -46,6 +50,7 @@ public class EventTalker {
 	}
 
 	public void printSelect() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
 		player.sendMessage("You selected " + npc.getFullName());
 	}
 }

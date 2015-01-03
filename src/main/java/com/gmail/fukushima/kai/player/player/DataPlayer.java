@@ -22,4 +22,8 @@ public class DataPlayer {
 			}
 		}
 	}
+	public Boolean isValid() {
+		if(0 < name.length()) return true;
+		return false;
+	}
 }
