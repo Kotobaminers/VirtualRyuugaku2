@@ -54,7 +54,7 @@ public class ConfigHandlerShadow extends ConfigHandler {
 		file = new File(path);
 		config = YamlConfiguration.loadConfiguration(file);
 	}
-	public static void saveDataShadow(DataShadowTopic data) {
+	public static void saveDataShadowTopic(DataShadowTopic data) {
 		String pathBase = data.nameTopic;
 		for(Integer id : data.listId) {
 			Talker talker = DataManagerTalker.getTalker(id);

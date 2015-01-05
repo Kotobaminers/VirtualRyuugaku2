@@ -46,13 +46,13 @@ public class DataManagerShadowTopic implements DataManager {
 	}
 	private static void saveMapDataShadowTopic() {
 		for(DataShadowTopic data : mapDataShadowTopic.values()) {
-			ConfigHandlerShadow.saveDataShadow(data);
+			ConfigHandlerShadow.saveDataShadowTopic(data);
 		}
 		ConfigHandlerShadow.save();
 	}
 	public static void saveDataShadowTopic(DataShadowTopic data) {
 		putDataShadowTopic(data);
-		ConfigHandlerShadow.saveDataShadow(data);
+		ConfigHandlerShadow.saveDataShadowTopic(data);
 	}
 	public static void putDataShadowTopic(DataShadowTopic data) {
 		mapDataShadowTopic.put(data.nameTopic, data);
