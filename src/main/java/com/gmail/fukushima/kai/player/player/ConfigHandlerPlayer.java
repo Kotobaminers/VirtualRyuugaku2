@@ -12,6 +12,8 @@ import com.gmail.fukushima.kai.utilities.utilities.ConfigHandler;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class ConfigHandlerPlayer extends ConfigHandler {
+	public static YamlConfiguration config;
+	public static File file;
 	public static final String DIRECTORY = "PLAYER";
 	public static final String FILE_NAME = "PLAYER.yml";
 	public static final Integer lineInitial = 0;
@@ -75,5 +77,13 @@ public class ConfigHandlerPlayer extends ConfigHandler {
 		String pathDone = name + "." + PathPlayer.DONE;
 		config.set(pathDone, data.done);
 		UtilitiesProgramming.printDebugPlayer(data);
+	}
+	@Override
+	public File getFile() {
+		return file;
+	}
+	@Override
+	public YamlConfiguration getConfig() {
+		return config;
 	}
 }

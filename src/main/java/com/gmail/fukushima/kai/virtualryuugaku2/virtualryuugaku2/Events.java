@@ -22,7 +22,6 @@ public class Events implements Listener {
 		NPC npc = event.getNPC();
 		Integer id = npc.getId();
 		Talker talker = DataManagerTalker.getTalker(id);
-		if(!talker.hasSentence()) return;
 		new EventTalker(npc, talker, event.getClicker()).quest();
 	}
 	@EventHandler
@@ -38,7 +37,6 @@ public class Events implements Listener {
 		case PLAYER:
 			Integer id = event.getNPC().getId();
 			Talker talker = DataManagerTalker.getTalker(id);
-			if(!talker.hasSentence()) return;
 			new EventTalker(npc, talker, event.getClicker()).talk();
 		default:
 			break;

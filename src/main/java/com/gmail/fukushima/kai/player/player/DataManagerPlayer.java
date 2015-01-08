@@ -34,7 +34,7 @@ public class DataManagerPlayer implements DataManager {
 		for(DataPlayer data : mapDataPlayer.values()) {
 			ConfigHandlerPlayer.saveDataPlayer(data);
 		}
-		ConfigHandlerPlayer.save();
+		new ConfigHandlerPlayer().save();
 	}
 	public static void saveDataPlayer(DataPlayer data) {
 		ConfigHandlerPlayer.saveDataPlayer(data);

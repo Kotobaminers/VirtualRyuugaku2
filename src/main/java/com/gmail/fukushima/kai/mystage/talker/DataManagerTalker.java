@@ -14,7 +14,7 @@ public class DataManagerTalker implements DataManager {
 		}
 		return talker;
 	}
-	public static void importTalker(Talker talker) {
+	public static void putTalker(Talker talker) {
 		mapTalker.put(talker.id, talker);
 	}
 	@Override

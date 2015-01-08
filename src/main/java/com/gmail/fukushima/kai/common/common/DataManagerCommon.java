@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.gmail.fukushima.kai.utilities.utilities.DataManager;
+import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 import com.gmail.fukushima.kai.virtualryuugaku2.virtualryuugaku2.DataManagerPlugin;
 
 public class DataManagerCommon implements DataManager {
@@ -29,6 +30,7 @@ public class DataManagerCommon implements DataManager {
 	private static final String NAME_FILE = "ROMAJI_TABLE.txt";
 	private static final String DELIMITTER = "[Type]";
 	private static void importRomaji() throws IOException {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
 		String path = DataManagerPlugin.plugin.getDataFolder() + "//" + NAME_DIRECTORY + "//" + NAME_FILE;
 		File file = new File(path);
 		String lineJoined = "";
@@ -67,6 +69,7 @@ public class DataManagerCommon implements DataManager {
 	}
 	@Override
 	public void load() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
 		initialize();
 		try {
 			importRomaji();

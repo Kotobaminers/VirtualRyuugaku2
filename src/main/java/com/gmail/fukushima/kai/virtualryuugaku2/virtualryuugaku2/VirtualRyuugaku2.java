@@ -1,5 +1,7 @@
 package com.gmail.fukushima.kai.virtualryuugaku2.virtualryuugaku2;
 
+import java.nio.charset.Charset;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
@@ -18,9 +20,13 @@ public class VirtualRyuugaku2 extends JavaPlugin {
 		for(Commands command : Commands.values()) {
 			this.getCommand(command.toString()).setExecutor(new CommandExecutorPlugin(this));
 		}
+		System.out.println("My Default Charset: " + Charset.defaultCharset());
+
+		UtilitiesProgramming.printDebugShadowAll();
+		UtilitiesProgramming.printDebugTalkerAll();
 
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-//		DataManagerPlugin.savePlugin();
+		DataManagerPlugin.savePlugin();
 	}
 	@Override
 	public void onDisable() {

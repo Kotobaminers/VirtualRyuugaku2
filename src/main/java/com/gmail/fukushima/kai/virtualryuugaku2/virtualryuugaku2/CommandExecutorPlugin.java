@@ -9,6 +9,7 @@ import com.gmail.fukushima.kai.common.common.CommandEmpty;
 import com.gmail.fukushima.kai.mystage.mystage.CommandStage;
 import com.gmail.fukushima.kai.mystage.talker.CommandTalker;
 import com.gmail.fukushima.kai.mystage.talker.CommandTalkerOP;
+import com.gmail.fukushima.kai.shadow.shadow.CommandVirtualRyuugakuShadow;
 import com.gmail.fukushima.kai.utilities.utilities.MyCommand;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
@@ -18,7 +19,11 @@ public class CommandExecutorPlugin implements CommandExecutor {
 		VIRTUALRYUUGAKU, VRG,
 		VIRTUALRYUUGAKUOP, VRGOP, VRGCO,
 		STAGE, STAGEOP,
-		TALKER, TALKEROP;
+		TALKER, TALKEROP,
+		SHADOW, SHADOWOP
+
+
+		;
 		public static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -74,6 +79,12 @@ public class CommandExecutorPlugin implements CommandExecutor {
 			case VRGOP:
 				myCommand = new CommandVirtualRyuugakuOP(player, command, args);
 				break;
+			case SHADOW:
+				myCommand = new CommandVirtualRyuugakuShadow(player, command, args);
+				break;
+			case SHADOWOP:
+				break;
+			//VRGCO should be placed the uppersection.
 			default:
 				break;
 			}

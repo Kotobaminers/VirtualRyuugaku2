@@ -23,7 +23,7 @@ public class DataManagerCitizens implements DataManager {
 		MemorySection memory = (MemorySection) config.get(KEY_NPC);
 		for(String key : memory.getKeys(false)) {
 			UtilitiesProgramming.printDebugMessage(key, new Exception());
-			Integer id = Integer.valueOf(key);
+			Integer id = Integer.parseInt(key);
 			String name = memory.getString(key + "." + KEY_NAME);
 			if(0 <= id) {
 				DataCitizens data = new DataCitizens();

@@ -18,6 +18,18 @@ public abstract class Description {
 	public List<String> tips = new ArrayList<String>();
 	private final List<ChatColor> colorsJp = Arrays.asList(ChatColor.WHITE, ChatColor.GRAY, ChatColor.DARK_GRAY);
 	private final List<ChatColor> colorsSingle = Arrays.asList(ChatColor.WHITE);
+	public enum Path {ENGL, KANJ, KANA}
+	public enum Expression {NONE, EN, KANJI, KANA;
+		public static Expression lookup(String name) {
+			try {
+				UtilitiesProgramming.printDebugMessage("", new Exception());
+				return Expression.valueOf(name.toUpperCase());
+			} catch (IllegalArgumentException e) {
+				UtilitiesProgramming.printDebugMessage(e.toString(), new Exception());
+				return Expression.NONE;
+			}
+		}
+	}
 	public Description() {
 	}
 	public Description(List<String> kanji, List<String> kana, List<String> en, List<String> tips) {

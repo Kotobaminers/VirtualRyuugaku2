@@ -40,7 +40,7 @@ public final class DataManagerPlugin {
 	}
 
 	public static void savePlugin() {
-//		DataManagerPlayer.saveMapDataPlayer();
-		//TODO DataManager.save***();
+		new DataManagerPlayer().saveAll();
+		new DataManagerShadowTopic().saveAll();
 	}
 }

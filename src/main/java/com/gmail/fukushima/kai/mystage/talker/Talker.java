@@ -1,19 +1,21 @@
 package com.gmail.fukushima.kai.mystage.talker;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
+import com.gmail.fukushima.kai.common.common.Description.Path;
 import com.gmail.fukushima.kai.common.common.Sentence;
 import com.gmail.fukushima.kai.player.player.DataManagerPlayer;
 import com.gmail.fukushima.kai.player.player.DataPlayer;
+import com.gmail.fukushima.kai.utilities.utilities.ConfigHandler;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class Talker {
-	public String name;
-	public String owner;
+	public String name = "";
+	public String owner = "";
 	public Integer id = -1;
 	public List<Sentence> listSentence = new ArrayList<Sentence>();
 	public Sentence question = new Sentence();
@@ -77,6 +79,67 @@ public class Talker {
 		String message = name + ": " + sentence.loadEn();
 		player.sendMessage(message);
 	}
+	public void saveAtConfig(ConfigHandler configHandler, String pathBase) {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		String path = pathBase + "." + this.id.toString();
+		configHandler.getConfig().set(path + "." + "NAME", name);
+		configHandler.getConfig().set(path + "." + "OWNER", owner);
+		List<String> listEn = new ArrayList<String>();
+		List<String> listKanji = new ArrayList<String>();
+		List<String> listKana = new ArrayList<String>();
+		for(Sentence sentence : listSentence) {
+			listEn.add(findSentenceFirst(sentence.en));
+			listKanji.add(findSentenceFirst(sentence.kanji));
+			listKana.add(findSentenceFirst(sentence.kana));
+		}
+		configHandler.getConfig().set(path + "." + "ENGL", listEn);
+		configHandler.getConfig().set(path + "." + "KANJ", listKanji);
+		configHandler.getConfig().set(path + "." + "KANA", listKana);
+		configHandler.save();
+	}
+	public static Talker importTalker(ConfigHandler configHandler, String path2, Integer id, TypeTalker type) {
+		String path = path2 + "." + id.toString();
+		String name = configHandler.getConfig().getString(path + "." + "NAME");
+		String owner = configHandler.getConfig().getString(path + "." + "OWNER");
+		List<String> listEn = configHandler.getConfig().getStringList(path + "." + Path.ENGL.toString());
+		List<String> listKanji = configHandler.getConfig().getStringList(path + "." + Path.KANJ.toString());
+		List<String> listKana = configHandler.getConfig().getStringList(path + "." + Path.KANA.toString());
+		List<Sentence> listSentence = new ArrayList<Sentence>();
+		for(Integer i = 0; i < listEn.size(); i++) {
+			List<String> tempEn = Arrays.asList(listEn.get(i));
+			List<String> tempKanji = Arrays.asList(listKanji.get(i));
+			List<String> tempKana = Arrays.asList(listKana.get(i));
+			List<String> tempHint = Arrays.asList("");
+			listSentence.add(new Sentence(tempKanji, tempKana, tempEn, tempHint));
+		}
+		Talker talker = new Talker();
+		talker.id = id;
+		talker.name = name;
+		talker.owner = owner;
+		talker.type = type;
+		talker.listSentence = listSentence;
+		return talker;
+	}
+	private String findSentenceFirst(List<String> list) {
+		String sentence = "No Sentence.";
+		if(0 < list.size()) {
+			sentence = list.get(0);
+		}
+		return sentence;
+	}
+	public Boolean isValid() {
+		if(0 < name.length()){
+			return true;
+		}
+		return false;
+	}
+	public Boolean isYours(String playerName) {
+		if(owner.equals(playerName)){
+			return true;
+		}
+		return false;
+	}
+
 	private void printMessageJp(Player player, Sentence sentence) {
 		String message = name + ": " + sentence.loadJp();
 		player.sendMessage(message);
@@ -106,16 +169,19 @@ public class Talker {
 		UtilitiesProgramming.printDebugMessage("No Sentence", new Exception());
 		return false;
 	}
-	public void saveAtConfig(FileConfiguration config, String path) {//TODO
-//		Integer count = 0;
-//		for(Sentence sentence : listSentence) {
-//			Map<>
-//			config.set(path, value);
-//		}
-//		} else if(num.equals(0)) {
-//			talker.question = sentence;
-//		} else if(num < 0) {
-//			talker.answer = sentence;
-//		}
+	public void printInformation(Player player) {
+		if(!isValid()) return;
+		player.sendMessage("[Talker] " + name);
+		player.sendMessage(" ID: " + id + " TYPE: " + type.toString() + " OWNER: " + owner);
+		Integer count = 0;
+		for(Sentence sentence : listSentence) {
+			count++;
+			player.sendMessage(" SENT(" + count + ") EN: " + sentence.loadEn());
+			player.sendMessage(" SENT(" + count + ") JP: " + sentence.loadJp());
+		}
+		player.sendMessage(" QUES EN: " + question.loadEn());
+		player.sendMessage(" QUES JP: " + question.loadJp());
+		player.sendMessage(" ANSW EN: " + answer.loadEn());
+		player.sendMessage(" ANSW JP: " + answer.loadJp());
 	}
 }

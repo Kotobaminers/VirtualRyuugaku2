@@ -39,7 +39,7 @@ public class DataManagerStage implements DataManager {
 						Map<?, ?> mapSentence = (Map<?, ?>) mapTalker.get(key);
 						Talker talker = createTalker(id, creator, mapSentence);
 						if(0 < talker.listSentence.size()) {
-							DataManagerTalker.importTalker(talker);
+							DataManagerTalker.putTalker(talker);
 							listId.add(id);
 						}
 					}
@@ -85,7 +85,7 @@ public class DataManagerStage implements DataManager {
 		talker.owner = owner;
 		for(Object key : map.keySet()) {
 			Map<?, ?> mapSentence = (Map<?, ?>) map.get(key);
-			Integer num = Integer.valueOf(key.toString());
+			Integer num = Integer.parseInt(key.toString());
 			Sentence sentence = createSentence(mapSentence);
 			if(0 < sentence.en.size() || 0 < sentence.kanji.size() || 0 < sentence.kana.size()) {
 				if(num > 0) {

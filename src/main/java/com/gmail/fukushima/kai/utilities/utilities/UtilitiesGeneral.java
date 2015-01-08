@@ -9,8 +9,8 @@ import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
 import com.gmail.fukushima.kai.common.common.DataManagerCommon;
-import com.gmail.fukushima.kai.common.common.Letters;
 import com.gmail.fukushima.kai.common.common.DataManagerCommon.TypeLetters;
+import com.gmail.fukushima.kai.common.common.Letters;
 
 public class UtilitiesGeneral {
 	public static String toRomaji(String kana) {
