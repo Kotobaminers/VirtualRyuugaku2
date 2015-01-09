@@ -6,10 +6,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.gmail.fukushima.kai.common.common.CommandEmpty;
-import com.gmail.fukushima.kai.mystage.mystage.CommandStage;
-import com.gmail.fukushima.kai.mystage.talker.CommandTalker;
-import com.gmail.fukushima.kai.mystage.talker.CommandTalkerOP;
 import com.gmail.fukushima.kai.shadow.shadow.CommandVirtualRyuugakuShadow;
+import com.gmail.fukushima.kai.stage.stage.CommandStage;
+import com.gmail.fukushima.kai.talker.talker.CommandTalker;
+import com.gmail.fukushima.kai.talker.talker.CommandTalkerOP;
 import com.gmail.fukushima.kai.utilities.utilities.MyCommand;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 

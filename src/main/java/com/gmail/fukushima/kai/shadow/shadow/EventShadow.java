@@ -4,8 +4,8 @@ import net.citizensnpcs.api.npc.NPC;
 
 import org.bukkit.entity.Player;
 
-import com.gmail.fukushima.kai.mystage.talker.Talker;
-import com.gmail.fukushima.kai.shadow.shadow.ConfigHandlerShadow.Path;
+import com.gmail.fukushima.kai.shadow.shadow.ConfigHandlerShadowTopic.Path;
+import com.gmail.fukushima.kai.talker.talker.Talker;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesGeneral;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
@@ -42,7 +42,7 @@ public class EventShadow {
 			talker.id = id;
 			talker.name = player.getName();
 			talker.owner = player.getName();
-			talker.saveAtConfig(new ConfigHandlerShadow(), nameTopic + "." + Path.TALKER.toString() + "." + player.getName());
+			talker.saveAtConfig(new ConfigHandlerShadowTopic(), nameTopic + "." + Path.TALKER.toString() + "." + player.getName());
 		} else {
 			player.sendMessage("You've already created your shadow in this topic.");
 		}

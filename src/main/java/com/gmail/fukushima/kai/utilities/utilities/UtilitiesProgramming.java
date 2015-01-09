@@ -4,15 +4,17 @@ import org.bukkit.Bukkit;
 
 import com.gmail.fukushima.kai.citizens.citizens.DataCitizens;
 import com.gmail.fukushima.kai.citizens.citizens.DataManagerCitizens;
+import com.gmail.fukushima.kai.comment.comment.DataComment;
+import com.gmail.fukushima.kai.comment.comment.DataManagerComment;
 import com.gmail.fukushima.kai.common.common.Sentence;
-import com.gmail.fukushima.kai.mystage.mystage.DataManagerStage;
-import com.gmail.fukushima.kai.mystage.mystage.Stage;
-import com.gmail.fukushima.kai.mystage.talker.DataManagerTalker;
-import com.gmail.fukushima.kai.mystage.talker.Talker;
 import com.gmail.fukushima.kai.player.player.DataManagerPlayer;
 import com.gmail.fukushima.kai.player.player.DataPlayer;
 import com.gmail.fukushima.kai.shadow.shadow.DataManagerShadowTopic;
 import com.gmail.fukushima.kai.shadow.shadow.DataShadowTopic;
+import com.gmail.fukushima.kai.stage.stage.DataManagerStage;
+import com.gmail.fukushima.kai.stage.stage.Stage;
+import com.gmail.fukushima.kai.talker.talker.DataManagerTalker;
+import com.gmail.fukushima.kai.talker.talker.Talker;
 import com.gmail.fukushima.kai.virtualryuugaku2.virtualryuugaku2.Settings;
 
 
@@ -29,75 +31,85 @@ public class UtilitiesProgramming {
 		if(Settings.debugMessageBroadcast) {
 			Bukkit.broadcastMessage(UtilitiesGeneral.joinStringsWithSpace(broadcast));
 		} else {
-			System.out.println(UtilitiesGeneral.joinStringsWithSpace(broadcast));
+			Bukkit.getLogger().info(UtilitiesGeneral.joinStringsWithSpace(broadcast));
 		}
 	}
 	public static void printDebugCitizensAll() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
 		for(DataCitizens data : DataManagerCitizens.mapDataCitizns.values()) {
-			UtilitiesProgramming.printDebugMessage("", new Exception());
 			UtilitiesProgramming.printDebugCitizens(data);
 		}
 	}
 	public static void printDebugPlayerAll() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
 		for(DataPlayer data : DataManagerPlayer.mapDataPlayer.values()) {
-			UtilitiesProgramming.printDebugMessage("", new Exception());
 			UtilitiesProgramming.printDebugPlayer(data);
 		}
 	}
 	public static void printDebugStageAll() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
 		for(Stage data : DataManagerStage.mapStage.values()) {
-			UtilitiesProgramming.printDebugMessage("", new Exception());
 			UtilitiesProgramming.printDebugStage(data);
 		}
 	}
 	public static void printDebugShadowAll() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
 		for(DataShadowTopic data : DataManagerShadowTopic.mapDataShadowTopic.values()) {
-			UtilitiesProgramming.printDebugMessage("", new Exception());
 			UtilitiesProgramming.printDebugShadowTopic(data);
 		}
 	}
 	public static void printDebugTalkerAll() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
 		for(Talker data : DataManagerTalker.mapTalker.values()) {
-			UtilitiesProgramming.printDebugMessage("", new Exception());
 			UtilitiesProgramming.printDebugTalker(data);
 		}
 	}
+	public static void printDebugCommentAll() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		for(DataComment data : DataManagerComment.mapDataComment.values()) {
+			UtilitiesProgramming.printDebugComment(data);
+		}
+	}
 	public static void printDebugStage(Stage stage) {
-		System.out.println("[Debug Stage] " + stage.name);
-		System.out.println(" CREATOR: " + stage.creator);
+		Bukkit.getLogger().info("[Debug Stage] " + stage.name);
+		Bukkit.getLogger().info(" CREATOR: " + stage.creator);
 		for(Integer id : stage.listId) {
 			Talker talker = DataManagerTalker.getTalker(id);
 			printDebugTalker(talker);
 		}
 	}
 	public static void printDebugPlayer(DataPlayer data) {
-		System.out.println("[Debug DataPlayer] " + data.name);
-		System.out.println(" LINE: " + data.line);
-		System.out.println(" SELECT: " + data.select);
+		Bukkit.getLogger().info("[Debug DataPlayer] " + data.name);
+		Bukkit.getLogger().info(" LINE: " + data.line);
+		Bukkit.getLogger().info(" SELECT: " + data.select);
 	}
 	public static void printDebugTalker(Talker talker) {
 		if(talker.id < 0) return;
-		System.out.println("[Debug Talker] " + talker.name);
-		System.out.println(" ID: " + talker.id + " TYPE: " + talker.type.toString() + " OWNER: " + talker.owner);
+		Bukkit.getLogger().info("[Debug Talker] " + talker.name);
+		Bukkit.getLogger().info(" ID: " + talker.id + " TYPE: " + talker.type.toString() + " OWNER: " + talker.owner);
 		for(Sentence sentence : talker.listSentence) {
-			System.out.println(" SEN: " + sentence.loadEn());
-			System.out.println(" SEN: " + sentence.loadJp());
+			Bukkit.getLogger().info(" SEN: " + sentence.loadEn());
+			Bukkit.getLogger().info(" SEN: " + sentence.loadJp());
 		}
-		System.out.println(" QUE: " + talker.question.loadEn());
-		System.out.println(" QUE: " + talker.question.loadJp());
-		System.out.println(" ANS: " + talker.answer.loadEn());
-		System.out.println(" ANS: " + talker.answer.loadJp());
+		Bukkit.getLogger().info(" QUE: " + talker.question.loadEn());
+		Bukkit.getLogger().info(" QUE: " + talker.question.loadJp());
+		Bukkit.getLogger().info(" ANS: " + talker.answer.loadEn());
+		Bukkit.getLogger().info(" ANS: " + talker.answer.loadJp());
 	}
 	public static void printDebugCitizens(DataCitizens citizens) {
-		System.out.println("ID: " + citizens.id + " Name: " + citizens.name);
+		Bukkit.getLogger().info("ID: " + citizens.id + " Name: " + citizens.name);
 	}
 	public static void printDebugShadowTopic(DataShadowTopic shadow) {
-		System.out.println("[Debug ShadowTopic] " + shadow.nameTopic);
+		Bukkit.getLogger().info("[Debug ShadowTopic] " + shadow.nameTopic);
 		String message = " CREATED: " + shadow.created;
-		System.out.println(message);
+		Bukkit.getLogger().info(message);
 		for(Integer id : shadow.listId) {
 			Talker talker = DataManagerTalker.getTalker(id);
 			UtilitiesProgramming.printDebugTalker(talker);
 		}
+	}
+	public static void printDebugComment(DataComment comment) {
+		Bukkit.getLogger().info("[Debug Comment] OWNER: " + comment.owner + " ID: " + comment.id.toString() + " SENDER: " + comment.sender + " STATE: " + comment.state);
+		Bukkit.getLogger().info(" COMMENT: " + comment.comment);
 	}
 }

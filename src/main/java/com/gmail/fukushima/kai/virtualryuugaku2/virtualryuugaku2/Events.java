@@ -9,10 +9,10 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import com.gmail.fukushima.kai.mystage.talker.DataManagerTalker;
-import com.gmail.fukushima.kai.mystage.talker.EventTalker;
-import com.gmail.fukushima.kai.mystage.talker.Talker;
 import com.gmail.fukushima.kai.shadow.shadow.EventShadow;
+import com.gmail.fukushima.kai.talker.talker.DataManagerTalker;
+import com.gmail.fukushima.kai.talker.talker.EventTalker;
+import com.gmail.fukushima.kai.talker.talker.Talker;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class Events implements Listener {

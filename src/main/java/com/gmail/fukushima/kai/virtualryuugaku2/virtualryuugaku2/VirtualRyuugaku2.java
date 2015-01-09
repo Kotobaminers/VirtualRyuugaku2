@@ -22,8 +22,7 @@ public class VirtualRyuugaku2 extends JavaPlugin {
 		}
 		System.out.println("My Default Charset: " + Charset.defaultCharset());
 
-		UtilitiesProgramming.printDebugShadowAll();
-		UtilitiesProgramming.printDebugTalkerAll();
+		UtilitiesProgramming.printDebugCommentAll();
 
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataManagerPlugin.savePlugin();

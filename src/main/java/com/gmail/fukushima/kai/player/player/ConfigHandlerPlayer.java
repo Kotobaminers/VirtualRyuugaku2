@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.fukushima.kai.player.player.DataPlayer.Language;
 import com.gmail.fukushima.kai.utilities.utilities.ConfigHandler;
@@ -60,12 +59,6 @@ public class ConfigHandlerPlayer extends ConfigHandler {
 		}
 		return line;
 	}
-	@Override
-	public void initialize(JavaPlugin plugin) {
-		String path = plugin.getDataFolder() + "\\" + DIRECTORY + "\\" +FILE_NAME;
-		file = new File(path);
-		config = YamlConfiguration.loadConfiguration(file);
-	}
 	public static void saveDataPlayer(DataPlayer data) {
 		String name = data.name;
 		String pathLine = name + "." + PathPlayer.LINE;
@@ -85,5 +78,21 @@ public class ConfigHandlerPlayer extends ConfigHandler {
 	@Override
 	public YamlConfiguration getConfig() {
 		return config;
+	}
+	@Override
+	public void setFile(File file) {
+		ConfigHandlerPlayer.file = file;
+	}
+	@Override
+	public void setConfig(YamlConfiguration config) {
+		ConfigHandlerPlayer.config = config;
+	}
+	@Override
+	public String getFileName() {
+		return FILE_NAME;
+	}
+	@Override
+	public String getDirectory() {
+		return DIRECTORY;
 	}
 }

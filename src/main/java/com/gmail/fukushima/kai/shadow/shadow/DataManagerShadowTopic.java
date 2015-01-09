@@ -9,12 +9,12 @@ import org.bukkit.entity.Player;
 
 import com.gmail.fukushima.kai.citizens.citizens.DataManagerCitizens;
 import com.gmail.fukushima.kai.common.common.Sentence;
-import com.gmail.fukushima.kai.mystage.mystage.DataManagerStage;
-import com.gmail.fukushima.kai.mystage.talker.DataManagerTalker;
-import com.gmail.fukushima.kai.mystage.talker.Talker;
-import com.gmail.fukushima.kai.mystage.talker.Talker.TypeTalker;
-import com.gmail.fukushima.kai.shadow.shadow.ConfigHandlerShadow.Path;
-import com.gmail.fukushima.kai.shadow.shadow.ConfigHandlerShadow.PrivateDataShadow;
+import com.gmail.fukushima.kai.shadow.shadow.ConfigHandlerShadowTopic.Path;
+import com.gmail.fukushima.kai.shadow.shadow.ConfigHandlerShadowTopic.DataShadowData;
+import com.gmail.fukushima.kai.stage.stage.DataManagerStage;
+import com.gmail.fukushima.kai.talker.talker.DataManagerTalker;
+import com.gmail.fukushima.kai.talker.talker.Talker;
+import com.gmail.fukushima.kai.talker.talker.Talker.TypeTalker;
 import com.gmail.fukushima.kai.utilities.utilities.DataManager;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
@@ -41,16 +41,16 @@ public class DataManagerShadowTopic implements DataManager {
 	private static void importDataShadowTopic() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		Map<String, DataShadowTopic> map = new HashMap<String, DataShadowTopic>();
-		for(String key : ConfigHandlerShadow.config.getKeys(false)) {
+		for(String key : ConfigHandlerShadowTopic.config.getKeys(false)) {
 			UtilitiesProgramming.printDebugMessage(key, new Exception());
-			DataShadowTopic data = ConfigHandlerShadow.loadDataShadow(key);
+			DataShadowTopic data = ConfigHandlerShadowTopic.loadDataShadowTopic(key);
 			UtilitiesProgramming.printDebugShadowTopic(data);
 			map.put(key, data);
-			List<PrivateDataShadow> list = new ConfigHandlerShadow().loadListPrivateDataShadow(key);
-			for(PrivateDataShadow privateData : list) {
+			List<DataShadowData> list = new ConfigHandlerShadowTopic().loadListPrivateDataShadow(key);
+			for(DataShadowData privateData : list) {
 				String path = key + "." + Path.TALKER.toString() + "." + privateData.creator;
 				UtilitiesProgramming.printDebugMessage(path + privateData.creator + privateData.id, new Exception());
-				Talker talker = Talker.importTalker(new ConfigHandlerShadow(), path, privateData.id, TypeTalker.SHADOW);
+				Talker talker = Talker.importTalker(new ConfigHandlerShadowTopic(), path, privateData.id, TypeTalker.SHADOW);
 				DataManagerTalker.putTalker(talker);
 			}
 		}
@@ -61,13 +61,13 @@ public class DataManagerShadowTopic implements DataManager {
 	}
 	public static void saveDataShadowTopic(DataShadowTopic data) {
 		putDataShadowTopic(data);
-		ConfigHandlerShadow.saveDataShadowTopic(data);
+		ConfigHandlerShadowTopic.saveDataShadowTopic(data);
 	}
 	private static void saveMapDataShadowTopic() {
 		for(DataShadowTopic data : mapDataShadowTopic.values()) {
-			ConfigHandlerShadow.saveDataShadowTopic(data);
+			ConfigHandlerShadowTopic.saveDataShadowTopic(data);
 		}
-		new ConfigHandlerShadow().save();
+		new ConfigHandlerShadowTopic().save();
 	}
 	public static void addCreated(Player player, Integer id, String nameTopic) {
 		DataShadowTopic data = getDataShadowTopic(nameTopic);
