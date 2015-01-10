@@ -1,6 +1,5 @@
 package com.gmail.fukushima.kai.talker.talker;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import com.gmail.fukushima.kai.common.common.Sentence;
 import com.gmail.fukushima.kai.player.player.DataManagerPlayer;
 import com.gmail.fukushima.kai.player.player.DataPlayer;
 import com.gmail.fukushima.kai.player.player.DataPlayer.Language;
-import com.gmail.fukushima.kai.stage.stage.DataManagerStage;
 import com.gmail.fukushima.kai.utilities.utilities.MyCommand;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesGeneral;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
@@ -82,7 +80,7 @@ public class CommandTalker extends MyCommand {
 			if(line <= talker.listSentence.size()) {
 				talker.listSentence.remove(line - 1);
 				player.sendMessage("The talker is edited.");
-				DataManagerTalker.putTalker(talker);
+				DataManagerTalker.addTalker(talker);
 				talker.printInformation(player);
 				return;
 			}
@@ -143,7 +141,7 @@ public class CommandTalker extends MyCommand {
 				}
 				UtilitiesProgramming.printDebugMessage("", new Exception());
 				player.sendMessage("The talker is edited.");
-				DataManagerTalker.putTalker(talker);
+				DataManagerTalker.addTalker(talker);
 				talker.printInformation(player);
 				return;
 			}
@@ -171,39 +169,39 @@ public class CommandTalker extends MyCommand {
 		player.sendMessage("You set your learning language " + data.language.toString());
 	}
 	private void commandAnswer() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		String answer = "";
-		if(1 < args.length) {
-			List<String> list = new ArrayList<String>();
-			for(Integer i = 1; i < args.length; i++) {
-				list.add(args[i]);
-			}
-			String [] array = list.toArray(new String[list.size()]);
-			answer = UtilitiesGeneral.joinStringsWithSpace(array);
-		} else {
-			return;
-		}
-		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-		Integer id = data.select;
-		Talker talker = DataManagerTalker.getTalker(id);
-		if(!talker.hasAnswerEn() || !talker.hasAnswerJp()) return;
-		Boolean valid = false;
-		switch(data.language) {
-		case EN:
-			valid = talker.answer.validEn(answer);
-			break;
-		case JP:
-			valid = talker.answer.validJp(answer);
-			break;
-		default:
-			break;
-		}
-		if(valid) {
-			player.sendMessage("Correct");
-			DataManagerPlayer.addDone(player, id);
-			DataManagerStage.loadStageById(id).printInformation(player);
-		} else {
-			player.sendMessage("Wrong");
-		}
+//		UtilitiesProgramming.printDebugMessage("", new Exception());
+//		String answer = "";
+//		if(1 < args.length) {
+//			List<String> list = new ArrayList<String>();
+//			for(Integer i = 1; i < args.length; i++) {
+//				list.add(args[i]);
+//			}
+//			String [] array = list.toArray(new String[list.size()]);
+//			answer = UtilitiesGeneral.joinStringsWithSpace(array);
+//		} else {
+//			return;
+//		}
+//		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
+//		Integer id = data.select;
+//		Talker talker = DataManagerTalker.getTalker(id);
+//		if(!talker.hasAnswerEn() || !talker.hasAnswerJp()) return;
+//		Boolean valid = false;
+//		switch(data.language) {
+//		case EN:
+//			valid = talker.answer.validEn(answer);
+//			break;
+//		case JP:
+//			valid = talker.answer.validJp(answer);
+//			break;
+//		default:
+//			break;
+//		}
+//		if(valid) {
+//			player.sendMessage("Correct");
+//			DataManagerPlayer.addDone(player, id);
+//			DataManagerOldStage.loadStageById(id).printInformation(player);
+//		} else {
+//			player.sendMessage("Wrong");
+//		}
 	}
 }

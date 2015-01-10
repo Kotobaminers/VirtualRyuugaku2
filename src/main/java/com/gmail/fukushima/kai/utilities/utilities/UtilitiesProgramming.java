@@ -7,12 +7,9 @@ import com.gmail.fukushima.kai.citizens.citizens.DataManagerCitizens;
 import com.gmail.fukushima.kai.comment.comment.DataComment;
 import com.gmail.fukushima.kai.comment.comment.DataManagerComment;
 import com.gmail.fukushima.kai.common.common.Sentence;
+import com.gmail.fukushima.kai.mytalker.mytalker.Stage;
 import com.gmail.fukushima.kai.player.player.DataManagerPlayer;
 import com.gmail.fukushima.kai.player.player.DataPlayer;
-import com.gmail.fukushima.kai.shadow.shadow.DataManagerShadowTopic;
-import com.gmail.fukushima.kai.shadow.shadow.DataShadowTopic;
-import com.gmail.fukushima.kai.stage.stage.DataManagerStage;
-import com.gmail.fukushima.kai.stage.stage.Stage;
 import com.gmail.fukushima.kai.talker.talker.DataManagerTalker;
 import com.gmail.fukushima.kai.talker.talker.Talker;
 import com.gmail.fukushima.kai.virtualryuugaku2.virtualryuugaku2.Settings;
@@ -46,16 +43,16 @@ public class UtilitiesProgramming {
 			UtilitiesProgramming.printDebugPlayer(data);
 		}
 	}
+//	public static void printDebugStageAll() {
+//		UtilitiesProgramming.printDebugMessage("", new Exception());
+//		for(OldStage data : DataManagerOldStage.mapStage.values()) {
+//			UtilitiesProgramming.printDebugStage(data);
+//		}
+//	}
 	public static void printDebugStageAll() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		for(Stage data : DataManagerStage.mapStage.values()) {
+		for(Stage data : DataManagerTalker.indexStage.values()) {
 			UtilitiesProgramming.printDebugStage(data);
-		}
-	}
-	public static void printDebugShadowAll() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		for(DataShadowTopic data : DataManagerShadowTopic.mapDataShadowTopic.values()) {
-			UtilitiesProgramming.printDebugShadowTopic(data);
 		}
 	}
 	public static void printDebugTalkerAll() {
@@ -70,14 +67,14 @@ public class UtilitiesProgramming {
 			UtilitiesProgramming.printDebugComment(data);
 		}
 	}
-	public static void printDebugStage(Stage stage) {
-		Bukkit.getLogger().info("[Debug Stage] " + stage.name);
-		Bukkit.getLogger().info(" CREATOR: " + stage.creator);
-		for(Integer id : stage.listId) {
-			Talker talker = DataManagerTalker.getTalker(id);
-			printDebugTalker(talker);
-		}
-	}
+//	public static void printDebugStage(OldStage stage) {
+//		Bukkit.getLogger().info("[Debug Stage] " + stage.name);
+//		Bukkit.getLogger().info(" CREATOR: " + stage.creator);
+//		for(Integer id : stage.listId) {
+//			Talker talker = DataManagerTalker.getTalker(id);
+//			printDebugTalker(talker);
+//		}
+//	}
 	public static void printDebugPlayer(DataPlayer data) {
 		Bukkit.getLogger().info("[Debug DataPlayer] " + data.name);
 		Bukkit.getLogger().info(" LINE: " + data.line);
@@ -86,24 +83,23 @@ public class UtilitiesProgramming {
 	public static void printDebugTalker(Talker talker) {
 		if(talker.id < 0) return;
 		Bukkit.getLogger().info("[Debug Talker] " + talker.name);
-		Bukkit.getLogger().info(" ID: " + talker.id + " TYPE: " + talker.type.toString() + " OWNER: " + talker.owner);
+		Bukkit.getLogger().info(" ID: " + talker.id + ", OWNER: " + talker.owner);
 		for(Sentence sentence : talker.listSentence) {
 			Bukkit.getLogger().info(" SEN: " + sentence.loadEn());
 			Bukkit.getLogger().info(" SEN: " + sentence.loadJp());
 		}
-		Bukkit.getLogger().info(" QUE: " + talker.question.loadEn());
-		Bukkit.getLogger().info(" QUE: " + talker.question.loadJp());
-		Bukkit.getLogger().info(" ANS: " + talker.answer.loadEn());
-		Bukkit.getLogger().info(" ANS: " + talker.answer.loadJp());
+//		Bukkit.getLogger().info(" QUE: " + talker.question.loadEn());
+//		Bukkit.getLogger().info(" QUE: " + talker.question.loadJp());
+//		Bukkit.getLogger().info(" ANS: " + talker.answer.loadEn());
+//		Bukkit.getLogger().info(" ANS: " + talker.answer.loadJp());
 	}
 	public static void printDebugCitizens(DataCitizens citizens) {
 		Bukkit.getLogger().info("ID: " + citizens.id + " Name: " + citizens.name);
 	}
-	public static void printDebugShadowTopic(DataShadowTopic shadow) {
-		Bukkit.getLogger().info("[Debug ShadowTopic] " + shadow.nameTopic);
-		String message = " CREATED: " + shadow.created;
-		Bukkit.getLogger().info(message);
-		for(Integer id : shadow.listId) {
+	public static void printDebugStage(Stage stage) {
+		Bukkit.getLogger().info("[Debug Stage] " + stage.name);
+		System.out.println(" LISTID: " + stage.listId);
+		for(Integer id : stage.listId) {
 			Talker talker = DataManagerTalker.getTalker(id);
 			UtilitiesProgramming.printDebugTalker(talker);
 		}

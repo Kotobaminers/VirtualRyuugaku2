@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
 import com.gmail.fukushima.kai.common.common.DataManagerCommon;
@@ -29,26 +28,18 @@ public class UtilitiesGeneral {
 	}
 	public static void runCommandAsOP(Player player, String command) {
 		if(!player.isOp()) {
-			try
-			{
+			try {
 				player.setOp(true);
 				Bukkit.getServer().dispatchCommand(player, command);
-			}
-			catch(Exception e)
-			{
+			} catch(Exception e) {
 				e.printStackTrace();
-			}
-			finally
-			{
+			} finally {
 				player.setOp(false);
 			}
 		} else {
-			try
-			{
+			try {
 				Bukkit.getServer().dispatchCommand(player, command);
-			}
-			catch(Exception e)
-			{
+			} catch(Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -128,14 +119,24 @@ public class UtilitiesGeneral {
 		}
 		return string;
 	}
-	public static void sendHelpCommand(Player player, Command command) {
-		String title = "*** Help: " + command.getName();
-		String description = command.getDescription();
-		String usage = command.getUsage();
-		List<String> aliases = command.getAliases();
-		player.sendMessage(title);
-		player.sendMessage(description);
-		player.sendMessage(usage);
-		player.sendMessage(aliases.toString());
+	public static String joinArraysStringWithDot(String[] strings) {
+		String string = "";
+		for(String part : strings) {
+			string += "." + part;
+		}
+		if(0 < string.length()) {
+			string = string.substring(1, string.length());
+		}
+		return string;
 	}
+//	public static void sendHelpCommand(Player player, Command command) {
+//		String title = "*** Help: " + command.getName();
+//		String description = command.getDescription();
+//		String usage = command.getUsage();
+//		List<String> aliases = command.getAliases();
+//		player.sendMessage(title);
+//		player.sendMessage(description);
+//		player.sendMessage(usage);
+//		player.sendMessage(aliases.toString());
+//	}
 }

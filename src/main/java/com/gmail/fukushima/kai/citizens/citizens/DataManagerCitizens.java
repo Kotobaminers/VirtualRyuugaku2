@@ -22,7 +22,6 @@ public class DataManagerCitizens implements DataManager {
 		YamlConfiguration config = YamlConfiguration.loadConfiguration(new File(citizensDataFolder));
 		MemorySection memory = (MemorySection) config.get(KEY_NPC);
 		for(String key : memory.getKeys(false)) {
-			UtilitiesProgramming.printDebugMessage(key, new Exception());
 			Integer id = Integer.parseInt(key);
 			String name = memory.getString(key + "." + KEY_NAME);
 			if(0 <= id) {
@@ -30,7 +29,6 @@ public class DataManagerCitizens implements DataManager {
 				data.id = id;
 				data.name = name;
 				mapDataCitizns.put(id, data);
-				UtilitiesProgramming.printDebugCitizens(data);
 			}
 		}
 	}

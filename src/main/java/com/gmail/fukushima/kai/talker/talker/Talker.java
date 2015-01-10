@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.citizensnpcs.api.npc.NPC;
+
 import org.bukkit.entity.Player;
 
 import com.gmail.fukushima.kai.common.common.Description.Path;
@@ -14,9 +16,10 @@ import com.gmail.fukushima.kai.utilities.utilities.ConfigHandler;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class Talker {
-	public String name = "";
-	public String owner = "";
 	public Integer id = -1;
+	public String name = "";
+	public String nameStage = "";
+	public String owner = "";
 	public List<Sentence> listSentence = new ArrayList<Sentence>();
 	public Sentence question = new Sentence();
 	public Sentence answer = new Sentence();
@@ -183,5 +186,11 @@ public class Talker {
 		player.sendMessage(" QUES JP: " + question.loadJp());
 		player.sendMessage(" ANSW EN: " + answer.loadEn());
 		player.sendMessage(" ANSW JP: " + answer.loadJp());
+	}
+	public static boolean isTalker(NPC npc) {
+		if(DataManagerTalker.mapTalker.containsKey(npc.getId())) {
+			return true;
+		}
+		return false;
 	}
 }

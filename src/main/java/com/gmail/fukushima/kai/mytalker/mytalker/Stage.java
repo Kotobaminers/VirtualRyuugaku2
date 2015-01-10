@@ -1,13 +1,14 @@
-package com.gmail.fukushima.kai.shadow.shadow;
+package com.gmail.fukushima.kai.mytalker.mytalker;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.gmail.fukushima.kai.talker.talker.Talker;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
-public class DataShadowTopic {
-	public String nameTopic = "";
-	public List<String> created = new ArrayList<String>();
+public class Stage {
+	public String name = "";
+	public List<String> editor = new ArrayList<String>();
 	public List<Integer> listId = new ArrayList<Integer>();
 	public enum Language {EN, JP;
 		public static Language lookup(String name) {
@@ -21,10 +22,15 @@ public class DataShadowTopic {
 		}
 	}
 	public Boolean isValid() {
-		if(0 < nameTopic.length()) {
+		if(0 < name.length()) {
 			return true;
 		}
 		UtilitiesProgramming.printDebugMessage("Invalid DataShadowTopic", new Exception());
 		return false;
+	}
+	public void addTalker(Talker talker) {
+		if(!listId.contains(talker.id)) {
+			listId.add(talker.id);
+		}
 	}
 }

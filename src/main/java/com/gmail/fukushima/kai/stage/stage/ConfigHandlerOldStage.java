@@ -5,7 +5,8 @@ import java.io.File;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class ConfigHandlerStage {
+
+public class ConfigHandlerOldStage {
 	/*
 	 * This class is not extends ConfigHandler class
 	 */
@@ -13,7 +14,7 @@ public class ConfigHandlerStage {
 	public FileConfiguration config;
 	public File file;
 	public enum Path {CREATOR, TALKER}
-	public ConfigHandlerStage(File file) {
+	public ConfigHandlerOldStage(File file) {
 		this.file = file;
 		this.config = YamlConfiguration.loadConfiguration(file);
 	}
