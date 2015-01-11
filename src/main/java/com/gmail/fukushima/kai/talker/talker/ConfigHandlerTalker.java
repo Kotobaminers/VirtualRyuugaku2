@@ -2,14 +2,19 @@ package com.gmail.fukushima.kai.talker.talker;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.gmail.fukushima.kai.mytalker.mytalker.Stage;
+import com.gmail.fukushima.kai.comment.comment.DataComment;
+import com.gmail.fukushima.kai.comment.comment.DataComment.CommentState;
+import com.gmail.fukushima.kai.common.common.Description;
+import com.gmail.fukushima.kai.talker.talker.TalkerAnswer.KeyAnswer;
+import com.gmail.fukushima.kai.talker.talker.TalkerQuestion.KeyQuestion;
 import com.gmail.fukushima.kai.utilities.utilities.ConfigHandler;
-import com.gmail.fukushima.kai.utilities.utilities.UtilitiesGeneral;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class ConfigHandlerTalker extends ConfigHandler {
@@ -18,78 +23,78 @@ public class ConfigHandlerTalker extends ConfigHandler {
 	public static final String DIRECTORY = "TALKER";
 	public static final String FILE_NAME = "TALKER.yml";
 	public enum PathStage {TALKER, EDITOR}
-	public enum PathTalker {NAME, OWNE, ENGL, KANJ, KANA, QUES, ANSW, COMM}
-	public List<Talker> importTalker() {
+	public enum PathTalker {NAME, EDITOR, STAGE, EN, KANJI, KANA, Q, A, COMMENT}
+	public enum PathComment {STATE, EXPRESSION}
+	//Talker
+	public static List<Talker> importTalkerDefault() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		List<Talker> list = new ArrayList<Talker>();
-		for(String stage : config.getKeys(false)) {
-			UtilitiesProgramming.printDebugMessage(stage, new Exception());
-			MemorySection memory = (MemorySection) config.get(stage);
-			for(String talkerPath : memory.getKeys(false)) {
-				if(talkerPath.equalsIgnoreCase(PathStage.TALKER.toString())) {
-					UtilitiesProgramming.printDebugMessage(talkerPath, new Exception());
-					MemorySection memory2 = (MemorySection) memory.get(talkerPath);
-					for(String idString : memory2.getKeys(false)) {
-						UtilitiesProgramming.printDebugMessage(idString, new Exception());
-						Integer id = Integer.parseInt(idString.toString());
-						Talker talker = new Talker();
-						talker.id = id;
-						talker.nameStage = stage;
-						String[] array = {stage, talkerPath, idString};
-						String path = UtilitiesGeneral.joinArraysStringWithDot(array);
-						talker.name = config.getString(path + "." + PathTalker.NAME.toString());
-						talker.owner = config.getString(path + "." + PathTalker.OWNE.toString());
-						list.add(talker);
-					}
+		for(String idString : config.getKeys(false)) {
+			MemorySection memoryId = (MemorySection) config.get(idString);
+			Integer id = Integer.parseInt(idString.toString());
+			Talker talker = new Talker();
+			talker.id = id;
+			String path = idString;
+			talker.nameStage = memoryId.getString(PathTalker.STAGE.toString());
+			talker.name = memoryId.getString(PathTalker.NAME.toString());
+			talker.editor.addAll(memoryId.getStringList(PathTalker.EDITOR.toString()));
+			List<String> kanji = memoryId.getStringList(PathTalker.KANJI.toString());
+			List<String> kana = memoryId.getStringList(PathTalker.KANA.toString());
+			List<String> en = memoryId.getStringList(PathTalker.EN.toString());
+			Integer size = kanji.size();
+			List<Description> listSentence = new ArrayList<Description>();
+			if(size.equals(kana.size()) && size.equals(en.size())) {
+				for(int i = 0; i < size; i++) {
+					listSentence.add(Description.create(kanji.get(i), kana.get(i), en.get(i), new ArrayList<String>()));
 				}
 			}
-		}
-		return list;
-	}
-	public static List<Stage> importStage() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		List<Stage> list = new ArrayList<Stage>();
-		for(String name : config.getKeys(false)) {
-			UtilitiesProgramming.printDebugMessage(name, new Exception());
-			MemorySection memory = (MemorySection) config.get(name);
-			List<String> editor = new ArrayList<String>();
-			List<Integer> listId = new ArrayList<Integer>();
-			for(String pathStage : memory.getKeys(false)) {
-				if(pathStage.equalsIgnoreCase(PathStage.EDITOR.toString())) {
-					UtilitiesProgramming.printDebugMessage(pathStage, new Exception());
-					String path = name + "." + PathStage.EDITOR;
-					if(config.isList(path)) {
-						System.out.println(editor);
-						editor = config.getStringList(path);
-					}
-				}
-				if(pathStage.equalsIgnoreCase(PathStage.TALKER.toString())) {
-					MemorySection memory2 = (MemorySection) memory.get(pathStage);
-					for(String idString : memory2.getKeys(false)) {
-						UtilitiesProgramming.printDebugMessage(idString, new Exception());
-						listId.add(Integer.parseInt(idString));
-					}
-				}
+			talker.listSentence = listSentence;
+			String questionEn = memoryId.getString(PathTalker.Q + "." + KeyQuestion.EN);
+			String questionJp = memoryId.getString(PathTalker.Q + "." + KeyQuestion.JP);
+			talker.question = new TalkerQuestion().create(questionEn, questionJp);
+			List<String> answerEn = memoryId.getStringList(PathTalker.A + "." + KeyAnswer.EN);
+			List<String> answerJp = memoryId.getStringList(PathTalker.A + "." + KeyAnswer.JP);
+			talker.answer = new TalkerAnswer().create(answerEn, answerJp);
+			Map<String, DataComment> mapComment = new HashMap<String, DataComment>();
+			MemorySection memoryComment = (MemorySection) memoryId.get(PathTalker.COMMENT.toString());
+			for(String sender : memoryComment.getKeys(false)) {
+				DataComment comment = new DataComment();
+				comment.sender = sender;
+				String pathComment = sender;
+				comment.expression = memoryComment.getString(pathComment + "." + PathComment.EXPRESSION);
+				comment.state = CommentState.lookup(memoryComment.getString(pathComment + "." + PathComment.STATE));
+				mapComment.put(sender, comment);
 			}
-			Stage stage = new Stage();
-			stage.name = name;
-			stage.editor = editor;
-			stage.listId = listId;
-			list.add(stage);
+			talker.mapComment = mapComment;
+			list.add(talker);
 		}
 		return list;
 	}
 	public static void saveTalker(Talker talker) {
-		String[] arrays = {talker.nameStage, PathStage.TALKER.toString(), talker.id.toString()};
-		String path = UtilitiesGeneral.joinArraysStringWithDot(arrays);
+		String path = talker.id.toString();
 		config.set(path + "." + PathTalker.NAME, talker.name);
-		config.set(path + "." + PathTalker.OWNE, talker.owner);
-	}
-	public static void saveStage(Stage stage) {
-		//Only saving editor is enough because the others are saved in saveTalker(talker);
-		String path = stage.name + "." + PathStage.EDITOR.toString();
-		UtilitiesProgramming.printDebugMessage(path, new Exception());
-		config.set(path, stage.editor);
+		config.set(path + "." + PathTalker.EDITOR, talker.editor);
+		config.set(path + "." + PathTalker.STAGE, talker.nameStage);
+		List<String> kanji = new ArrayList<String>();
+		List<String> kana = new ArrayList<String>();
+		List<String> en = new ArrayList<String>();
+		for(Description description : talker.listSentence) {
+			kanji.add(description.kanji.get(0));
+			kana.add(description.kana.get(0));
+			en.add(description.en.get(0));
+		}
+		config.set(path + "." + PathTalker.KANJI, kanji);
+		config.set(path + "." + PathTalker.KANA, kana);
+		config.set(path + "." + PathTalker.EN, en);
+		config.set(path + "." + PathTalker.Q + "." + KeyQuestion.EN, talker.question.getEn());
+		config.set(path + "." + PathTalker.Q + "." + KeyQuestion.JP, talker.question.getJp());
+		config.set(path + "." + PathTalker.A + "." + KeyAnswer.EN, talker.answer.getEn());
+		config.set(path + "." + PathTalker.A + "." + KeyAnswer.JP, talker.answer.getJp());
+		for(DataComment comment : talker.mapComment.values()) {
+			String pathComment = path + "." + PathTalker.COMMENT + "." + comment.sender;
+			config.set(pathComment + "." + PathComment.STATE, comment.state.toString());
+			config.set(pathComment + "." + PathComment.EXPRESSION, comment.expression);
+		}
 	}
 	@Override
 	public void setFile(File file) {

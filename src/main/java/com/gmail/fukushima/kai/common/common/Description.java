@@ -5,12 +5,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesGeneral;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
-public abstract class Description {
+public class Description {
 	public List<String> kanji = new ArrayList<String>();
 	public List<String> kana = new ArrayList<String>();
 	public List<String> en = new ArrayList<String>();
@@ -30,24 +29,17 @@ public abstract class Description {
 			}
 		}
 	}
-	public Description() {
+
+	public static Description create(String kanji, String kana, String en, List<String> tips) {
+		Description description = new Description();
+		description.kanji = Arrays.asList(kanji);
+		description.kana = Arrays.asList(kana);
+		description.en = Arrays.asList(en);
+		description.tips = tips;
+		description.romaji = Arrays.asList(UtilitiesGeneral.toRomaji(kana));
+		return description;
 	}
-	public Description(List<String> kanji, List<String> kana, List<String> en, List<String> tips) {
-		this.kanji = kanji;
-		this.kana = kana;
-		this.en = en;
-		this.tips = tips;
-		List<String> romaji = new ArrayList<String>();
-		for(String string : kana) {
-			romaji.add(UtilitiesGeneral.toRomaji(string));
-		}
-		this.romaji = romaji;
-	}
-	public void sendDescription(Player player) {
-		sendEn(player);
-		sendJp(player);
-		sendTips(player);
-	}
+
 	public String loadEn() {
 		String message = UtilitiesGeneral.joinListListString(Arrays.asList(en), colorsSingle);
 		return message;
@@ -56,43 +48,8 @@ public abstract class Description {
 		String message = UtilitiesGeneral.joinListListString(Arrays.asList(kanji, kana, romaji), colorsJp);
 		return message;
 	}
-	public void sendEn(Player player) {
-		player.sendMessage(UtilitiesGeneral.joinListListString(Arrays.asList(en), colorsSingle));
-	}
-	public void sendJp(Player player) {
-		player.sendMessage(UtilitiesGeneral.joinListListString(Arrays.asList(kanji, kana, romaji), colorsJp));
-	}
-	public void sendTips(Player player) {
-		player.sendMessage(UtilitiesGeneral.joinListListString(Arrays.asList(tips), colorsSingle));
-	}
-	public abstract void sendMessage(Player player);
+
 	public void printDebug() {
 		UtilitiesProgramming.printDebugMessage("  " + kanji + kana + en + romaji + tips, new Exception());
-	}
-	public Boolean validEn(String answer) {
-		for(String search : en) {
-			if(search.equalsIgnoreCase(answer)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	public Boolean validJp(String answer) {
-		for(String search : romaji) {
-			if(search.equalsIgnoreCase(answer)) {
-				return true;
-			}
-		}
-		for(String search : kana) {
-			if(search.equalsIgnoreCase(answer)) {
-				return true;
-			}
-		}
-		for(String search : kanji) {
-			if(search.equalsIgnoreCase(answer)) {
-				return true;
-			}
-		}
-		return false;
 	}
 }

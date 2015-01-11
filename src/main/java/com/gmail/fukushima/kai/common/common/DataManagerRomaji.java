@@ -15,7 +15,7 @@ import com.gmail.fukushima.kai.utilities.utilities.DataManager;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 import com.gmail.fukushima.kai.virtualryuugaku2.virtualryuugaku2.DataManagerPlugin;
 
-public class DataManagerCommon implements DataManager {
+public class DataManagerRomaji implements DataManager {
 	public enum TypeLetters {
 		TTSULARGESMALL,
 		LARGESMALL,
@@ -24,9 +24,9 @@ public class DataManagerCommon implements DataManager {
 		DAKUTEN,
 		SIGNS,
 		}
-	public static Map<String, List<Letters>> mapLetters = new HashMap<String, List<Letters>>();
+	private static Map<String, List<Letters>> mapLetters = new HashMap<String, List<Letters>>();
 
-	private static final String NAME_DIRECTORY = "COMMON";
+	private static final String NAME_DIRECTORY = "LIBRARY//ROMAJI";
 	private static final String NAME_FILE = "ROMAJI_TABLE.txt";
 	private static final String DELIMITTER = "[Type]";
 	private static void importRomaji() throws IOException {
@@ -61,14 +61,14 @@ public class DataManagerCommon implements DataManager {
 		buffer.close();
 		reader.close();
 		str.close();
-		mapLetters = map;
+		setMapLetters(map);
 	}
 	@Override
 	public void initialize() {
-		mapLetters = new HashMap<String, List<Letters>>();
+		setMapLetters(new HashMap<String, List<Letters>>());
 	}
 	@Override
-	public void load() {
+	public void loadAll() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		initialize();
 		try {
@@ -79,5 +79,11 @@ public class DataManagerCommon implements DataManager {
 	}
 	@Override
 	public void saveAll() {
+	}
+	public static Map<String, List<Letters>> getMapLetters() {
+		return mapLetters;
+	}
+	public static void setMapLetters(Map<String, List<Letters>> mapLetters) {
+		DataManagerRomaji.mapLetters = mapLetters;
 	}
 }

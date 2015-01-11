@@ -6,8 +6,7 @@ import com.gmail.fukushima.kai.citizens.citizens.DataCitizens;
 import com.gmail.fukushima.kai.citizens.citizens.DataManagerCitizens;
 import com.gmail.fukushima.kai.comment.comment.DataComment;
 import com.gmail.fukushima.kai.comment.comment.DataManagerComment;
-import com.gmail.fukushima.kai.common.common.Sentence;
-import com.gmail.fukushima.kai.mytalker.mytalker.Stage;
+import com.gmail.fukushima.kai.common.common.Description;
 import com.gmail.fukushima.kai.player.player.DataManagerPlayer;
 import com.gmail.fukushima.kai.player.player.DataPlayer;
 import com.gmail.fukushima.kai.talker.talker.DataManagerTalker;
@@ -39,42 +38,22 @@ public class UtilitiesProgramming {
 	}
 	public static void printDebugPlayerAll() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		for(DataPlayer data : DataManagerPlayer.mapDataPlayer.values()) {
+		for(DataPlayer data : DataManagerPlayer.getMapDataPlayer().values()) {
 			UtilitiesProgramming.printDebugPlayer(data);
-		}
-	}
-//	public static void printDebugStageAll() {
-//		UtilitiesProgramming.printDebugMessage("", new Exception());
-//		for(OldStage data : DataManagerOldStage.mapStage.values()) {
-//			UtilitiesProgramming.printDebugStage(data);
-//		}
-//	}
-	public static void printDebugStageAll() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		for(Stage data : DataManagerTalker.indexStage.values()) {
-			UtilitiesProgramming.printDebugStage(data);
 		}
 	}
 	public static void printDebugTalkerAll() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		for(Talker data : DataManagerTalker.mapTalker.values()) {
+		for(Talker data : DataManagerTalker.getMapTalker().values()) {
 			UtilitiesProgramming.printDebugTalker(data);
 		}
 	}
 	public static void printDebugCommentAll() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		for(DataComment data : DataManagerComment.mapDataComment.values()) {
+		for(DataComment data : DataManagerComment.getMapDataComment().values()) {
 			UtilitiesProgramming.printDebugComment(data);
 		}
 	}
-//	public static void printDebugStage(OldStage stage) {
-//		Bukkit.getLogger().info("[Debug Stage] " + stage.name);
-//		Bukkit.getLogger().info(" CREATOR: " + stage.creator);
-//		for(Integer id : stage.listId) {
-//			Talker talker = DataManagerTalker.getTalker(id);
-//			printDebugTalker(talker);
-//		}
-//	}
 	public static void printDebugPlayer(DataPlayer data) {
 		Bukkit.getLogger().info("[Debug DataPlayer] " + data.name);
 		Bukkit.getLogger().info(" LINE: " + data.line);
@@ -83,29 +62,24 @@ public class UtilitiesProgramming {
 	public static void printDebugTalker(Talker talker) {
 		if(talker.id < 0) return;
 		Bukkit.getLogger().info("[Debug Talker] " + talker.name);
-		Bukkit.getLogger().info(" ID: " + talker.id + ", OWNER: " + talker.owner);
-		for(Sentence sentence : talker.listSentence) {
+		Bukkit.getLogger().info(" ID: " + talker.id + ", EDITOR: " + talker.editor + ", STAGE: " + talker.nameStage);
+		for(Description sentence : talker.listSentence) {
 			Bukkit.getLogger().info(" SEN: " + sentence.loadEn());
 			Bukkit.getLogger().info(" SEN: " + sentence.loadJp());
 		}
-//		Bukkit.getLogger().info(" QUE: " + talker.question.loadEn());
-//		Bukkit.getLogger().info(" QUE: " + talker.question.loadJp());
-//		Bukkit.getLogger().info(" ANS: " + talker.answer.loadEn());
-//		Bukkit.getLogger().info(" ANS: " + talker.answer.loadJp());
-	}
-	public static void printDebugCitizens(DataCitizens citizens) {
-		Bukkit.getLogger().info("ID: " + citizens.id + " Name: " + citizens.name);
-	}
-	public static void printDebugStage(Stage stage) {
-		Bukkit.getLogger().info("[Debug Stage] " + stage.name);
-		System.out.println(" LISTID: " + stage.listId);
-		for(Integer id : stage.listId) {
-			Talker talker = DataManagerTalker.getTalker(id);
-			UtilitiesProgramming.printDebugTalker(talker);
+		Bukkit.getLogger().info(" Q(EN): " + talker.question.getEn());
+		Bukkit.getLogger().info(" Q(JP): " + talker.question.getJp());
+		Bukkit.getLogger().info(" A(EN): " + UtilitiesGeneral.joinStrings(talker.answer.getEn(), ", "));
+		Bukkit.getLogger().info(" A(JP): " + UtilitiesGeneral.joinStrings(talker.answer.getJp(), ", "));
+		for(DataComment comment : talker.mapComment.values()) {
+			UtilitiesProgramming.printDebugComment(comment);
 		}
 	}
+	public static void printDebugCitizens(DataCitizens citizens) {
+		Bukkit.getLogger().info("ID: " + citizens.id + ", NAME: " + citizens.name);
+	}
 	public static void printDebugComment(DataComment comment) {
-		Bukkit.getLogger().info("[Debug Comment] OWNER: " + comment.owner + " ID: " + comment.id.toString() + " SENDER: " + comment.sender + " STATE: " + comment.state);
-		Bukkit.getLogger().info(" COMMENT: " + comment.comment);
+		Bukkit.getLogger().info("[Debug Comment] " + " SENDER: " + comment.sender + ", STATE: " + comment.state);
+		Bukkit.getLogger().info(" COMMENT: " + comment.expression);
 	}
 }

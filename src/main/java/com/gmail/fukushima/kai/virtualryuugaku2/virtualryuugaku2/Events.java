@@ -8,7 +8,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
-import com.gmail.fukushima.kai.mytalker.mytalker.EventStage;
+import com.gmail.fukushima.kai.talker.stage.EventStage;
 import com.gmail.fukushima.kai.talker.talker.DataManagerTalker;
 import com.gmail.fukushima.kai.talker.talker.EventTalker;
 import com.gmail.fukushima.kai.talker.talker.Talker;
@@ -34,7 +34,7 @@ public class Events implements Listener {
 		EntityType type = npc.getEntity().getType();
 		switch(type) {
 		case CREEPER:
-			new EventStage(npc, event.getClicker()).create();
+			new EventStage(npc, event.getClicker()).createTalker();
 			return;
 		case PLAYER:
 			if(Talker.isTalker(npc)) {//Talker

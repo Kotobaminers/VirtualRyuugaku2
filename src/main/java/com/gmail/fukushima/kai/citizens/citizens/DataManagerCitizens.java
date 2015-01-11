@@ -48,7 +48,7 @@ public class DataManagerCitizens implements DataManager {
 		mapDataCitizns = new HashMap<Integer, DataCitizens>();
 	}
 	@Override
-	public void load() {
+	public void loadAll() {
 		initialize();
 		importCitizens();
 	}

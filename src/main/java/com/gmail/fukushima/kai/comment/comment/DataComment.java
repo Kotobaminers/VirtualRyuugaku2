@@ -5,10 +5,8 @@ import org.bukkit.entity.Player;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class DataComment {
-	public String owner = "";
-	public Integer id = 0;
 	public String sender = "";
-	public String comment = "";
+	public String expression = "";
 	public CommentState state = CommentState.NEW;
 	public enum CommentState {
 		NEW, OLD;
@@ -16,26 +14,29 @@ public class DataComment {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
 				return CommentState.valueOf(name.toUpperCase());
-			} catch (IllegalArgumentException e) {
+			} catch (Exception e) {
 				UtilitiesProgramming.printDebugMessage(e.toString(), new Exception());
 				return CommentState.NEW;
 			}
 		}
 	}
 	public Boolean isValid() {
-		if(0 < owner.length()) {
+		if(0 < editor.length()) {
 			return true;
 		}
 		return false;
 	}
 	public Boolean isSame(DataComment data) {
-		if(owner.equalsIgnoreCase(data.owner) && id.equals(data.id) && sender.equalsIgnoreCase(data.sender) && comment.equalsIgnoreCase(data.comment) && state.equals(data.state)) {
+		if(editor.equalsIgnoreCase(data.editor) && id.equals(data.id) && sender.equalsIgnoreCase(data.sender) && expression.equalsIgnoreCase(data.expression) && state.equals(data.state)) {
 			return true;
 		}
 		return false;
 	}
 	public void printInfo(Player player) {
-		player.sendMessage("[Comment Info] " + "From: " + this.sender + "To: " + this.owner + " STATE: " + this.state);
-		player.sendMessage(" COMMENT: " + this.comment);
+		player.sendMessage("[Comment Info] " + "From: " + this.sender + "To: " + this.editor + " STATE: " + this.state);
+		player.sendMessage(" COMMENT: " + this.expression);
 	}
+
+	public String editor = "";
+	public Integer id = 0;
 }

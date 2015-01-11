@@ -11,15 +11,29 @@ import com.gmail.fukushima.kai.utilities.utilities.DataManager;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class DataManagerPlayer implements DataManager {
-	public static Map<String, DataPlayer> mapDataPlayer = new HashMap<String, DataPlayer>();
+	private static Map<String, DataPlayer> mapDataPlayer = new HashMap<String, DataPlayer>();
 
 	public static DataPlayer getDataPlayer(Player player) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataPlayer data = new DataPlayer();
-		if(mapDataPlayer.containsKey(player.getName())) {
-			data = mapDataPlayer.get(player.getName());
+		if(getMapDataPlayer().containsKey(player.getName())) {
+			data = getMapDataPlayer().get(player.getName());
 		}
 		return data;
+	}
+	public static void putDataPlayer(DataPlayer data) {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		getMapDataPlayer().put(data.name, data);
+	}
+
+	@Override
+	public void loadAll() {
+		initialize();
+		importDataPlayer();
+	}
+	@Override
+	public void initialize() {
+		setMapDataPlayer(new HashMap<String, DataPlayer>());
 	}
 	private static void importDataPlayer() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -28,21 +42,20 @@ public class DataManagerPlayer implements DataManager {
 			DataPlayer data = ConfigHandlerPlayer.loadDataPlayer(key);
 			map.put(key, data);
 		}
-		mapDataPlayer = map;
+		setMapDataPlayer(map);
+	}
+
+	@Override
+	public void saveAll() {
+		saveMapDataPlayer();
 	}
 	private static void saveMapDataPlayer() {
-		for(DataPlayer data : mapDataPlayer.values()) {
+		for(DataPlayer data : getMapDataPlayer().values()) {
 			ConfigHandlerPlayer.saveDataPlayer(data);
 		}
 		new ConfigHandlerPlayer().save();
 	}
-	public static void saveDataPlayer(DataPlayer data) {
-		ConfigHandlerPlayer.saveDataPlayer(data);
-	}
-	public static void putDataPlayer(DataPlayer data) {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		mapDataPlayer.put(data.name, data);
-	}
+
 	public static void addDone(Player player, Integer id) {
 		DataPlayer data = getDataPlayer(player);
 		List<Integer> done = new ArrayList<Integer>();
@@ -55,17 +68,11 @@ public class DataManagerPlayer implements DataManager {
 			UtilitiesProgramming.printDebugMessage("This Talker has already been added.", new Exception());
 		}
 	}
-	@Override
-	public void initialize() {
-		mapDataPlayer = new HashMap<String, DataPlayer>();
+
+	public static Map<String, DataPlayer> getMapDataPlayer() {
+		return mapDataPlayer;
 	}
-	@Override
-	public void load() {
-		initialize();
-		importDataPlayer();
-	}
-	@Override
-	public void saveAll() {
-		saveMapDataPlayer();
+	private static void setMapDataPlayer(Map<String, DataPlayer> mapDataPlayer) {
+		DataManagerPlayer.mapDataPlayer = mapDataPlayer;
 	}
 }

@@ -16,16 +16,11 @@ public class VirtualRyuugaku2 extends JavaPlugin {
 		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Loading Plugin Data", new Exception());
 		DataManagerPlugin.loadPlugin();
 
-		UtilitiesProgramming.printDebugTalkerAll();
-		UtilitiesProgramming.printDebugStageAll();
-
 		getServer().getPluginManager().registerEvents(new Events(), this);
 		for(Commands command : Commands.values()) {
 			this.getCommand(command.toString()).setExecutor(new CommandExecutorPlugin(this));
 		}
 		System.out.println("My Default Charset: " + Charset.defaultCharset());
-
-		UtilitiesProgramming.printDebugTalkerAll();
 
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataManagerPlugin.savePlugin();

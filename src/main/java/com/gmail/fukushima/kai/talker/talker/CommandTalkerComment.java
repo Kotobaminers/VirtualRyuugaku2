@@ -1,14 +1,8 @@
 package com.gmail.fukushima.kai.talker.talker;
 
-import java.util.List;
-
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-import com.gmail.fukushima.kai.comment.comment.DataComment;
-import com.gmail.fukushima.kai.comment.comment.DataComment.CommentState;
-import com.gmail.fukushima.kai.comment.comment.DataManagerComment;
-import com.gmail.fukushima.kai.player.player.DataManagerPlayer;
 import com.gmail.fukushima.kai.utilities.utilities.MyCommand;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
@@ -57,23 +51,23 @@ public class CommandTalkerComment extends MyCommand {
 	}
 	private void commandRead() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		Talker talker = DataManagerTalker.getTalker(DataManagerPlayer.getDataPlayer(player).select);
-		List<DataComment> listComment = DataManagerComment.loadListCommentById(talker.owner, talker.id);
-		player.sendMessage("Comments for the selected talker(ID: " + talker.id.toString() + ") are shown.");
-		for(DataComment data: listComment) {
-			data.printInfo(player);
-		}
+//		Talker talker = DataManagerTalker.getTalker(DataManagerPlayer.getDataPlayer(player).select);
+//		List<DataComment> listComment = DataManagerComment.loadListCommentById(talker.editor, talker.id);
+//		player.sendMessage("Comments for the selected talker(ID: " + talker.id.toString() + ") are shown.");
+//		for(DataComment data: listComment) {
+//			data.printInfo(player);
+//		}
 	}
 	private void commandSend() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		Talker talker = DataManagerTalker.getTalker(DataManagerPlayer.getDataPlayer(player).select);
-		DataComment data = new DataComment();
-		data.owner = talker.owner;
-		data.id = talker.id;
-		data.sender = player.getName();
-		data.comment = args[2];
-		data.state = CommentState.NEW;
-		DataManagerComment.putData(data);
+//		UtilitiesProgramming.printDebugMessage("", new Exception());
+//		Talker talker = DataManagerTalker.getTalker(DataManagerPlayer.getDataPlayer(player).select);
+//		DataComment data = new DataComment();
+//		data.owner = talker.editor;
+//		data.id = talker.id;
+//		data.sender = player.getName();
+//		data.comment = args[2];
+//		data.state = CommentState.NEW;
+//		DataManagerComment.putData(data);
 	}
 	private void printUsageComment() {
 	}

@@ -6,8 +6,8 @@ import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
+import com.gmail.fukushima.kai.common.common.Description;
 import com.gmail.fukushima.kai.common.common.Description.Expression;
-import com.gmail.fukushima.kai.common.common.Sentence;
 import com.gmail.fukushima.kai.player.player.DataManagerPlayer;
 import com.gmail.fukushima.kai.player.player.DataPlayer;
 import com.gmail.fukushima.kai.player.player.DataPlayer.Language;
@@ -80,7 +80,7 @@ public class CommandTalker extends MyCommand {
 			if(line <= talker.listSentence.size()) {
 				talker.listSentence.remove(line - 1);
 				player.sendMessage("The talker is edited.");
-				DataManagerTalker.addTalker(talker);
+				DataManagerTalker.registerTalker(talker);
 				talker.printInformation(player);
 				return;
 			}
@@ -104,7 +104,7 @@ public class CommandTalker extends MyCommand {
 			Expression expression = Expression.lookup(args[2]);
 			if(0 < line && line < 11 && !expression.equals(Expression.NONE)) {
 				Talker talker = DataManagerTalker.getTalker(DataManagerPlayer.getDataPlayer(player).select);
-				UtilitiesProgramming.printDebugMessage(player.getName() + talker.owner, new Exception());
+				UtilitiesProgramming.printDebugMessage(player.getName() + talker.editor, new Exception());
 				if(!talker.isYours(player.getName())) {
 					player.sendMessage("This is not your talker.");
 					return;
@@ -116,13 +116,13 @@ public class CommandTalker extends MyCommand {
 					UtilitiesProgramming.printDebugMessage("", new Exception());
 					for(Integer i = 0; i < line - sizeSentence; i++) {
 						UtilitiesProgramming.printDebugMessage(""  + sizeSentence + " " + line  + " " + i , new Exception());
-						talker.listSentence.add(new Sentence());
+						talker.listSentence.add(new Description());
 						Integer numberSentence = sizeSentence + i + 1;
 						player.sendMessage("Added sentence(" + numberSentence +")");
 					}
 				}
 				UtilitiesProgramming.printDebugMessage("", new Exception());
-				Sentence sentence = talker.listSentence.get(line - 1);
+				Description sentence = talker.listSentence.get(line - 1);
 				List<String> input = Arrays.asList(args[3]);
 				UtilitiesProgramming.printDebugMessage("", new Exception());
 				switch(expression) {
@@ -141,7 +141,7 @@ public class CommandTalker extends MyCommand {
 				}
 				UtilitiesProgramming.printDebugMessage("", new Exception());
 				player.sendMessage("The talker is edited.");
-				DataManagerTalker.addTalker(talker);
+				DataManagerTalker.registerTalker(talker);
 				talker.printInformation(player);
 				return;
 			}
@@ -166,7 +166,7 @@ public class CommandTalker extends MyCommand {
 			break;
 		}
 		DataManagerPlayer.putDataPlayer(data);
-		player.sendMessage("You set your learning language " + data.language.toString());
+		player.sendMessage("You set your language " + data.language.toString());
 	}
 	private void commandAnswer() {
 //		UtilitiesProgramming.printDebugMessage("", new Exception());
