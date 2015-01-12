@@ -6,25 +6,25 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.gmail.fukushima.kai.common.common.CommandEmpty;
-import com.gmail.fukushima.kai.common.common.MyCommand;
-import com.gmail.fukushima.kai.mystage.mystage.CommandStage;
-import com.gmail.fukushima.kai.mystage.talker.CommandTalker;
+import com.gmail.fukushima.kai.talker.talker.CommandTalker;
+import com.gmail.fukushima.kai.talker.talker.CommandTalkerOP;
+import com.gmail.fukushima.kai.utilities.utilities.MyCommand;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class CommandExecutorPlugin implements CommandExecutor {
 	public enum Commands {
-		NONE,
 		VIRTUALRYUUGAKU, VRG,
-		VIRTUALRYUUGAKUOP, VRGOP,
+		VIRTUALRYUUGAKUOP, VRGOP, VRGCO,
 		STAGE, STAGEOP,
-		TALKER, TALKEROP;
+		TALKER, TALKEROP,
+		;
 		public static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
 				return Commands.valueOf(name.toUpperCase());
 			} catch (IllegalArgumentException e) {
 				UtilitiesProgramming.printDebugMessage(e.toString(), new Exception());
-				return Commands.NONE;
+				return Commands.VRG;
 			}
 		}
 	}
@@ -33,6 +33,11 @@ public class CommandExecutorPlugin implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
+		Commands commands = Commands.lookup(label);
+		if(commands.equals(Commands.VRGCO)) {
+			new CommandVirturalRyuugakuConsole().printDebug(args);
+			return true;
+		}
 		if(sender instanceof Player) {
 			UtilitiesProgramming.printDebugMessage("", new Exception());
 			Player player = (Player) sender;
@@ -43,24 +48,19 @@ public class CommandExecutorPlugin implements CommandExecutor {
 					return false;
 				}
 			}
-			Commands commands = Commands.lookup(label);
 			MyCommand myCommand = new CommandEmpty(player, command, args);
 			switch(commands) {
-			case NONE:
-				break;
-			case STAGE:
-				myCommand = new CommandStage(player, command, args);
-				break;
-			case STAGEOP:
-				break;
 			case TALKER:
 				myCommand = new CommandTalker(player, command, args);
 				break;
 			case TALKEROP:
+				myCommand = new CommandTalkerOP(player, command, args);
 				break;
 			case VIRTUALRYUUGAKU:
+				player.sendMessage(DataManagerPlugin.plugin.getName() + " developped by kai_f");
 				break;
 			case VRG:
+				player.sendMessage(DataManagerPlugin.plugin.getName() + " developped by kai_f");
 				break;
 			case VIRTUALRYUUGAKUOP:
 				myCommand = new CommandVirtualRyuugakuOP(player, command, args);
@@ -68,10 +68,12 @@ public class CommandExecutorPlugin implements CommandExecutor {
 			case VRGOP:
 				myCommand = new CommandVirtualRyuugakuOP(player, command, args);
 				break;
+			//VRGCO should be placed the upper section.
 			default:
 				break;
 			}
 			myCommand.runCommand();
+			return true;
 		}
 		return false;
 	}

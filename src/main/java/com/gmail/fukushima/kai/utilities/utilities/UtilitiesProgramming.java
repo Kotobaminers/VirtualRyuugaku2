@@ -1,12 +1,16 @@
 package com.gmail.fukushima.kai.utilities.utilities;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 
-import com.gmail.fukushima.kai.common.common.Sentence;
-import com.gmail.fukushima.kai.mystage.mystage.Stage;
-import com.gmail.fukushima.kai.mystage.talker.Talker;
+import com.gmail.fukushima.kai.citizens.citizens.DataCitizens;
+import com.gmail.fukushima.kai.citizens.citizens.DataManagerCitizens;
+import com.gmail.fukushima.kai.common.common.Description;
 import com.gmail.fukushima.kai.player.player.DataManagerPlayer;
 import com.gmail.fukushima.kai.player.player.DataPlayer;
+import com.gmail.fukushima.kai.talker.comment.DataComment;
+import com.gmail.fukushima.kai.talker.talker.DataManagerTalker;
+import com.gmail.fukushima.kai.talker.talker.Talker;
 import com.gmail.fukushima.kai.virtualryuugaku2.virtualryuugaku2.Settings;
 
 
@@ -15,49 +19,69 @@ public class UtilitiesProgramming {
 		if(!Settings.debugMessage) return;
 		StackTraceElement element = exception.getStackTrace()[0];
 		String nameClass = element.getClassName();
-		String[] splited = nameClass.split("//.");
+		String[] split = nameClass.split("\\.");
+		nameClass = split[split.length - 1];
 		String nameMethod = element.getMethodName();
 		String line = String.valueOf(element.getLineNumber());
-		String[] broadcast = {message, splited[splited.length-1], nameMethod, line};
+		String[] broadcast = {message, nameClass, nameMethod, line};
 		if(Settings.debugMessageBroadcast) {
-			Bukkit.broadcastMessage(UtilitiesGeneral.joinStringsWithSpace(broadcast));
+			Bukkit.broadcastMessage(ChatColor.RED + UtilitiesGeneral.joinStringsWithSpace(broadcast));
 		} else {
-			System.out.println(UtilitiesGeneral.joinStringsWithSpace(broadcast));
+			Bukkit.getLogger().info(ChatColor.RED + UtilitiesGeneral.joinStrings(broadcast, " "));
 		}
 	}
-	public static void printDebugStage(Stage stage) {
-		if(!Settings.debugStage) return;
-		System.out.println("[Debug Stage] " + stage.name);
-		System.out.println(" Creator: " + stage.creator);
-		for(Talker talker : stage.listTalker) {
-			printDebugTalker(talker);
-			for(Sentence sentence : talker.listSentence) {
-				sentence.printDebug();
+	public static void printDebugCitizensAll() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		for(DataCitizens data : DataManagerCitizens.getMapDataCitizns().values()) {
+			UtilitiesProgramming.printDebugCitizens(data);
+		}
+	}
+	public static void printDebugPlayerAll() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		for(DataPlayer data : DataManagerPlayer.getMapDataPlayer().values()) {
+			UtilitiesProgramming.printDebugPlayer(data);
+		}
+	}
+	public static void printDebugTalkerAll() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		for(Talker data : DataManagerTalker.getMapTalker().values()) {
+			UtilitiesProgramming.printDebugTalker(data);
+		}
+	}
+	public static void printDebugCommentAll() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		for(Talker data : DataManagerTalker.getMapTalker().values()) {
+			for(DataComment comment : data.mapComment.values()) {
+				UtilitiesProgramming.printDebugComment(comment);
 			}
 		}
 	}
-	public static void printDebugMapDataPlayer() {
-		if(!Settings.debugPlayer) return;
-		for(DataPlayer data : DataManagerPlayer.mapDataPlayer.values()) {
-			printDebugDataPlayer(data);
-		}
-	}
-	public static void printDebugDataPlayer(DataPlayer data) {
-		if(!Settings.debugPlayer) return;
-		System.out.println("[Debug DataPlayer] " + data.name);
-		System.out.println(" LINE: " + data.line);
-		System.out.println(" SELECT: " + data.select);
+	public static void printDebugPlayer(DataPlayer data) {
+		UtilitiesProgramming.printDebugMessage("[Debug DataPlayer] " + data.name, new Exception());
+		UtilitiesProgramming.printDebugMessage(" LINE: " + data.line, new Exception());
+		UtilitiesProgramming.printDebugMessage(" SELECT: " + data.select, new Exception());
 	}
 	public static void printDebugTalker(Talker talker) {
-		System.out.println("[Debug Talker]" + talker.name);
-		System.out.println(" ID: " + talker.id);
-		for(Sentence sentence : talker.listSentence) {
-			System.out.println(" SEN: " + sentence.loadEn());
-			System.out.println(" SEN: " + sentence.loadJp());
+		if(talker.id < 0) return;
+		UtilitiesProgramming.printDebugMessage("[Debug Talker] " + talker.name, new Exception());
+		UtilitiesProgramming.printDebugMessage(" ID: " + talker.id + ", EDITOR: " + talker.editor + ", STAGE: " + talker.stage, new Exception());
+		for(Description sentence : talker.listSentence) {
+			UtilitiesProgramming.printDebugMessage(" SEN: " + sentence.loadEn(), new Exception());
+			UtilitiesProgramming.printDebugMessage(" SEN: " + sentence.loadJp(), new Exception());
 		}
-		System.out.println(" QUE: " + talker.question.loadEn());
-		System.out.println(" QUE: " + talker.question.loadJp());
-		System.out.println(" ANS: " + talker.answer.loadEn());
-		System.out.println(" ANS: " + talker.answer.loadJp());
+		UtilitiesProgramming.printDebugMessage(" Q(EN): " + talker.question.getEn(), new Exception());
+		UtilitiesProgramming.printDebugMessage(" Q(JP): " + talker.question.getJp(), new Exception());
+		UtilitiesProgramming.printDebugMessage(" A(EN): " + UtilitiesGeneral.joinStrings(talker.answer.getEn(), ", "), new Exception());
+		UtilitiesProgramming.printDebugMessage(" A(JP): " + UtilitiesGeneral.joinStrings(talker.answer.getJp(), ", "), new Exception());
+		for(DataComment comment : talker.mapComment.values()) {
+			UtilitiesProgramming.printDebugComment(comment);
+		}
+	}
+	public static void printDebugCitizens(DataCitizens citizens) {
+		UtilitiesProgramming.printDebugMessage("ID: " + citizens.id + ", NAME: " + citizens.name, new Exception());
+	}
+	public static void printDebugComment(DataComment comment) {
+		UtilitiesProgramming.printDebugMessage("[Debug Comment] " + " SENDER: " + comment.sender + ", STATE: " + comment.state, new Exception());
+		UtilitiesProgramming.printDebugMessage(" COMMENT: " + comment.expression, new Exception());
 	}
 }

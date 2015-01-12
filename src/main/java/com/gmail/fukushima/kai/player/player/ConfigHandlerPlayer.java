@@ -4,65 +4,55 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import com.gmail.fukushima.kai.player.player.DataPlayer.Language;
 import com.gmail.fukushima.kai.utilities.utilities.ConfigHandler;
-import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class ConfigHandlerPlayer extends ConfigHandler {
+	public static YamlConfiguration config;
+	public static File file;
 	public static final String DIRECTORY = "PLAYER";
 	public static final String FILE_NAME = "PLAYER.yml";
 	public static final Integer lineInitial = 0;
 	public static final Integer selectInitial = -1;
 	public enum PathPlayer {LINE, SELECT, LANGUAGE, DONE}
-	public static DataPlayer loadDataPlayer(String name) {
-		DataPlayer data = new DataPlayer();
-		data.name = name;
-		data.line = loadLine(name);
-		data.select = loadSelect(name);
-		data.language = loadLanguage(name);
-		data.done = loadDone(name);
-		return data;
-	}
-	private static List<Integer> loadDone(String name) {
-		List<Integer> done = new ArrayList<Integer>();
-		String path = name + "." + PathPlayer.DONE.toString();
-		if(ConfigHandlerPlayer.config.isList(path)) {
-			done = ConfigHandlerPlayer.config.getIntegerList(path);
+	public static List<DataPlayer> importDataPlayer() {
+		List<DataPlayer> list = new ArrayList<DataPlayer>();
+		for(String name : config.getKeys(false)) {
+			MemorySection memory = (MemorySection) config.get(name);
+			DataPlayer data = new DataPlayer();
+			data.name = name;
+			data.line = loadLine(memory);
+			data.select = loadSelect(memory);
+			data.language = loadLanguage(memory);
 		}
-		return done;
+		return list;
 	}
-	private static Language loadLanguage(String name) {
+	private static Language loadLanguage(MemorySection memory) {
 		String language = "";
-		String path = name + "." + PathPlayer.LANGUAGE.toString();
-		if(ConfigHandlerPlayer.config.isString(path)) {
-			language = ConfigHandlerPlayer.config.getString(path);
+		String path = PathPlayer.LANGUAGE.toString();
+		if(memory.isString(path)) {
+			language = memory.getString(path);
 		}
 		return Language.lookup(language);
 	}
-	private static Integer loadLine(String name) {
+	private static Integer loadLine(MemorySection memory) {
 		Integer line = lineInitial;
-		String path = name + "." + PathPlayer.LINE.toString();
-		if(ConfigHandlerPlayer.config.isInt(path)) {
-			line = ConfigHandlerPlayer.config.getInt(path);
+		String path = PathPlayer.LINE.toString();
+		if(memory.isInt(path)) {
+			line = memory.getInt(path);
 		}
 		return line;
 	}
-	private static Integer loadSelect(String name) {
+	private static Integer loadSelect(MemorySection memory) {
 		Integer line = selectInitial;
-		String path = name + "." + PathPlayer.SELECT.toString();
-		if(ConfigHandlerPlayer.config.isInt(path)) {
-			line = ConfigHandlerPlayer.config.getInt(path);
+		String path = PathPlayer.SELECT.toString();
+		if(memory.isInt(path)) {
+			line = memory.getInt(path);
 		}
 		return line;
-	}
-	@Override
-	public void initialize(JavaPlugin plugin) {
-		String path = plugin.getDataFolder() + "\\" + DIRECTORY + "\\" +FILE_NAME;
-		file = new File(path);
-		config = YamlConfiguration.loadConfiguration(file);
 	}
 	public static void saveDataPlayer(DataPlayer data) {
 		String name = data.name;
@@ -74,6 +64,29 @@ public class ConfigHandlerPlayer extends ConfigHandler {
 		config.set(pathLanguage, data.language.toString());
 		String pathDone = name + "." + PathPlayer.DONE;
 		config.set(pathDone, data.done);
-		UtilitiesProgramming.printDebugDataPlayer(data);
+	}
+	@Override
+	public File getFile() {
+		return file;
+	}
+	@Override
+	public YamlConfiguration getConfig() {
+		return config;
+	}
+	@Override
+	public void setFile(File file) {
+		ConfigHandlerPlayer.file = file;
+	}
+	@Override
+	public void setConfig(YamlConfiguration config) {
+		ConfigHandlerPlayer.config = config;
+	}
+	@Override
+	public String getFileName() {
+		return FILE_NAME;
+	}
+	@Override
+	public String getDirectory() {
+		return DIRECTORY;
 	}
 }

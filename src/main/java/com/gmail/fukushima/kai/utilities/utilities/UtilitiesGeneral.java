@@ -1,20 +1,20 @@
 package com.gmail.fukushima.kai.utilities.utilities;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-import com.gmail.fukushima.kai.common.common.DataManagerCommon;
+import com.gmail.fukushima.kai.common.common.DataManagerRomaji;
+import com.gmail.fukushima.kai.common.common.DataManagerRomaji.TypeLetters;
 import com.gmail.fukushima.kai.common.common.Letters;
-import com.gmail.fukushima.kai.common.common.DataManagerCommon.TypeLetters;
 
 public class UtilitiesGeneral {
 	public static String toRomaji(String kana) {
-		Map<String, List<Letters>> map = DataManagerCommon.mapLetters;
+		Map<String, List<Letters>> map = DataManagerRomaji.getMapLetters();
 		for(TypeLetters type : TypeLetters.values()) {
 			for(String key : map.keySet()) {
 				if(type.toString().equalsIgnoreCase(key)) {
@@ -29,64 +29,23 @@ public class UtilitiesGeneral {
 	}
 	public static void runCommandAsOP(Player player, String command) {
 		if(!player.isOp()) {
-			try
-			{
+			try {
 				player.setOp(true);
 				Bukkit.getServer().dispatchCommand(player, command);
-			}
-			catch(Exception e)
-			{
+			} catch(Exception e) {
 				e.printStackTrace();
-			}
-			finally
-			{
+			} finally {
 				player.setOp(false);
 			}
 		} else {
-			try
-			{
+			try {
 				Bukkit.getServer().dispatchCommand(player, command);
-			}
-			catch(Exception e)
-			{
+			} catch(Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
-//	public static void sendMessageAll(String message) {
-//		for(Player player : StaticFieldsCommon.plugin.getServer().getOnlinePlayers()) {
-//			player.sendMessage(message);
-//		}
-//	}
-//	public static String dropColors(String str) {
-//		for(String color : StaticFieldsCommon.ESSENTIALS_COLORS) {
-//			str = str.replace(color, "");
-//		}
-//		return str;
-//	}
-//	public static ChatColor loadColorRandom() {
-//		ChatColor color;
-//		Random random = new Random();
-//		Integer num = random.nextInt(StaticFieldsCommon.CHAT_COLORS.size());
-//		color = StaticFieldsCommon.CHAT_COLORS.get(num);
-//		return color;
-//	}
-//	public static String loadMarkRandom() {
-//		String mark = "";
-//		Random random = new Random();
-//		Integer num = random.nextInt(StaticFieldsCommon.MARKS.size());
-//		mark = StaticFieldsCommon.MARKS.get(num);
-//		return mark;
-//	}
-//	public static String loadColorMarkRandom(Integer num) {
-//		String mark = "";
-//		for(Integer i = 0; i < num; i++) {
-//			mark += "" + loadColorRandom();
-//			mark += loadMarkRandom();
-//		}
-//		mark += ChatColor.RESET;
-//		return mark;
-//	}
+
 	public static String joinListListString(List<List<String>> listList, List<ChatColor> colors) {
 		String comma = ", ";
 		String string = "";
@@ -108,6 +67,30 @@ public class UtilitiesGeneral {
 		string += ChatColor.RESET;
 		return string;
 	}
+
+	public static String joinStrings(List<String> strings, String spacer) {
+		if(strings == null)  return "";
+		String string = "";
+		for(String part : strings) {
+			string += spacer + part;
+		}
+		if(0 < string.length()) {
+			string = string.substring(spacer.length(), string.length());
+		}
+		return string;
+	}
+	public static String joinStrings(String[] strings, String spacer) {
+		if(strings == null)  return "";
+		String string = "";
+		for(String part : strings) {
+			string += spacer + part;
+		}
+		if(0 < string.length()) {
+			string = string.substring(spacer.length(), string.length());
+		}
+		return string;
+	}
+
 	public static String joinStringsWithSpace(String[] strings) {
 		String string = "";
 		for(String part : strings) {
@@ -128,14 +111,25 @@ public class UtilitiesGeneral {
 		}
 		return string;
 	}
-	public static void sendHelpCommand(Player player, Command command) {
-		String title = "*** Help: " + command.getName();
-		String description = command.getDescription();
-		String usage = command.getUsage();
-		List<String> aliases = command.getAliases();
-		player.sendMessage(title);
-		player.sendMessage(description);
-		player.sendMessage(usage);
-		player.sendMessage(aliases.toString());
+	public static String joinArraysStringWithDot(String[] strings) {
+		String string = "";
+		for(String part : strings) {
+			string += "." + part;
+		}
+		if(0 < string.length()) {
+			string = string.substring(1, string.length());
+		}
+		return string;
+	}
+	public static Integer getTotalLengthStrings(List<String> strings) {
+		String total = "";
+		for(String string : strings) {
+			total += string;
+		}
+		return total.length();
+	}
+	public static Integer getTotalLengthStrings(String[] strings) {
+		List<String> list = Arrays.asList(strings);
+		return getTotalLengthStrings(list);
 	}
 }
