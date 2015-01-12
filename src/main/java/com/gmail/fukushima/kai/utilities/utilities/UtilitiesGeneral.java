@@ -1,5 +1,6 @@
 package com.gmail.fukushima.kai.utilities.utilities;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -68,6 +69,7 @@ public class UtilitiesGeneral {
 	}
 
 	public static String joinStrings(List<String> strings, String spacer) {
+		if(strings == null)  return "";
 		String string = "";
 		for(String part : strings) {
 			string += spacer + part;
@@ -78,6 +80,7 @@ public class UtilitiesGeneral {
 		return string;
 	}
 	public static String joinStrings(String[] strings, String spacer) {
+		if(strings == null)  return "";
 		String string = "";
 		for(String part : strings) {
 			string += spacer + part;
@@ -118,14 +121,15 @@ public class UtilitiesGeneral {
 		}
 		return string;
 	}
-//	public static void sendHelpCommand(Player player, Command command) {
-//		String title = "*** Help: " + command.getName();
-//		String description = command.getDescription();
-//		String usage = command.getUsage();
-//		List<String> aliases = command.getAliases();
-//		player.sendMessage(title);
-//		player.sendMessage(description);
-//		player.sendMessage(usage);
-//		player.sendMessage(aliases.toString());
-//	}
+	public static Integer getTotalLengthStrings(List<String> strings) {
+		String total = "";
+		for(String string : strings) {
+			total += string;
+		}
+		return total.length();
+	}
+	public static Integer getTotalLengthStrings(String[] strings) {
+		List<String> list = Arrays.asList(strings);
+		return getTotalLengthStrings(list);
+	}
 }

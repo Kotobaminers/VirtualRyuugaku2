@@ -1,20 +1,24 @@
 package com.gmail.fukushima.kai.talker.talker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.gmail.fukushima.kai.common.common.Description;
+import com.gmail.fukushima.kai.talker.comment.DataComment;
+import com.gmail.fukushima.kai.talker.comment.DataComment.CommentState;
 import com.gmail.fukushima.kai.talker.talker.TalkerAnswer.KeyAnswer;
 import com.gmail.fukushima.kai.talker.talker.TalkerQuestion.KeyQuestion;
-import com.gmail.fukushima.kai.utilities.utilities.UtilitiesGeneral;
 import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class LibraryHandlerTalker {
 	public enum PathStage {TALKER, EDITOR}
-	public enum PathTalker {NAME, EDITOR, EN, KANJI, KANA, Q, A}
+	public enum PathTalker {NAME, EDITOR, EN, KANJI, KANA, Q, A, COMMENT}
+	public enum PathComment {STATE, EXPRESSION}
 	//Talker
 	public static List<Talker> importTalkerLibrary(YamlConfiguration library) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -23,23 +27,20 @@ public class LibraryHandlerTalker {
 		List<String> editor = library.getStringList(PathTalker.EDITOR.toString());
 		for(String talkerPath : library.getKeys(false)) {
 			if(talkerPath.equalsIgnoreCase(PathStage.TALKER.toString())) {
-				UtilitiesProgramming.printDebugMessage(talkerPath, new Exception());
 				MemorySection memory = (MemorySection) library.get(talkerPath);
 				for(String idString : memory.getKeys(false)) {
-					UtilitiesProgramming.printDebugMessage(idString, new Exception());
+					MemorySection memoryId = (MemorySection) memory.get(idString);
+
 					Integer id = Integer.parseInt(idString.toString());
 					Talker talker = new Talker();
 					talker.id = id;
-					talker.nameStage = stage;
-					String[] array = {stage, talkerPath, idString};
-					String path = UtilitiesGeneral.joinStrings(array, ".");
-					talker.name = library.getString(path + "." + PathTalker.NAME.toString());
+					talker.name = memoryId.getString(PathTalker.NAME.toString());
+					talker.stage = stage;
 					talker.editor.addAll(editor);
-					UtilitiesProgramming.printDebugTalker(talker);
 
-					List<String> kanji = library.getStringList(path + "." + PathTalker.KANJI.toString());
-					List<String> kana = library.getStringList(path + "." + PathTalker.KANA.toString());
-					List<String> en = library.getStringList(path + "." + PathTalker.EN.toString());
+					List<String> kanji = memoryId.getStringList(PathTalker.KANJI.toString());
+					List<String> kana = memoryId.getStringList(PathTalker.KANA.toString());
+					List<String> en = memoryId.getStringList(PathTalker.EN.toString());
 					Integer size = kanji.size();
 					List<Description> listSentence = new ArrayList<Description>();
 					if(size.equals(kana.size()) && size.equals(en.size())) {
@@ -48,17 +49,31 @@ public class LibraryHandlerTalker {
 						}
 					}
 					talker.listSentence = listSentence;
-					UtilitiesProgramming.printDebugTalker(talker);
 
-					String questionEn = library.getString(path + "." + PathTalker.Q + "." + KeyQuestion.EN);
-					String questionJp = library.getString(path + "." + PathTalker.Q + "." + KeyQuestion.JP);
+					String questionEn = memoryId.getString(PathTalker.Q + "." + KeyQuestion.EN);
+					String questionJp = memoryId.getString(PathTalker.Q + "." + KeyQuestion.JP);
 					talker.question = new TalkerQuestion().create(questionEn, questionJp);
-					UtilitiesProgramming.printDebugTalker(talker);
 
-					List<String> answerEn = library.getStringList(path + "." + PathTalker.A + "." + KeyAnswer.EN);
-					List<String> answerJp = library.getStringList(path + "." + PathTalker.A + "." + KeyAnswer.JP);
+					List<String> answerEn = memoryId.getStringList(PathTalker.A + "." + KeyAnswer.EN);
+					List<String> answerJp = memoryId.getStringList(PathTalker.A + "." + KeyAnswer.JP);
 					talker.answer = new TalkerAnswer().create(answerEn, answerJp);
-					UtilitiesProgramming.printDebugTalker(talker);
+
+					if(memoryId.contains(PathTalker.COMMENT.toString())) {
+						Map<String, DataComment> mapComment = new HashMap<String, DataComment>();
+						MemorySection memoryComment = (MemorySection) memoryId.get(PathTalker.COMMENT.toString());
+						if(memoryComment == null) {
+							System.out.println("NULL");
+						}
+						for(String sender : memoryComment.getKeys(false)) {
+							DataComment comment = new DataComment();
+							comment.sender = sender;
+							String pathComment = sender;
+							comment.expression = memoryComment.getString(pathComment + "." + PathComment.EXPRESSION);
+							comment.state = CommentState.lookup(memoryComment.getString(pathComment + "." + PathComment.STATE));
+							mapComment.put(sender, comment);
+						}
+						talker.mapComment = mapComment;
+					}
 
 					list.add(talker);
 				}

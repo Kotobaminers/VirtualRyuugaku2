@@ -9,9 +9,9 @@ import java.util.Map;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.gmail.fukushima.kai.comment.comment.DataComment;
-import com.gmail.fukushima.kai.comment.comment.DataComment.CommentState;
 import com.gmail.fukushima.kai.common.common.Description;
+import com.gmail.fukushima.kai.talker.comment.DataComment;
+import com.gmail.fukushima.kai.talker.comment.DataComment.CommentState;
 import com.gmail.fukushima.kai.talker.talker.TalkerAnswer.KeyAnswer;
 import com.gmail.fukushima.kai.talker.talker.TalkerQuestion.KeyQuestion;
 import com.gmail.fukushima.kai.utilities.utilities.ConfigHandler;
@@ -34,10 +34,10 @@ public class ConfigHandlerTalker extends ConfigHandler {
 			Integer id = Integer.parseInt(idString.toString());
 			Talker talker = new Talker();
 			talker.id = id;
-			String path = idString;
-			talker.nameStage = memoryId.getString(PathTalker.STAGE.toString());
 			talker.name = memoryId.getString(PathTalker.NAME.toString());
+			talker.stage = memoryId.getString(PathTalker.STAGE.toString());
 			talker.editor.addAll(memoryId.getStringList(PathTalker.EDITOR.toString()));
+
 			List<String> kanji = memoryId.getStringList(PathTalker.KANJI.toString());
 			List<String> kana = memoryId.getStringList(PathTalker.KANA.toString());
 			List<String> en = memoryId.getStringList(PathTalker.EN.toString());
@@ -49,23 +49,29 @@ public class ConfigHandlerTalker extends ConfigHandler {
 				}
 			}
 			talker.listSentence = listSentence;
+
 			String questionEn = memoryId.getString(PathTalker.Q + "." + KeyQuestion.EN);
 			String questionJp = memoryId.getString(PathTalker.Q + "." + KeyQuestion.JP);
 			talker.question = new TalkerQuestion().create(questionEn, questionJp);
+
 			List<String> answerEn = memoryId.getStringList(PathTalker.A + "." + KeyAnswer.EN);
 			List<String> answerJp = memoryId.getStringList(PathTalker.A + "." + KeyAnswer.JP);
 			talker.answer = new TalkerAnswer().create(answerEn, answerJp);
-			Map<String, DataComment> mapComment = new HashMap<String, DataComment>();
-			MemorySection memoryComment = (MemorySection) memoryId.get(PathTalker.COMMENT.toString());
-			for(String sender : memoryComment.getKeys(false)) {
-				DataComment comment = new DataComment();
-				comment.sender = sender;
-				String pathComment = sender;
-				comment.expression = memoryComment.getString(pathComment + "." + PathComment.EXPRESSION);
-				comment.state = CommentState.lookup(memoryComment.getString(pathComment + "." + PathComment.STATE));
-				mapComment.put(sender, comment);
+
+			if(memoryId.contains(PathTalker.COMMENT.toString())) {
+				Map<String, DataComment> mapComment = new HashMap<String, DataComment>();
+				MemorySection memoryComment = (MemorySection) memoryId.get(PathTalker.COMMENT.toString());
+				for(String sender : memoryComment.getKeys(false)) {
+					DataComment comment = new DataComment();
+					comment.sender = sender;
+					String pathComment = sender;
+					comment.expression = memoryComment.getString(pathComment + "." + PathComment.EXPRESSION);
+					comment.state = CommentState.lookup(memoryComment.getString(pathComment + "." + PathComment.STATE));
+					mapComment.put(sender, comment);
+				}
+				talker.mapComment = mapComment;
 			}
-			talker.mapComment = mapComment;
+
 			list.add(talker);
 		}
 		return list;
@@ -74,14 +80,20 @@ public class ConfigHandlerTalker extends ConfigHandler {
 		String path = talker.id.toString();
 		config.set(path + "." + PathTalker.NAME, talker.name);
 		config.set(path + "." + PathTalker.EDITOR, talker.editor);
-		config.set(path + "." + PathTalker.STAGE, talker.nameStage);
+		config.set(path + "." + PathTalker.STAGE, talker.stage);
 		List<String> kanji = new ArrayList<String>();
 		List<String> kana = new ArrayList<String>();
 		List<String> en = new ArrayList<String>();
 		for(Description description : talker.listSentence) {
-			kanji.add(description.kanji.get(0));
-			kana.add(description.kana.get(0));
-			en.add(description.en.get(0));
+			String enAdd = "";
+			String kanjiAdd = "";
+			String kanaAdd = "";
+			if(0 < description.en.size()) enAdd = description.en.get(0);
+			if(0 < description.kanji.size()) kanjiAdd = description.kanji.get(0);
+			if(0 < description.kana.size()) kanaAdd = description.kana.get(0);
+			en.add(enAdd);
+			kanji.add(kanjiAdd);
+			kana.add(kanaAdd);
 		}
 		config.set(path + "." + PathTalker.KANJI, kanji);
 		config.set(path + "." + PathTalker.KANA, kana);

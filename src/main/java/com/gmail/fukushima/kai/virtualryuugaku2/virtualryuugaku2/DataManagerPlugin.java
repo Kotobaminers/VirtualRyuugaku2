@@ -1,8 +1,6 @@
 package com.gmail.fukushima.kai.virtualryuugaku2.virtualryuugaku2;
 
 import com.gmail.fukushima.kai.citizens.citizens.DataManagerCitizens;
-import com.gmail.fukushima.kai.comment.comment.ConfigHandlerComment;
-import com.gmail.fukushima.kai.comment.comment.DataManagerComment;
 import com.gmail.fukushima.kai.common.common.DataManagerRomaji;
 import com.gmail.fukushima.kai.common.common.LibraryManager;
 import com.gmail.fukushima.kai.player.player.ConfigHandlerPlayer;
@@ -32,9 +30,7 @@ public final class DataManagerPlugin {
 		new ConfigHandlerTalker().initialize(plugin);
 		new DataManagerTalker().loadAll();
 
-		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Loading Comment Data", new Exception());
-		new ConfigHandlerComment().initialize(plugin);
-		new DataManagerComment().loadAll();
+		savePlugin();
 
 		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Finishing Loading Plugin Data", new Exception());
 	}
@@ -46,7 +42,5 @@ public final class DataManagerPlugin {
 		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Saving Talker Data", new Exception());
 		new DataManagerTalker().saveAll();
 
-		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Saving Comment Data", new Exception());
-		new DataManagerComment().saveAll();
 	}
 }

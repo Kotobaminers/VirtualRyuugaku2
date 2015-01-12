@@ -56,11 +56,6 @@ public class CommandExecutorPlugin implements CommandExecutor {
 			case TALKEROP:
 				myCommand = new CommandTalkerOP(player, command, args);
 				break;
-			case STAGE:
-//				myCommand = new CommandStage(player, command, args);
-				break;
-			case STAGEOP:
-				break;
 			case VIRTUALRYUUGAKU:
 				player.sendMessage(DataManagerPlugin.plugin.getName() + " developped by kai_f");
 				break;

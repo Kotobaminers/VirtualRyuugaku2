@@ -12,11 +12,20 @@ import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 import com.gmail.fukushima.kai.virtualryuugaku2.virtualryuugaku2.DataManagerPlugin;
 
 public class DataManagerCitizens implements DataManager {
-	public static Map<Integer, DataCitizens> mapDataCitizns = new HashMap<Integer, DataCitizens>();
+	private static Map<Integer, DataCitizens> mapDataCitizns = new HashMap<Integer, DataCitizens>();
 	private static String citizensDataFolder = DataManagerPlugin.plugin.getDataFolder().getParent() + "//Citizens//saves.yml";
 	private static final String KEY_NPC = "npc";
 	private static final String KEY_NAME = "name";
 
+	@Override
+	public void loadAll() {
+		initialize();
+		importCitizens();
+	}
+	@Override
+	public void initialize() {
+		setMapDataCitizns(new HashMap<Integer, DataCitizens>());
+	}
 	private static void importCitizens() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		YamlConfiguration config = YamlConfiguration.loadConfiguration(new File(citizensDataFolder));
@@ -28,32 +37,19 @@ public class DataManagerCitizens implements DataManager {
 				DataCitizens data = new DataCitizens();
 				data.id = id;
 				data.name = name;
-				mapDataCitizns.put(id, data);
+				getMapDataCitizns().put(id, data);
 			}
 		}
 	}
-	public static String loadNameById(Integer id) {
-		DataCitizens data = mapDataCitizns.get(id);
-		String name = data.name;
-		return name;
-	}
-	public static Boolean isValidId(Integer id) {
-		for(DataCitizens data : mapDataCitizns.values()) {
-			if(data.id.equals(id)) return true;
-		}
-		return false;
-	}
-	@Override
-	public void initialize() {
-		mapDataCitizns = new HashMap<Integer, DataCitizens>();
-	}
-	@Override
-	public void loadAll() {
-		initialize();
-		importCitizens();
-	}
+
 	@Override
 	public void saveAll() {
-		// TODO Auto-generated method stub
 	}
+	public static Map<Integer, DataCitizens> getMapDataCitizns() {
+		return mapDataCitizns;
+	}
+	private static void setMapDataCitizns(Map<Integer, DataCitizens> mapDataCitizns) {
+		DataManagerCitizens.mapDataCitizns = mapDataCitizns;
+	}
+
 }

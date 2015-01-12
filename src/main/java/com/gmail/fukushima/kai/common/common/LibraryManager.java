@@ -18,7 +18,7 @@ public final class LibraryManager implements InitializerWithPlugin {
 	private enum Library {STAGE}
 	@Override
 	public void initialize(JavaPlugin plugin) {
-		directory = plugin.getDataFolder() + "\\" + DIRECTORY_BASE + "\\";
+		directory = plugin.getDataFolder() + "//" + DIRECTORY_BASE + "//";
 	}
 	public static List<YamlConfiguration> getListLibraryStage() {
 		List<YamlConfiguration> list = new ArrayList<YamlConfiguration>();

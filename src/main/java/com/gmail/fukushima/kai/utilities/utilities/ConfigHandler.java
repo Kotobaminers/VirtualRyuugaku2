@@ -18,9 +18,10 @@ public abstract class ConfigHandler implements InitializerWithPlugin {
 	public abstract YamlConfiguration getConfig();
 	@Override
 	public void initialize(JavaPlugin plugin) {
-		String path = plugin.getDataFolder() + "\\" + getDirectory() + "\\" + getFileName();
+		String path = plugin.getDataFolder() + "//" + getDirectory() + "//" + getFileName();
 		setFile(new File(path));
 		setConfig(YamlConfiguration.loadConfiguration(getFile()));
+		UtilitiesProgramming.printDebugMessage(getFile().getAbsolutePath() + getFile().exists(), new Exception());
 	}
 	public abstract void setFile(File file);
 	public abstract void setConfig(YamlConfiguration config);

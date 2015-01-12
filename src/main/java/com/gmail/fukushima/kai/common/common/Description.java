@@ -41,11 +41,17 @@ public class Description {
 	}
 
 	public String loadEn() {
-		String message = UtilitiesGeneral.joinListListString(Arrays.asList(en), colorsSingle);
+		String message = "";
+		if(0 < UtilitiesGeneral.getTotalLengthStrings(en)) {
+			message = UtilitiesGeneral.joinListListString(Arrays.asList(en), colorsSingle);
+		}
 		return message;
 	}
 	public String loadJp() {
-		String message = UtilitiesGeneral.joinListListString(Arrays.asList(kanji, kana, romaji), colorsJp);
+		String message = "";
+		if(0 < UtilitiesGeneral.getTotalLengthStrings(kanji) || 0 < UtilitiesGeneral.getTotalLengthStrings(kana)) {
+			message = UtilitiesGeneral.joinListListString(Arrays.asList(kanji, kana, romaji), colorsJp);
+		}
 		return message;
 	}
 

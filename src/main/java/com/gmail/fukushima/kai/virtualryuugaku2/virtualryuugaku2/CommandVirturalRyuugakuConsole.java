@@ -4,7 +4,7 @@ import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class CommandVirturalRyuugakuConsole {
 	public enum Debug {
-		NONE, CITIZENS, PLAYER, STAGE, TALKER, COMMENT;
+		NONE, CITIZENS, PLAYER, RELOAD, TALKER, COMMENT;
 		public static Debug lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -25,8 +25,8 @@ public class CommandVirturalRyuugakuConsole {
 			case PLAYER:
 				UtilitiesProgramming.printDebugPlayerAll();
 				break;
-			case STAGE:
-//				UtilitiesProgramming.printDebugStageAll();
+			case RELOAD:
+				DataManagerPlugin.loadPlugin();;
 				break;
 			case TALKER:
 				UtilitiesProgramming.printDebugTalkerAll();

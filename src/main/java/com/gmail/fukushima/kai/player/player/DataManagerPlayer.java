@@ -1,6 +1,5 @@
 package com.gmail.fukushima.kai.player.player;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +17,8 @@ public class DataManagerPlayer implements DataManager {
 		DataPlayer data = new DataPlayer();
 		if(getMapDataPlayer().containsKey(player.getName())) {
 			data = getMapDataPlayer().get(player.getName());
+		} else {
+			data.name = player.getName();
 		}
 		return data;
 	}
@@ -26,21 +27,28 @@ public class DataManagerPlayer implements DataManager {
 		getMapDataPlayer().put(data.name, data);
 	}
 
+	public static Map<String, DataPlayer> getMapDataPlayer() {
+		return mapDataPlayer;
+	}
+	private static void setMapDataPlayer(Map<String, DataPlayer> mapDataPlayer) {
+		DataManagerPlayer.mapDataPlayer = mapDataPlayer;
+	}
+
 	@Override
 	public void loadAll() {
 		initialize();
-		importDataPlayer();
+		loadDataPlayer();
 	}
 	@Override
 	public void initialize() {
 		setMapDataPlayer(new HashMap<String, DataPlayer>());
 	}
-	private static void importDataPlayer() {
+	private static void loadDataPlayer() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		Map<String, DataPlayer> map = new HashMap<String, DataPlayer>();
-		for(String key : ConfigHandlerPlayer.config.getKeys(false)) {
-			DataPlayer data = ConfigHandlerPlayer.loadDataPlayer(key);
-			map.put(key, data);
+		List<DataPlayer> list = ConfigHandlerPlayer.importDataPlayer();
+		for(DataPlayer data : list) {
+			map.put(data.name, data);
 		}
 		setMapDataPlayer(map);
 	}
@@ -54,25 +62,5 @@ public class DataManagerPlayer implements DataManager {
 			ConfigHandlerPlayer.saveDataPlayer(data);
 		}
 		new ConfigHandlerPlayer().save();
-	}
-
-	public static void addDone(Player player, Integer id) {
-		DataPlayer data = getDataPlayer(player);
-		List<Integer> done = new ArrayList<Integer>();
-		done.addAll(data.done);
-		if(!done.contains(id)) {
-			done.add(id);
-			data.done = done;
-			putDataPlayer(data);
-		} else {
-			UtilitiesProgramming.printDebugMessage("This Talker has already been added.", new Exception());
-		}
-	}
-
-	public static Map<String, DataPlayer> getMapDataPlayer() {
-		return mapDataPlayer;
-	}
-	private static void setMapDataPlayer(Map<String, DataPlayer> mapDataPlayer) {
-		DataManagerPlayer.mapDataPlayer = mapDataPlayer;
 	}
 }
