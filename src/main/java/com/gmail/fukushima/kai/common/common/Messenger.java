@@ -12,6 +12,7 @@ public class Messenger {
 		SELECT_TALKER_1,
 		NO_EXPRESSION_LINE_LANG_2,
 		NO_QUESTION_LANG_1,
+		NO_SENTENCE_0,
 		;
 	}
 	public static void print(Player player, Message key, String[] opts) {
@@ -25,6 +26,7 @@ public class Messenger {
 		case SELECT_TALKER_1: message += "You selected " + opts[0] + "."; break;
 		case NO_EXPRESSION_LINE_LANG_2: message += "No expression in line " + opts[0] + " in " + opts[1] + "."; break;
 		case NO_QUESTION_LANG_1: message += "No question in " + opts[0] + "."; break;
+		case NO_SENTENCE_0: message += "The talker has no sentence."; break;
 		default: break;
 		}
 		player.sendMessage(message);

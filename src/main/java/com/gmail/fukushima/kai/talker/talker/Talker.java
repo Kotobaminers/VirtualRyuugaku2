@@ -28,12 +28,16 @@ public class Talker {
 
 	public void talkNext(Player player, DataPlayer data) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		if(listSentence.size() - 1 < data.line) {
-			data.line = 0;
+		if(0 < listSentence.size()) {
+			if(listSentence.size() - 1 < data.line) {
+				data.line = 0;
+			}
+			Description sentence = listSentence.get(data.line);
+			printExpression(player, sentence, data);
+			data.line++;
+		} else {
+			Messenger.print(player, Message.NO_SENTENCE_0, null);
 		}
-		Description sentence = listSentence.get(data.line);
-		printExpression(player, sentence, data);
-		data.line++;
 	}
 	private void printExpression(Player player, Description sentence, DataPlayer data) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -49,7 +53,7 @@ public class Talker {
 			break;
 		}
 		if(0 < expression.length()) {
-			expression = data.name + ": " + expression;
+			expression = name + ": " + expression;
 			player.sendMessage(expression);
 		} else {
 			int line = data.line.intValue();
@@ -93,13 +97,6 @@ public class Talker {
 	public Boolean hasAnswerJp() {
 		if(0 < answer.getJp().size()) return true;
 		UtilitiesProgramming.printDebugMessage("No Answer in JP", new Exception());
-		return false;
-	}
-	public Boolean hasSentence() {
-		if(0 < listSentence.size()) {
-			return true;
-		}
-		UtilitiesProgramming.printDebugMessage("No Sentence", new Exception());
 		return false;
 	}
 	public void printInformation(Player player) {

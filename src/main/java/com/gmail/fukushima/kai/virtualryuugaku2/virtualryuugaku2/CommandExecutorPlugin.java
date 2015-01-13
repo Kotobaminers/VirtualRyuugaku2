@@ -14,7 +14,7 @@ import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 public class CommandExecutorPlugin implements CommandExecutor {
 	public enum Commands {
 		VIRTUALRYUUGAKU, VRG,
-		VIRTUALRYUUGAKUOP, VRGOP, VRGCO,
+		VIRTUALRYUUGAKUOP, VRGOP, VRGDBG,
 		STAGE, STAGEOP,
 		TALKER, TALKEROP,
 		;
@@ -34,7 +34,7 @@ public class CommandExecutorPlugin implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		Commands commands = Commands.lookup(label);
-		if(commands.equals(Commands.VRGCO)) {
+		if(commands.equals(Commands.VRGDBG)) {
 			new CommandVirturalRyuugakuConsole().printDebug(args);
 			return true;
 		}

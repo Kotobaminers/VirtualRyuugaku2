@@ -4,7 +4,7 @@ import com.gmail.fukushima.kai.utilities.utilities.UtilitiesProgramming;
 
 public class CommandVirturalRyuugakuConsole {
 	public enum Debug {
-		NONE, CITIZENS, PLAYER, RELOAD, TALKER, COMMENT;
+		NONE, CITIZENS, PLAYER, RELOAD, TALKER, COMMENT, MODE;
 		public static Debug lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -34,10 +34,28 @@ public class CommandVirturalRyuugakuConsole {
 			case COMMENT:
 				UtilitiesProgramming.printDebugCommentAll();
 				break;
+			case MODE:
+				commandDebugMode();
+				break;
 			case NONE:
 				break;
 			default:
 				break;
+			}
+		}
+	}
+	private void commandDebugMode() {
+		if(!Settings.debugMessage) {
+			Settings.debugMessage = true;
+			UtilitiesProgramming.printDebugMessage("[VRG Debug] Message = " + Settings.debugMessage + ", BC = " + Settings.debugMessageBroadcast, new Exception());
+		} else {
+			if(!Settings.debugMessageBroadcast) {
+				Settings.debugMessageBroadcast = true;
+				UtilitiesProgramming.printDebugMessage("[VRG Debug] Message = " + Settings.debugMessage + ", BC = " + Settings.debugMessageBroadcast, new Exception());
+			} else {
+				Settings.debugMessage = false;
+				Settings.debugMessageBroadcast = false;
+				UtilitiesProgramming.printDebugMessage("[VRG Debug] Message = " + Settings.debugMessage + ", BC = " + Settings.debugMessageBroadcast, new Exception());
 			}
 		}
 	}

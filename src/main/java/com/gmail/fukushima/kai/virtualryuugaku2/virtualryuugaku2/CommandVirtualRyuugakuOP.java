@@ -11,7 +11,7 @@ public class CommandVirtualRyuugakuOP extends MyCommand {
 		super(player, command, args);
 	}
 	public enum Commands {
-		NONE, RELOAD, SAVE, DEBUGMODE;
+		NONE, RELOAD, SAVE;
 		public static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -36,26 +36,8 @@ public class CommandVirtualRyuugakuOP extends MyCommand {
 			case SAVE:
 				commandSave();
 				break;
-			case DEBUGMODE:
-				commandDebugMode();
-				break;
 			default:
 				break;
-			}
-		}
-	}
-	private void commandDebugMode() {
-		if(!Settings.debugMessage) {
-			Settings.debugMessage = true;
-			player.sendMessage("[VRG Debug] Message = " + Settings.debugMessage + ", BC = " + Settings.debugMessageBroadcast);
-		} else {
-			if(!Settings.debugMessageBroadcast) {
-				Settings.debugMessageBroadcast = true;
-				player.sendMessage("[VRG Debug] Message = " + Settings.debugMessage + ", BC = " + Settings.debugMessageBroadcast);
-			} else {
-				Settings.debugMessage = false;
-				Settings.debugMessageBroadcast = false;
-				player.sendMessage("[VRG Debug] Message = " + Settings.debugMessage + ", BC = " + Settings.debugMessageBroadcast);
 			}
 		}
 	}

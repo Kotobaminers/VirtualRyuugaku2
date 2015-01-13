@@ -10,11 +10,12 @@ commands:
     permission: vertualryuugaku.op
   VIRTUALRYUUGAKUOP:
     permission: vertualryuugaku.op
+  VRGDBG:
+    permission: vertualryuugaku.op
   TALKEROP:
     permission: vertualryuugaku.op
   STAGEOP:
     permission: vertualryuugaku.op
-  VRGCO:
 
 permissions:
   vertualryuugaku.op:

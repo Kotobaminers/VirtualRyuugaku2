@@ -20,10 +20,10 @@ public class LibraryHandlerTalker {
 	public enum PathTalker {NAME, EDITOR, EN, KANJI, KANA, Q, A, COMMENT}
 	public enum PathComment {STATE, EXPRESSION}
 	//Talker
-	public static List<Talker> importTalkerLibrary(YamlConfiguration library) {
+	public static List<Talker> importTalkerLibrary(String stage, YamlConfiguration library) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		List<Talker> list = new ArrayList<Talker>();
-		String stage = library.getName();
+		UtilitiesProgramming.printDebugMessage("Stage: " + stage, new Exception());
 		List<String> editor = library.getStringList(PathTalker.EDITOR.toString());
 		for(String talkerPath : library.getKeys(false)) {
 			if(talkerPath.equalsIgnoreCase(PathStage.TALKER.toString())) {
@@ -76,6 +76,7 @@ public class LibraryHandlerTalker {
 					}
 
 					list.add(talker);
+					UtilitiesProgramming.printDebugTalker(talker);
 				}
 			}
 		}

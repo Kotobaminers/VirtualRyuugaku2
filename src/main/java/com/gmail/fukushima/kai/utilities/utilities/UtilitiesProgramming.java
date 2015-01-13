@@ -23,11 +23,12 @@ public class UtilitiesProgramming {
 		nameClass = split[split.length - 1];
 		String nameMethod = element.getMethodName();
 		String line = String.valueOf(element.getLineNumber());
-		String[] broadcast = {message, nameClass, nameMethod, line};
 		if(Settings.debugMessageBroadcast) {
-			Bukkit.broadcastMessage(ChatColor.RED + UtilitiesGeneral.joinStringsWithSpace(broadcast));
+			String[] broadcast = {ChatColor.RED.toString(), message, ChatColor.GRAY.toString(), nameClass, nameMethod, ChatColor.WHITE.toString(), line};
+			Bukkit.broadcastMessage(UtilitiesGeneral.joinStringsWithSpace(broadcast));
 		} else {
-			Bukkit.getLogger().info(ChatColor.RED + UtilitiesGeneral.joinStrings(broadcast, " "));
+			String[] broadcast = {message, nameClass, nameMethod, line};
+			Bukkit.getLogger().info(UtilitiesGeneral.joinStrings(broadcast, " "));
 		}
 	}
 	public static void printDebugCitizensAll() {

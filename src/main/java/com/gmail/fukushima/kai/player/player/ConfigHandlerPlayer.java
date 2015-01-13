@@ -27,6 +27,7 @@ public class ConfigHandlerPlayer extends ConfigHandler {
 			data.line = loadLine(memory);
 			data.select = loadSelect(memory);
 			data.language = loadLanguage(memory);
+			list.add(data);
 		}
 		return list;
 	}

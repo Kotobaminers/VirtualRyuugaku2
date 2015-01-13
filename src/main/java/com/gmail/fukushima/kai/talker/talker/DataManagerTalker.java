@@ -30,9 +30,9 @@ public class DataManagerTalker implements DataManager {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		List<Talker> list = new ArrayList<Talker>();
 		list.addAll(ConfigHandlerTalker.importTalkerDefault());
-		List<YamlConfiguration> listConfig = LibraryManager.getListLibraryStage();
-		for(YamlConfiguration config : listConfig) {
-			list.addAll(LibraryHandlerTalker.importTalkerLibrary(config));
+		Map<String, YamlConfiguration> mapConfig = LibraryManager.getListLibraryStage();
+		for(String stage : mapConfig.keySet()) {
+			list.addAll(LibraryHandlerTalker.importTalkerLibrary(stage, mapConfig.get(stage)));
 		}
 		for(Talker talker : list) {
 			if(Talker.isValidCitizensId(talker.id)) {

@@ -33,7 +33,6 @@ public class EventTalker {
 			Messenger.print(player, Message.SELECT_TALKER_1, opts);
 			return;
 		} else {
-			if(!talker.hasSentence()) return;
 			talker.talkNext(player, data);
 			return;
 		}
@@ -48,7 +47,6 @@ public class EventTalker {
 			Messenger.print(player, Message.SELECT_TALKER_1, opts);
 			return;
 		} else {
-			if(!talker.hasSentence()) return;
 			talker.quest(player, data);
 			return;
 		}
