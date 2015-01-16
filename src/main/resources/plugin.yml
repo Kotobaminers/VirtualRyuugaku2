@@ -1,5 +1,5 @@
 name: VirtualRyuugaku2
-main: com.gmail.fukushima.kai.virtualryuugaku2.virtualryuugaku2.VirtualRyuugaku2
+main: com.github.kotobaminers.virtualryuugaku.virtualryuugaku.VirtualRyuugaku
 version: 0.1
 commands:
   VRG:
