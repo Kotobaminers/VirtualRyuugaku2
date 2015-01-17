@@ -6,29 +6,18 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class Description {
+	private static final String SPACER = ChatColor.RED + ", " + ChatColor.RESET;
+
 	public List<String> kanji = new ArrayList<String>();
 	public List<String> kana = new ArrayList<String>();
 	public List<String> en = new ArrayList<String>();
 	public List<String> romaji = new ArrayList<String>();
 	public List<String> tips = new ArrayList<String>();
-	private final List<ChatColor> colorsJp = Arrays.asList(ChatColor.WHITE, ChatColor.GRAY, ChatColor.DARK_GRAY);
-	private final List<ChatColor> colorsSingle = Arrays.asList(ChatColor.WHITE);
 	public enum Path {ENGL, KANJ, KANA}
-	public enum Expression {NONE, EN, KANJI, KANA;
-		public static Expression lookup(String name) {
-			try {
-				UtilitiesProgramming.printDebugMessage("", new Exception());
-				return Expression.valueOf(name.toUpperCase());
-			} catch (IllegalArgumentException e) {
-				UtilitiesProgramming.printDebugMessage(e.toString(), new Exception());
-				return Expression.NONE;
-			}
-		}
-	}
 
 	public static Description create(String kanji, String kana, String en, List<String> tips) {
 		Description description = new Description();
@@ -40,22 +29,41 @@ public class Description {
 		return description;
 	}
 
-	public String loadEn() {
-		String message = "";
-		if(0 < UtilitiesGeneral.getTotalLengthStrings(en)) {
-			message = UtilitiesGeneral.joinListListString(Arrays.asList(en), colorsSingle);
+	public String express(Expression expression) {
+		List<String> list = new ArrayList<String>();
+		switch(expression) {
+		case ROMAJI://No break;
+			list.add(expressRomaji());
+		case KANA://No break;
+			list.add(expressKana());
+		case KANJI:
+			list.add(expressKanji());
+			break;
+		case EN:
+			list.add(expressEn());
+			break;
+		case NONE:
+			break;
+		default:
+			break;
 		}
+		String message = UtilitiesGeneral.joinStrings(list, SPACER);
 		return message;
 	}
-	public String loadJp() {
-		String message = "";
-		if(0 < UtilitiesGeneral.getTotalLengthStrings(kanji) || 0 < UtilitiesGeneral.getTotalLengthStrings(kana)) {
-			message = UtilitiesGeneral.joinListListString(Arrays.asList(kanji, kana, romaji), colorsJp);
-		}
+	private String expressEn() {
+		String message = UtilitiesGeneral.joinStrings(en, SPACER);
 		return message;
 	}
-
-	public void printDebug() {
-		UtilitiesProgramming.printDebugMessage("  " + kanji + kana + en + romaji + tips, new Exception());
+	private String expressKanji() {
+		String message = UtilitiesGeneral.joinStrings(kanji, SPACER);
+		return message;
+	}
+	private String expressKana() {
+		String message = UtilitiesGeneral.joinStrings(kana, SPACER);
+		return message;
+	}
+	private String expressRomaji() {
+		String message = UtilitiesGeneral.joinStrings(romaji, SPACER);
+		return message;
 	}
 }

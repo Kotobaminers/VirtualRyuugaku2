@@ -7,7 +7,7 @@ import java.util.List;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer.Language;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.ConfigHandler;
 
 public class ConfigHandlerPlayer extends ConfigHandler {
@@ -31,13 +31,13 @@ public class ConfigHandlerPlayer extends ConfigHandler {
 		}
 		return list;
 	}
-	private static Language loadLanguage(MemorySection memory) {
+	private static Expression loadLanguage(MemorySection memory) {
 		String language = "";
 		String path = PathPlayer.LANGUAGE.toString();
 		if(memory.isString(path)) {
 			language = memory.getString(path);
 		}
-		return Language.lookup(language);
+		return Expression.lookup(language);
 	}
 	private static Integer loadLine(MemorySection memory) {
 		Integer line = lineInitial;

@@ -23,9 +23,12 @@ public class MessengerGeneral {
 		SENT_COMMENT_0,
 		NO_NEW_COMMENT_0,
 		NO_COMMENT_0,
-		DONE_COMMENT_1
+		DONE_COMMENT_1,
+		TALKER_SPEAK_2,
+		TALKER_QUESTION_1
 		;
 	}
+
 	public static void print(Player player, Message key, String[] opts) {
 		String message = MESSENGER_PREFIX;
 		switch(key) {
@@ -46,6 +49,8 @@ public class MessengerGeneral {
 		case NO_NEW_COMMENT_0: message += "You don't have any new comments."; break;
 		case NO_COMMENT_0: message += "The selected talker doesn't have any comments."; break;
 		case DONE_COMMENT_1: message += "The comment from " + opts[0] + "'s state was switched to " + DataComment.CommentState.DONE.toString() + "."; break;
+		case TALKER_SPEAK_2: message += opts[0] + ChatColor.RESET + ": " + ChatColor.GREEN + "\"" + ChatColor.RESET + opts[1] + ChatColor.GREEN + "\"" + ChatColor.RESET; break;
+		case TALKER_QUESTION_1: message += "[Question] " + opts[0]; break;
 		default: break;
 		}
 		player.sendMessage(message);

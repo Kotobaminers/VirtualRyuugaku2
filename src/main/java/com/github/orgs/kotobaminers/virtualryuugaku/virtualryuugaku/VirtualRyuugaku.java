@@ -1,7 +1,5 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 
-import java.nio.charset.Charset;
-
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
@@ -20,7 +18,6 @@ public class VirtualRyuugaku extends JavaPlugin {
 		for(Commands command : Commands.values()) {
 			this.getCommand(command.toString()).setExecutor(new CommandExecutorPlugin(this));
 		}
-		System.out.println("My Default Charset: " + Charset.defaultCharset());
 
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataManagerPlugin.savePlugin();

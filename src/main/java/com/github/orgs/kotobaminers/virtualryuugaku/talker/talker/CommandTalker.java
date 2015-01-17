@@ -8,14 +8,13 @@ import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description.Expression;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerCommandUsage;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerCommandUsage.Usage;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
-import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer.Language;
 import com.github.orgs.kotobaminers.virtualryuugaku.talker.comment.CommandTalkerComment;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
@@ -171,7 +170,7 @@ public class CommandTalker extends MyCommand {
 					strings.add(args[i]);
 				}
 				String input = UtilitiesGeneral.joinStrings(strings, " ");
-				switch(expression) {
+				switch(expression) {//Romaji will be automatically created by kana.
 				case EN:
 					sentence.en = Arrays.asList(input);
 					break;
@@ -181,6 +180,10 @@ public class CommandTalker extends MyCommand {
 					break;
 				case KANJI:
 					sentence.kanji = Arrays.asList(input);
+					break;
+				case NONE:
+					break;
+				case ROMAJI:
 					break;
 				default:
 					break;
@@ -200,13 +203,20 @@ public class CommandTalker extends MyCommand {
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
 		switch(data.language) {
 		case EN:
-			data.language = Language.JP;
+			data.language = Expression.KANJI;
 			break;
-		case JP:
-			data.language = Language.EN;
+		case KANJI:
+			data.language = Expression.KANA;
 			break;
+		case KANA:
+			data.language = Expression.ROMAJI;
+			break;
+		case ROMAJI:
+			data.language = Expression.EN;
+			break;
+		case NONE:
 		default:
-			data.language = Language.JP;
+			data.language = Expression.KANJI;
 			break;
 		}
 		DataManagerPlayer.putDataPlayer(data);

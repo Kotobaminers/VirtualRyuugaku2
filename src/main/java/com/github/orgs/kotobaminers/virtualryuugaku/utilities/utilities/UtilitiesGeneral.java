@@ -9,8 +9,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManagerRomaji;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Letters;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManagerRomaji.TypeLetters;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Letters;
 
 public class UtilitiesGeneral {
 	public static String toRomaji(String kana) {
@@ -72,7 +72,9 @@ public class UtilitiesGeneral {
 		if(strings == null)  return "";
 		String string = "";
 		for(String part : strings) {
-			string += spacer + part;
+			if(0 < part.length()) {
+				string += spacer + part;
+			}
 		}
 		if(0 < string.length()) {
 			string = string.substring(spacer.length(), string.length());

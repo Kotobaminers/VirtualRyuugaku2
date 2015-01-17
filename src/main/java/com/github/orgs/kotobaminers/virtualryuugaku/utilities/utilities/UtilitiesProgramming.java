@@ -6,6 +6,7 @@ import org.bukkit.ChatColor;
 import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManagerCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.talker.comment.DataComment;
@@ -67,8 +68,8 @@ public class UtilitiesProgramming {
 		UtilitiesProgramming.printDebugMessage("[Debug Talker] " + talker.name, new Exception());
 		UtilitiesProgramming.printDebugMessage(" ID: " + talker.id + ", EDITOR: " + talker.editor + ", STAGE: " + talker.stage, new Exception());
 		for(Description sentence : talker.listSentence) {
-			UtilitiesProgramming.printDebugMessage(" SEN: " + sentence.loadEn(), new Exception());
-			UtilitiesProgramming.printDebugMessage(" SEN: " + sentence.loadJp(), new Exception());
+			UtilitiesProgramming.printDebugMessage(" SEN: " + sentence.express(Expression.EN), new Exception());
+			UtilitiesProgramming.printDebugMessage(" SEN: " + sentence.express(Expression.KANJI), new Exception());
 		}
 		UtilitiesProgramming.printDebugMessage(" Q(EN): " + talker.question.getEn(), new Exception());
 		UtilitiesProgramming.printDebugMessage(" Q(JP): " + talker.question.getJp(), new Exception());
