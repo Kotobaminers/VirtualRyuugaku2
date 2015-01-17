@@ -1,5 +1,5 @@
 name: VirtualRyuugaku2
-main: com.github.kotobaminers.virtualryuugaku.virtualryuugaku.VirtualRyuugaku
+main: com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VirtualRyuugaku
 version: 0.1
 commands:
   VRG:
