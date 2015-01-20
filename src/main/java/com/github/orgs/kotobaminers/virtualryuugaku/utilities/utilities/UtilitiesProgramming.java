@@ -34,7 +34,7 @@ public class UtilitiesProgramming {
 	}
 	public static void printDebugCitizensAll() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		for(DataCitizens data : DataManagerCitizens.getMapDataCitizns().values()) {
+		for(DataCitizens data : DataManagerCitizens.getMapDataCitizens().values()) {
 			UtilitiesProgramming.printDebugCitizens(data);
 		}
 	}

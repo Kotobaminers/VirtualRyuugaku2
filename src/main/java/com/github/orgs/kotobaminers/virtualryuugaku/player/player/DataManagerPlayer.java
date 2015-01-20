@@ -6,6 +6,9 @@ import java.util.Map;
 
 import org.bukkit.entity.Player;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.Talker;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.DataManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
@@ -32,6 +35,14 @@ public class DataManagerPlayer implements DataManager {
 	}
 	private static void setMapDataPlayer(Map<String, DataPlayer> mapDataPlayer) {
 		DataManagerPlayer.mapDataPlayer = mapDataPlayer;
+	}
+
+	public static void selectTalker(Player player, Talker talker) {
+		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
+		data.select = talker.id;
+		data.line = 0;
+		String[] opts = {talker.name};
+		MessengerGeneral.print(player, Message.SELECT_TALKER_1, opts);
 	}
 
 	@Override

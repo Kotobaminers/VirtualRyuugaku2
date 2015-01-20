@@ -1,16 +1,12 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.talker.talker;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.comment.DataComment;
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.comment.DataComment.CommentState;
 import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.TalkerAnswer.KeyAnswer;
 import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.TalkerQuestion.KeyQuestion;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
@@ -34,7 +30,7 @@ public class LibraryHandlerTalker {
 					Integer id = Integer.parseInt(idString.toString());
 					Talker talker = new Talker();
 					talker.id = id;
-					talker.name = memoryId.getString(PathTalker.NAME.toString());
+//					talker.name = memoryId.getString(PathTalker.NAME.toString()); Name is imported from citizens.
 					talker.stage = stage;
 					talker.editor.addAll(editor);
 
@@ -58,22 +54,23 @@ public class LibraryHandlerTalker {
 					List<String> answerJp = memoryId.getStringList(PathTalker.A + "." + KeyAnswer.JP);
 					talker.answer = new TalkerAnswer().create(answerEn, answerJp);
 
-					if(memoryId.contains(PathTalker.COMMENT.toString())) {
-						Map<String, DataComment> mapComment = new HashMap<String, DataComment>();
-						MemorySection memoryComment = (MemorySection) memoryId.get(PathTalker.COMMENT.toString());
-						if(memoryComment == null) {
-							System.out.println("NULL");
-						}
-						for(String sender : memoryComment.getKeys(false)) {
-							DataComment comment = new DataComment();
-							comment.sender = sender;
-							String pathComment = sender;
-							comment.expression = memoryComment.getString(pathComment + "." + PathComment.EXPRESSION);
-							comment.state = CommentState.lookup(memoryComment.getString(pathComment + "." + PathComment.STATE));
-							mapComment.put(sender, comment);
-						}
-						talker.mapComment = mapComment;
-					}
+					//Comments will be imported from Talker.yml
+//					if(memoryId.contains(PathTalker.COMMENT.toString())) {
+//						Map<String, DataComment> mapComment = new HashMap<String, DataComment>();
+//						MemorySection memoryComment = (MemorySection) memoryId.get(PathTalker.COMMENT.toString());
+//						if(memoryComment == null) {
+//							System.out.println("NULL");
+//						}
+//						for(String sender : memoryComment.getKeys(false)) {
+//							DataComment comment = new DataComment();
+//							comment.sender = sender;
+//							String pathComment = sender;
+//							comment.expression = memoryComment.getString(pathComment + "." + PathComment.EXPRESSION);
+//							comment.state = CommentState.lookup(memoryComment.getString(pathComment + "." + PathComment.STATE));
+//							mapComment.put(sender, comment);
+//						}
+//						talker.mapComment = mapComment;
+//					}
 
 					list.add(talker);
 					UtilitiesProgramming.printDebugTalker(talker);

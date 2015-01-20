@@ -88,10 +88,7 @@ public class CommandTalker extends MyCommand {
 				MessengerGeneral.print(player, Message.INVALID_TALKER_1, opts);
 				return;
 			}
-			DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-			data.select = id;
-			String[] opts = {talker.name};
-			MessengerGeneral.print(player, Message.SELECT_TALKER_1, opts);
+			DataManagerPlayer.selectTalker(player, talker);
 		} else {
 			MessengerCommandUsage.print(player, Usage.TALKER_SELECT_0, null);
 		}

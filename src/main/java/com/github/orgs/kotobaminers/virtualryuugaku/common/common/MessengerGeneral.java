@@ -25,7 +25,12 @@ public class MessengerGeneral {
 		NO_COMMENT_0,
 		DONE_COMMENT_1,
 		TALKER_SPEAK_2,
-		TALKER_QUESTION_1
+		TALKER_QUESTION_1,
+		START_CONVERSATION_1,
+		FINISH_CONVERSATION_0,
+		TALKER_INFO_LABEL_1,
+		TALKER_INFO_DATA_3,
+		TALKER_INFO_SENTENCE_3,
 		;
 	}
 
@@ -37,20 +42,25 @@ public class MessengerGeneral {
 		case SET_LANGUAGE_1: message += "You set your language in " + opts[0] + "."; break;
 		case OWN_TALKER_0: message += "You own this talker."; break;
 		case ALREADY_OWNED_0: message += "You have already owned a talker in this stage."; break;
-		case SELECT_TALKER_1: message += "You selected " + opts[0] + "."; break;
+		case SELECT_TALKER_1: message += "You selected " + opts[0] + ChatColor.RESET + "."; break;
 		case NO_EXPRESSION_LINE_LANG_2: message += "No expression in line " + opts[0] + " in " + opts[1] + "."; break;
 		case NO_QUESTION_LANG_1: message += "No question in " + opts[0] + "."; break;
 		case NO_SENTENCE_0: message += "The talker has no sentence."; break;
 		case GOT_NEW_MESSAGE_1: message += "You got " + opts[0] + " new messages. /talker comment new"; break;
-		case SHOW_COMMENT_2: message += "Showing comments for " + opts[0] + "(ID: " + opts[1] + ")."; break;
+		case SHOW_COMMENT_2: message += "Showing comments for " + opts[0] + ChatColor.RESET + "(ID: " + opts[1] + ")."; break;
 		case INVALID_TALKER_1: message += "Invalid talker(ID: " + opts[0] + ")."; break;
-		case NEW_COMMENT_4: message += opts[0] + " new comments with " +opts[1] + "(ID: " + opts[2] + "). From: " + opts[3] + ")."; break;
+		case NEW_COMMENT_4: message += opts[0] + " new comments with " +opts[1] + ChatColor.RESET + "(ID: " + opts[2] + "). From: " + opts[3] + ")."; break;
 		case SENT_COMMENT_0: message += "You sent a comment."; break;
 		case NO_NEW_COMMENT_0: message += "You don't have any new comments."; break;
 		case NO_COMMENT_0: message += "The selected talker doesn't have any comments."; break;
 		case DONE_COMMENT_1: message += "The comment from " + opts[0] + "'s state was switched to " + DataComment.CommentState.DONE.toString() + "."; break;
 		case TALKER_SPEAK_2: message += opts[0] + ChatColor.RESET + ": " + ChatColor.GREEN + "\"" + ChatColor.RESET + opts[1] + ChatColor.GREEN + "\"" + ChatColor.RESET; break;
 		case TALKER_QUESTION_1: message += "[Question] " + opts[0]; break;
+		case START_CONVERSATION_1: message += ChatColor.RED + "Starting a conversation with " + ChatColor.RESET + opts[0] + ChatColor.RESET; break;
+		case FINISH_CONVERSATION_0: message += ChatColor.RED + "The conversation is finished." + ChatColor.RESET; break;//Expression  from ALC.
+		case TALKER_INFO_LABEL_1: message = ChatColor.GOLD +  "[Talker] " + ChatColor.RESET + opts[0] + ChatColor.RESET; break;//Without prefix
+		case TALKER_INFO_DATA_3: message = " ID: " + opts[0] + ", EDITOR: " + opts[1] + ", STAGE: " + opts[2]; break;//Without prefix
+		case TALKER_INFO_SENTENCE_3: message = " SENT(" + opts[0] + ") " + opts[1] + ": " + opts[2]; break;//Without prefix
 		default: break;
 		}
 		player.sendMessage(message);

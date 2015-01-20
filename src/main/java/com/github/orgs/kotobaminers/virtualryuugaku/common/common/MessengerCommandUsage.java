@@ -9,6 +9,7 @@ public class MessengerCommandUsage {
 		TALKER_SELECT_0,
 		TALKER_COMMENT_READ_0,
 		TALKER_COMMENT_DONE_0,
+		TALKER_SENTENCE_0,
 		;
 	}
 	public static void print(Player player, Usage key, String[] opts) {
@@ -17,6 +18,7 @@ public class MessengerCommandUsage {
 		case TALKER_SELECT_0: message += "/talker select <ID NUMBER>"; break;
 		case TALKER_COMMENT_READ_0: message += "/talker comment read"; break;
 		case TALKER_COMMENT_DONE_0: message += "/talker comment done <SENDER NAME>"; break;
+		case TALKER_SENTENCE_0: message += "/talker sentence <LINE(1-10)> en/kanji/kana <EXPRESSION>"; break;
 		default: break;
 		}
 		player.sendMessage(message);

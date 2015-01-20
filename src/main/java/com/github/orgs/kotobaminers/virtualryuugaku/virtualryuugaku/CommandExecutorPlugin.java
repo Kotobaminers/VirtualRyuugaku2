@@ -35,7 +35,10 @@ public class CommandExecutorPlugin implements CommandExecutor {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		Commands commands = Commands.lookup(label);
 		if(commands.equals(Commands.VRGDBG)) {
-			new CommandVirturalRyuugakuConsole().printDebug(args);
+			if(sender instanceof Player) {
+				if(!sender.isOp()) return false;
+			}
+			new CommandVirturalRyuugakuDebug().printDebug(args);
 			return true;
 		}
 		if(sender instanceof Player) {

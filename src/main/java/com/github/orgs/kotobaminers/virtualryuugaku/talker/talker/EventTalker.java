@@ -27,28 +27,18 @@ public class EventTalker {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
 		if(!data.select.equals(npc.getId())) {
-			data.select = npc.getId();
-			DataManagerPlayer.putDataPlayer(data);
-			String[] opts = {talker.name};
-			MessengerGeneral.print(player, Message.SELECT_TALKER_1, opts);
-			return;
+			DataManagerPlayer.selectTalker(player, talker);
 		} else {
 			talker.talkNext(player, data);
-			return;
 		}
 	}
 	public void quest() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
 		if(!data.select.equals(npc.getId())) {
-			data.select = npc.getId();
-			DataManagerPlayer.putDataPlayer(data);
-			String[] opts = {talker.name};
-			MessengerGeneral.print(player, Message.SELECT_TALKER_1, opts);
-			return;
+			DataManagerPlayer.selectTalker(player, talker);
 		} else {
 			talker.quest(player, data);
-			return;
 		}
 	}
 

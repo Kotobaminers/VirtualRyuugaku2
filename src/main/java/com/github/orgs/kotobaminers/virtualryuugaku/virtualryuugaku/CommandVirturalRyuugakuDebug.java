@@ -2,7 +2,7 @@ package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
-public class CommandVirturalRyuugakuConsole {
+public class CommandVirturalRyuugakuDebug {
 	public enum Debug {
 		NONE, CITIZENS, PLAYER, RELOAD, TALKER, COMMENT, MODE;
 		public static Debug lookup(String name) {

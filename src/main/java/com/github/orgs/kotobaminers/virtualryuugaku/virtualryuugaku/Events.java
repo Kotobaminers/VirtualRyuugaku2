@@ -33,7 +33,7 @@ public class Events implements Listener {
 			Talker talker = DataManagerTalker.getTalker(id);
 			new EventTalker(npc, talker, event.getClicker()).quest();
 		} else {
-			UtilitiesProgramming.printDebugMessage("This is not a talker.", new Exception());
+			UtilitiesProgramming.printDebugMessage("NON talker. ID: " + npc.getId(), new Exception());
 		}
 	}
 
@@ -51,7 +51,7 @@ public class Events implements Listener {
 			}
 			return;
 		} else {
-			UtilitiesProgramming.printDebugMessage("This is not a talker.", new Exception());
+			UtilitiesProgramming.printDebugMessage("NON talker. ID: " + npc.getId(), new Exception());
 		}
 	}
 

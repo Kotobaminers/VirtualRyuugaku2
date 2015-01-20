@@ -1,6 +1,7 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.talker.talker;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,10 +12,13 @@ import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataCitize
 import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManagerCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerCommandUsage;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerCommandUsage.Usage;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.talker.comment.DataComment;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class Talker {
@@ -33,11 +37,21 @@ public class Talker {
 			if(listSentence.size() - 1 < data.line) {
 				data.line = 0;
 			}
+			if(data.line.equals(0)) {
+				String[] opts = {name};
+				MessengerGeneral.print(player, Message.START_CONVERSATION_1, opts);
+			}
 			Description sentence = listSentence.get(data.line);
 			printExpression(player, sentence, data);
 			data.line++;
+			if(listSentence.size() - 1 < data.line) {
+				MessengerGeneral.print(player, Message.FINISH_CONVERSATION_0, null);
+			}
 		} else {
 			MessengerGeneral.print(player, Message.NO_SENTENCE_0, null);
+			if(editor.contains(player.getName())) {
+				MessengerCommandUsage.print(player, Usage.TALKER_SENTENCE_0, null);
+			}
 		}
 	}
 	private void printExpression(Player player, Description sentence, DataPlayer data) {
@@ -78,7 +92,7 @@ public class Talker {
 		}
 	}
 	public Boolean isEmpty() {
-		if(0 < name.length()){
+		if(0 < name.length()) {
 			return false;
 		}
 		return true;
@@ -95,16 +109,20 @@ public class Talker {
 	}
 	public void printInformation(Player player) {
 		if(isEmpty()) return;
-		player.sendMessage("[Talker] " + name);
-		player.sendMessage(" ID: " + id + ", EDITOR: " + editor + ", STAGE: " + stage);
+		String[] opts = {name};
+		MessengerGeneral.print(player, Message.TALKER_INFO_LABEL_1, opts);
+		String editors = UtilitiesGeneral.joinStrings(editor, ", ");
+		String[] opts2 = {id.toString(), editors, stage};
+		MessengerGeneral.print(player, Message.TALKER_INFO_DATA_3, opts2);
 		Integer count = 0;
+		List<Expression> expressions = Arrays.asList(Expression.EN, Expression.KANJI, Expression.KANA);
 		for(Description sentence : listSentence) {
 			count++;
-			player.sendMessage(" SENT(" + count + ") EN: " + sentence.express(Expression.EN));
-			player.sendMessage(" SENT(" + count + ") JP: " + sentence.express(Expression.KANJI));
+			for(Expression expression : expressions) {
+				String[] opts3 = {count.toString(), expression.toString(), sentence.express(expression)};
+				MessengerGeneral.print(player, Message.TALKER_INFO_SENTENCE_3, opts3);
+			}
 		}
-		player.sendMessage(" Q(EN): " + question.getEn());
-		player.sendMessage(" Q(JP): " + question.getJp());
 	}
 	public Boolean canEdit(String playerName) {
 		if(editor.contains(playerName)){
@@ -113,7 +131,7 @@ public class Talker {
 		return false;
 	}
 	public static Boolean isValidCitizensId(Integer id) {
-		for(DataCitizens data : DataManagerCitizens.getMapDataCitizns().values()) {
+		for(DataCitizens data : DataManagerCitizens.getMapDataCitizens().values()) {
 			if(data.id.equals(id)) {
 				return true;
 			}

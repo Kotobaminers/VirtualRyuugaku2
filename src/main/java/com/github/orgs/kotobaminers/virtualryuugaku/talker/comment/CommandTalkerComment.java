@@ -67,6 +67,9 @@ public class CommandTalkerComment extends MyCommand {
 		if(2 < args.length) {
 			String name = args[2];
 			Talker talker = DataManagerTalker.getTalker(DataManagerPlayer.getDataPlayer(player).select);
+			if(talker.canEdit(player.getName())) {
+				MessengerGeneral.print(player, Message.CANT_EDIT_TALKER_0, null);
+			}
 			if(talker.mapComment.containsKey(name)) {
 				DataComment data = talker.mapComment.get(name);
 				data.state = CommentState.DONE;
