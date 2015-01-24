@@ -62,6 +62,8 @@ public class Events implements Listener {
 		try {
 			CommentHandler.printCommentNew(player);
 		} catch(Exception e) {
+			// TOOD: This never supposed to happened.
+			UtilitiesProgramming.printDebugMessage("ERROR: ", e);
 		}
 	}
 
