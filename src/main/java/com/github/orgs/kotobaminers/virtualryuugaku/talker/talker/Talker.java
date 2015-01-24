@@ -39,13 +39,13 @@ public class Talker {
 			}
 			if(data.line.equals(0)) {
 				String[] opts = {name};
-				MessengerGeneral.print(player, Message.START_CONVERSATION_1, opts);
+				MessengerGeneral.print(player, Message.TALKER_SPEAK_START_1, opts);
 			}
 			Description sentence = listSentence.get(data.line);
 			printExpression(player, sentence, data);
 			data.line++;
 			if(listSentence.size() - 1 < data.line) {
-				MessengerGeneral.print(player, Message.FINISH_CONVERSATION_0, null);
+				MessengerGeneral.print(player, Message.TALKER_SPEAK_FINISH_0, null);
 			}
 		} else {
 			MessengerGeneral.print(player, Message.NO_SENTENCE_0, null);
@@ -58,8 +58,8 @@ public class Talker {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		String expression = sentence.express(data.language);
 		if(0 < expression.length()) {
-			String[] opts = {name, expression};
-			MessengerGeneral.print(player, Message.TALKER_SPEAK_2, opts);
+			String[] opts = {expression};
+			MessengerGeneral.print(player, Message.TALKER_SPEAK_1, opts);
 		} else {
 			int line = data.line.intValue();
 			String[] opts = {String.valueOf(line + 1), data.language.toString()};

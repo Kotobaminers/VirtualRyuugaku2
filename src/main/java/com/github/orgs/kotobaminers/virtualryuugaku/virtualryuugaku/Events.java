@@ -59,7 +59,10 @@ public class Events implements Listener {
 	public void onJoin(PlayerJoinEvent event) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		Player player = event.getPlayer();
-		CommentHandler.printCommentNew(player);
+		try {
+			CommentHandler.printCommentNew(player);
+		} catch(Exception e) {
+		}
 	}
 
 	@EventHandler

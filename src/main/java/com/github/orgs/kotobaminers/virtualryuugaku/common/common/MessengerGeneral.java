@@ -24,10 +24,10 @@ public class MessengerGeneral {
 		NO_NEW_COMMENT_0,
 		NO_COMMENT_0,
 		DONE_COMMENT_1,
-		TALKER_SPEAK_2,
+		TALKER_SPEAK_1,
 		TALKER_QUESTION_1,
-		START_CONVERSATION_1,
-		FINISH_CONVERSATION_0,
+		TALKER_SPEAK_START_1,
+		TALKER_SPEAK_FINISH_0,
 		TALKER_INFO_LABEL_1,
 		TALKER_INFO_DATA_3,
 		TALKER_INFO_SENTENCE_3,
@@ -54,10 +54,10 @@ public class MessengerGeneral {
 		case NO_NEW_COMMENT_0: message += "You don't have any new comments."; break;
 		case NO_COMMENT_0: message += "The selected talker doesn't have any comments."; break;
 		case DONE_COMMENT_1: message += "The comment from " + opts[0] + "'s state was switched to " + DataComment.CommentState.DONE.toString() + "."; break;
-		case TALKER_SPEAK_2: message += opts[0] + ChatColor.RESET + ": " + ChatColor.GREEN + "\"" + ChatColor.RESET + opts[1] + ChatColor.GREEN + "\"" + ChatColor.RESET; break;
+		case TALKER_SPEAK_1: message = ChatColor.GREEN + " \"" + ChatColor.RESET + opts[0] + ChatColor.GREEN + "\"" + ChatColor.RESET; break;
 		case TALKER_QUESTION_1: message += "[Question] " + opts[0]; break;
-		case START_CONVERSATION_1: message += ChatColor.RED + "Starting a conversation with " + ChatColor.RESET + opts[0] + ChatColor.RESET; break;
-		case FINISH_CONVERSATION_0: message += ChatColor.RED + "The conversation is finished." + ChatColor.RESET; break;//Expression  from ALC.
+		case TALKER_SPEAK_START_1: message += opts[0] + ChatColor.RESET + ":"; break;
+		case TALKER_SPEAK_FINISH_0: message += ChatColor.RED + "The conversation is finished." + ChatColor.RESET; break;//Expression  from ALC.
 		case TALKER_INFO_LABEL_1: message = ChatColor.GOLD +  "[Talker] " + ChatColor.RESET + opts[0] + ChatColor.RESET; break;//Without prefix
 		case TALKER_INFO_DATA_3: message = " ID: " + opts[0] + ", EDITOR: " + opts[1] + ", STAGE: " + opts[2]; break;//Without prefix
 		case TALKER_INFO_SENTENCE_3: message = " SENT(" + opts[0] + ") " + opts[1] + ": " + opts[2]; break;//Without prefix

@@ -44,13 +44,6 @@ public class CommandExecutorPlugin implements CommandExecutor {
 		if(sender instanceof Player) {
 			UtilitiesProgramming.printDebugMessage("", new Exception());
 			Player player = (Player) sender;
-			if(Settings.protectionCommandOP) {
-				UtilitiesProgramming.printDebugMessage("protectionCommandOP is true", new Exception());
-				if(!player.isOp()) {
-					player.sendMessage("OP protection is enabled.");
-					return false;
-				}
-			}
 			MyCommand myCommand = new CommandEmpty(player, command, args);
 			switch(commands) {
 			case TALKER:
@@ -60,14 +53,10 @@ public class CommandExecutorPlugin implements CommandExecutor {
 				myCommand = new CommandTalkerOP(player, command, args);
 				break;
 			case VIRTUALRYUUGAKU:
-				player.sendMessage(DataManagerPlugin.plugin.getName() + " developped by kai_f");
-				break;
 			case VRG:
 				player.sendMessage(DataManagerPlugin.plugin.getName() + " developped by kai_f");
 				break;
 			case VIRTUALRYUUGAKUOP:
-				myCommand = new CommandVirtualRyuugakuOP(player, command, args);
-				break;
 			case VRGOP:
 				myCommand = new CommandVirtualRyuugakuOP(player, command, args);
 				break;

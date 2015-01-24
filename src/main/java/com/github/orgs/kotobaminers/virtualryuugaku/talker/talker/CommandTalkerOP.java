@@ -22,7 +22,7 @@ public class CommandTalkerOP extends MyCommand {
 		super(player, command, args);
 	}
 	public enum Commands {
-		NONE, DEBUG, CREATE;
+		NONE, DEBUG, CREATE, REGISTER, DEREGISTER,;
 		public static Commands lookup(String name) {
 			UtilitiesProgramming.printDebugMessage("", new Exception());
 			Commands commands = Commands.NONE;
@@ -49,10 +49,21 @@ public class CommandTalkerOP extends MyCommand {
 			case CREATE:
 				commandCreate();
 				break;
+			case DEREGISTER:
+				break;
+			case REGISTER:
+				commandRegister();
+				break;
 			default:
 				break;
 			}
 		}
+	}
+	private void commandRegister() {
+		if(1 < args.length) {
+
+		}
+
 	}
 	private void commandDebug() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
