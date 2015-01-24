@@ -5,6 +5,13 @@ commands:
   VRG:
   VIRTUALRYUUGAKU:
   TALKER:
+    usage: |
+      /<command> select [id]
+      /<command> sentence [line] (kanji/kana/en) [expression]
+      /<command> language
+      /<command> info
+      /<command> comment (read/send/new/done)
+
   STAGE:
   VRGOP:
     permission: vertualryuugaku.op

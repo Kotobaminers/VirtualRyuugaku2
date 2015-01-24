@@ -23,6 +23,7 @@ public class CommandTalkerComment extends MyCommand {
 		super(player, command, args);
 	}
 	public enum CommandsComment {
+		
 		NONE, SEND, READ, REMOVE, NEW, DONE;
 		public static CommandsComment lookup(String name) {
 			try {
