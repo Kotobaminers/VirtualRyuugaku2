@@ -31,7 +31,7 @@ public class CommandStageOP extends MyCommand {
 			case NONE:
 				break;
 			case NEXT:
-				GameStage.questNext();
+//				commandNext();
 				break;
 			case STOP:
 				break;
@@ -40,4 +40,17 @@ public class CommandStageOP extends MyCommand {
 			}
 		}
 	}
+
+	//After Cancelling the task, error happens to start run Task again...
+//	private void commandNext() {
+//		UtilitiesProgramming.printDebugMessage("", new Exception());
+//		if(!RunnableStage.running) {
+//			MessengerGeneral.print(player, Message.GAME_STAGE_NOT_RUNNING_0, null);
+//			return;
+//		}
+//		UtilitiesProgramming.printDebugMessage("", new Exception());
+//		RunnableStage.getGame().cancel();
+//		UtilitiesProgramming.printDebugMessage("", new Exception());
+//		RunnableStage.getGame().runTaskTimer(DataManagerPlugin.plugin, 0, GameStage.interval);//Imediatelly run task
+//	}
 }

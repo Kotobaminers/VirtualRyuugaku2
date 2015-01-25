@@ -1,19 +1,25 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.stage.stage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Broadcast;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
+import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.DataManagerPlugin;
 
 public class CommandStage extends MyCommand {
 	public CommandStage(Player player, Command command, String[] args) {
 		super(player, command, args);
 	}
 	private enum Commands {
-		NONE, START, INFO,;
+		NONE, START, INFO, ANSWER, A;
 		private static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -37,27 +43,55 @@ public class CommandStage extends MyCommand {
 			case START:
 				commandStart();
 				break;
+			case A:
+			case ANSWER:
+				commandAnswer();
+				break;
 			default:
 				break;
 			}
 		}
 	}
 
+	private void commandAnswer() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		if(1< args.length) {
+			List<String> list = new ArrayList<String>();
+			for(Integer i = 1; i < args.length; i++) {
+				list.add(args[i]);
+			}
+			String answer = UtilitiesGeneral.joinStrings(list, " ");
+			for(String correct : DataManagerStage.answers) {
+				if(correct.equalsIgnoreCase(answer)) {
+					String[] opts = {UtilitiesGeneral.joinStrings(DataManagerStage.answers, ", ")};
+					MessengerGeneral.print(player, Message.GAME_STAGE_CORRECT_1, opts);
+					return;
+				}
+			}
+			String[] opts = {answer};
+			MessengerGeneral.print(player, Message.GAME_STAGE_WRONG_1, opts);
+		}
+	}
+
 	private void commandStart() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		if(1< args.length) {
-			if(GameStage.active) {
+			if(DataManagerStage.running) {
 				MessengerGeneral.print(player, Message.GAME_STAGE_RUNNING_0, null);
 				return;
 			}
 			String stage = args[1];
-			GameStage.loadNewGame(stage);
-			if(!GameStage.isValid()) {
+			DataManagerStage.loadNewGame(stage);
+			if(!DataManagerStage.getGame().isValid()) {
 				String[] opts = {stage};
 				MessengerGeneral.print(player, Message.GAME_STAGE_INVALID_1, opts);
 				return;
 			}
-			GameStage.questNext();
+
+			String[] opts = {stage.toUpperCase()};
+			MessengerGeneral.broadcast(Broadcast.GAME_STAGE_START_1, opts);
+			DataManagerStage.running = true;
+			DataManagerStage.getGame().runTaskTimer(DataManagerPlugin.plugin, DataManagerStage.ready, DataManagerStage.interval);
 		}
 	}
 }

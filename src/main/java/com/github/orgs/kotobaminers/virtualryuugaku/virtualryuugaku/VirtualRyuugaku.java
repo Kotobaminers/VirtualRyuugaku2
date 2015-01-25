@@ -20,6 +20,7 @@ public class VirtualRyuugaku extends JavaPlugin {
 		}
 
 		UtilitiesProgramming.printDebugMessage("", new Exception());
+
 		DataManagerPlugin.savePlugin();
 	}
 	@Override

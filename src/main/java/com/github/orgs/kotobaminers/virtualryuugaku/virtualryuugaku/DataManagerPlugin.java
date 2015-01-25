@@ -5,6 +5,8 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManagerRom
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.LibraryManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.ConfigHandlerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.ConfigHandlerStage;
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.DataManagerStage;
 import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.ConfigHandlerTalker;
 import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.DataManagerTalker;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
@@ -29,6 +31,10 @@ public final class DataManagerPlugin {
 		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Loading Talker Data", new Exception());
 		new ConfigHandlerTalker().initialize(plugin);
 		new DataManagerTalker().loadAll();
+
+		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Loading Talker Data", new Exception());
+		new ConfigHandlerStage().initialize(plugin);
+		new DataManagerStage().loadAll();
 
 		savePlugin();
 

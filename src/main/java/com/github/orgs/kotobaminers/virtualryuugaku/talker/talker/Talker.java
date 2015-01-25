@@ -129,8 +129,10 @@ public class Talker {
 		this.key = key;
 	}
 	public Description getKeyDescription() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
 		Description description = new Description();
-		Integer key = getKey();
+		Integer key = getKey() - 1;
+		UtilitiesProgramming.printDebugMessage(key.toString() + " " + listSentence.size(), new Exception());
 		if(key < listSentence.size()) {
 			description = listSentence.get(key);
 		}

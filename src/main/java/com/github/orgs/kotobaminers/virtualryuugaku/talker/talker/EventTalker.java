@@ -47,10 +47,12 @@ public class EventTalker {
 			String en = description.express(Expression.EN);
 			List<String> list = new ArrayList<String>();
 			switch(data.language) {
-			case ROMAJI://No break;
+			case ROMAJI:
 				list.add(description.express(Expression.ROMAJI));
-			case KANA://No break;
+				break;
+			case KANA:
 				list.add(description.express(Expression.KANA));
+				break;
 			case EN:
 			case KANJI:
 				list.add(description.express(Expression.KANJI));
@@ -64,8 +66,8 @@ public class EventTalker {
 			String[] optsJp = {jp};
 			String[] optsEn = {en};
 			MessengerGeneral.print(player, Message.TALKER_KEY_SENTENCE_1, opts);
-			MessengerGeneral.print(player, Message.TALKER_MEMORY_JP_1, optsJp);
-			MessengerGeneral.print(player, Message.TALKER_MEMORY_EN_1, optsEn);
+			MessengerGeneral.print(player, Message.TALKER_KEY_SENTENCE_JP_1, optsJp);
+			MessengerGeneral.print(player, Message.TALKER_KEY_SENTENCE_EN_1, optsEn);
 		}
 	}
 

@@ -32,11 +32,14 @@ public class MessengerGeneral {
 		TALKER_INFO_LABEL_1,
 		TALKER_INFO_DATA_3,
 		TALKER_INFO_SENTENCE_3,
-		TALKER_MEMORY_EN_1,
-		TALKER_MEMORY_JP_1,
+		TALKER_KEY_SENTENCE_EN_1,
+		TALKER_KEY_SENTENCE_JP_1,
 		TALKER_KEY_SENTENCE_1,
 		GAME_STAGE_INVALID_1,
 		GAME_STAGE_RUNNING_0,
+		GAME_STAGE_NOT_RUNNING_0,
+		GAME_STAGE_CORRECT_1,
+		GAME_STAGE_WRONG_1,
 		;
 	}
 
@@ -68,10 +71,13 @@ public class MessengerGeneral {
 		case TALKER_INFO_DATA_3: message = " ID: " + opts[0] + ", EDITOR: " + opts[1] + ", STAGE: " + opts[2]; break;//Without prefix
 		case TALKER_INFO_SENTENCE_3: message = " SENT(" + opts[0] + ") " + opts[1] + ": " + opts[2]; break;//Without prefix
 		case TALKER_KEY_SENTENCE_1: message += opts[0] + ChatColor.RESET + "'s Key Sentence."; break;
-		case TALKER_MEMORY_EN_1: message = " EN: " + ChatColor.GOLD + " \"" + ChatColor.RESET + opts[0] + ChatColor.GOLD + "\"" + ChatColor.RESET; break;//Without prefix
-		case TALKER_MEMORY_JP_1: message = " JP: " + ChatColor.GOLD + " \"" + ChatColor.RESET + opts[0] + ChatColor.GOLD + "\"" + ChatColor.RESET; break;//Without prefix
+		case TALKER_KEY_SENTENCE_EN_1: message = " EN: " + ChatColor.GOLD + " \"" + ChatColor.RESET + opts[0] + ChatColor.GOLD + "\"" + ChatColor.RESET; break;//Without prefix
+		case TALKER_KEY_SENTENCE_JP_1: message = " JP: " + ChatColor.GOLD + " \"" + ChatColor.RESET + opts[0] + ChatColor.GOLD + "\"" + ChatColor.RESET; break;//Without prefix
 		case GAME_STAGE_INVALID_1: message += "Invalid stage name(" + opts[0] + ")"; break;
-		case GAME_STAGE_RUNNING_0: message += "A game is running for now. Try later."; break;
+		case GAME_STAGE_RUNNING_0: message += "A game is already running right now. Try later."; break;
+		case GAME_STAGE_NOT_RUNNING_0: message += "No game is running for now."; break;
+		case GAME_STAGE_CORRECT_1: message += "Correct: (" + opts[0] + ")"; break;
+		case GAME_STAGE_WRONG_1: message += "Wrong: (Your answer is " + opts[0] + ")"; break;
 		default: break;
 		}
 		player.sendMessage(message);
