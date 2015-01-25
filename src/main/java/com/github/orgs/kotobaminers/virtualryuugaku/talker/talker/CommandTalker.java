@@ -19,15 +19,14 @@ import com.github.orgs.kotobaminers.virtualryuugaku.talker.comment.CommandTalker
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.CommandExecutorPlugin.Commands;
 
 public class CommandTalker extends MyCommand {
 	public CommandTalker(Player player, Command command, String[] args) {
 		super(player, command, args);
 	}
-	public enum CommandsTalker {
+	private enum CommandsTalker {
 		NONE, ANSWER, SENTENCE, COMMENT, REMOVE, LANGUAGE, INFO, STAGE, SELECT;
-		public static CommandsTalker lookup(String name) {
+		private static CommandsTalker lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
 				return CommandsTalker.valueOf(name.toUpperCase());
@@ -65,8 +64,10 @@ public class CommandTalker extends MyCommand {
 				break;
 			case STAGE:
 				commandStage();
+				break;
 			case SELECT:
 				commandSelect();
+				break;
 			default:
 				break;
 			}
@@ -120,7 +121,6 @@ public class CommandTalker extends MyCommand {
 			try {
 				line = Integer.parseInt(args[1]);
 			} catch(NumberFormatException e) {
-				printUsageRemove();
 				return;
 			}
 			Talker talker = DataManagerTalker.getTalker(DataManagerPlayer.getDataPlayer(player).select);
@@ -132,10 +132,6 @@ public class CommandTalker extends MyCommand {
 				return;
 			}
 		}
-		printUsageRemove();
-	}
-	private void printUsageRemove() {
-		player.sendMessage("/" + Commands.TALKER.toString().toLowerCase() + " " + CommandsTalker.REMOVE.toString().toLowerCase() + " <LINE(1-10)>");
 	}
 	private void commandSentence() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -144,7 +140,7 @@ public class CommandTalker extends MyCommand {
 			try {
 				line = Integer.parseInt(args[1]);
 			} catch(NumberFormatException e) {
-				printUsageSentence();
+//				printUsageSentence();
 				return;
 			}
 			Expression expression = Expression.lookup(args[2]);
@@ -191,10 +187,7 @@ public class CommandTalker extends MyCommand {
 				return;
 			}
 		}
-		printUsageSentence();
-	}
-	private void printUsageSentence() {
-		player.sendMessage("/" + Commands.TALKER.toString().toLowerCase() + " " + CommandsTalker.SENTENCE.toString().toLowerCase() + " <LINE(1-10)> <EN/KANJI/KANA> <SENTENCE>");
+//		printUsageSentence();
 	}
 	private void commandLanguage() {
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);

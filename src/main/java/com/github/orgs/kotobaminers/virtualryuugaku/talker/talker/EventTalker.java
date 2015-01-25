@@ -1,16 +1,20 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.talker.talker;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.citizensnpcs.api.npc.NPC;
 
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class EventTalker {
@@ -32,13 +36,36 @@ public class EventTalker {
 			talker.talkNext(player, data);
 		}
 	}
-	public void quest() {
+	public void printKeySentence() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
 		if(!data.select.equals(npc.getId())) {
 			DataManagerPlayer.selectTalker(player, talker);
 		} else {
-			talker.quest(player, data);
+			UtilitiesProgramming.printDebugMessage("", new Exception());
+			Description description = talker.getKeyDescription();
+			String en = description.express(Expression.EN);
+			List<String> list = new ArrayList<String>();
+			switch(data.language) {
+			case ROMAJI://No break;
+				list.add(description.express(Expression.ROMAJI));
+			case KANA://No break;
+				list.add(description.express(Expression.KANA));
+			case EN:
+			case KANJI:
+				list.add(description.express(Expression.KANJI));
+				break;
+			case NONE:
+			default:
+				break;
+			}
+			String jp = UtilitiesGeneral.joinStrings(list, ", ");
+			String[] opts = {talker.name};
+			String[] optsJp = {jp};
+			String[] optsEn = {en};
+			MessengerGeneral.print(player, Message.TALKER_KEY_SENTENCE_1, opts);
+			MessengerGeneral.print(player, Message.TALKER_MEMORY_JP_1, optsJp);
+			MessengerGeneral.print(player, Message.TALKER_MEMORY_EN_1, optsEn);
 		}
 	}
 

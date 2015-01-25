@@ -6,28 +6,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.CommandEmpty;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Commands;
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.CommandStage;
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.CommandStageOP;
 import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.CommandTalker;
 import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.CommandTalkerOP;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class CommandExecutorPlugin implements CommandExecutor {
-	public enum Commands {
-		VIRTUALRYUUGAKU, VRG,
-		VIRTUALRYUUGAKUOP, VRGOP, VRGDBG,
-		STAGE, STAGEOP,
-		TALKER, TALKEROP,
-		;
-		public static Commands lookup(String name) {
-			try {
-				UtilitiesProgramming.printDebugMessage("", new Exception());
-				return Commands.valueOf(name.toUpperCase());
-			} catch (IllegalArgumentException e) {
-				UtilitiesProgramming.printDebugMessage(e.toString(), new Exception());
-				return Commands.VRG;
-			}
-		}
-	}
 	public CommandExecutorPlugin(VirtualRyuugaku plugin) {
 	}
 	@Override
@@ -60,7 +47,13 @@ public class CommandExecutorPlugin implements CommandExecutor {
 			case VRGOP:
 				myCommand = new CommandVirtualRyuugakuOP(player, command, args);
 				break;
-			//VRGCO should be placed the upper section.
+			case STAGE:
+				myCommand = new CommandStage(player, command, args);
+				break;
+			case STAGEOP:
+				myCommand = new CommandStageOP(player, command, args);
+				break;
+			//VRGDBG should be placed the upper section.
 			default:
 				break;
 			}

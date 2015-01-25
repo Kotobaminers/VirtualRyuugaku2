@@ -37,10 +37,10 @@ public class DataManagerTalker implements DataManager {
 		}
 		for(Talker talker : list) {
 			if(Talker.isValidCitizensId(talker.id)) {
-				talker = DataManagerCitizens.overrideTalker(talker);
+				talker = DataManagerCitizens.overrideCitizens(talker);
 				if(getMapTalker().containsKey(talker.id)) {
 					UtilitiesProgramming.printDebugMessage("Overriding NPC: ID: " + talker.id, new Exception());
-					talker = overrideTalkerLibarary(talker);
+					talker = overrideComment(talker);
 				}
 				putTalker(talker);
 			} else {
@@ -48,7 +48,7 @@ public class DataManagerTalker implements DataManager {
 			}
 		}
 	}
-	private static Talker overrideTalkerLibarary(Talker talker) {
+	private static Talker overrideComment(Talker talker) {
 		talker.mapComment = getTalker(talker.id).mapComment;
 		return talker;
 	}

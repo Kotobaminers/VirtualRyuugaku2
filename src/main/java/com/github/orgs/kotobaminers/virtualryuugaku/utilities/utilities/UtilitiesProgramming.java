@@ -26,7 +26,7 @@ public class UtilitiesProgramming {
 		String line = String.valueOf(element.getLineNumber());
 		if(Settings.debugMessageBroadcast) {
 			String[] broadcast = {ChatColor.RED.toString(), message, ChatColor.GRAY.toString(), nameClass, nameMethod, ChatColor.WHITE.toString(), line};
-			Bukkit.broadcastMessage(UtilitiesGeneral.joinStringsWithSpace(broadcast));
+			Bukkit.broadcastMessage(UtilitiesGeneral.joinStrings(broadcast, " "));
 		} else {
 			String[] broadcast = {message, nameClass, nameMethod, line};
 			Bukkit.getLogger().info(UtilitiesGeneral.joinStrings(broadcast, " "));
@@ -66,7 +66,7 @@ public class UtilitiesProgramming {
 	public static void printDebugTalker(Talker talker) {
 		if(talker.id < 0) return;
 		UtilitiesProgramming.printDebugMessage("[Debug Talker] " + talker.name, new Exception());
-		UtilitiesProgramming.printDebugMessage(" ID: " + talker.id + ", EDITOR: " + talker.editor + ", STAGE: " + talker.stage, new Exception());
+		UtilitiesProgramming.printDebugMessage(" ID: " + talker.id + ", EDITOR: " + talker.editor + ", STAGE: " + talker.stage + ", KEY: " + talker.getKey(), new Exception());
 		for(Description sentence : talker.listSentence) {
 			UtilitiesProgramming.printDebugMessage(" SEN: " + sentence.express(Expression.EN), new Exception());
 			UtilitiesProgramming.printDebugMessage(" SEN: " + sentence.express(Expression.KANJI), new Exception());

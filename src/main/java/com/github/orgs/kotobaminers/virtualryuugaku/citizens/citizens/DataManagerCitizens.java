@@ -18,6 +18,27 @@ public class DataManagerCitizens implements DataManager {
 	private static final String KEY_NPC = "npc";
 	private static final String KEY_NAME = "name";
 
+	public static void addNPC(Integer id) {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		YamlConfiguration config = YamlConfiguration.loadConfiguration(new File(citizensDataFolder));
+		MemorySection memory = (MemorySection) config.get(KEY_NPC);
+		if(memory.contains(id.toString())) {
+			String name = memory.getString(id.toString() + "." + KEY_NAME);
+			DataCitizens data = new DataCitizens();
+			data.id = id;
+			data.name = name;
+			getMapDataCitizens().put(id, data);
+		} else {
+			UtilitiesProgramming.printDebugMessage("NON Existing ID in citizens", new Exception());
+		}
+	}
+
+	public static Talker overrideCitizens(Talker talker) {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		talker.name = getMapDataCitizens().get(talker.id).name;
+		return talker;
+	}
+
 	@Override
 	public void loadAll() {
 		initialize();
@@ -52,10 +73,4 @@ public class DataManagerCitizens implements DataManager {
 	private static void setMapDataCitizens(Map<Integer, DataCitizens> mapDataCitizens) {
 		DataManagerCitizens.mapDataCitizens = mapDataCitizens;
 	}
-	public static Talker overrideTalker(Talker talker) {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		talker.name = getMapDataCitizens().get(talker.id).name;
-		return talker;
-	}
-
 }

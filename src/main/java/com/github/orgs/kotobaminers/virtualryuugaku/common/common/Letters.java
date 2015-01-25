@@ -10,7 +10,7 @@ public class Letters {
 	private String type = "";
 	public void printDebug() {
 		String[] debug = {hiragana, katakana, romaji, type};
-		UtilitiesProgramming.printDebugMessage(UtilitiesGeneral.joinStringsWithSpace(debug), new Exception());
+		UtilitiesProgramming.printDebugMessage(UtilitiesGeneral.joinStrings(debug, " "), new Exception());
 	}
 	public String getHiragana() {
 		return hiragana;

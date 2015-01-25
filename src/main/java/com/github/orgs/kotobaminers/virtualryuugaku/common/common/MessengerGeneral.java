@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.talker.comment.DataComment;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 
 public class MessengerGeneral {
 	private static final String MESSENGER_PREFIX = "" + ChatColor.GOLD + ChatColor.BOLD +"[" + ChatColor.YELLOW + "VRG" + ChatColor.GOLD + ChatColor.BOLD + "] " + ChatColor.RESET;
@@ -31,6 +32,11 @@ public class MessengerGeneral {
 		TALKER_INFO_LABEL_1,
 		TALKER_INFO_DATA_3,
 		TALKER_INFO_SENTENCE_3,
+		TALKER_MEMORY_EN_1,
+		TALKER_MEMORY_JP_1,
+		TALKER_KEY_SENTENCE_1,
+		GAME_STAGE_INVALID_1,
+		GAME_STAGE_RUNNING_0,
 		;
 	}
 
@@ -61,9 +67,31 @@ public class MessengerGeneral {
 		case TALKER_INFO_LABEL_1: message = ChatColor.GOLD +  "[Talker] " + ChatColor.RESET + opts[0] + ChatColor.RESET; break;//Without prefix
 		case TALKER_INFO_DATA_3: message = " ID: " + opts[0] + ", EDITOR: " + opts[1] + ", STAGE: " + opts[2]; break;//Without prefix
 		case TALKER_INFO_SENTENCE_3: message = " SENT(" + opts[0] + ") " + opts[1] + ": " + opts[2]; break;//Without prefix
+		case TALKER_KEY_SENTENCE_1: message += opts[0] + ChatColor.RESET + "'s Key Sentence."; break;
+		case TALKER_MEMORY_EN_1: message = " EN: " + ChatColor.GOLD + " \"" + ChatColor.RESET + opts[0] + ChatColor.GOLD + "\"" + ChatColor.RESET; break;//Without prefix
+		case TALKER_MEMORY_JP_1: message = " JP: " + ChatColor.GOLD + " \"" + ChatColor.RESET + opts[0] + ChatColor.GOLD + "\"" + ChatColor.RESET; break;//Without prefix
+		case GAME_STAGE_INVALID_1: message += "Invalid stage name(" + opts[0] + ")"; break;
+		case GAME_STAGE_RUNNING_0: message += "A game is running for now. Try later."; break;
 		default: break;
 		}
 		player.sendMessage(message);
+	}
+
+	public enum Broadcast {
+		GAME_STAGE_START_1,
+		GAME_STAGE_END_1,
+		GAME_STAGE_QUEST_3,
+	}
+
+	public static void broadcast(Broadcast key, String[] opts) {
+		String message = MESSENGER_PREFIX;
+		switch(key) {
+		case GAME_STAGE_START_1: message += "A new game will start! Stage: " + opts[0]; break;
+		case GAME_STAGE_END_1: message += "The game finished! Stage: " + opts[0]; break;
+		case GAME_STAGE_QUEST_3: message = " [Q"+ opts[0] +"] What is \"" + opts[1] + "\" in " + opts[2] + "?"; break;
+		default: break;
+		}
+		UtilitiesGeneral.sendMessageAll(message);
 	}
 
 	public static void printReadComment(Player player, DataComment data, Integer line) {
@@ -72,4 +100,5 @@ public class MessengerGeneral {
 		player.sendMessage(info);
 		player.sendMessage(expression);
 	}
+
 }

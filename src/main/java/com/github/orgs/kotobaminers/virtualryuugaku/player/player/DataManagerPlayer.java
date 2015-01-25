@@ -22,6 +22,7 @@ public class DataManagerPlayer implements DataManager {
 			data = getMapDataPlayer().get(player.getName());
 		} else {
 			data.name = player.getName();
+			putDataPlayer(data);//In the case without existing playerdata, one is created here.
 		}
 		return data;
 	}

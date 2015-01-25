@@ -27,9 +27,10 @@ public class Talker {
 	public String stage = "";
 	public List<String> editor = new ArrayList<String>();
 	public List<Description> listSentence = new ArrayList<Description>();
+	private Integer key = 0;
+	public Map<String, DataComment> mapComment = new HashMap<String, DataComment>();
 	public TalkerQuestion question = new TalkerQuestion();
 	public TalkerAnswer answer = new TalkerAnswer();
-	public Map<String, DataComment> mapComment = new HashMap<String, DataComment>();
 
 	public void talkNext(Player player, DataPlayer data) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -67,30 +68,6 @@ public class Talker {
 		}
 	}
 
-	public void quest(Player player, DataPlayer data) {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		String message = "";
-		switch(data.language) {
-		case EN:
-			message = question.getEn();
-			break;
-		case KANJI:
-			message = question.getJp();
-			break;
-		case KANA:
-		case NONE:
-		case ROMAJI:
-		default:
-			break;
-		}
-		if(0 < message.length()) {
-			String[] opts = {message};
-			MessengerGeneral.print(player, Message.TALKER_QUESTION_1, opts);
-		} else {
-			String[] opts = {data.language.toString()};
-			MessengerGeneral.print(player, Message.NO_QUESTION_LANG_1, opts);
-		}
-	}
 	public Boolean isEmpty() {
 		if(0 < name.length()) {
 			return false;
@@ -144,5 +121,19 @@ public class Talker {
 			return true;
 		}
 		return false;
+	}
+	public Integer getKey() {
+		return key;
+	}
+	public void setKey(Integer key) {
+		this.key = key;
+	}
+	public Description getKeyDescription() {
+		Description description = new Description();
+		Integer key = getKey();
+		if(key < listSentence.size()) {
+			description = listSentence.get(key);
+		}
+		return description;
 	}
 }

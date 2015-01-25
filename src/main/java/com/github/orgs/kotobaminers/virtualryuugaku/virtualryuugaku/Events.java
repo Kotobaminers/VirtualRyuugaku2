@@ -31,7 +31,7 @@ public class Events implements Listener {
 		if(DataManagerTalker.existsTalker(npc)) {//Talker
 			Integer id = npc.getId();
 			Talker talker = DataManagerTalker.getTalker(id);
-			new EventTalker(npc, talker, event.getClicker()).quest();
+			new EventTalker(npc, talker, event.getClicker()).printKeySentence();
 		} else {
 			UtilitiesProgramming.printDebugMessage("NON talker. ID: " + npc.getId(), new Exception());
 		}
@@ -62,7 +62,6 @@ public class Events implements Listener {
 		try {
 			CommentHandler.printCommentNew(player);
 		} catch(Exception e) {
-			// TOOD: This never supposed to happened.
 			UtilitiesProgramming.printDebugMessage("ERROR: ", e);
 		}
 	}
