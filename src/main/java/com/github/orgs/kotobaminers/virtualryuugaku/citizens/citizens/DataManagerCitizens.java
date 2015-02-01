@@ -7,7 +7,6 @@ import java.util.Map;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.Talker;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.DataManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.DataManagerPlugin;
@@ -33,10 +32,15 @@ public class DataManagerCitizens implements DataManager {
 		}
 	}
 
-	public static Talker overrideCitizens(Talker talker) {
+	public static DataCitizens getDataCitizens(Integer id) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		talker.name = getMapDataCitizens().get(talker.id).name;
-		return talker;
+		DataCitizens data = new DataCitizens();
+		if(getMapDataCitizens().keySet().contains(id)) {
+			data = getMapDataCitizens().get(id);
+		} else {
+			UtilitiesProgramming.printDebugMessage("Invalid DataCitizens ID: " + id, new Exception());
+		}
+		return data;
 	}
 
 	@Override
@@ -67,6 +71,7 @@ public class DataManagerCitizens implements DataManager {
 	@Override
 	public void saveAll() {
 	}
+
 	public static Map<Integer, DataCitizens> getMapDataCitizens() {
 		return mapDataCitizens;
 	}

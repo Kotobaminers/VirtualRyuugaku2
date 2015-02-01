@@ -61,10 +61,12 @@ public class CommandStage extends MyCommand {
 				list.add(args[i]);
 			}
 			String answer = UtilitiesGeneral.joinStrings(list, " ");
-			for(String correct : DataManagerStage.answers) {
+			for(String correct : StageGameHandler.answers) {
 				if(correct.equalsIgnoreCase(answer)) {
-					String[] opts = {UtilitiesGeneral.joinStrings(DataManagerStage.answers, ", ")};
-					MessengerGeneral.print(player, Message.GAME_STAGE_CORRECT_1, opts);
+					StageGameHandler.correct(player);
+					String total = StageGameHandler.getScoreCurrent(player).toString();
+					String[] opts = {UtilitiesGeneral.joinStrings(StageGameHandler.answers, ", "), total};
+					MessengerGeneral.print(player, Message.GAME_STAGE_CORRECT_2, opts);
 					return;
 				}
 			}
@@ -76,13 +78,13 @@ public class CommandStage extends MyCommand {
 	private void commandStart() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		if(1< args.length) {
-			if(DataManagerStage.running) {
+			if(StageGameHandler.running) {
 				MessengerGeneral.print(player, Message.GAME_STAGE_RUNNING_0, null);
 				return;
 			}
 			String stage = args[1];
-			DataManagerStage.loadNewGame(stage);
-			if(!DataManagerStage.getGame().isValid()) {
+			StageGameHandler.loadNewGame(stage);
+			if(!StageGameHandler.getGame().isValid()) {
 				String[] opts = {stage};
 				MessengerGeneral.print(player, Message.GAME_STAGE_INVALID_1, opts);
 				return;
@@ -90,8 +92,8 @@ public class CommandStage extends MyCommand {
 
 			String[] opts = {stage.toUpperCase()};
 			MessengerGeneral.broadcast(Broadcast.GAME_STAGE_START_1, opts);
-			DataManagerStage.running = true;
-			DataManagerStage.getGame().runTaskTimer(DataManagerPlugin.plugin, DataManagerStage.ready, DataManagerStage.interval);
+			StageGameHandler.running = true;
+			StageGameHandler.getGame().runTaskTimer(DataManagerPlugin.plugin, StageGameHandler.ready, StageGameHandler.interval);
 		}
 	}
 }

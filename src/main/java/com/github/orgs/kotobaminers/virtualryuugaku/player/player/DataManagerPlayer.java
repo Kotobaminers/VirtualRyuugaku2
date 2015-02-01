@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.Talker;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.DataManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
@@ -38,11 +37,11 @@ public class DataManagerPlayer implements DataManager {
 		DataManagerPlayer.mapDataPlayer = mapDataPlayer;
 	}
 
-	public static void selectTalker(Player player, Talker talker) {
+	public static void selectTalker(Player player, Integer id) {
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-		data.select = talker.id;
+		data.select = id;
 		data.line = 0;
-		String[] opts = {talker.name};
+		String[] opts = {id.toString()};
 		MessengerGeneral.print(player, Message.SELECT_TALKER_1, opts);
 	}
 

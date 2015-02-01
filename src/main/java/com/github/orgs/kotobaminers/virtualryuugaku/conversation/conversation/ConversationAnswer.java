@@ -1,11 +1,11 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.talker.talker;
+package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TalkerAnswer {
+public class ConversationAnswer {
 	private Map<KeyAnswer, List<String>> mapAnswers = new HashMap<KeyAnswer, List<String>>();
 	public enum KeyAnswer {EN, JP}
 	public List<String> getEn() {
@@ -30,8 +30,8 @@ public class TalkerAnswer {
 	private void setJp(List<String> jp) {
 		mapAnswers.put(KeyAnswer.JP, jp);
 	}
-	public TalkerAnswer create(List<String> en, List<String> jp) {
-		TalkerAnswer answer = new TalkerAnswer();
+	public ConversationAnswer create(List<String> en, List<String> jp) {
+		ConversationAnswer answer = new ConversationAnswer();
 		answer.setEn(en);
 		answer.setJp(jp);
 		return answer;

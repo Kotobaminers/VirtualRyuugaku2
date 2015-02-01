@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.talker.comment;
+package com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,20 +10,20 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerComma
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerCommandUsage.Usage;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment.CommentState;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.comment.DataComment.CommentState;
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.DataManagerTalker;
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.Talker;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
-public class CommandTalkerComment extends MyCommand {
-	public CommandTalkerComment(Player player, Command command, String[] args) {
+public class CommandConversationComment extends MyCommand {
+	public CommandConversationComment(Player player, Command command, String[] args) {
 		super(player, command, args);
 	}
 	public enum CommandsComment {
-		
+
 		NONE, SEND, READ, REMOVE, NEW, DONE;
 		public static CommandsComment lookup(String name) {
 			try {
@@ -67,7 +67,7 @@ public class CommandTalkerComment extends MyCommand {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		if(2 < args.length) {
 			String name = args[2];
-			Talker talker = DataManagerTalker.getTalker(DataManagerPlayer.getDataPlayer(player).select);
+			Conversation talker = DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select);
 			if(talker.canEdit(player.getName())) {
 				MessengerGeneral.print(player, Message.CANT_EDIT_TALKER_0, null);
 			}
@@ -87,9 +87,9 @@ public class CommandTalkerComment extends MyCommand {
 	}
 	private void commandRead() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		Talker talker = DataManagerTalker.getTalker(DataManagerPlayer.getDataPlayer(player).select);
-		String[] opts = {talker.name, talker.id.toString()};
-		MessengerGeneral.print(player, Message.SHOW_COMMENT_2, opts);
+		Conversation talker = DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select);
+//		String[] opts = {talker.name, talker.id.toString()};
+//		MessengerGeneral.print(player, Message.SHOW_COMMENT_2, opts);
 		Integer count = 0;
 		for(DataComment data: talker.mapComment.values()) {
 			MessengerGeneral.printReadComment(player, data, ++count);
@@ -103,7 +103,7 @@ public class CommandTalkerComment extends MyCommand {
 	private void commandSend() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		if(2 < args.length){
-			Talker talker = DataManagerTalker.getTalker(DataManagerPlayer.getDataPlayer(player).select);
+			Conversation talker = DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select);
 			List<String> list = new ArrayList<String>();
 			for (int i = 2; i < args.length; i++) {
 				list.add(args[i]);

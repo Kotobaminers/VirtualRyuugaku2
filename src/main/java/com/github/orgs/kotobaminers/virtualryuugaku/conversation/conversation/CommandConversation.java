@@ -1,31 +1,25 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.talker.talker;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
 
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerCommandUsage;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerCommandUsage.Usage;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.CommandConversationComment;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.comment.CommandTalkerComment;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
-public class CommandTalker extends MyCommand {
-	public CommandTalker(Player player, Command command, String[] args) {
+public class CommandConversation extends MyCommand {
+	public CommandConversation(Player player, Command command, String[] args) {
 		super(player, command, args);
 	}
 	private enum CommandsTalker {
-		NONE, ANSWER, SENTENCE, COMMENT, REMOVE, LANGUAGE, INFO, STAGE, SELECT;
+		NONE, ANSWER, SENTENCE, COMMENT, REMOVE, LANGUAGE, LANG, INFO, STAGE, SELECT;
 		private static CommandsTalker lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -45,7 +39,7 @@ public class CommandTalker extends MyCommand {
 			case NONE:
 				break;
 			case COMMENT:
-				new CommandTalkerComment(player, command, args).runCommand();
+				new CommandConversationComment(player, command, args).runCommand();
 				break;
 			case ANSWER:
 				commandAnswer();
@@ -57,6 +51,7 @@ public class CommandTalker extends MyCommand {
 				commandRemove();
 				break;
 			case LANGUAGE:
+			case LANG:
 				commandLanguage();
 				break;
 			case INFO:
@@ -83,13 +78,7 @@ public class CommandTalker extends MyCommand {
 				MessengerCommandUsage.print(player, Usage.TALKER_SELECT_0, null);
 				return;
 			}
-			Talker talker = DataManagerTalker.getTalker(id);
-			if(talker.isEmpty()) {
-				String[] opts = {id.toString()};
-				MessengerGeneral.print(player, Message.INVALID_TALKER_1, opts);
-				return;
-			}
-			DataManagerPlayer.selectTalker(player, talker);
+			DataManagerPlayer.selectTalker(player, id);
 		} else {
 			MessengerCommandUsage.print(player, Usage.TALKER_SELECT_0, null);
 		}
@@ -97,11 +86,11 @@ public class CommandTalker extends MyCommand {
 	private void commandStage() {
 		if(args.length == 3) {
 			String stage = args[2];
-			Talker talker = DataManagerTalker.getTalker(DataManagerPlayer.getDataPlayer(player).select);
-			DataManagerTalker.getTalker(DataManagerPlayer.getDataPlayer(player).select).printInformation(player);
+			Conversation talker = DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select);
+			DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select).printInformation(player);
 			if(talker.canEdit(player.getName())) {
 				talker.stage = stage;
-				DataManagerTalker.getTalker(DataManagerPlayer.getDataPlayer(player).select).printInformation(player);
+				DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select).printInformation(player);
 				String[] args = {""};
 				MessengerGeneral.print(player, Message.EDITED_TALKER_0, args);
 			} else {
@@ -112,7 +101,7 @@ public class CommandTalker extends MyCommand {
 
 	}
 	private void commandInfo() {
-		Talker talker = DataManagerTalker.getTalker(DataManagerPlayer.getDataPlayer(player).select);
+		Conversation talker = DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select);
 		talker.printInformation(player);
 	}
 	private void commandRemove() {
@@ -123,9 +112,9 @@ public class CommandTalker extends MyCommand {
 			} catch(NumberFormatException e) {
 				return;
 			}
-			Talker talker = DataManagerTalker.getTalker(DataManagerPlayer.getDataPlayer(player).select);
-			if(line <= talker.listSentence.size()) {
-				talker.listSentence.remove(line - 1);
+			Conversation talker = DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select);
+			if(line <= talker.listTalk.size()) {
+				talker.listTalk.remove(line - 1);
 				talker.printInformation(player);
 				String[] settings = {""};
 				MessengerGeneral.print(player, Message.EDITED_TALKER_0, settings);
@@ -135,58 +124,58 @@ public class CommandTalker extends MyCommand {
 	}
 	private void commandSentence() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		if(3 < args.length) {
-			Integer line = 0;
-			try {
-				line = Integer.parseInt(args[1]);
-			} catch(NumberFormatException e) {
-//				printUsageSentence();
-				return;
-			}
-			Expression expression = Expression.lookup(args[2]);
-			if(0 < line && line < 11 && !expression.equals(Expression.NONE)) {
-				Talker talker = DataManagerTalker.getTalker(DataManagerPlayer.getDataPlayer(player).select);
-				if(!talker.canEdit(player.getName())) {
-					String[] settings = {""};
-					MessengerGeneral.print(player, Message.CANT_EDIT_TALKER_0, settings);
-					return;
-				}
-				Integer sizeSentence = talker.listSentence.size();
-				if(sizeSentence < line) {
-					for(Integer i = 0; i < line - sizeSentence; i++) {
-						talker.listSentence.add(new Description());
-					}
-				}
-				Description sentence = talker.listSentence.get(line - 1);
-				List<String> strings = new ArrayList<String>();
-				for(int i = 3; i < args.length; i++) {
-					strings.add(args[i]);
-				}
-				String input = UtilitiesGeneral.joinStrings(strings, " ");
-				switch(expression) {//Romaji will be automatically created by kana.
-				case EN:
-					sentence.en = Arrays.asList(input);
-					break;
-				case KANA:
-					sentence.kana = Arrays.asList(input);
-					sentence.romaji = Arrays.asList(UtilitiesGeneral.toRomaji(input));
-					break;
-				case KANJI:
-					sentence.kanji = Arrays.asList(input);
-					break;
-				case NONE:
-					break;
-				case ROMAJI:
-					break;
-				default:
-					break;
-				}
-				String[] msg = {""};
-				MessengerGeneral.print(player, Message.EDITED_TALKER_0, msg);
-				talker.printInformation(player);
-				return;
-			}
-		}
+//		if(3 < args.length) {
+//			Integer line = 0;
+//			try {
+//				line = Integer.parseInt(args[1]);
+//			} catch(NumberFormatException e) {
+////				printUsageSentence();
+//				return;
+//			}
+//			Expression expression = Expression.lookup(args[2]);
+//			if(0 < line && line < 11 && !expression.equals(Expression.NONE)) {
+//				Conversation talker = DataManagerConversation.getTalker(DataManagerPlayer.getDataPlayer(player).select);
+//				if(!talker.canEdit(player.getName())) {
+//					String[] settings = {""};
+//					MessengerGeneral.print(player, Message.CANT_EDIT_TALKER_0, settings);
+//					return;
+//				}
+//				Integer sizeSentence = talker.listTalk.size();
+//				if(sizeSentence < line) {
+//					for(Integer i = 0; i < line - sizeSentence; i++) {
+//						talker.listTalk.add(new Description());
+//					}
+//				}
+//				Description sentence = talker.listTalk.get(line - 1).description;
+//				List<String> strings = new ArrayList<String>();
+//				for(int i = 3; i < args.length; i++) {
+//					strings.add(args[i]);
+//				}
+//				String input = UtilitiesGeneral.joinStrings(strings, " ");
+//				switch(expression) {//Romaji will be automatically created by kana.
+//				case EN:
+//					sentence.en = Arrays.asList(input);
+//					break;
+//				case KANA:
+//					sentence.kana = Arrays.asList(input);
+//					sentence.romaji = Arrays.asList(UtilitiesGeneral.toRomaji(input));
+//					break;
+//				case KANJI:
+//					sentence.kanji = Arrays.asList(input);
+//					break;
+//				case NONE:
+//					break;
+//				case ROMAJI:
+//					break;
+//				default:
+//					break;
+//				}
+//				String[] msg = {""};
+//				MessengerGeneral.print(player, Message.EDITED_TALKER_0, msg);
+//				talker.printInformation(player);
+//				return;
+//			}
+//		}
 //		printUsageSentence();
 	}
 	private void commandLanguage() {

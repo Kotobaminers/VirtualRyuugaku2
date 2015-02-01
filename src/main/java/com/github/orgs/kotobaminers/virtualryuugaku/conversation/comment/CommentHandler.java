@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.talker.comment;
+package com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +8,8 @@ import org.bukkit.entity.Player;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerCommandUsage;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.DataManagerTalker;
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.Talker;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
@@ -17,7 +17,7 @@ public class CommentHandler {
 	public static void printCommentNew(Player player) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		Boolean existsNew = false;
-		for (Talker talker : DataManagerTalker.getMapTalker().values()) {
+		for (Conversation talker : DataManagerConversation.getMapConversation().values()) {
 			if (talker.editor.contains(player.getName())) {
 				List<String> listSenders = new ArrayList<String>();
 				Integer count = 0;
@@ -30,8 +30,8 @@ public class CommentHandler {
 				if(0 < listSenders.size()) {
 					existsNew = true;
 					String senders = UtilitiesGeneral.joinStrings(listSenders, ", ");
-					String[] opts = {count.toString(), talker.name, talker.id.toString(), senders};
-					MessengerGeneral.print(player, Message.NEW_COMMENT_4, opts);
+//					String[] opts = {count.toString(), talker.name, talker.id.toString(), senders};
+//					MessengerGeneral.print(player, Message.NEW_COMMENT_4, opts);
 				}
 			}
 		}

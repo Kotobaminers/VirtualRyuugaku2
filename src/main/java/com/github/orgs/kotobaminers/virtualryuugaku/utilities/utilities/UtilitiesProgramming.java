@@ -5,13 +5,13 @@ import org.bukkit.ChatColor;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManagerCitizens;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.comment.DataComment;
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.DataManagerTalker;
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.Talker;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Settings;
 
 
@@ -33,57 +33,63 @@ public class UtilitiesProgramming {
 		}
 	}
 	public static void printDebugCitizensAll() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
+		printDebugMessage("", new Exception());
 		for(DataCitizens data : DataManagerCitizens.getMapDataCitizens().values()) {
-			UtilitiesProgramming.printDebugCitizens(data);
+			printDebugCitizens(data);
 		}
 	}
 	public static void printDebugPlayerAll() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
+		printDebugMessage("", new Exception());
 		for(DataPlayer data : DataManagerPlayer.getMapDataPlayer().values()) {
-			UtilitiesProgramming.printDebugPlayer(data);
+			printDebugPlayer(data);
 		}
 	}
-	public static void printDebugTalkerAll() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		for(Talker data : DataManagerTalker.getMapTalker().values()) {
-			UtilitiesProgramming.printDebugTalker(data);
+	public static void printDebugConversationAll() {
+		printDebugMessage("", new Exception());
+		for(Conversation data : DataManagerConversation.getMapConversation().values()) {
+			printDebugConversation(data);
 		}
 	}
 	public static void printDebugCommentAll() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		for(Talker data : DataManagerTalker.getMapTalker().values()) {
+		printDebugMessage("", new Exception());
+		for(Conversation data : DataManagerConversation.getMapConversation().values()) {
 			for(DataComment comment : data.mapComment.values()) {
-				UtilitiesProgramming.printDebugComment(comment);
+				printDebugComment(comment);
 			}
 		}
 	}
+
 	public static void printDebugPlayer(DataPlayer data) {
-		UtilitiesProgramming.printDebugMessage("[Debug DataPlayer] " + data.name, new Exception());
-		UtilitiesProgramming.printDebugMessage(" LINE: " + data.line, new Exception());
-		UtilitiesProgramming.printDebugMessage(" SELECT: " + data.select, new Exception());
+		printDebugMessage("[Debug DataPlayer] " + data.name, new Exception());
+		printDebugMessage(" LINE: " + data.line, new Exception());
+		printDebugMessage(" SELECT: " + data.select, new Exception());
 	}
-	public static void printDebugTalker(Talker talker) {
-		if(talker.id < 0) return;
-		UtilitiesProgramming.printDebugMessage("[Debug Talker] " + talker.name, new Exception());
-		UtilitiesProgramming.printDebugMessage(" ID: " + talker.id + ", EDITOR: " + talker.editor + ", STAGE: " + talker.stage + ", KEY: " + talker.getKey(), new Exception());
-		for(Description sentence : talker.listSentence) {
-			UtilitiesProgramming.printDebugMessage(" SEN: " + sentence.express(Expression.EN), new Exception());
-			UtilitiesProgramming.printDebugMessage(" SEN: " + sentence.express(Expression.KANJI), new Exception());
+	public static void printDebugConversation(Conversation conversation) {
+		if(!(0 < conversation.listTalk.size())) return;
+		printDebugMessage("[Debug Conversation] " + "STAGE: " + conversation.stage + ", EDITOR: " + conversation.editor + ", KEY: " + conversation.getKey(), new Exception());
+		for(Talk talk : conversation.listTalk) {
+			printDebugTalk(talk);
 		}
-		UtilitiesProgramming.printDebugMessage(" Q(EN): " + talker.question.getEn(), new Exception());
-		UtilitiesProgramming.printDebugMessage(" Q(JP): " + talker.question.getJp(), new Exception());
-		UtilitiesProgramming.printDebugMessage(" A(EN): " + UtilitiesGeneral.joinStrings(talker.answer.getEn(), ", "), new Exception());
-		UtilitiesProgramming.printDebugMessage(" A(JP): " + UtilitiesGeneral.joinStrings(talker.answer.getJp(), ", "), new Exception());
-		for(DataComment comment : talker.mapComment.values()) {
-			UtilitiesProgramming.printDebugComment(comment);
+		printDebugMessage(" Q(EN): " + conversation.question.getEn(), new Exception());
+		printDebugMessage(" Q(JP): " + conversation.question.getJp(), new Exception());
+		printDebugMessage(" A(EN): " + UtilitiesGeneral.joinStrings(conversation.answer.getEn(), ", "), new Exception());
+		printDebugMessage(" A(JP): " + UtilitiesGeneral.joinStrings(conversation.answer.getJp(), ", "), new Exception());
+		for(DataComment comment : conversation.mapComment.values()) {
+			printDebugComment(comment);
 		}
 	}
 	public static void printDebugCitizens(DataCitizens citizens) {
-		UtilitiesProgramming.printDebugMessage("ID: " + citizens.id + ", NAME: " + citizens.name, new Exception());
+		printDebugMessage("ID: " + citizens.id + ", NAME: " + citizens.name, new Exception());
 	}
 	public static void printDebugComment(DataComment comment) {
-		UtilitiesProgramming.printDebugMessage("[Debug Comment] " + " SENDER: " + comment.sender + ", STATE: " + comment.state, new Exception());
-		UtilitiesProgramming.printDebugMessage(" COMMENT: " + comment.expression, new Exception());
+		printDebugMessage("[Debug Comment] " + " SENDER: " + comment.sender + ", STATE: " + comment.state, new Exception());
+		printDebugMessage(" COMMENT: " + comment.expression, new Exception());
+	}
+	public static void printDebugTalk(Talk talk) {
+		printDebugMessage("[Debug Talk] NAME: " + talk.name + ", ID: " + talk.id, new Exception());
+		printDebugMessage(talk.description.express(Expression.EN), new Exception());
+		printDebugMessage(talk.description.express(Expression.KANJI), new Exception());
+		printDebugMessage(talk.description.express(Expression.KANA), new Exception());
+		printDebugMessage(talk.description.express(Expression.ROMAJI), new Exception());
 	}
 }

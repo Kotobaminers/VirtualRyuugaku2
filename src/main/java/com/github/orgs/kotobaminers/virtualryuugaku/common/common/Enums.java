@@ -7,7 +7,8 @@ public class Enums {//public enums
 		VIRTUALRYUUGAKU, VRG,
 		VIRTUALRYUUGAKUOP, VRGOP, VRGDBG,
 		STAGE, STAGEOP,
-		TALKER, TALKEROP,
+		CONVERSATION, CONVERSATIONOP,
+		CONV, CONVOP,
 		;
 		public static Commands lookup(String name) {
 			try {
@@ -30,6 +31,6 @@ public class Enums {//public enums
 			}
 		}
 	}
-	public enum PathTalker {STAGE, EDITOR, EN, KANJI, KANA, KEY, Q, A, COMMENT}
+	public enum PathConversation {STAGE, EDITOR, EN, KANJI, KANA, KEY, Q, A, COMMENT}
 	public enum PathComment {STATE, EXPRESSION}
 }

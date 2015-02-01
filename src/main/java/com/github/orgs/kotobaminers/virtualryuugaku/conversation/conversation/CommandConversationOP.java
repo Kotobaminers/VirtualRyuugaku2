@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.talker.talker;
+package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +16,9 @@ import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.DataEventCre
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Events;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Events.EventCreate;
 
-public class CommandTalkerOP extends MyCommand {
+public class CommandConversationOP extends MyCommand {
 	private static final String DEFAULT_NAME_EMPTY_TALKER = "&a@Empty_Talker";
-	public CommandTalkerOP(Player player, Command command, String[] args) {
+	public CommandConversationOP(Player player, Command command, String[] args) {
 		super(player, command, args);
 	}
 	public enum Commands {
@@ -68,8 +68,8 @@ public class CommandTalkerOP extends MyCommand {
 	private void commandDebug() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-		Talker talker = DataManagerTalker.getTalker(data.select);
-		UtilitiesProgramming.printDebugTalker(talker);
+		Conversation talker = DataManagerConversation.getConversation(data.select);
+		UtilitiesProgramming.printDebugConversation(talker);
 	}
 	private void commandCreate() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());

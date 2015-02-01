@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.talker.comment;
+package com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 

@@ -4,13 +4,14 @@ version: ${git.commit.id.describe}
 commands:
   VRG:
   VIRTUALRYUUGAKU:
-  TALKER:
+  CONVERSATION:
     usage: |
       /<command> select [id]
       /<command> sentence [line] (kanji/kana/en) [expression]
       /<command> language
       /<command> info
       /<command> comment (read/send/new/done)
+  CONV:
   STAGE:
   VRGOP:
     permission: vertualryuugaku.op
@@ -18,7 +19,9 @@ commands:
     permission: vertualryuugaku.op
   VRGDBG:
     permission: vertualryuugaku.op
-  TALKEROP:
+  CONVERSATIONOP:
+    permission: vertualryuugaku.op
+  CONVOP:
     permission: vertualryuugaku.op
   STAGEOP:
     permission: vertualryuugaku.op

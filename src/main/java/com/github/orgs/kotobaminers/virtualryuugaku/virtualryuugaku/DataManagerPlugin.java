@@ -3,12 +3,12 @@ package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManagerCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManagerRomaji;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.LibraryManager;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConfigHandlerConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.ConfigHandlerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.ConfigHandlerStage;
-import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.DataManagerStage;
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.ConfigHandlerTalker;
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.DataManagerTalker;
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.StageGameHandler;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public final class DataManagerPlugin {
@@ -29,12 +29,12 @@ public final class DataManagerPlugin {
 		new DataManagerPlayer().loadAll();
 
 		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Loading Talker Data", new Exception());
-		new ConfigHandlerTalker().initialize(plugin);
-		new DataManagerTalker().loadAll();
+		new ConfigHandlerConversation().initialize(plugin);
+		new DataManagerConversation().loadAll();
 
 		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Loading Talker Data", new Exception());
 		new ConfigHandlerStage().initialize(plugin);
-		new DataManagerStage().loadAll();
+		new StageGameHandler().loadAll();
 
 		savePlugin();
 
@@ -46,7 +46,7 @@ public final class DataManagerPlugin {
 		new DataManagerPlayer().saveAll();
 
 		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Saving Talker Data", new Exception());
-		new DataManagerTalker().saveAll();
+		new DataManagerConversation().saveAll();
 
 	}
 }

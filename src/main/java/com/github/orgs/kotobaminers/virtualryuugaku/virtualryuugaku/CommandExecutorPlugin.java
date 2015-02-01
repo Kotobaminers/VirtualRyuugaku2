@@ -7,10 +7,10 @@ import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.CommandEmpty;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Commands;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.CommandConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.CommandConversationOP;
 import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.CommandStage;
 import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.CommandStageOP;
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.CommandTalker;
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.CommandTalkerOP;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
@@ -33,11 +33,13 @@ public class CommandExecutorPlugin implements CommandExecutor {
 			Player player = (Player) sender;
 			MyCommand myCommand = new CommandEmpty(player, command, args);
 			switch(commands) {
-			case TALKER:
-				myCommand = new CommandTalker(player, command, args);
+			case CONVERSATION:
+			case CONV:
+				myCommand = new CommandConversation(player, command, args);
 				break;
-			case TALKEROP:
-				myCommand = new CommandTalkerOP(player, command, args);
+			case CONVERSATIONOP:
+			case CONVOP:
+				myCommand = new CommandConversationOP(player, command, args);
 				break;
 			case VIRTUALRYUUGAKU:
 			case VRG:

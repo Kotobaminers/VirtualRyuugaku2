@@ -1,5 +1,6 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -74,4 +75,26 @@ public class UtilitiesGeneral {
 		List<String> list = Arrays.asList(strings);
 		return getTotalLengthStrings(list);
 	}
+
+	public static List<Integer> toListInteger(String string) {
+		List<Integer> list = new ArrayList<Integer>();
+		String tmp = "";
+		if(string.startsWith("[") && string.endsWith("]")) {
+			tmp = string.substring(1, string.length()-1);
+			String[] tmps = tmp.split(", ");
+			for(String str : tmps) {
+				list.add(Integer.parseInt(str));
+			}
+		}
+		return list;
+	}
+	public static String toString(List<Integer> list) {
+		List<String> strings = new ArrayList<String>();
+		for(Integer i : list) {
+			strings.add(i.toString());
+		}
+		String string = "[" + joinStrings(strings, ", ") + "]";
+		return string;
+	}
+
 }

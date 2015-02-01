@@ -48,12 +48,12 @@ public class ConfigHandlerPlayer extends ConfigHandler {
 		return line;
 	}
 	private static Integer loadSelect(MemorySection memory) {
-		Integer line = selectInitial;
+		Integer select = -1;
 		String path = PathPlayer.SELECT.toString();
-		if(memory.isInt(path)) {
-			line = memory.getInt(path);
+		if(memory.isList(path)) {
+			select = memory.getInt(path);
 		}
-		return line;
+		return select;
 	}
 	public static void saveDataPlayer(DataPlayer data) {
 		String name = data.name;

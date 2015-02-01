@@ -12,10 +12,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.comment.CommentHandler;
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.DataManagerTalker;
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.EventTalker;
-import com.github.orgs.kotobaminers.virtualryuugaku.talker.talker.Talker;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.CommentHandler;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.EventConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class Events implements Listener {
@@ -27,27 +27,27 @@ public class Events implements Listener {
 	@EventHandler
 	public void onClickNPCLeft(NPCLeftClickEvent event) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		NPC npc = event.getNPC();
-		if(DataManagerTalker.existsTalker(npc)) {//Talker
-			Integer id = npc.getId();
-			Talker talker = DataManagerTalker.getTalker(id);
-			new EventTalker(npc, talker, event.getClicker()).printKeySentence();
-		} else {
-			UtilitiesProgramming.printDebugMessage("NON talker. ID: " + npc.getId(), new Exception());
-		}
+//		NPC npc = event.getNPC();
+//		if(DataManagerConversation.existsTalker(npc)) {//Talker
+//			Integer id = npc.getId();
+//			Conversation talker = DataManagerConversation.getTalker(id);
+//			new EventConversation(npc, talker, event.getClicker()).printKeySentence();
+//		} else {
+//			UtilitiesProgramming.printDebugMessage("NON talker. ID: " + npc.getId(), new Exception());
+//		}
 	}
 
 	@EventHandler
 	public void onClickNPCRight(NPCRightClickEvent event) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		NPC npc = event.getNPC();
-		if(DataManagerTalker.existsTalker(npc)) {
+		if(DataManagerConversation.existsConversation(npc)) {
 			Integer id = npc.getId();
-			Talker talker = DataManagerTalker.getTalker(id);
-			if(talker.hasEditor()) {//Talker without editors is Empty Talker
-				new EventTalker(npc, talker, event.getClicker()).talk();
+			Conversation conversation = DataManagerConversation.getConversation(id);
+			if(conversation.hasEditor()) {//Talker without editors is Empty Talker
+				new EventConversation(npc, conversation, event.getClicker()).talk();
 			} else {
-				new EventTalker(npc, talker, event.getClicker()).ownEmptyTalker();
+				new EventConversation(npc, conversation, event.getClicker()).ownEmptyTalker();
 			}
 			return;
 		} else {
@@ -77,8 +77,8 @@ public class Events implements Listener {
 			String stage = DataEventCreate.nameStage.toUpperCase();
 			DataEventCreate.initialize();
 			NPC npc = event.getNPC();
-			Talker talker = DataManagerTalker.getTalker(npc.getId());
-			new EventTalker(npc, talker, player).registerEmptyTalker(stage);
+			Conversation talker = DataManagerConversation.getConversation(npc.getId());
+			new EventConversation(npc, talker, player).registerEmptyTalker(stage);
 			break;
 		case NONE:
 			break;
@@ -95,7 +95,7 @@ public class Events implements Listener {
 	private void resetEventFlag() {
 		flagEventCreate = EventCreate.NONE;
 	}
-	
-	
+
+
 
 }
