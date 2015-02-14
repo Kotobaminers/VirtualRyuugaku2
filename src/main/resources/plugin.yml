@@ -13,6 +13,8 @@ commands:
       /<command> comment (read/send/new/done)
   CONV:
   STAGE:
+  ANSWER:
+  ANS:
   VRGOP:
     permission: vertualryuugaku.op
   VIRTUALRYUUGAKUOP:

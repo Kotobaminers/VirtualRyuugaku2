@@ -21,10 +21,10 @@ public class VirtualRyuugaku extends JavaPlugin {
 
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 
-		DataManagerPlugin.savePlugin();
+//		DataManagerPlugin.savePlugin();
 	}
 	@Override
 	public void onDisable() {
-		DataManagerPlugin.savePlugin();
+//		DataManagerPlugin.savePlugin();
 	}
 }

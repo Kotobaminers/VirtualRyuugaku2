@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -16,6 +18,11 @@ public class DataManagerCitizens implements DataManager {
 	private static String citizensDataFolder = DataManagerPlugin.plugin.getDataFolder().getParent() + "//Citizens//saves.yml";
 	private static final String KEY_NPC = "npc";
 	private static final String KEY_NAME = "name";
+	private static final String KEY_LOCATION = "traits.location";
+	private static final String KEY_WORLD = "world";
+	private static final String KEY_X = "x";
+	private static final String KEY_Y = "y";
+	private static final String KEY_Z = "z";
 
 	public static void addNPC(Integer id) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -58,12 +65,23 @@ public class DataManagerCitizens implements DataManager {
 		MemorySection memory = (MemorySection) config.get(KEY_NPC);
 		for(String key : memory.getKeys(false)) {
 			Integer id = Integer.parseInt(key);
-			String name = memory.getString(key + "." + KEY_NAME);
 			if(0 <= id) {
-				DataCitizens data = new DataCitizens();
-				data.id = id;
-				data.name = name;
-				getMapDataCitizens().put(id, data);
+				try {
+					String name = memory.getString(key + "." + KEY_NAME);
+					DataCitizens data = new DataCitizens();
+					data.id = id;
+					data.name = name;
+					MemorySection memoryLocation = (MemorySection) memory.get(key + "." + KEY_LOCATION);
+					String worldName = memoryLocation.getString(KEY_WORLD);
+					World world = DataManagerPlugin.plugin.getServer().getWorld(worldName);
+					Double x = Double.parseDouble(memoryLocation.getString(KEY_X));
+					Double y = Double.parseDouble(memoryLocation.getString(KEY_Y));
+					Double z = Double.parseDouble(memoryLocation.getString(KEY_Z));
+					data.location = new Location(world, x, y, z);
+					UtilitiesProgramming.printDebugMessage(x.toString()+y.toString()+z.toString()+worldName , new Exception());
+					getMapDataCitizens().put(id, data);
+				} catch(Exception e){
+				}
 			}
 		}
 	}

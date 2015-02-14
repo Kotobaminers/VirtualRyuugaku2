@@ -9,6 +9,7 @@ public class Enums {//public enums
 		STAGE, STAGEOP,
 		CONVERSATION, CONVERSATIONOP,
 		CONV, CONVOP,
+		ANSWER, ANS,
 		;
 		public static Commands lookup(String name) {
 			try {

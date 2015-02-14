@@ -18,15 +18,15 @@ public class CommandConversation extends MyCommand {
 	public CommandConversation(Player player, Command command, String[] args) {
 		super(player, command, args);
 	}
-	private enum CommandsTalker {
+	private enum CommandsConversation {
 		NONE, ANSWER, SENTENCE, COMMENT, REMOVE, LANGUAGE, LANG, INFO, STAGE, SELECT;
-		private static CommandsTalker lookup(String name) {
+		private static CommandsConversation lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
-				return CommandsTalker.valueOf(name.toUpperCase());
+				return CommandsConversation.valueOf(name.toUpperCase());
 			} catch (IllegalArgumentException e) {
 				UtilitiesProgramming.printDebugMessage(e.toString(), new Exception());
-				return CommandsTalker.NONE;
+				return CommandsConversation.NONE;
 			}
 		}
 	}
@@ -34,7 +34,7 @@ public class CommandConversation extends MyCommand {
 	public void runCommand() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		if(0 < args.length) {
-			CommandsTalker commands = CommandsTalker.lookup(args[0]);
+			CommandsConversation commands = CommandsConversation.lookup(args[0]);
 			switch(commands) {
 			case NONE:
 				break;

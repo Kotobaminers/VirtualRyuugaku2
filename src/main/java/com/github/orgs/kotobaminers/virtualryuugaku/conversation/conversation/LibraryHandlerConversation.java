@@ -50,7 +50,7 @@ public class LibraryHandlerConversation {
 									UtilitiesProgramming.printDebugTalk(talk);
 									conversation.listTalk.add(talk);
 								} else {
-									UtilitiesProgramming.printDebugMessage("Invalid NPC: " + i, new Exception());
+									UtilitiesProgramming.printDebugMessage("Invalid Order: " + UtilitiesGeneral.toString(order), new Exception());
 								}
 							}
 						}

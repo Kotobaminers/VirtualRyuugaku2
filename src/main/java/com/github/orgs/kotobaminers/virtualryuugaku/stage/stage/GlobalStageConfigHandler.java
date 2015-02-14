@@ -6,7 +6,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.ConfigHandler;
 
-public class ConfigHandlerStage extends ConfigHandler {
+public class GlobalStageConfigHandler extends ConfigHandler {
 	public static YamlConfiguration config;
 	public static File file;
 	public static final String DIRECTORY = "STAGE";
@@ -30,11 +30,11 @@ public class ConfigHandlerStage extends ConfigHandler {
 	}
 	@Override
 	public void setFile(File file) {
-		ConfigHandlerStage.file = file;
+		GlobalStageConfigHandler.file = file;
 	}
 	@Override
 	public void setConfig(YamlConfiguration config) {
-		ConfigHandlerStage.config = config;
+		GlobalStageConfigHandler.config = config;
 	}
 	@Override
 	public String getFileName() {

@@ -3,7 +3,7 @@ package com.github.orgs.kotobaminers.virtualryuugaku.stage.stage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataGameStagePlayer {
+public class GlobalStageDataPlayer {
 	String name;
 	List<Integer> score = new ArrayList<Integer>();
 	public Integer getScoreTotal() {

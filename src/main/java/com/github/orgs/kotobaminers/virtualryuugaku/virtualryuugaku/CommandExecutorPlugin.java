@@ -55,6 +55,11 @@ public class CommandExecutorPlugin implements CommandExecutor {
 			case STAGEOP:
 				myCommand = new CommandStageOP(player, command, args);
 				break;
+			case ANSWER:
+			case ANS:
+				myCommand = new CommandAnswer(player, command, args);
+				break;
+			case VRGDBG:
 			//VRGDBG should be placed the upper section.
 			default:
 				break;

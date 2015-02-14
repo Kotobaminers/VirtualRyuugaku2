@@ -51,7 +51,7 @@ public class Events implements Listener {
 			}
 			return;
 		} else {
-			UtilitiesProgramming.printDebugMessage("NON talker. ID: " + npc.getId(), new Exception());
+			UtilitiesProgramming.printDebugMessage("NON talker: ID: " + npc.getId(), new Exception());
 		}
 	}
 

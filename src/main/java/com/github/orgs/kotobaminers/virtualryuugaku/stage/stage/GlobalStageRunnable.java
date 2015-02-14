@@ -10,11 +10,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
-public class GameStage extends BukkitRunnable {
+public class GlobalStageRunnable extends BukkitRunnable {
 	public String stage = "";
 	public List<Talk> listTalk = new ArrayList<Talk>();
 	public Integer count = -1;
-	private static Map<String, DataGameStagePlayer> mapDataPlayer = new HashMap<String, DataGameStagePlayer>();
+	private static Map<String, GlobalStageDataPlayer> mapDataPlayer = new HashMap<String, GlobalStageDataPlayer>();
 
 	public boolean isValid() {
 		if(0 < listTalk.size()) {
@@ -26,39 +26,36 @@ public class GameStage extends BukkitRunnable {
 	@Override
 	public void run() {
 		if(count < listTalk.size()) {
-			UtilitiesProgramming.printDebugMessage("", new Exception());
 			count++;
-			StageGameHandler.questNext();
+			GlobalStageGameHandler.questNext();
 		} else {
-			UtilitiesProgramming.printDebugMessage("", new Exception());
 			this.cancel();
-			StageGameHandler.printEnd();
-			StageGameHandler.initializeGame();
+			GlobalStageGameHandler.printEnd();
+			GlobalStageGameHandler.initializeData();
+			GlobalStageGameHandler.initializeGame();
 		}
 	}
 
-	public DataGameStagePlayer getData(String name) {
+	public GlobalStageDataPlayer getData(String name) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		DataGameStagePlayer data = new DataGameStagePlayer();
+		GlobalStageDataPlayer data = new GlobalStageDataPlayer();
 		if(getMapDataPlayer().containsKey(name)) {
 			data = getMapDataPlayer().get(name);
-			UtilitiesProgramming.printDebugMessage("" + data.score, new Exception());
 		} else {
-			UtilitiesProgramming.printDebugMessage("New Data" + data.score, new Exception());
 			data.name = name;
 			setData(data);
 		}
 		return data;
 	}
-	private void setData(DataGameStagePlayer data) {
+	private void setData(GlobalStageDataPlayer data) {
 		mapDataPlayer.put(data.name, data);
 	}
 
-	public Map<String, DataGameStagePlayer> getMapDataPlayer() {
+	public Map<String, GlobalStageDataPlayer> getMapDataPlayer() {
 		return mapDataPlayer;
 	}
-	public void setMapDataPlayer(Map<String, DataGameStagePlayer> mapDataPlayer) {
-		GameStage.mapDataPlayer = mapDataPlayer;
+	public void setMapDataPlayer(Map<String, GlobalStageDataPlayer> mapDataPlayer) {
+		GlobalStageRunnable.mapDataPlayer = mapDataPlayer;
 	}
 
 }

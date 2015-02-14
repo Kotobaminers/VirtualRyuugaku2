@@ -1,10 +1,13 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.common.common;
 
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class MessengerGeneral {
 	private static final String MESSENGER_PREFIX = "" + ChatColor.GOLD + ChatColor.BOLD +"[" + ChatColor.YELLOW + "VRG" + ChatColor.GOLD + ChatColor.BOLD + "] " + ChatColor.RESET;
@@ -40,8 +43,55 @@ public class MessengerGeneral {
 		GAME_STAGE_NOT_RUNNING_0,
 		GAME_STAGE_CORRECT_2,
 		GAME_STAGE_WRONG_1,
+		TELEPORT_0,
+		GAME_STAGE_QUEST_4,
+		STAGE_GAME_QUESTION_4,
 		;
 	}
+
+	public static String getMessage(Message key, String[] opts) {
+		String message = MESSENGER_PREFIX;
+		switch(key) {
+		case CANT_EDIT_TALKER_0: message += "You can't edit this talker."; break;
+		case EDITED_TALKER_0: message += "This talker was edited."; break;
+		case SET_LANGUAGE_1: message += "You set your language in " + opts[0] + "."; break;
+		case OWN_TALKER_0: message += "You own this talker."; break;
+		case ALREADY_OWNED_0: message += "You have already owned a talker in this stage."; break;
+		case SELECT_TALKER_1: message += "You selected " + opts[0] + ChatColor.RESET + "."; break;
+		case NO_EXPRESSION_LINE_LANG_2: message += "No expression in line " + opts[0] + " in " + opts[1] + "."; break;
+		case NO_QUESTION_LANG_1: message += "No question in " + opts[0] + "."; break;
+		case NO_SENTENCE_0: message += "The talker has no sentence."; break;
+		case GOT_NEW_MESSAGE_1: message += "You got " + opts[0] + " new messages. /talker comment new"; break;
+		case SHOW_COMMENT_2: message += "Showing comments for " + opts[0] + ChatColor.RESET + "(ID: " + opts[1] + ")."; break;
+		case INVALID_TALKER_1: message += "Invalid talker(ID: " + opts[0] + ")."; break;
+		case NEW_COMMENT_4: message += opts[0] + " new comments with " +opts[1] + ChatColor.RESET + "(ID: " + opts[2] + "). From: " + opts[3] + ")."; break;
+		case SENT_COMMENT_0: message += "You sent a comment."; break;
+		case NO_NEW_COMMENT_0: message += "You don't have any new comments."; break;
+		case NO_COMMENT_0: message += "The selected talker doesn't have any comments."; break;
+		case DONE_COMMENT_1: message += "The comment from " + opts[0] + "'s state was switched to " + DataComment.CommentState.DONE.toString() + "."; break;
+		case CONVERSATION_SPEAK_2: message = opts[0] + ChatColor.GREEN + " \"" + ChatColor.RESET + opts[1] + ChatColor.GREEN + "\"" + ChatColor.RESET; break;
+		case CONVERSATION_QUESTION_1: message += "[Question] " + opts[0]; break;
+		case CONVERSATION_SPEAK_START_1: message += "The conversation has started."; break;
+		case CONVERSATION_SPEAK_FINISH_0: message += ChatColor.RED + "The conversation is finished." + ChatColor.RESET; break;//Expression  from ALC.
+		case CONVERSATION_INFO_LABEL_1: message = ChatColor.GOLD +  "[Talker] " + ChatColor.RESET + opts[0] + ChatColor.RESET; break;//Without prefix
+		case CONVERSATION_INFO_DATA_3: message = " ID: " + opts[0] + ", EDITOR: " + opts[1] + ", STAGE: " + opts[2]; break;//Without prefix
+		case CONVERSATION_INFO_SENTENCE_3: message = " SENT(" + opts[0] + ") " + opts[1] + ": " + opts[2]; break;//Without prefix
+		case CONVERSATION_KEY_SENTENCE_1: message += opts[0] + ChatColor.RESET + "'s Key Sentence."; break;
+		case CONVERSATION_KEY_SENTENCE_EN_1: message = " EN: " + ChatColor.GOLD + " \"" + ChatColor.RESET + opts[0] + ChatColor.GOLD + "\"" + ChatColor.RESET; break;//Without prefix
+		case CONVERSATION_KEY_SENTENCE_JP_1: message = " JP: " + ChatColor.GOLD + " \"" + ChatColor.RESET + opts[0] + ChatColor.GOLD + "\"" + ChatColor.RESET; break;//Without prefix
+		case GAME_STAGE_INVALID_1: message += "Invalid stage name(" + opts[0] + ")"; break;
+		case GAME_STAGE_RUNNING_0: message += "A game is already running right now. Try later."; break;
+		case GAME_STAGE_NOT_RUNNING_0: message += "No game is running for now."; break;
+		case GAME_STAGE_CORRECT_2: message += "Correct: (" + opts[0] + "), Score: " + opts[1]; break;
+		case GAME_STAGE_WRONG_1: message += "Wrong: (Your answer is " + opts[0] + ")"; break;
+		case TELEPORT_0: message += "Teleporting..."; break;
+		case GAME_STAGE_QUEST_4: message = " [Q"+ opts[0] +"] What is \"" + opts[1] + "\" in " + opts[2] + "? (from " + opts[3] + ChatColor.RESET + ")"; break;
+		case STAGE_GAME_QUESTION_4: message = " [Q"+ opts[0] +"] What is \"" + opts[1] + "\" in " + opts[2] + "? (from " + opts[3] + ChatColor.RESET + ")"; break;
+		default: break;
+		}
+		return message;
+	}
+
 
 	public static void print(Player player, Message key, String[] opts) {
 		String message = MESSENGER_PREFIX;
@@ -78,6 +128,8 @@ public class MessengerGeneral {
 		case GAME_STAGE_NOT_RUNNING_0: message += "No game is running for now."; break;
 		case GAME_STAGE_CORRECT_2: message += "Correct: (" + opts[0] + "), Score: " + opts[1]; break;
 		case GAME_STAGE_WRONG_1: message += "Wrong: (Your answer is " + opts[0] + ")"; break;
+		case TELEPORT_0: message += "Teleporting..."; break;
+		case GAME_STAGE_QUEST_4: message = " [Q"+ opts[0] +"] What is \"" + opts[1] + "\" in " + opts[2] + "? (from " + opts[3] + ChatColor.RESET + ")"; break;
 		default: break;
 		}
 		player.sendMessage(message);
@@ -86,8 +138,9 @@ public class MessengerGeneral {
 	public enum Broadcast {
 		GAME_STAGE_START_1,
 		GAME_STAGE_END_1,
-		GAME_STAGE_QUEST_3,
+		GAME_STAGE_QUEST_4,
 		STAGE_TOTAL_2,
+		STAGE_PLAYERS_1,
 	}
 
 	public static void broadcast(Broadcast key, String[] opts) {
@@ -95,11 +148,21 @@ public class MessengerGeneral {
 		switch(key) {
 		case GAME_STAGE_START_1: message += "A new game will start! Stage: " + opts[0]; break;
 		case GAME_STAGE_END_1: message += "The game finished! Stage: " + opts[0]; break;
-		case GAME_STAGE_QUEST_3: message = " [Q"+ opts[0] +"] What is \"" + opts[1] + "\" in " + opts[2] + "?"; break;
+		case GAME_STAGE_QUEST_4: message = " [Q"+ opts[0] +"] What is \"" + opts[1] + "\" in " + opts[2] + "? (from " + opts[3] + ChatColor.RESET + ")"; break;
 		case STAGE_TOTAL_2: message += "Score: " + opts[0] + "(" + opts[1] + ")"; break;
+		case STAGE_PLAYERS_1: message += "Current Players: " + opts[0];
 		default: break;
 		}
 		UtilitiesGeneral.sendMessageAll(message);
+	}
+
+	public static void print(List<Player> listPlayer, String message) {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		for(Player player : listPlayer) {
+			if(player.isOnline()) {
+				player.sendMessage(message);
+			}
+		}
 	}
 
 	public static void printReadComment(Player player, DataComment data, Integer line) {
