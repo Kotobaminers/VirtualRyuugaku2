@@ -40,17 +40,18 @@ public class Conversation {
 				data.line = 0;
 			}
 			Talk talk = listTalk.get(data.line);
-			if(data.line.equals(0)) {
-				String[] opts = {talk.name};
-				MessengerGeneral.print(player, Message.CONVERSATION_SPEAK_START_1, opts);
-			}
-			talk.printExpression(player, data);
+//			if(data.line.equals(0)) {
+//				String[] opts = {talk.name};
+//				MessengerGeneral.print(player, Message.CONVERSATION_TALK_START_1, opts);
+//			}
+//			talk.printExpression(player, data);
+			talk.description.print(player);
 			data.line++;
 			if(listTalk.size() - 1 < data.line) {
-				MessengerGeneral.print(player, Message.CONVERSATION_SPEAK_FINISH_0, null);
+//				MessengerGeneral.print(player, Message.CONVERSATION_TALK_FINISH_0, null);
 			}
 		} else {
-			MessengerGeneral.print(player, Message.NO_SENTENCE_0, null);
+			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.NO_SENTENCE_0, null));
 			if(editor.contains(player.getName())) {
 				MessengerCommandUsage.print(player, Usage.TALKER_SENTENCE_0, null);
 			}

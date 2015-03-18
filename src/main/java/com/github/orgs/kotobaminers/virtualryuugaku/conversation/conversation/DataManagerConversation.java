@@ -33,7 +33,7 @@ public class DataManagerConversation implements DataManager {
 		list.addAll(ConfigHandlerConversation.importConversationDefault());
 		Map<String, YamlConfiguration> mapConfig = LibraryManager.getListLibraryStage();
 		for(String stage : mapConfig.keySet()) {
-			list.addAll(LibraryHandlerConversation.importTalkerLibrary(stage, mapConfig.get(stage)));
+			list.addAll(LibraryHandlerConversation.importConversationLibrary(stage, mapConfig.get(stage)));
 		}
 		for(Conversation conversation : list) {
 			if(Conversation.isValidCitizensId(conversation.getOrder())) {

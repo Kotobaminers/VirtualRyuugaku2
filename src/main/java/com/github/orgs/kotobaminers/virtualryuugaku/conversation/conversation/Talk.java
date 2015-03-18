@@ -23,13 +23,13 @@ public class Talk {
 
 	public void printExpression(Player player, DataPlayer data) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		String expression = description.express(data.language);
+		String expression = description.express(data.expression);
 		if(0 < expression.length()) {
 			String[] opts = {name, expression};
 			MessengerGeneral.print(player, Message.CONVERSATION_SPEAK_2, opts);
 		} else {
 			int line = data.line.intValue();
-			String[] opts = {String.valueOf(line + 1), data.language.toString()};
+			String[] opts = {String.valueOf(line + 1), data.expression.toString()};
 			MessengerGeneral.print(player, Message.NO_EXPRESSION_LINE_LANG_2, opts);
 		}
 	}

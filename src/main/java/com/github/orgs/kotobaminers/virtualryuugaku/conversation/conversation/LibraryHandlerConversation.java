@@ -17,8 +17,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utilitie
 
 public class LibraryHandlerConversation {
 	private enum PathStage {CONVERSATION, EDITOR}
-	//Talker
-	public static List<Conversation> importTalkerLibrary(String stage, YamlConfiguration library) {
+	public static List<Conversation> importConversationLibrary(String stage, YamlConfiguration library) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		List<Conversation> list = new ArrayList<Conversation>();
 		UtilitiesProgramming.printDebugMessage("Stage: " + stage, new Exception());
@@ -40,7 +39,7 @@ public class LibraryHandlerConversation {
 						List<String> kana = memoryId.getStringList(PathConversation.KANA.toString());
 						List<String> en = memoryId.getStringList(PathConversation.EN.toString());
 						Integer size = order.size();
-						if(size.equals(kana.size()) && size.equals(kana.size()) && size.equals(en.size())) {
+						if(size.equals(kanji.size()) && size.equals(kana.size()) && size.equals(en.size())) {
 							for(int i = 0; i < size; i++) {
 								UtilitiesProgramming.printDebugMessage("", new Exception());
 								if(Conversation.isValidCitizensId(order)) {
@@ -50,7 +49,7 @@ public class LibraryHandlerConversation {
 									UtilitiesProgramming.printDebugTalk(talk);
 									conversation.listTalk.add(talk);
 								} else {
-									UtilitiesProgramming.printDebugMessage("Invalid Order: " + UtilitiesGeneral.toString(order), new Exception());
+									UtilitiesProgramming.printDebugMessage("Invalid Order: " + UtilitiesGeneral.toYamlStringListInteger(order), new Exception());
 								}
 							}
 						}

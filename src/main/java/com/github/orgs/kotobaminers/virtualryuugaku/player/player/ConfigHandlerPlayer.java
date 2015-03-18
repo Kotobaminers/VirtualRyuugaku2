@@ -26,7 +26,7 @@ public class ConfigHandlerPlayer extends ConfigHandler {
 			data.name = name;
 			data.line = loadLine(memory);
 			data.select = loadSelect(memory);
-			data.language = loadLanguage(memory);
+			data.expression = loadLanguage(memory);
 			list.add(data);
 		}
 		return list;
@@ -62,7 +62,7 @@ public class ConfigHandlerPlayer extends ConfigHandler {
 		String pathSelect = name + "." + PathPlayer.SELECT;
 		config.set(pathSelect, data.select);
 		String pathLanguage = name + "." + PathPlayer.LANGUAGE;
-		config.set(pathLanguage, data.language.toString());
+		config.set(pathLanguage, data.expression.toString());
 		String pathDone = name + "." + PathPlayer.DONE;
 		config.set(pathDone, data.done);
 	}

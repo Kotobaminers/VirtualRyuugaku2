@@ -180,26 +180,26 @@ public class CommandConversation extends MyCommand {
 	}
 	private void commandLanguage() {
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-		switch(data.language) {
+		switch(data.expression) {
 		case EN:
-			data.language = Expression.KANJI;
+			data.expression = Expression.KANJI;
 			break;
 		case KANJI:
-			data.language = Expression.KANA;
+			data.expression = Expression.KANA;
 			break;
 		case KANA:
-			data.language = Expression.ROMAJI;
+			data.expression = Expression.ROMAJI;
 			break;
 		case ROMAJI:
-			data.language = Expression.EN;
+			data.expression = Expression.EN;
 			break;
 		case NONE:
 		default:
-			data.language = Expression.KANJI;
+			data.expression = Expression.KANJI;
 			break;
 		}
 		DataManagerPlayer.putDataPlayer(data);
-		String[] settings = {data.language.toString()};
+		String[] settings = {data.expression.toString()};
 		MessengerGeneral.print(player, Message.SET_LANGUAGE_1, settings);
 	}
 	private void commandAnswer() {

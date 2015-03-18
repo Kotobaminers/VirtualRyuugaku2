@@ -107,7 +107,7 @@ public class ConfigHandlerConversation extends ConfigHandler {
 		for (Talk talk : conversation.listTalk) {
 			id.add(talk.id);
 		}
-		String path = UtilitiesGeneral.toString(id);
+		String path = UtilitiesGeneral.toYamlStringListInteger(id);
 		config.set(path + "." + PathConversation.EDITOR, conversation.editor);
 		config.set(path + "." + PathConversation.STAGE, conversation.stage);
 		List<String> kanji = new ArrayList<String>();

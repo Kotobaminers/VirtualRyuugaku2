@@ -10,7 +10,6 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGener
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class CommentHandler {
@@ -29,7 +28,7 @@ public class CommentHandler {
 				}
 				if(0 < listSenders.size()) {
 					existsNew = true;
-					String senders = UtilitiesGeneral.joinStrings(listSenders, ", ");
+//					String senders = UtilitiesGeneral.joinStrings(listSenders, ", ");
 //					String[] opts = {count.toString(), talker.name, talker.id.toString(), senders};
 //					MessengerGeneral.print(player, Message.NEW_COMMENT_4, opts);
 				}

@@ -21,11 +21,11 @@ public class EventConversation {
 	public void talk() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-		if(!data.select.equals(npc.getId())) {
-			DataManagerPlayer.selectTalker(player, npc.getId());
-		} else {
+//		if(!data.select.equals(npc.getId())) {
+//			DataManagerPlayer.selectTalker(player, npc.getId());
+//		} else {
 			conversation.talkNext(player, data);
-		}
+//		}
 	}
 	public void printKeySentence() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());

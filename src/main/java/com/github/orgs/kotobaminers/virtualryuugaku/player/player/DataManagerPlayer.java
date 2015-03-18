@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.bukkit.entity.Player;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.DataManager;
@@ -15,12 +16,15 @@ public class DataManagerPlayer implements DataManager {
 	private static Map<String, DataPlayer> mapDataPlayer = new HashMap<String, DataPlayer>();
 
 	public static DataPlayer getDataPlayer(Player player) {
+		return getDataPlayer(player.getName());
+	}
+	public static DataPlayer getDataPlayer(String name) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataPlayer data = new DataPlayer();
-		if(getMapDataPlayer().containsKey(player.getName())) {
-			data = getMapDataPlayer().get(player.getName());
+		if(getMapDataPlayer().containsKey(name)) {
+			data = getMapDataPlayer().get(name);
 		} else {
-			data.name = player.getName();
+			data.name = name;
 			putDataPlayer(data);//In the case without existing playerdata, one is created here.
 		}
 		return data;
@@ -28,6 +32,22 @@ public class DataManagerPlayer implements DataManager {
 	public static void putDataPlayer(DataPlayer data) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		getMapDataPlayer().put(data.name, data);
+	}
+	public static void toggleExpression(String name, Expression expression) {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		if(expression.equals(Expression.NONE)) {
+			UtilitiesProgramming.printDebugMessage("", new Exception());
+			return;
+		}
+		DataPlayer data = getDataPlayer(name);
+		List<Expression> expressions = data.expressions;
+		if(expressions.contains(expression)) {
+			UtilitiesProgramming.printDebugMessage("", new Exception());
+			while(expressions.remove(expression)) {};
+		} else {
+			UtilitiesProgramming.printDebugMessage("", new Exception());
+			expressions.add(expression);
+		}
 	}
 
 	public static Map<String, DataPlayer> getMapDataPlayer() {

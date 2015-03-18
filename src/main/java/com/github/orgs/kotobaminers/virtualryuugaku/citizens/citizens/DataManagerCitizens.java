@@ -39,6 +39,15 @@ public class DataManagerCitizens implements DataManager {
 		}
 	}
 
+	public static Boolean existsNPC(Integer id) {
+		if(getMapDataCitizens().keySet().contains(id)) {
+			return true;
+		} else {
+			UtilitiesProgramming.printDebugMessage("Invalid DataCitizens ID: " + id, new Exception());
+		}
+		return false;
+	}
+
 	public static DataCitizens getDataCitizens(Integer id) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataCitizens data = new DataCitizens();

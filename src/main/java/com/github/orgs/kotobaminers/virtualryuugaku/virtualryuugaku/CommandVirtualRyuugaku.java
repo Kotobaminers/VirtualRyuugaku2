@@ -1,0 +1,119 @@
+package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.command.Command;
+import org.bukkit.entity.Player;
+
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Japanese;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Language;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
+import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
+
+public class CommandVirtualRyuugaku extends MyCommand {
+	public CommandVirtualRyuugaku(Player player, Command command, String[] args) {
+		super(player, command, args);
+	}
+	private enum Commands {
+		NONE, LANGUAGE, LANG, JAPANESE, JP, EN, KANJI, KANA, ROMAJI;
+		public static Commands lookup(String name) {
+			try {
+				UtilitiesProgramming.printDebugMessage("", new Exception());
+				return Commands.valueOf(name.toUpperCase());
+			} catch (IllegalArgumentException e) {
+				UtilitiesProgramming.printDebugMessage(e.toString(), new Exception());
+				return Commands.NONE;
+			}
+		}
+	}
+	@Override
+	public void runCommand() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		if(!player.isOp()) return;
+		if(0 < args.length) {
+			Commands commands = Commands.lookup(args[0]);
+			switch(commands) {
+			case LANGUAGE:
+			case LANG:
+				commandLanguage();
+				break;
+			case JAPANESE:
+			case JP:
+				commandJapanese();
+				break;
+			case EN:
+			case KANJI:
+			case KANA:
+			case ROMAJI:
+				commandToggleExpression();
+				break;
+			case NONE:
+			default:
+				break;
+			}
+		}
+	}
+
+	private void commandToggleExpression() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		if(0 < args.length) {
+			String expressionString = args[0];
+			Expression expression = Expression.lookup(expressionString);
+			DataManagerPlayer.toggleExpression(player.getName(), expression);
+			DataPlayer data = DataManagerPlayer.getDataPlayer(player);
+			List<String> expressions = new ArrayList<String>();
+			for(Expression search : data.expressions) {
+				expressions.add(search.toString());
+			}
+			if(0 < expressions.size()) {
+				String[] opts = {UtilitiesGeneral.joinStrings(expressions, ", ")};
+				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.COMMAND_VRG_EXPRESSIONS_1, opts));
+			} else {
+				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.COMMAND_VRG_EXPRESSIONS_OFF_0, null));
+			}
+		}
+	}
+
+	private void commandJapanese() {
+		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
+		switch(data.japanese) {
+		case ROMAJI:
+			data.japanese = Japanese.KANA;
+			break;
+		case KANA:
+			data.japanese = Japanese.KANJI;
+			break;
+		case KANJI:
+			data.japanese = Japanese.ROMAJI;
+			break;
+		case DEFAULT:
+		default:
+			break;
+		}
+		String[] opts = {data.japanese.toString()};
+		player.sendMessage(MessengerGeneral.getMessage(Message.COMMAND_VRG_JAPANESE_1, opts));
+	}
+	private void commandLanguage() {
+		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
+		switch(data.language) {
+		case EN:
+			data.language = Language.JP;
+			break;
+		case JP:
+			data.language = Language.EN;
+			break;
+		case DEFAULT:
+		default:
+			break;
+		}
+		String[] opts = {data.language.toString()};
+		player.sendMessage(MessengerGeneral.getMessage(Message.COMMAND_VRG_LANGUAGE_1, opts));
+	}
+}

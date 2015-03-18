@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManagerCitizens;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
@@ -13,6 +14,8 @@ import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Ta
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Settings;
+import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.DataManagerVRGNPC;
+import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.VRGNPC;
 
 
 public class UtilitiesProgramming {
@@ -58,7 +61,18 @@ public class UtilitiesProgramming {
 			}
 		}
 	}
-
+	public static void printDebugVRGNPCAll() {
+		printDebugMessage("", new Exception());
+		for(VRGNPC vrgnpc : DataManagerVRGNPC.getMapVRGNPC().values()) {
+			printDebugVRGNPC(vrgnpc);
+		}
+	}
+	private static void printDebugVRGNPC(VRGNPC data) {
+		printDebugMessage("[Debug VRGNPC] NAME: " + data.name + ", STAGE: " + data.stage + ", ID: " + data.id + ", EDITOR: " + UtilitiesGeneral.joinStrings(data.editor, ", ") + UtilitiesGeneral.joinStrings(data.editor, ", "), new Exception());
+		for(Description description : data.listDescription) {
+			printDebugDescription(description);
+		}
+	}
 	public static void printDebugPlayer(DataPlayer data) {
 		printDebugMessage("[Debug DataPlayer] " + data.name, new Exception());
 		printDebugMessage(" LINE: " + data.line, new Exception());
@@ -87,9 +101,10 @@ public class UtilitiesProgramming {
 	}
 	public static void printDebugTalk(Talk talk) {
 		printDebugMessage("[Debug Talk] NAME: " + talk.name + ", ID: " + talk.id, new Exception());
-		printDebugMessage(talk.description.express(Expression.EN), new Exception());
-		printDebugMessage(talk.description.express(Expression.KANJI), new Exception());
-		printDebugMessage(talk.description.express(Expression.KANA), new Exception());
-		printDebugMessage(talk.description.express(Expression.ROMAJI), new Exception());
+		printDebugDescription(talk.description);
+	}
+	public static void printDebugDescription(Description description) {
+		printDebugMessage(description.express(Expression.EN), new Exception());
+		printDebugMessage(description.express(Expression.KANJI), new Exception());
 	}
 }

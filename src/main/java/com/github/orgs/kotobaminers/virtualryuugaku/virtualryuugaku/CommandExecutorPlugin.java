@@ -43,7 +43,7 @@ public class CommandExecutorPlugin implements CommandExecutor {
 				break;
 			case VIRTUALRYUUGAKU:
 			case VRG:
-				player.sendMessage(DataManagerPlugin.plugin.getName() + " developped by kai_f");
+				myCommand = new CommandVirtualRyuugaku(player, command, args);
 				break;
 			case VIRTUALRYUUGAKUOP:
 			case VRGOP:

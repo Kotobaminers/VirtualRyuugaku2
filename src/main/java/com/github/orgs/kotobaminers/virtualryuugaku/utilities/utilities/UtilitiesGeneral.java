@@ -88,13 +88,16 @@ public class UtilitiesGeneral {
 		}
 		return list;
 	}
-	public static String toString(List<Integer> list) {
+	public static String toYamlStringListInteger(List<Integer> list) {
 		List<String> strings = new ArrayList<String>();
 		for(Integer i : list) {
 			strings.add(i.toString());
 		}
+		String string = toYamlStringListString(strings);
+		return string;
+	}
+	public static String toYamlStringListString(List<String> strings) {
 		String string = "[" + joinStrings(strings, ", ") + "]";
 		return string;
 	}
-
 }

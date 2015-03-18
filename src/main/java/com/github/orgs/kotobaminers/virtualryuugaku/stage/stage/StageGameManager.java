@@ -24,11 +24,11 @@ public abstract class StageGameManager {
 		StageGame game = getGame(key);
 		if(index < game.size()) {
 			String[] opts = {index.toString(), game.getQuestion(index), game.languages.get(index), game.listName.get(index)};
-			String message = MessengerGeneral.getMessage(Message.STAGE_GAME_QUESTION_4, opts);
+			String message = MessengerGeneral.getMessage(Message.STAGE_GAME_QUESTION_2, opts);
 			printQuestion(message);
 		} else {
 			printEnd();
-			putGame(key, game.getGameEmpty());
+//			putGame(key, game.getGameEmpty());
 		}
 	}
 
