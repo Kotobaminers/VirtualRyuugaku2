@@ -52,10 +52,11 @@ public class CommandAnswer extends MyCommand {
 	}
 
 	private void commandLearn() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
 	}
 
 	private void commandTest() {
-//		UtilitiesProgramming.printDebugMessage("", new Exception());
+		UtilitiesProgramming.printDebugMessage("", new Exception());
 //		if(1< args.length) {
 //			List<String> list = new ArrayList<String>();
 //			for(Integer i = 1; i < args.length; i++) {
@@ -86,8 +87,9 @@ public class CommandAnswer extends MyCommand {
 				}
 				String answer = UtilitiesGeneral.joinStrings(list, " ");
 				StageGameDataStorage.getPractice(player.getName()).validateAnswer(player, answer);
+			} else {
+				player.sendMessage("PracticeStage does not exist.");
 			}
-			player.sendMessage("PracticeStage does not exist.");
 		}
 	}
 }

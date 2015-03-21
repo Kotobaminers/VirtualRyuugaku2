@@ -40,14 +40,14 @@ public class MessengerGeneral {
 		CONVERSATION_KEY_SENTENCE_EN_1,
 		CONVERSATION_KEY_SENTENCE_JP_1,
 		CONVERSATION_KEY_SENTENCE_1,
-		GAME_STAGE_INVALID_1,
-		GAME_STAGE_RUNNING_0,
-		GAME_STAGE_NOT_RUNNING_0,
-		GAME_STAGE_CORRECT_2,
-		GAME_STAGE_WRONG_1,
+		STAGE_INVALID_1,
+		STAGE_RUNNING_0,
+		STAGE_NOT_RUNNING_0,
+		STAGE_CORRECT_1,
+		STAGE_WRONG_0,
+		STAGE_FINISH_1,
 		TELEPORT_0,
-		GAME_STAGE_QUEST_4,
-		STAGE_GAME_QUESTION_2,
+		STAGE_QUESTION_2,
 		FIND_PEOPLE_QUEST_1,
 		FIND_PEOPLE_FINISH_1,
 		FIND_PEOPLE_REMOVE_1,
@@ -82,21 +82,21 @@ public class MessengerGeneral {
 		case CONVERSATION_SPEAK_2: message = opts[0] + ChatColor.GREEN + " \"" + ChatColor.RESET + opts[1] + ChatColor.GREEN + "\"" + ChatColor.RESET; break;
 		case CONVERSATION_QUESTION_1: message += "[Question] " + opts[0]; break;
 		case CONVERSATION_TALK_START_1: message += "The conversation has started."; break;
-		case CONVERSATION_TALK_FINISH_0: message += ChatColor.RED + "The conversation is finished." + ChatColor.RESET; break;//Expression  from ALC.
+		case CONVERSATION_TALK_FINISH_0: message += ChatColor.RED + "The conversation is finished." + ChatColor.RESET; break;//Expression from ALC.
 		case CONVERSATION_INFO_LABEL_1: message = ChatColor.GOLD +  "[Talker] " + ChatColor.RESET + opts[0] + ChatColor.RESET; break;//Without prefix
 		case CONVERSATION_INFO_DATA_3: message = " ID: " + opts[0] + ", EDITOR: " + opts[1] + ", STAGE: " + opts[2]; break;//Without prefix
 		case CONVERSATION_INFO_SENTENCE_3: message = " SENT(" + opts[0] + ") " + opts[1] + ": " + opts[2]; break;//Without prefix
 		case CONVERSATION_KEY_SENTENCE_1: message += opts[0] + ChatColor.RESET + "'s Key Sentence."; break;
 		case CONVERSATION_KEY_SENTENCE_EN_1: message = " EN: " + ChatColor.GOLD + " \"" + ChatColor.RESET + opts[0] + ChatColor.GOLD + "\"" + ChatColor.RESET; break;//Without prefix
 		case CONVERSATION_KEY_SENTENCE_JP_1: message = " JP: " + ChatColor.GOLD + " \"" + ChatColor.RESET + opts[0] + ChatColor.GOLD + "\"" + ChatColor.RESET; break;//Without prefix
-		case GAME_STAGE_INVALID_1: message += "Invalid stage name(" + opts[0] + ")"; break;
-		case GAME_STAGE_RUNNING_0: message += "A game is already running right now. Try later."; break;
-		case GAME_STAGE_NOT_RUNNING_0: message += "No game is running for now."; break;
-		case GAME_STAGE_CORRECT_2: message += "Correct: (" + opts[0] + "), Score: " + opts[1]; break;
-		case GAME_STAGE_WRONG_1: message += "Wrong: (Your answer is " + opts[0] + ")"; break;
+		case STAGE_INVALID_1: message += "Invalid stage name(" + opts[0] + ")"; break;
+		case STAGE_RUNNING_0: message += "A game is already running right now. Try later."; break;
+		case STAGE_NOT_RUNNING_0: message += "No game is running for now."; break;
+		case STAGE_QUESTION_2: message = " [Q] What is \"" + opts[0] + "\" in " + opts[1] + "?"; break;
+		case STAGE_CORRECT_1: message += ChatColor.GREEN + "Correct Answer!" + ChatColor.RESET + " (Answers: " + opts[0] + ")"; break;
+		case STAGE_WRONG_0: message += ChatColor.RED + "Wrong Answer!"; break;
+		case STAGE_FINISH_1: message += ChatColor.GREEN + opts[0] + " successfully completed the stage!"; break;
 		case TELEPORT_0: message += "Teleporting..."; break;
-		case GAME_STAGE_QUEST_4: message = " [Q"+ opts[0] +"] What is \"" + opts[1] + "\" in " + opts[2] + "? (from " + opts[3] + ChatColor.RESET + ")"; break;
-		case STAGE_GAME_QUESTION_2: message = " [Q] What is \"" + opts[0] + "\" in " + opts[1] + "?"; break;
 		case FIND_PEOPLE_QUEST_1: message = " [FindPpl: " + opts[0] + "] Find a Person!"; break;
 		case FIND_PEOPLE_FINISH_1: message = " [FindPpl: " + opts[0] + "] You successufully Finished the game!"; break;
 		case FIND_PEOPLE_REMOVE_1: message = " [FindPpl: " + opts[0] + "] Removed the game!"; break;
@@ -141,37 +141,13 @@ public class MessengerGeneral {
 		case CONVERSATION_KEY_SENTENCE_1: message += opts[0] + ChatColor.RESET + "'s Key Sentence."; break;
 		case CONVERSATION_KEY_SENTENCE_EN_1: message = " EN: " + ChatColor.GOLD + " \"" + ChatColor.RESET + opts[0] + ChatColor.GOLD + "\"" + ChatColor.RESET; break;//Without prefix
 		case CONVERSATION_KEY_SENTENCE_JP_1: message = " JP: " + ChatColor.GOLD + " \"" + ChatColor.RESET + opts[0] + ChatColor.GOLD + "\"" + ChatColor.RESET; break;//Without prefix
-		case GAME_STAGE_INVALID_1: message += "Invalid stage name(" + opts[0] + ")"; break;
-		case GAME_STAGE_RUNNING_0: message += "A game is already running right now. Try later."; break;
-		case GAME_STAGE_NOT_RUNNING_0: message += "No game is running for now."; break;
-		case GAME_STAGE_CORRECT_2: message += "Correct: (" + opts[0] + "), Score: " + opts[1]; break;
-		case GAME_STAGE_WRONG_1: message += "Wrong: (Your answer is " + opts[0] + ")"; break;
+		case STAGE_INVALID_1: message += "Invalid stage name(" + opts[0] + ")"; break;
+		case STAGE_RUNNING_0: message += "A game is already running right now. Try later."; break;
+		case STAGE_NOT_RUNNING_0: message += "No game is running for now."; break;
 		case TELEPORT_0: message += "Teleporting..."; break;
-		case GAME_STAGE_QUEST_4: message = " [Q"+ opts[0] +"] What is \"" + opts[1] + "\" in " + opts[2] + "? (from " + opts[3] + ChatColor.RESET + ")"; break;
 		default: break;
 		}
 		player.sendMessage(message);
-	}
-
-	public enum Broadcast {
-		GAME_STAGE_START_1,
-		GAME_STAGE_END_1,
-		GAME_STAGE_QUEST_4,
-		STAGE_TOTAL_2,
-		STAGE_PLAYERS_1,
-	}
-
-	public static void broadcast(Broadcast key, String[] opts) {
-		String message = MESSENGER_PREFIX;
-		switch(key) {
-		case GAME_STAGE_START_1: message += "A new game will start! Stage: " + opts[0]; break;
-		case GAME_STAGE_END_1: message += "The game finished! Stage: " + opts[0]; break;
-		case GAME_STAGE_QUEST_4: message = " [Q"+ opts[0] +"] What is \"" + opts[1] + "\" in " + opts[2] + "? (from " + opts[3] + ChatColor.RESET + ")"; break;
-		case STAGE_TOTAL_2: message += "Score: " + opts[0] + "(" + opts[1] + ")"; break;
-		case STAGE_PLAYERS_1: message += "Current Players: " + opts[0];
-		default: break;
-		}
-		UtilitiesGeneral.sendMessageAll(message);
 	}
 
 	public static void print(List<Player> listPlayer, String message) {
@@ -186,6 +162,10 @@ public class MessengerGeneral {
 			player.sendMessage(message);
 		}
 	}
+	public static void broadcast(String message) {
+		UtilitiesGeneral.sendMessageAll(message);
+	}
+
 	public static void printReadComment(Player player, DataComment data, Integer line) {
 		String info = "[Comment: " + line + "] FROM: " + data.sender + ", STATE: " + data.state;
 		String expression = "  " + data.expression;

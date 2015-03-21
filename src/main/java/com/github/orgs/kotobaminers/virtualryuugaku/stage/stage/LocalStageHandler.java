@@ -7,8 +7,6 @@ import java.util.Map;
 
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
@@ -79,10 +77,10 @@ public class LocalStageHandler {
 			game.correct(player);
 			String total = game.getScoreTotal().toString();
 			String[] opts = {UtilitiesGeneral.joinStrings(game.answers, ", "), total};
-			MessengerGeneral.print(player, Message.GAME_STAGE_CORRECT_2, opts);
+//			MessengerGeneral.print(player, Message.GAME_STAGE_CORRECT_2, opts);
 		} else {
 			String[] opts = {answer};
-			MessengerGeneral.print(player, Message.GAME_STAGE_WRONG_1, opts);
+//			MessengerGeneral.print(player, Message.GAME_STAGE_WRONG_1, opts);
 		}
 		runNext(name);
 	}

@@ -100,7 +100,7 @@ public class CommandStage extends MyCommand {
 			String name = player.getName();
 			if(!PracticeStageHandler.existsStage(stage)) {
 				String[] opts = {stage};
-				MessengerGeneral.print(player, Message.GAME_STAGE_INVALID_1, opts);
+				MessengerGeneral.print(player, Message.STAGE_INVALID_1, opts);
 				return;
 			}
 			UtilitiesProgramming.printDebugMessage("", new Exception());

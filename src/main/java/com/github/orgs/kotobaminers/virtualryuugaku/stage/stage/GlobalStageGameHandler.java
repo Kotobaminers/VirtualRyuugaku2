@@ -4,14 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Broadcast;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.DataManager;
@@ -58,43 +53,43 @@ public class GlobalStageGameHandler implements DataManager {
 
 	public static void questNext() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		if(getGame().listTalk.size() <= getGame().count) {
-			UtilitiesProgramming.printDebugMessage("Error: listTalker.size() <= count", new Exception());
-			return;
-		}
-		Description description = getGame().listTalk.get(getGame().count).description;
-		answers = new ArrayList<String>();
-		Random random = new Random();
-		String languageAnswer= "";
-		int language = random.nextInt(2);//Random Number 0 or 1
-		switch(language) {
-		case 0:
-			question = description.express(Expression.EN);
-			answers.addAll(description.kanji);
-			answers.addAll(description.kana);
-			answers.addAll(description.romaji);
-			languageAnswer = "Japanese";
-			break;
-		case 1:
-			question = description.express(Expression.KANA);
-			answers.addAll(description.en);
-			languageAnswer = "English";
-			break;
-		default: break;
-		}
-		Integer number = getGame().count + 1;
-		String[] opts = {number.toString(), question, languageAnswer};
-		MessengerGeneral.broadcast(Broadcast.GAME_STAGE_QUEST_4, opts);
+//		if(getGame().listTalk.size() <= getGame().count) {
+//			UtilitiesProgramming.printDebugMessage("Error: listTalker.size() <= count", new Exception());
+//			return;
+//		}
+//		Description description = getGame().listTalk.get(getGame().count).description;
+//		answers = new ArrayList<String>();
+//		Random random = new Random();
+//		String languageAnswer= "";
+//		int language = random.nextInt(2);//Random Number 0 or 1
+//		switch(language) {
+//		case 0:
+//			question = description.express(Expression.EN);
+//			answers.addAll(description.kanji);
+//			answers.addAll(description.kana);
+//			answers.addAll(description.romaji);
+//			languageAnswer = "Japanese";
+//			break;
+//		case 1:
+//			question = description.express(Expression.KANA);
+//			answers.addAll(description.en);
+//			languageAnswer = "English";
+//			break;
+//		default: break;
+//		}
+//		Integer number = getGame().count + 1;
+//		String[] opts = {number.toString(), question, languageAnswer};
+//		MessengerGeneral.broadcast(Broadcast.GAME_STAGE_QUEST_4, opts);
 	}
 
 	public static void printEnd() {
-		String[] opts = {getGame().stage.toUpperCase()};
-		MessengerGeneral.broadcast(Broadcast.GAME_STAGE_END_1, opts);
-		for (GlobalStageDataPlayer dataPlayer : getGame().getMapDataPlayer().values()) {
-			Integer total = dataPlayer.getScoreTotal();
-			String[] opts2 = {dataPlayer.name, total.toString()};
-			MessengerGeneral.broadcast(Broadcast.STAGE_TOTAL_2, opts2);
-		}
+//		String[] opts = {getGame().stage.toUpperCase()};
+//		MessengerGeneral.broadcast(Broadcast.GAME_STAGE_END_1, opts);
+//		for (GlobalStageDataPlayer dataPlayer : getGame().getMapDataPlayer().values()) {
+//			Integer total = dataPlayer.getScoreTotal();
+//			String[] opts2 = {dataPlayer.name, total.toString()};
+//			MessengerGeneral.broadcast(Broadcast.STAGE_TOTAL_2, opts2);
+//		}
 	}
 	public static void initializeData() {
 		getGame().setMapDataPlayer(new HashMap<String, GlobalStageDataPlayer>());

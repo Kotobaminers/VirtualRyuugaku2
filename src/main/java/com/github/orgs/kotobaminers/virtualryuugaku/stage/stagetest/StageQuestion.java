@@ -52,7 +52,7 @@ public class StageQuestion {
 	public void printQuestion(Player player) {
 		String[] opts = {getQuestion(player), Language.convertString(language)};
 		UtilitiesProgramming.printDebugMessage(UtilitiesGeneral.joinStrings(opts, " "), new Exception());
-		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.STAGE_GAME_QUESTION_2, opts));
+		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.STAGE_QUESTION_2, opts));
 	}
 
 	public String getQuestion(Player player) {
@@ -77,7 +77,9 @@ public class StageQuestion {
 	}
 
 	public boolean isValidAnswer(String answer) {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
 		List<String> answers = getAnswers();
+		UtilitiesProgramming.printDebugMessage(answer + " " + UtilitiesGeneral.joinStrings(answers, "-"), new Exception());
 		for(String search : answers) {
 			if(search.equalsIgnoreCase(answer)) {
 				return true;
@@ -100,10 +102,10 @@ public class StageQuestion {
 		return answers;
 	}
 	private List<String> getAnswersEnglish() {
-		return talk.description.getEnglishList();
+		return talk.description.getJapaneseList();
 	}
 	private List<String> getAnswersJapanese() {
-		return talk.description.getJapaneseList();
+		return talk.description.getEnglishList();
 	}
 
 

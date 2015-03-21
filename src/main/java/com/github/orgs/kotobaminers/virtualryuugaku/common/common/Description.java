@@ -93,11 +93,11 @@ public class Description {
 		default:
 			break;
 		}
-		String message = MessengerGeneral.PREFIX_JP + UtilitiesGeneral.joinStrings(japanese, SPACER);
+		String message = UtilitiesGeneral.joinStrings(japanese, SPACER);
 		return message;
 	}
 	public String getEnglish() {
-		String message = MessengerGeneral.PREFIX_EN + UtilitiesGeneral.joinStrings(en, SPACER);
+		String message = UtilitiesGeneral.joinStrings(en, SPACER);
 		return message;
 	}
 

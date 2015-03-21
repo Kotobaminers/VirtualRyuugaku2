@@ -8,9 +8,6 @@ import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Broadcast;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
@@ -54,13 +51,13 @@ public class LocalStage {
 		Integer number = count + 1;
 		String[] opts = {number.toString(), question, languageAnswer, talk.name};
 		for(Player player : getPlayers()) {
-			MessengerGeneral.print(player, Message.GAME_STAGE_QUEST_4, opts);
+//			MessengerGeneral.print(player, Message.STAGE_QUEST_4, opts);
 		}
 	}
 
 	public void printEnd() {
-		String[] opts = {stage.toUpperCase()};
-		MessengerGeneral.broadcast(Broadcast.GAME_STAGE_END_1, opts);
+//		String[] opts = {stage.toUpperCase()};
+//		MessengerGeneral.broadcast(Broadcast.GAME_STAGE_END_1, opts);
 //		Integer total = getScoreTotal();
 //		String[] opts2 = {name, total.toString()};
 //		MessengerGeneral.broadcast(Broadcast.STAGE_TOTAL_2, opts2);

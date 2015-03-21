@@ -3,15 +3,22 @@ package com.github.orgs.kotobaminers.virtualryuugaku.stage.stagetest;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.FireworkEffect.Type;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.FireworkUtility;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.FireworkUtility.FireworkColor;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public abstract class StageGameHandler {
 	public List<StageQuestion> stageQuestions = new ArrayList<StageQuestion>();
-	public Integer index = 0;
+	public Integer index = -1;
 
 	public abstract void loadNewGame(String name, String stage);
 	public void loadNewGameSorted(String stage) {
@@ -35,30 +42,27 @@ public abstract class StageGameHandler {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		addIndex();
 		StageQuestion stageQuestion = getStageQuestion();
-		printQuestion(stageQuestion, player);
-	}
-	private void printFinished(Player player) {
-		player.sendMessage("Finished");
+		giveQuestion(stageQuestion, player);
 	}
 	private void addIndex() {
-		if(!index.equals(0)) {
-			index++;
-		}
+		index++;
 	}
 	public boolean isFinished() {
-		if(index < stageQuestions.size()) {
+		UtilitiesProgramming.printDebugMessage(index.toString() + " " + stageQuestions.size(), new Exception());
+		if(stageQuestions.size() <= index + 1) {
 			return true;
 		}
 		return false;
 	}
 
 	public StageQuestion getStageQuestion() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
+		UtilitiesProgramming.printDebugMessage(index.toString(), new Exception());
 		StageQuestion stageQuestion = stageQuestions.get(index);
 		return stageQuestion;
 	}
 
-	public void printQuestion(StageQuestion stageQuestion, Player player) {
+	public void giveQuestion(StageQuestion stageQuestion, Player player) {
+		player.playSound(player.getLocation(), Sound.NOTE_PIANO, 1, 1);
 		stageQuestion.printQuestion(player);
 	}
 
@@ -66,22 +70,33 @@ public abstract class StageGameHandler {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		StageQuestion stageQuestion = getStageQuestion();
 		if(stageQuestion.isValidAnswer(answer)) {
-			printCorrect(player);
+			validateCorrect(player);
+			if(isFinished()) {
+				finishGame(player);
+				initialize();
+				return;
+			} else {
+				runNext(player);
+				return;
+			}
 		} else {
-			printWrong(player);
+			validateWrong(player);
 		}
-		if(isFinished()) {
-			printFinished(player);
-			initialize();
-			return;
-		}
-		runNext(player);
 	}
-	private void printCorrect(Player player) {
-		player.sendMessage("correct");
+	private void finishGame(Player player) {
+		String[] opts = {player.getName()};
+		MessengerGeneral.broadcast(MessengerGeneral.getMessage(Message.STAGE_FINISH_1, opts));
+		FireworkUtility.shootFirework(player.getWorld(), player.getLocation(), Type.BALL_LARGE, FireworkColor.GREEN, FireworkColor.AQUA, 0);
 	}
-	private void printWrong(Player player) {
-		player.sendMessage("wrong");
+	private void validateCorrect(Player player) {
+		StageQuestion stageQuestion = getStageQuestion();
+		String[] opts = {UtilitiesGeneral.joinStrings(stageQuestion.getAnswers(), ", ")};
+		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.STAGE_CORRECT_1, opts));
+		player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 1);
+	}
+	private void validateWrong(Player player) {
+		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.STAGE_WRONG_0, null));
+		player.playSound(player.getLocation(), Sound.ITEM_BREAK, 1, 1);
 	}
 
 	public static boolean existsStage(String stage) {
