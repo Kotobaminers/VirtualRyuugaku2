@@ -111,7 +111,7 @@ public class DataManagerVRGNPC implements DataManager {
 		if(existsVRGNPC(id)) {
 			VRGNPC vrgnpc = getVRGNPC(id);
 			for(Description description : vrgnpc.listDescription) {
-				player.sendMessage(description.getExpression(player));
+//				player.sendMessage(description.getExpression(player));
 			}
 		}
 	}
@@ -120,7 +120,7 @@ public class DataManagerVRGNPC implements DataManager {
 		if(existsVRGNPC(id)) {
 			VRGNPC vrgnpc = getVRGNPC(id);
 			for(Description description : vrgnpc.listDescription) {
-				description.print(player);
+//				description.print(player);
 			}
 		}
 	}

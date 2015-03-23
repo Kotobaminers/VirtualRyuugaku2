@@ -22,7 +22,7 @@ public class CommandVirtualRyuugaku extends MyCommand {
 		super(player, command, args);
 	}
 	private enum Commands {
-		NONE, LANGUAGE, LANG, JAPANESE, JP, EN, KANJI, KANA, ROMAJI;
+		NONE, LANGUAGE, LANG, JAPANESE, JP, EN, KANJI, KANA, ROMAJI, TEST;
 		public static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -54,7 +54,10 @@ public class CommandVirtualRyuugaku extends MyCommand {
 			case ROMAJI:
 				commandToggleExpression();
 				break;
+			case TEST:
+				break;
 			case NONE:
+				break;
 			default:
 				break;
 			}

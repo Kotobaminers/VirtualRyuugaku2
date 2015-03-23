@@ -7,8 +7,6 @@ import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Co
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.ConfigHandlerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
-import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GlobalStageConfigHandler;
-import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GlobalStageGameHandler;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.DataManagerVRGNPC;
 
@@ -36,10 +34,6 @@ public final class DataManagerPlugin {
 		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Loading VRGNPC Data", new Exception());
 		new LibraryManager().initialize(plugin);
 		new DataManagerVRGNPC().loadAll();
-
-		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Loading Talker Data", new Exception());
-		new GlobalStageConfigHandler().initialize(plugin);
-		new GlobalStageGameHandler().loadAll();
 
 		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Finishing Loading Plugin Data", new Exception());
 	}

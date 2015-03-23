@@ -10,7 +10,6 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGener
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
-import com.github.orgs.kotobaminers.virtualryuugaku.stage.stagetest.PracticeStageHandler;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
@@ -19,7 +18,7 @@ public class CommandStage extends MyCommand {
 		super(player, command, args);
 	}
 	private enum Commands {
-		NONE, TEST, LEARN, PRACTICE, INFO, TP, FIND;
+		NONE, TEST, LEARN, PRACTICE, INFO, TP, FIND, FINDPPL, FINDPEOPLE, FP;
 		private static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -41,9 +40,6 @@ public class CommandStage extends MyCommand {
 			case TP:
 				commandTP();
 				break;
-			case FIND:
-				commandFind();
-				break;
 			case INFO:
 				break;
 			case TEST:
@@ -55,19 +51,26 @@ public class CommandStage extends MyCommand {
 			case LEARN:
 				commandLearn();
 				break;
+			case FIND:
+			case FINDPEOPLE:
+			case FINDPPL:
+			case FP:
+				commandFindPeople();
+				break;
 			default:
 				break;
 			}
 		}
 	}
 
-	private void commandFind() {
+	private void commandFindPeople() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
 		if(1 < args.length) {
 			String stage = args[1];
-			GameFindPeopleHandler.loadNewGame(player.getName(), stage);
-			GameFindPeopleHandler.tryNext(player);
+			GameFindPeopleHandler.loadNewGame(player, player.getName(), stage);
 		}
 	}
+
 
 	private void commandLearn() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());

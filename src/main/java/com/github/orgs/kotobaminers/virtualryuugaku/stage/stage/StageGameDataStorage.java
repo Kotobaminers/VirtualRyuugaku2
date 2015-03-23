@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.stage.stagetest;
+package com.github.orgs.kotobaminers.virtualryuugaku.stage.stage;
 
 import java.util.HashMap;
 import java.util.Map;

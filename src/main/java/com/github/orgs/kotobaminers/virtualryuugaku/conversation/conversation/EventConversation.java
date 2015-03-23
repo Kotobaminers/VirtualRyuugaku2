@@ -21,16 +21,17 @@ public class EventConversation {
 	public void talk() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-//		if(!data.select.equals(npc.getId())) {
-//			DataManagerPlayer.selectTalker(player, npc.getId());
-//		} else {
-			conversation.talkNext(player, data);
-//		}
+		conversation.talkNext(player, data);
+//		conversation.talkEffect(player, npc);//Talking NPCs' locantion can't get because it's not saved.
+		conversation.talkSound(player);
+		new ScoreboardTalk().update(player, conversation, data);
+		data.line++;
 	}
+
 	public void printKeySentence() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 //		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-//		if(!data.select.equals(npc.getId())) {
+//		if(!data.select.equa ls(npc.getId())) {
 //			DataManagerPlayer.selectTalker(player, talker);
 //		} else {
 //			UtilitiesProgramming.printDebugMessage("", new Exception());

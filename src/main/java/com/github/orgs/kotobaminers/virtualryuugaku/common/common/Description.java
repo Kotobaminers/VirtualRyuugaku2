@@ -8,7 +8,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
@@ -21,7 +20,6 @@ public class Description {
 	public List<String> en = new ArrayList<String>();
 	public List<String> romaji = new ArrayList<String>();
 	public List<String> tips = new ArrayList<String>();
-	public enum Path {ENGL, KANJ, KANA}
 
 	public static Description create(String kanji, String kana, String en, List<String> tips) {
 		Description description = new Description();
@@ -33,112 +31,45 @@ public class Description {
 		return description;
 	}
 
-	public void print(Player player) {
-		List<Expression> expressions = DataManagerPlayer.getDataPlayer(player).expressions;
-		if(expressions.contains(Expression.EN)) {
-			String[] opts = {getEnglish()};
-			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.DESCRIPTION_0, opts));
-		}
-		List<String> listJapanese = new ArrayList<String>();
-		if(expressions.contains(Expression.KANJI)) {
-			listJapanese.add(expressKanji());
-		}
-		if(expressions.contains(Expression.KANA)) {
-			listJapanese.add(expressKana());
-		}
-		if(expressions.contains(Expression.ROMAJI)) {
-			listJapanese.add(expressRomaji());
-		}
-		String japanese = UtilitiesGeneral.joinStrings(listJapanese, ", ");
-		if(0 < japanese.length()) {
-			String[] opts = {MessengerGeneral.PREFIX_JP + japanese};
-			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.DESCRIPTION_0, opts));
-		}
-
-	}
-
-	public String getExpression(Player player) {
-		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-		String message = "";
-		switch(data.language) {
-		case EN:
-			message = getEnglish();
-			break;
-		case JP:
-			message = getJapanese(player);
-			break;
-		case DEFAULT:
-		default:
-			break;
-		}
-		return message;
-	}
-	public String getJapanese(Player player) {
+	public String getJapaneseJoined(Player player) {
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
 		List<String> japanese = new ArrayList<String>();
-		switch(data.japanese) {
-		case ROMAJI:
-			japanese.addAll(kanji);
-			japanese.addAll(kana);
-			japanese.addAll(romaji);
-			break;
-		case KANA:
-			japanese.addAll(kanji);
-			japanese.addAll(kana);
-			break;
-		case KANJI:
-			japanese.addAll(kanji);
-			break;
-		case DEFAULT:
-		default:
-			break;
+		for(Expression expression : data.expressions) {
+			switch(expression) {
+			case ROMAJI:
+				japanese.addAll(romaji);
+				break;
+			case KANA:
+				japanese.addAll(kana);
+				break;
+			case KANJI:
+				japanese.addAll(kanji);
+				break;
+			default:
+				break;
+			}
 		}
 		String message = UtilitiesGeneral.joinStrings(japanese, SPACER);
 		return message;
 	}
-	public String getEnglish() {
+
+	public String getEnglishJoined() {
 		String message = UtilitiesGeneral.joinStrings(en, SPACER);
 		return message;
 	}
-
-	public String express(Expression expression) {
-		List<String> list = new ArrayList<String>();
-		switch(expression) {
-		case ROMAJI://No break;
-			list.add(expressRomaji());
-		case KANA://No break;
-			list.add(expressKana());
-		case KANJI:
-			list.add(expressKanji());
-			break;
-		case EN:
-			list.add(expressEn());
-			break;
-		case NONE:
-			break;
-		default:
-			break;
-		}
-		String message = UtilitiesGeneral.joinStrings(list, SPACER);
-		return message;
-	}
-
-	private String expressEn() {
-		String message = UtilitiesGeneral.joinStrings(en, SPACER);
-		return message;
-	}
-	private String expressKanji() {
+	public String getKanjiJoined() {
 		String message = UtilitiesGeneral.joinStrings(kanji, SPACER);
 		return message;
 	}
-	private String expressKana() {
+	public String getKanaJoined() {
 		String message = UtilitiesGeneral.joinStrings(kana, SPACER);
 		return message;
 	}
-	private String expressRomaji() {
+	public String getRomajiJoined() {
 		String message = UtilitiesGeneral.joinStrings(romaji, SPACER);
 		return message;
 	}
+
 	public List<String> getJapaneseList() {
 		List<String> list = new ArrayList<String>();
 		list.addAll(kanji);
@@ -151,5 +82,23 @@ public class Description {
 		list.addAll(en);
 		return list;
 	}
+
+//	public String getExpression(Player player) {
+//		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
+//		String message = "";
+//		switch(data.language) {
+//		case EN:
+//			message = getEnglishJoined();
+//			break;
+//		case JP:
+//			message = getJapaneseJoined(player);
+//			break;
+//		case DEFAULT:
+//		default:
+//			break;
+//		}
+//		return message;
+//	}
+
 
 }

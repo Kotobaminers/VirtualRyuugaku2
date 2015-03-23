@@ -23,6 +23,7 @@ public class VirtualRyuugaku extends JavaPlugin {
 
 //		DataManagerPlugin.savePlugin();
 	}
+
 	@Override
 	public void onDisable() {
 //		DataManagerPlugin.savePlugin();

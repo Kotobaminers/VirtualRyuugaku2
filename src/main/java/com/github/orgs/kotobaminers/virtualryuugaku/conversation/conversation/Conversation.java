@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.citizensnpcs.api.npc.NPC;
+
+import org.bukkit.Effect;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManagerCitizens;
@@ -40,16 +44,7 @@ public class Conversation {
 				data.line = 0;
 			}
 			Talk talk = listTalk.get(data.line);
-//			if(data.line.equals(0)) {
-//				String[] opts = {talk.name};
-//				MessengerGeneral.print(player, Message.CONVERSATION_TALK_START_1, opts);
-//			}
-//			talk.printExpression(player, data);
-			talk.description.print(player);
-			data.line++;
-			if(listTalk.size() - 1 < data.line) {
-//				MessengerGeneral.print(player, Message.CONVERSATION_TALK_FINISH_0, null);
-			}
+			talk.print(player);
 		} else {
 			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.NO_SENTENCE_0, null));
 			if(editor.contains(player.getName())) {
@@ -57,6 +52,13 @@ public class Conversation {
 			}
 		}
 	}
+	public void talkEffect(Player player, NPC npc) {
+		player.getWorld().playEffect(npc.getStoredLocation().add(0, 2, 0), Effect.SMOKE, 22);//data is 22(None direction value).
+	}
+	public void talkSound(Player player) {
+		player.playSound(player.getLocation(), Sound.NOTE_PIANO, 1, 1);
+	}
+
 	public Boolean isEmpty() {
 		if(0 < listTalk.size()) {
 			return false;
@@ -73,6 +75,7 @@ public class Conversation {
 		UtilitiesProgramming.printDebugMessage("No Answer in JP", new Exception());
 		return false;
 	}
+
 	public void printInformation(Player player) {
 //		if(isEmpty()) return;
 //		String[] opts = {name};
@@ -118,4 +121,5 @@ public class Conversation {
 	public void setKey(List<Integer> key) {
 		this.key = key;
 	}
+
 }

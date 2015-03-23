@@ -6,7 +6,6 @@ import org.bukkit.ChatColor;
 import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManagerCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
@@ -104,7 +103,7 @@ public class UtilitiesProgramming {
 		printDebugDescription(talk.description);
 	}
 	public static void printDebugDescription(Description description) {
-		printDebugMessage(description.express(Expression.EN), new Exception());
-		printDebugMessage(description.express(Expression.KANJI), new Exception());
+		printDebugMessage(description.getEnglishJoined(), new Exception());
+		printDebugMessage(description.getKanjiJoined(), new Exception());
 	}
 }

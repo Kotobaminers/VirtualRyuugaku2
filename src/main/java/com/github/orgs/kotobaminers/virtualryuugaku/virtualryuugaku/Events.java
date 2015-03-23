@@ -7,10 +7,12 @@ import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.EventConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GameFindPeopleHandler;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.DataManagerVRGNPC;
 
@@ -24,11 +26,7 @@ public class Events implements Listener {
 	public void onClickNPCLeft(NPCLeftClickEvent event) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		Player player = event.getClicker();
-//		if(GameFindPeopleHandler.hasGame(player.getName())) {
-//			GameFindPeopleHandler.checkPerson(player, event.getNPC().getId());
-//		} else {
-			DataManagerVRGNPC.printVRGNPCInfo(event.getNPC().getId(), player);
-//		}
+		DataManagerVRGNPC.printVRGNPCInfo(event.getNPC().getId(), player);
 	}
 
 	@EventHandler
@@ -38,10 +36,13 @@ public class Events implements Listener {
 		if(DataManagerConversation.existsConversation(npc)) {
 			Integer id = npc.getId();
 			Conversation conversation = DataManagerConversation.getConversation(id);
-			if(conversation.hasEditor()) {//Talker without editors is Empty Talker
-				new EventConversation(npc, conversation, event.getClicker()).talk();
-			} else {
-//				new EventConversation(npc, conversation, event.getClicker()).ownEmptyTalker();
+			if(conversation.hasEditor()) {
+				Player player = event.getClicker();
+				if(GameFindPeopleHandler.hasGame(player)) {
+					GameFindPeopleHandler.getGame(player.getName()).validate(id);
+				} else {
+					new EventConversation(npc, conversation, player).talk();
+				}
 			}
 			return;
 		} else {
@@ -49,10 +50,17 @@ public class Events implements Listener {
 		}
 	}
 
+	@EventHandler
+	public void onJoin(PlayerJoinEvent event) {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+	}
+
+
 //	@EventHandler
 //	public void onJoin(PlayerJoinEvent event) {
 //		UtilitiesProgramming.printDebugMessage("", new Exception());
 //		Player player = event.getPlayer();
+//		player.setScoreboard(scoreboard);
 //		try {
 //			CommentHandler.printCommentNew(player);
 //		} catch(Exception e) {

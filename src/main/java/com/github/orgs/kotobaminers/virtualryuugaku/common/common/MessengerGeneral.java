@@ -10,9 +10,21 @@ import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utilitie
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class MessengerGeneral {
-	public static final String PREFIX_JP = "" + ChatColor.RED +"*JP* " + ChatColor.RESET;
-	public static final String PREFIX_EN = "" + ChatColor.AQUA +"*EN* " + ChatColor.RESET;
+	public static final String MARK_JP = ChatColor.RED +"*JP* " + ChatColor.RESET;
+	public static final String MARK_EN = ChatColor.AQUA +"*EN* " + ChatColor.RESET;
 	private static final String MESSENGER_PREFIX = "" + ChatColor.GOLD + ChatColor.BOLD +"[" + ChatColor.YELLOW + "VRG" + ChatColor.GOLD + ChatColor.BOLD + "] " + ChatColor.RESET;
+	private static final String getPartition(String mark1, String mark2, ChatColor color1, ChatColor color2) {
+		String partition = "  ";
+		for(int i = 0; i < 8; i++) {
+			partition += color1 + mark1 + " " + color2 + mark2 + " ";
+		}
+		partition += color1 + mark1;
+		return partition;
+	}
+	public static final String getPartitionDefault() {
+		return getPartition("=", "*", ChatColor.DARK_GREEN, ChatColor.GREEN);
+	}
+
 	public enum Message {
 		CANT_EDIT_TALKER_0,
 		EDITED_TALKER_0, SET_LANGUAGE_1,
@@ -48,14 +60,20 @@ public class MessengerGeneral {
 		STAGE_FINISH_1,
 		TELEPORT_0,
 		STAGE_QUESTION_2,
+		FIND_PEOPLE_MISSION_0,
 		FIND_PEOPLE_QUEST_1,
-		FIND_PEOPLE_FINISH_1,
+		FIND_PEOPLE_CORRECT_0,
+		FIND_PEOPLE_WRONG_0,
+
+		FIND_PEOPLE_FINISH_2,
 		FIND_PEOPLE_REMOVE_1,
+
 		COMMAND_VRG_JAPANESE_1,
 		COMMAND_VRG_LANGUAGE_1,
 		COMMAND_VRG_EXPRESSIONS_1,
 		COMMAND_VRG_EXPRESSIONS_OFF_0,
-		DESCRIPTION_0,
+		DESCRIPTION_EN_2,
+		DESCRIPTION_JP_2,
 		;
 	}
 
@@ -94,17 +112,22 @@ public class MessengerGeneral {
 		case STAGE_NOT_RUNNING_0: message += "No game is running for now."; break;
 		case STAGE_QUESTION_2: message = " [Q] What is \"" + opts[0] + "\" in " + opts[1] + "?"; break;
 		case STAGE_CORRECT_1: message += ChatColor.GREEN + "Correct Answer!" + ChatColor.RESET + " (Answers: " + opts[0] + ")"; break;
-		case STAGE_WRONG_0: message += ChatColor.RED + "Wrong Answer!"; break;
+		case STAGE_WRONG_0: message += ChatColor.DARK_RED + "Wrong Answer!"; break;
 		case STAGE_FINISH_1: message += ChatColor.GREEN + opts[0] + " successfully completed the stage!"; break;
 		case TELEPORT_0: message += "Teleporting..."; break;
-		case FIND_PEOPLE_QUEST_1: message = " [FindPpl: " + opts[0] + "] Find a Person!"; break;
-		case FIND_PEOPLE_FINISH_1: message = " [FindPpl: " + opts[0] + "] You successufully Finished the game!"; break;
+		case FIND_PEOPLE_MISSION_0: message += ChatColor.LIGHT_PURPLE + "Find the Person!"; break;
+		case FIND_PEOPLE_QUEST_1: message = ChatColor.GOLD + "???" + ChatColor.RESET + ": " + opts[0] ; break;
+		case FIND_PEOPLE_CORRECT_0: message += ChatColor.GREEN + "Correct!"; break;
+		case FIND_PEOPLE_WRONG_0: message += ChatColor.DARK_RED + "Wrong!"; break;
+		case FIND_PEOPLE_FINISH_2: message += ChatColor.GREEN + opts[0] + " successufully finished the game!" + ChatColor.RESET + " (FindPpl: " + opts[1] + ")"; break;
+
 		case FIND_PEOPLE_REMOVE_1: message = " [FindPpl: " + opts[0] + "] Removed the game!"; break;
 		case COMMAND_VRG_JAPANESE_1: message += "Your Japanese mode is set as " + opts[0] + "."; break;
 		case COMMAND_VRG_LANGUAGE_1: message += "Your learning language is set as " + opts[0] + "."; break;
 		case COMMAND_VRG_EXPRESSIONS_1: message += "Your current languages are " + opts[0] + "."; break;
 		case COMMAND_VRG_EXPRESSIONS_OFF_0: message += "Your current VRG output is OFF."; break;
-		case DESCRIPTION_0: message = opts[0]; break;
+		case DESCRIPTION_EN_2: message = opts[0] + ChatColor.RESET + ": " + opts[1] + " " + MARK_EN; break;
+		case DESCRIPTION_JP_2: message = opts[0] + ChatColor.RESET + ": " + opts[1] + " " + MARK_JP; break;
 		default: break;
 		}
 		return message;

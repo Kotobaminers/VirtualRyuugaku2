@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.stage.stagetest;
+package com.github.orgs.kotobaminers.virtualryuugaku.stage.stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,14 +26,28 @@ public class StageQuestion {
 			}
 			return language;
 		}
-		public static String convertString(Language language) {
+//		public static String convertString(Language language) {
+//			String string = "";
+//			switch(language) {
+//			case ENGLISH:
+//				string = "English";
+//				break;
+//			case JAPANESE:
+//				string = "Japanese";
+//				break;
+//			default:
+//				break;
+//			}
+//			return string;
+//		}
+		public static String convertStringOpposite(Language language) {
 			String string = "";
 			switch(language) {
 			case ENGLISH:
-				string = "English";
+				string = "Japanese";
 				break;
 			case JAPANESE:
-				string = "Japanese";
+				string = "English";
 				break;
 			default:
 				break;
@@ -50,7 +64,7 @@ public class StageQuestion {
 	}
 
 	public void printQuestion(Player player) {
-		String[] opts = {getQuestion(player), Language.convertString(language)};
+		String[] opts = {getQuestion(player), Language.convertStringOpposite(language)};
 		UtilitiesProgramming.printDebugMessage(UtilitiesGeneral.joinStrings(opts, " "), new Exception());
 		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.STAGE_QUESTION_2, opts));
 	}
@@ -70,10 +84,10 @@ public class StageQuestion {
 		return question;
 	}
 	private String getQuestionEnglish() {
-		return talk.description.getEnglish();
+		return talk.description.getEnglishJoined();
 	}
 	private String getQuestionJapanese(Player player) {
-		return talk.description.getJapanese(player);
+		return talk.description.getJapaneseJoined(player);
 	}
 
 	public boolean isValidAnswer(String answer) {
