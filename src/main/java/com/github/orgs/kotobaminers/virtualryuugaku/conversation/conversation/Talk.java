@@ -27,7 +27,7 @@ public class Talk {
 	public void print(Player player) {
 		List<Expression> expressions = DataManagerPlayer.getDataPlayer(player).expressions;
 		if(0 < expressions.size()) {
-			MessengerGeneral.print(player, MessengerGeneral.getPartitionDefault());
+			MessengerGeneral.print(player, MessengerGeneral.getPartitionTalk());
 		}
 		if(expressions.contains(Expression.EN)) {
 			String[] opts = {name, description.getEnglishJoined()};

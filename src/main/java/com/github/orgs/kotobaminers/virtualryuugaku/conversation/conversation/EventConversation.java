@@ -25,7 +25,15 @@ public class EventConversation {
 //		conversation.talkEffect(player, npc);//Talking NPCs' locantion can't get because it's not saved.
 		conversation.talkSound(player);
 		new ScoreboardTalk().update(player, conversation, data);
-		data.line++;
+		addLine(data);
+	}
+	private void addLine(DataPlayer data) {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		if(conversation.listTalk.size() <= data.line) {
+			data.line = 0;
+		} else {
+			data.line++;
+		}
 	}
 
 	public void printKeySentence() {

@@ -1,6 +1,7 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,10 +9,14 @@ import java.util.Map;
 import net.citizensnpcs.api.npc.NPC;
 
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManagerCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.LibraryManager;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.DataManager;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class DataManagerConversation implements DataManager {
@@ -59,6 +64,18 @@ public class DataManagerConversation implements DataManager {
 		}
 	}
 
+	public static void printHint(Player player, String stage) {
+		List<String> answers = new ArrayList<String>();
+		for(Conversation conversation : getMapConversation().values()) {
+			if(conversation.stage.equalsIgnoreCase(stage)) {
+				answers.addAll(conversation.question.getAnswers());
+			}
+		}
+		Collections.shuffle(answers);
+		String[] opts = {stage, UtilitiesGeneral.joinStrings(answers, ", ")};
+		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.CONVERSATION_HINT_2, opts));
+	}
+
 	@Override
 	public void saveAll() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -87,6 +104,19 @@ public class DataManagerConversation implements DataManager {
 		UtilitiesProgramming.printDebugMessage("NON Conversation", new Exception());
 		return false;
 	}
+
+	public static Integer getNumberQuestion(String stage) {
+		Integer question = 0;
+		for(Conversation search : DataManagerConversation.getMapConversation().values()) {
+			if(search.stage.equalsIgnoreCase(stage)) {
+				if(search.hasValidQuestion()) {
+					question++;
+				}
+			}
+		}
+		return question;
+	}
+
 
 	public static Map<List<Integer>, Conversation> getMapConversation() {
 		return mapConversation;

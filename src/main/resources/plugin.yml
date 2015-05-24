@@ -12,7 +12,6 @@ commands:
       /<command> info
       /<command> comment (read/send/new/done)
   CONV:
-  STAGE:
   ANSWER:
   ANS:
   VRGOP:

@@ -21,8 +21,23 @@ public class MessengerGeneral {
 		partition += color1 + mark1;
 		return partition;
 	}
-	public static final String getPartitionDefault() {
+	private static final String getPartition(String mark1, String mark2, ChatColor color1, ChatColor color2, Integer num) {
+		String partition = "  ";
+		int count = 8;
+		if(0 < num) {
+			count = num;
+		}
+		for(int i = 0; i < count; i++) {
+			partition += color1 + mark1 + " " + color2 + mark2 + " ";
+		}
+		partition += color1 + mark1;
+		return partition;
+	}
+	public static final String getPartitionTalk() {
 		return getPartition("=", "*", ChatColor.DARK_GREEN, ChatColor.GREEN);
+	}
+	public static final String getPartitionQuestion() {
+		return getPartition("=", "*", ChatColor.DARK_PURPLE, ChatColor.LIGHT_PURPLE);
 	}
 
 	public enum Message {
@@ -42,8 +57,10 @@ public class MessengerGeneral {
 		NO_NEW_COMMENT_0,
 		NO_COMMENT_0,
 		DONE_COMMENT_1,
+
 		CONVERSATION_SPEAK_2,
 		CONVERSATION_QUESTION_1,
+		CONVERSATION_QUESTION_COMPLITE_1,
 		CONVERSATION_TALK_START_1,
 		CONVERSATION_TALK_FINISH_0,
 		CONVERSATION_INFO_LABEL_1,
@@ -52,18 +69,22 @@ public class MessengerGeneral {
 		CONVERSATION_KEY_SENTENCE_EN_1,
 		CONVERSATION_KEY_SENTENCE_JP_1,
 		CONVERSATION_KEY_SENTENCE_1,
+
 		STAGE_INVALID_1,
 		STAGE_RUNNING_0,
 		STAGE_NOT_RUNNING_0,
 		STAGE_CORRECT_1,
 		STAGE_WRONG_0,
 		STAGE_FINISH_1,
+		STAGE_LIST_1,
+		STAGE_INFO_4,
+
 		TELEPORT_0,
 		STAGE_QUESTION_2,
 		FIND_PEOPLE_MISSION_0,
 		FIND_PEOPLE_QUEST_1,
-		FIND_PEOPLE_CORRECT_0,
-		FIND_PEOPLE_WRONG_0,
+		CORRECT_0,
+		WRONG_0,
 
 		FIND_PEOPLE_FINISH_2,
 		FIND_PEOPLE_REMOVE_1,
@@ -74,6 +95,7 @@ public class MessengerGeneral {
 		COMMAND_VRG_EXPRESSIONS_OFF_0,
 		DESCRIPTION_EN_2,
 		DESCRIPTION_JP_2,
+		CONVERSATION_HINT_2
 		;
 	}
 
@@ -97,28 +119,38 @@ public class MessengerGeneral {
 		case NO_NEW_COMMENT_0: message += "You don't have any new comments."; break;
 		case NO_COMMENT_0: message += "The selected talker doesn't have any comments."; break;
 		case DONE_COMMENT_1: message += "The comment from " + opts[0] + "'s state was switched to " + DataComment.CommentState.DONE.toString() + "."; break;
+
 		case CONVERSATION_SPEAK_2: message = opts[0] + ChatColor.GREEN + " \"" + ChatColor.RESET + opts[1] + ChatColor.GREEN + "\"" + ChatColor.RESET; break;
-		case CONVERSATION_QUESTION_1: message += "[Question] " + opts[0]; break;
+		case CONVERSATION_QUESTION_1: message = ChatColor.GREEN + "[Question] " + ChatColor.RESET + opts[0]; break;
+		case CONVERSATION_QUESTION_COMPLITE_1: message += ChatColor.GREEN + "You have answered all the questions correctly!" + ChatColor.RESET + " (" + opts[0] + ")";  break;
 		case CONVERSATION_TALK_START_1: message += "The conversation has started."; break;
 		case CONVERSATION_TALK_FINISH_0: message += ChatColor.RED + "The conversation is finished." + ChatColor.RESET; break;//Expression from ALC.
-		case CONVERSATION_INFO_LABEL_1: message = ChatColor.GOLD +  "[Talker] " + ChatColor.RESET + opts[0] + ChatColor.RESET; break;//Without prefix
-		case CONVERSATION_INFO_DATA_3: message = " ID: " + opts[0] + ", EDITOR: " + opts[1] + ", STAGE: " + opts[2]; break;//Without prefix
-		case CONVERSATION_INFO_SENTENCE_3: message = " SENT(" + opts[0] + ") " + opts[1] + ": " + opts[2]; break;//Without prefix
+		case CONVERSATION_INFO_LABEL_1: message = ChatColor.GOLD +  "[Talker] " + ChatColor.RESET + opts[0] + ChatColor.RESET; break;
+		case CONVERSATION_INFO_DATA_3: message = " ID: " + opts[0] + ", EDITOR: " + opts[1] + ", STAGE: " + opts[2]; break;
+		case CONVERSATION_INFO_SENTENCE_3: message = " SENT(" + opts[0] + ") " + opts[1] + ": " + opts[2]; break;
 		case CONVERSATION_KEY_SENTENCE_1: message += opts[0] + ChatColor.RESET + "'s Key Sentence."; break;
-		case CONVERSATION_KEY_SENTENCE_EN_1: message = " EN: " + ChatColor.GOLD + " \"" + ChatColor.RESET + opts[0] + ChatColor.GOLD + "\"" + ChatColor.RESET; break;//Without prefix
-		case CONVERSATION_KEY_SENTENCE_JP_1: message = " JP: " + ChatColor.GOLD + " \"" + ChatColor.RESET + opts[0] + ChatColor.GOLD + "\"" + ChatColor.RESET; break;//Without prefix
+		case CONVERSATION_KEY_SENTENCE_EN_1: message = " EN: " + ChatColor.GOLD + " \"" + ChatColor.RESET + opts[0] + ChatColor.GOLD + "\"" + ChatColor.RESET; break;
+		case CONVERSATION_KEY_SENTENCE_JP_1: message = " JP: " + ChatColor.GOLD + " \"" + ChatColor.RESET + opts[0] + ChatColor.GOLD + "\"" + ChatColor.RESET; break;
+		case CONVERSATION_HINT_2: message = "" + ChatColor.GOLD + ChatColor.BOLD +"[" + ChatColor.YELLOW + "Hint" + ChatColor.GOLD + ChatColor.BOLD + "] " + ChatColor.GREEN + opts[0] + ": " + ChatColor.RESET + opts[1]; break;
+
 		case STAGE_INVALID_1: message += "Invalid stage name(" + opts[0] + ")"; break;
 		case STAGE_RUNNING_0: message += "A game is already running right now. Try later."; break;
 		case STAGE_NOT_RUNNING_0: message += "No game is running for now."; break;
-		case STAGE_QUESTION_2: message = " [Q] What is \"" + opts[0] + "\" in " + opts[1] + "?"; break;
+		case STAGE_QUESTION_2: message =  ChatColor.GREEN + "[Question]" + ChatColor.RESET + " What is \"" + opts[0] + "\" in " + opts[1] + "?"; break;
 		case STAGE_CORRECT_1: message += ChatColor.GREEN + "Correct Answer!" + ChatColor.RESET + " (Answers: " + opts[0] + ")"; break;
 		case STAGE_WRONG_0: message += ChatColor.DARK_RED + "Wrong Answer!"; break;
 		case STAGE_FINISH_1: message += ChatColor.GREEN + opts[0] + " successfully completed the stage!"; break;
+		case STAGE_LIST_1: message = "" + ChatColor.GOLD + ChatColor.BOLD +"[" + ChatColor.YELLOW + "STAGES" + ChatColor.GOLD + ChatColor.BOLD + "] " + ChatColor.RESET + opts[0]; break;
+		case STAGE_INFO_4: message =
+				getPartition("=", "*", ChatColor.GOLD, ChatColor.YELLOW, 3) + "  " + ChatColor.GREEN + ChatColor.BOLD + opts[0] + getPartition("=", "*", ChatColor.GOLD, ChatColor.YELLOW, 3) + ChatColor.RESET + "\n"
+				+ " NPCs: " + opts[1] + "\n"
+				+ " Questions: " + opts[2] + " / " + opts[3];
+			break;
 		case TELEPORT_0: message += "Teleporting..."; break;
 		case FIND_PEOPLE_MISSION_0: message += ChatColor.LIGHT_PURPLE + "Find the Person!"; break;
 		case FIND_PEOPLE_QUEST_1: message = ChatColor.GOLD + "???" + ChatColor.RESET + ": " + opts[0] ; break;
-		case FIND_PEOPLE_CORRECT_0: message += ChatColor.GREEN + "Correct!"; break;
-		case FIND_PEOPLE_WRONG_0: message += ChatColor.DARK_RED + "Wrong!"; break;
+		case CORRECT_0: message += ChatColor.GREEN + "Correct!"; break;
+		case WRONG_0: message += ChatColor.DARK_RED + "Wrong!"; break;
 		case FIND_PEOPLE_FINISH_2: message += ChatColor.GREEN + opts[0] + " successufully finished the game!" + ChatColor.RESET + " (FindPpl: " + opts[1] + ")"; break;
 
 		case FIND_PEOPLE_REMOVE_1: message = " [FindPpl: " + opts[0] + "] Removed the game!"; break;
@@ -158,12 +190,12 @@ public class MessengerGeneral {
 		case CONVERSATION_QUESTION_1: message += "[Question] " + opts[0]; break;
 		case CONVERSATION_TALK_START_1: message += "The conversation has started."; break;
 		case CONVERSATION_TALK_FINISH_0: message += ChatColor.RED + "The conversation is finished." + ChatColor.RESET; break;//Expression  from ALC.
-		case CONVERSATION_INFO_LABEL_1: message = ChatColor.GOLD +  "[Talker] " + ChatColor.RESET + opts[0] + ChatColor.RESET; break;//Without prefix
-		case CONVERSATION_INFO_DATA_3: message = " ID: " + opts[0] + ", EDITOR: " + opts[1] + ", STAGE: " + opts[2]; break;//Without prefix
-		case CONVERSATION_INFO_SENTENCE_3: message = " SENT(" + opts[0] + ") " + opts[1] + ": " + opts[2]; break;//Without prefix
+		case CONVERSATION_INFO_LABEL_1: message = ChatColor.GOLD +  "[Talker] " + ChatColor.RESET + opts[0] + ChatColor.RESET; break;
+		case CONVERSATION_INFO_DATA_3: message = " ID: " + opts[0] + ", EDITOR: " + opts[1] + ", STAGE: " + opts[2]; break;
+		case CONVERSATION_INFO_SENTENCE_3: message = " SENT(" + opts[0] + ") " + opts[1] + ": " + opts[2]; break;
 		case CONVERSATION_KEY_SENTENCE_1: message += opts[0] + ChatColor.RESET + "'s Key Sentence."; break;
-		case CONVERSATION_KEY_SENTENCE_EN_1: message = " EN: " + ChatColor.GOLD + " \"" + ChatColor.RESET + opts[0] + ChatColor.GOLD + "\"" + ChatColor.RESET; break;//Without prefix
-		case CONVERSATION_KEY_SENTENCE_JP_1: message = " JP: " + ChatColor.GOLD + " \"" + ChatColor.RESET + opts[0] + ChatColor.GOLD + "\"" + ChatColor.RESET; break;//Without prefix
+		case CONVERSATION_KEY_SENTENCE_EN_1: message = " EN: " + ChatColor.GOLD + " \"" + ChatColor.RESET + opts[0] + ChatColor.GOLD + "\"" + ChatColor.RESET; break;
+		case CONVERSATION_KEY_SENTENCE_JP_1: message = " JP: " + ChatColor.GOLD + " \"" + ChatColor.RESET + opts[0] + ChatColor.GOLD + "\"" + ChatColor.RESET; break;
 		case STAGE_INVALID_1: message += "Invalid stage name(" + opts[0] + ")"; break;
 		case STAGE_RUNNING_0: message += "A game is already running right now. Try later."; break;
 		case STAGE_NOT_RUNNING_0: message += "No game is running for now."; break;

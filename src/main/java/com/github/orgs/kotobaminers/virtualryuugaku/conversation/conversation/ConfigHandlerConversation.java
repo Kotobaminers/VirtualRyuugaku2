@@ -16,8 +16,6 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.PathComm
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.PathConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment.CommentState;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationAnswer.KeyAnswer;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationQuestion.KeyQuestion;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.ConfigHandler;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
@@ -69,20 +67,6 @@ public class ConfigHandlerConversation extends ConfigHandler {
 				conversation.setKey(key);
 			}
 
-			path = Enums.PathConversation.Q.toString();
-			if(memoryId.contains(path + "." + KeyQuestion.EN.toString()) && memoryId.contains(path + "." + KeyQuestion.JP.toString())) {
-				String questionEn = memoryId.getString(PathConversation.Q + "." + KeyQuestion.EN);
-				String questionJp = memoryId.getString(PathConversation.Q + "." + KeyQuestion.JP);
-				conversation.question = new ConversationQuestion().create(questionEn, questionJp);
-			}
-
-			path = Enums.PathConversation.A.toString();
-			if(memoryId.contains(path + "." + KeyAnswer.EN.toString()) && memoryId.contains(path + "." + KeyAnswer.JP.toString())) {
-				List<String> answerEn = memoryId.getStringList(PathConversation.A + "." + KeyAnswer.EN);
-				List<String> answerJp = memoryId.getStringList(PathConversation.A + "." + KeyAnswer.JP);
-				conversation.answer = new ConversationAnswer().create(answerEn, answerJp);
-			}
-
 			if(memoryId.contains(PathConversation.COMMENT.toString())) {
 				Map<String, DataComment> mapComment = new HashMap<String, DataComment>();
 				MemorySection memoryComment = (MemorySection) memoryId.get(PathConversation.COMMENT.toString());
@@ -129,10 +113,6 @@ public class ConfigHandlerConversation extends ConfigHandler {
 		config.set(path + "." + PathConversation.KANA, kana);
 		config.set(path + "." + PathConversation.EN, en);
 		config.set(path + "." + PathConversation.KEY, conversation.getKey());
-		config.set(path + "." + PathConversation.Q + "." + KeyQuestion.EN, conversation.question.getEn());
-		config.set(path + "." + PathConversation.Q + "." + KeyQuestion.JP, conversation.question.getJp());
-		config.set(path + "." + PathConversation.A + "." + KeyAnswer.EN, conversation.answer.getEn());
-		config.set(path + "." + PathConversation.A + "." + KeyAnswer.JP, conversation.answer.getJp());
 		for(DataComment comment : conversation.mapComment.values()) {
 			String pathComment = path + "." + PathConversation.COMMENT + "." + comment.sender;
 			config.set(pathComment + "." + PathComment.STATE, comment.state.toString());

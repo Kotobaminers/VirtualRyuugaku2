@@ -17,6 +17,7 @@ public class ScoreboardTalk extends ScoreboardUtility {
 	private static Map<String, Scoreboard> mapScoreboard = new HashMap<String, Scoreboard>();
 	private static Map<String, Objective> mapObjective = new HashMap<String, Objective>();
 	public static final String NAME_BOARD = ChatColor.LIGHT_PURPLE + "* Mahou Jisho *";
+	public static final String QUESTION = ChatColor.GOLD + "Question";
 	public static final String FIND_PEOPLE = ChatColor.GREEN + "Find People";
 	public static final String PRACTICE = ChatColor.AQUA + "Practice";
 
@@ -30,10 +31,14 @@ public class ScoreboardTalk extends ScoreboardUtility {
 			}
 		}
 		scores.put(stage, keyTotal);
-		Talk talk = conversation.listTalk.get(data.line);
-		scores.put(talk.name, talk.id.intValue());
-		scores.put(FIND_PEOPLE, data.getScore(player, PlayerScore.FIND_PEOPLE));//TODO data.practice will be replaced.
-		scores.put(PRACTICE, 0);//TODO data.practice will be replaced.
+		if(data.line < conversation.listTalk.size()) {
+			Talk talk = conversation.listTalk.get(data.line);
+			scores.put(talk.name, talk.id.intValue());
+		}
+		Integer question = DataManagerConversation.getNumberQuestion(stage);
+		scores.put(QUESTION + "(" + question.toString() + ")", data.questionDone.size());
+		scores.put(FIND_PEOPLE, data.getScore(PlayerScore.FIND_PEOPLE));
+		scores.put(PRACTICE, data.getScore(PlayerScore.PRACTICE));//TODO data.practice will be replaced.
 		updateScoreboard(player, NAME_BOARD, scores);
 	}
 

@@ -91,11 +91,11 @@ public class GameFindPeople {
 	}
 
 	void correct(Player player) {
-		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.FIND_PEOPLE_CORRECT_0, null));
+		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.CORRECT_0, null));
 		player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 1);
 	}
 	void wrong(Player player) {
-		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.FIND_PEOPLE_WRONG_0, null));
+		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.WRONG_0, null));
 		player.playSound(player.getLocation(), Sound.ITEM_BREAK, 1, 1);
 		GameFindPeopleHandler.initializeGame(player);
 	}

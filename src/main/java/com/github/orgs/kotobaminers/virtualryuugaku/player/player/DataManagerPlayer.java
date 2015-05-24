@@ -7,8 +7,6 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.DataManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
@@ -61,8 +59,8 @@ public class DataManagerPlayer implements DataManager {
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
 		data.select = id;
 		data.line = 0;
-		String[] opts = {id.toString()};
-		MessengerGeneral.print(player, Message.SELECT_TALKER_1, opts);
+//		String[] opts = {id.toString()};
+//		MessengerGeneral.print(player, Message.SELECT_TALKER_1, opts);
 	}
 
 	@Override

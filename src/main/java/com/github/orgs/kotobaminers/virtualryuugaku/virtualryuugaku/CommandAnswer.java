@@ -6,6 +6,7 @@ import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.StageGameDataStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
@@ -16,7 +17,7 @@ public class CommandAnswer extends MyCommand {
 		super(player, command, args);
 	}
 	private enum Commands {
-		DEFAULT, PRACTICE, LEARN, TEST,;
+		DEFAULT, PRACTICE, LEARN, TEST, CONVERSATION, CONV, C;
 		private static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -45,9 +46,26 @@ public class CommandAnswer extends MyCommand {
 			case PRACTICE:
 				commandPractice();
 				break;
+			case C:
+			case CONV:
+			case CONVERSATION:
+				commandConversation();
+				break;
 			default:
 				break;
 			}
+		}
+	}
+
+	private void commandConversation() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		if(1 < args.length) {
+			List<String> list = new ArrayList<String>();
+			for(int i = 1; i < args.length; i++) {
+				list.add(args[i]);
+			}
+			String answer = UtilitiesGeneral.joinStrings(list, " ");
+			DataManagerPlayer.getDataPlayer(player).question.validateQuestion(player, answer);
 		}
 	}
 
@@ -79,7 +97,7 @@ public class CommandAnswer extends MyCommand {
 
 	private void commandPractice() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		if(1< args.length) {
+		if(1 < args.length) {
 			if(StageGameDataStorage.existsPractice(player.getName())) {
 				List<String> list = new ArrayList<String>();
 				for(Integer i = 1; i < args.length; i++) {

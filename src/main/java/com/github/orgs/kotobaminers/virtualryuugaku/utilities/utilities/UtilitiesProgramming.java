@@ -83,10 +83,8 @@ public class UtilitiesProgramming {
 		for(Talk talk : conversation.listTalk) {
 			printDebugTalk(talk);
 		}
-		printDebugMessage(" Q(EN): " + conversation.question.getEn(), new Exception());
-		printDebugMessage(" Q(JP): " + conversation.question.getJp(), new Exception());
-		printDebugMessage(" A(EN): " + UtilitiesGeneral.joinStrings(conversation.answer.getEn(), ", "), new Exception());
-		printDebugMessage(" A(JP): " + UtilitiesGeneral.joinStrings(conversation.answer.getJp(), ", "), new Exception());
+		printDebugMessage(conversation.question.getQuestion(), new Exception());
+		printDebugMessage(UtilitiesGeneral.joinStrings(conversation.question.getAnswers(), ", "), new Exception());
 		for(DataComment comment : conversation.mapComment.values()) {
 			printDebugComment(comment);
 		}

@@ -64,7 +64,7 @@ public class ConfigHandlerPlayer extends ConfigHandler {
 		String pathLanguage = name + "." + PathPlayer.LANGUAGE;
 		config.set(pathLanguage, data.expression.toString());
 		String pathDone = name + "." + PathPlayer.DONE;
-		config.set(pathDone, data.done);
+		config.set(pathDone, data.questionDone);
 	}
 	@Override
 	public File getFile() {

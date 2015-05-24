@@ -6,13 +6,14 @@ import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.BookOpen;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Japanese;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Language;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.CommandStage;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
@@ -22,7 +23,7 @@ public class CommandVirtualRyuugaku extends MyCommand {
 		super(player, command, args);
 	}
 	private enum Commands {
-		NONE, LANGUAGE, LANG, JAPANESE, JP, EN, KANJI, KANA, ROMAJI, TEST;
+		NONE, LANGUAGE, LANG, EN, KANJI, KANA, ROMAJI, TEST, BOOK, S, STAGE;
 		public static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -33,6 +34,7 @@ public class CommandVirtualRyuugaku extends MyCommand {
 			}
 		}
 	}
+
 	@Override
 	public void runCommand() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -44,10 +46,6 @@ public class CommandVirtualRyuugaku extends MyCommand {
 			case LANG:
 				commandLanguage();
 				break;
-			case JAPANESE:
-			case JP:
-				commandJapanese();
-				break;
 			case EN:
 			case KANJI:
 			case KANA:
@@ -57,6 +55,14 @@ public class CommandVirtualRyuugaku extends MyCommand {
 			case TEST:
 				break;
 			case NONE:
+				break;
+			case BOOK:
+				String[] book = {"aaa", "bbb"};
+				BookOpen.openBook(player, book);
+				break;
+			case S:
+			case STAGE:
+				new CommandStage(player, command, args).runCommand();
 				break;
 			default:
 				break;
@@ -84,25 +90,6 @@ public class CommandVirtualRyuugaku extends MyCommand {
 		}
 	}
 
-	private void commandJapanese() {
-		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-		switch(data.japanese) {
-		case ROMAJI:
-			data.japanese = Japanese.KANA;
-			break;
-		case KANA:
-			data.japanese = Japanese.KANJI;
-			break;
-		case KANJI:
-			data.japanese = Japanese.ROMAJI;
-			break;
-		case DEFAULT:
-		default:
-			break;
-		}
-		String[] opts = {data.japanese.toString()};
-		player.sendMessage(MessengerGeneral.getMessage(Message.COMMAND_VRG_JAPANESE_1, opts));
-	}
 	private void commandLanguage() {
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
 		switch(data.language) {

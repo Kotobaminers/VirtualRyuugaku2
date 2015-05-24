@@ -27,6 +27,30 @@ public class UtilitiesGeneral {
 		}
 		return kana;
 	}
+	public static List<String> addRomaji(List<String> strings) {
+		List<String> list = new ArrayList<String>();
+		for (String string : strings) {
+			list.add(string);
+			if (!isHalfWidthAlphanumeric(string)) {
+				String romaji = toRomaji(string);
+				if (isHalfWidthAlphanumeric(romaji)) {
+					list.add(romaji);
+				}
+			}
+		}
+		return list;
+	}
+	private static boolean isHalfWidthAlphanumeric(String string) {
+		if ( string == null || string.length() == 0 ) {
+			return false;
+		}
+		int len = string.length();
+		byte[] bytes = string.getBytes();
+		if ( len == bytes.length ) {
+			return true;
+		}
+		return false;
+	}
 
 	public static void sendMessageAll(String message) {
 		for(Player player : Bukkit.getServer().getOnlinePlayers()) {

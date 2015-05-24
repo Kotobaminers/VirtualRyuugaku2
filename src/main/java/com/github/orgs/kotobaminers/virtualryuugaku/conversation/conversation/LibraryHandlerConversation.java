@@ -10,8 +10,6 @@ import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManage
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.PathConversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationAnswer.KeyAnswer;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationQuestion.KeyQuestion;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
@@ -32,8 +30,6 @@ public class LibraryHandlerConversation {
 					conversation.stage = stage;
 					conversation.editor.addAll(editor);
 					//Name will be imported from citizens data.
-
-					UtilitiesProgramming.printDebugMessage("", new Exception());
 					if(memoryId.contains(Enums.PathConversation.EN.toString()) && memoryId.contains(Enums.PathConversation.KANJI.toString()) && memoryId.contains(Enums.PathConversation.KANA.toString())) {
 						List<String> kanji = memoryId.getStringList(PathConversation.KANJI.toString());
 						List<String> kana = memoryId.getStringList(PathConversation.KANA.toString());
@@ -64,18 +60,10 @@ public class LibraryHandlerConversation {
 						conversation.setKey(key);
 					}
 
-					path = Enums.PathConversation.Q.toString();
-					if(memoryId.contains(path + "." + KeyQuestion.EN.toString()) && memoryId.contains(path + "." + KeyQuestion.JP.toString())) {
-						String questionEn = memoryId.getString(PathConversation.Q + "." + KeyQuestion.EN);
-						String questionJp = memoryId.getString(PathConversation.Q + "." + KeyQuestion.JP);
-						conversation.question = new ConversationQuestion().create(questionEn, questionJp);
-					}
-
-					path = Enums.PathConversation.A.toString();
-					if(memoryId.contains(path + "." + KeyAnswer.EN.toString()) && memoryId.contains(path + "." + KeyAnswer.JP.toString())) {
-						List<String> answerEn = memoryId.getStringList(PathConversation.A + "." + KeyAnswer.EN);
-						List<String> answerJp = memoryId.getStringList(PathConversation.A + "." + KeyAnswer.JP);
-						conversation.answer = new ConversationAnswer().create(answerEn, answerJp);
+					if(memoryId.contains(PathConversation.Q.toString()) && memoryId.contains(PathConversation.A.toString())) {
+						String q = memoryId.getString(PathConversation.Q.toString());
+						List<String> a = UtilitiesGeneral.addRomaji(memoryId.getStringList(PathConversation.A.toString()));
+						conversation.question = ConversationQuestion.create(q, a, order, stage);
 					}
 
 					//Comments will be imported from Talker.yml

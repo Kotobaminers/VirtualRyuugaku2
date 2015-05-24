@@ -13,6 +13,8 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGener
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
+import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer.PlayerScore;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
@@ -87,6 +89,7 @@ public abstract class StageGameHandler {
 		String[] opts = {player.getName()};
 		MessengerGeneral.broadcast(MessengerGeneral.getMessage(Message.STAGE_FINISH_1, opts));
 		FireworkUtility.shootFirework(player.getWorld(), player.getLocation(), Type.BALL_LARGE, FireworkColor.GREEN, FireworkColor.AQUA, 0);
+		DataManagerPlayer.getDataPlayer(player).addScore(player, PlayerScore.PRACTICE);
 	}
 	private void validateCorrect(Player player) {
 		StageQuestion stageQuestion = getStageQuestion();

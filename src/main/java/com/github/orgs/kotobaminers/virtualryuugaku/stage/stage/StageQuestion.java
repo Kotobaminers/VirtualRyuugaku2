@@ -64,8 +64,8 @@ public class StageQuestion {
 	}
 
 	public void printQuestion(Player player) {
+		MessengerGeneral.print(player, MessengerGeneral.getPartitionQuestion());
 		String[] opts = {getQuestion(player), Language.convertStringOpposite(language)};
-		UtilitiesProgramming.printDebugMessage(UtilitiesGeneral.joinStrings(opts, " "), new Exception());
 		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.STAGE_QUESTION_2, opts));
 	}
 

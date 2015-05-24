@@ -9,8 +9,8 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Japanese;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Language;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationQuestion;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class DataPlayer {
@@ -19,13 +19,13 @@ public class DataPlayer {
 	public Integer select = -1;
 	public Expression expression = Expression.ROMAJI;
 	public Language language = Language.JP;
-	public Japanese japanese = Japanese.ROMAJI;
-	public List<Integer> done = new ArrayList<Integer>();
+	public List<List<Integer>> questionDone = new ArrayList<List<Integer>>();
 	public List<Expression> expressions = new ArrayList<Expression>(Arrays.asList(Expression.EN, Expression.KANJI, Expression.KANA, Expression.ROMAJI));
+	public ConversationQuestion question = new ConversationQuestion();
 	public Map<PlayerScore, Integer> mapScore = new HashMap<PlayerScore, Integer>();
 	public enum PlayerScore {PRACTICE, FIND_PEOPLE}
 
-	public Integer getScore(Player player, PlayerScore score) {
+	public Integer getScore(PlayerScore score) {
 		Integer value = 0;
 		if (mapScore.containsKey(score)) {
 			value = mapScore.get(score);
@@ -34,11 +34,17 @@ public class DataPlayer {
 		}
 		return value;
 	}
+
 	public void addScore(Player player, PlayerScore score) {
-		Integer value = getScore(player, score);
+		Integer value = getScore(score);
 		mapScore.put(score, ++value);
-		UtilitiesProgramming.printDebugMessage(getScore(player, PlayerScore.FIND_PEOPLE).toString(), new Exception());
 	}
 
-
+	public void addQuestionDone(Player player, List<Integer> key) {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
+		if(!data.questionDone.contains(key)) {
+			data.questionDone.add(key);
+		}
+	}
 }

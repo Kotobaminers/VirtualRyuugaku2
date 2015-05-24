@@ -6,7 +6,7 @@ public class Enums {//public enums
 	public enum Commands {
 		VIRTUALRYUUGAKU, VRG,
 		VIRTUALRYUUGAKUOP, VRGOP, VRGDBG,
-		STAGE, STAGEOP,
+		STAGEOP,
 		CONVERSATION, CONVERSATIONOP,
 		CONV, CONVOP,
 		ANSWER, ANS,
@@ -43,17 +43,6 @@ public class Enums {//public enums
 			}
 		}
 	}
-	public enum Japanese {DEFAULT, KANJI, KANA, ROMAJI;
-	public static Japanese lookup(String name) {
-		try {
-			UtilitiesProgramming.printDebugMessage("", new Exception());
-			return Japanese.valueOf(name.toUpperCase());
-		} catch (IllegalArgumentException e) {
-			UtilitiesProgramming.printDebugMessage(e.toString(), new Exception());
-			return Japanese.ROMAJI;
-		}
-	}
-}
 	public enum PathConversation {STAGE, EDITOR, EN, KANJI, KANA, KEY, Q, A, COMMENT}
 	public enum PathComment {STATE, EXPRESSION}
 }

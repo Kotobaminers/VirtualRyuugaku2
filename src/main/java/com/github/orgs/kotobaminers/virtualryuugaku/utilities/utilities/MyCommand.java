@@ -12,5 +12,6 @@ public abstract class MyCommand {
 		this.command = command;
 		this.args = args;
 	}
+
 	public abstract void runCommand();
 }

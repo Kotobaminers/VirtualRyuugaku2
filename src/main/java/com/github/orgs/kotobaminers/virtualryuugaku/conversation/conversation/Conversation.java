@@ -27,7 +27,6 @@ public class Conversation {
 	private List<Integer> key = new ArrayList<Integer>();
 	public Map<String, DataComment> mapComment = new HashMap<String, DataComment>();
 	public ConversationQuestion question = new ConversationQuestion();
-	public ConversationAnswer answer = new ConversationAnswer();
 
 	public List<Integer> getOrder() {
 		List<Integer> order = new ArrayList<Integer>();
@@ -38,13 +37,14 @@ public class Conversation {
 	}
 
 	public void talkNext(Player player, DataPlayer data) {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
+		UtilitiesProgramming.printDebugMessage(listTalk.size() + " " + data.line, new Exception());
 		if(0 < listTalk.size()) {
-			if(listTalk.size() - 1 < data.line) {
-				data.line = 0;
+			if(listTalk.size() <= data.line) {
+				question.giveQuestion(player, question);
+			} else {
+				Talk talk = listTalk.get(data.line);
+				talk.print(player);
 			}
-			Talk talk = listTalk.get(data.line);
-			talk.print(player);
 		} else {
 			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.NO_SENTENCE_0, null));
 			if(editor.contains(player.getName())) {
@@ -65,16 +65,6 @@ public class Conversation {
 		}
 		return true;
 	}
-	public Boolean hasAnswerEn() {
-		if(0 < answer.getEn().size()) return true;
-		UtilitiesProgramming.printDebugMessage("No Answer in EN", new Exception());
-		return false;
-	}
-	public Boolean hasAnswerJp() {
-		if(0 < answer.getJp().size()) return true;
-		UtilitiesProgramming.printDebugMessage("No Answer in JP", new Exception());
-		return false;
-	}
 
 	public void printInformation(Player player) {
 //		if(isEmpty()) return;
@@ -94,6 +84,7 @@ public class Conversation {
 //			}
 //		}
 	}
+
 	public Boolean canEdit(String playerName) {
 		if(editor.contains(playerName)){
 			return true;
@@ -115,6 +106,14 @@ public class Conversation {
 		}
 		return false;
 	}
+	public boolean hasValidQuestion() {
+		UtilitiesProgramming.printDebugMessage("" + editor.size(), new Exception());
+		if(0 < question.getQuestion().length() && 0 < question.getAnswers().size()) {
+			return true;
+		}
+		return false;
+	}
+
 	public List<Integer> getKey() {
 		return key;
 	}
