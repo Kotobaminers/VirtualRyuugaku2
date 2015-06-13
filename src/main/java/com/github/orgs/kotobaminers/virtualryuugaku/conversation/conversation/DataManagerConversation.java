@@ -80,7 +80,7 @@ public class DataManagerConversation implements DataManager {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		for(Conversation talker : getMapConversation().values()) {
 			UtilitiesProgramming.printDebugMessage("", new Exception());
-			ConfigHandlerConversation.saveConversation(talker);
+//			ConfigHandlerConversation.saveConversation(talker);
 		}
 		new ConfigHandlerConversation().save();
 	}

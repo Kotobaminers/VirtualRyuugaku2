@@ -2,20 +2,14 @@ package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManagerCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.PathComment;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.PathConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment.CommentState;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.ConfigHandler;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
@@ -25,64 +19,64 @@ public class ConfigHandlerConversation extends ConfigHandler {
 	public static File file;
 	public static final String DIRECTORY = "TALKER";
 	public static final String FILE_NAME = "TALKER.yml";
-	//Talker
+	//Not used for now
 	public static List<Conversation> importConversationDefault() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		List<Conversation> list = new ArrayList<Conversation>();
-		for(String idString : config.getKeys(false)) {
-			MemorySection memoryId = (MemorySection) config.get(idString);
-			List<Integer> order = UtilitiesGeneral.toListInteger(idString);
-			Conversation conversation = new Conversation();
-			conversation.stage = memoryId.getString(PathConversation.STAGE.toString());
-			conversation.editor.addAll(memoryId.getStringList(PathConversation.EDITOR.toString()));
-			//Name will be imported from citizens data.
-
-			if(memoryId.contains(Enums.PathConversation.EN.toString()) && memoryId.contains(Enums.PathConversation.KANJI.toString()) && memoryId.contains(Enums.PathConversation.KANA.toString())) {
-				List<String> kanji = memoryId.getStringList(PathConversation.KANJI.toString());
-				List<String> kana = memoryId.getStringList(PathConversation.KANA.toString());
-				List<String> en = memoryId.getStringList(PathConversation.EN.toString());
-				Integer size = order.size();
-				if(size.equals(kana.size()) && size.equals(kana.size()) && size.equals(en.size())) {
-					for(int i = 0; i < size; i++) {
-						if(Conversation.isValidCitizensId(order)) {
-							String name = DataManagerCitizens.getDataCitizens(order.get(i)).name;
-							Description description = Description.create(kanji.get(i), kana.get(i), en.get(i), new ArrayList<String>());
-							Talk talk = new Talk().create(order.get(i), name, description);
-							conversation.listTalk.add(talk);
-						} else {
-							UtilitiesProgramming.printDebugMessage("Invalid NPC: " + i, new Exception());
-						}
-					}
-				} else {
-					UtilitiesProgramming.printDebugMessage("Invalid: if(size.equals(kana.size()) && size.equals(kana.size()) && size.equals(en.size()))", new Exception());
-				}
-			}
-
-			String path = Enums.PathConversation.KEY.toString();
-			if(memoryId.contains(path)) {
-				List<Integer> key = new ArrayList<Integer>();
-				for (int i : memoryId.getIntegerList(path)) {
-					key.add(i - 1);
-				}
-				conversation.setKey(key);
-			}
-
-			if(memoryId.contains(PathConversation.COMMENT.toString())) {
-				Map<String, DataComment> mapComment = new HashMap<String, DataComment>();
-				MemorySection memoryComment = (MemorySection) memoryId.get(PathConversation.COMMENT.toString());
-				for(String sender : memoryComment.getKeys(false)) {
-					DataComment comment = new DataComment();
-					comment.sender = sender;
-					String pathComment = sender;
-					comment.expression = memoryComment.getString(pathComment + "." + PathComment.EXPRESSION);
-					comment.state = CommentState.lookup(memoryComment.getString(pathComment + "." + PathComment.STATE));
-					mapComment.put(sender, comment);
-				}
-				conversation.mapComment = mapComment;
-			}
-
-			list.add(conversation);
-		}
+//		for(String idString : config.getKeys(false)) {
+//			MemorySection memoryId = (MemorySection) config.get(idString);
+//			List<Integer> order = UtilitiesGeneral.toListInteger(idString);
+//			Conversation conversation = new Conversation();
+//			conversation.stage = memoryId.getString(PathConversation.STAGE.toString());
+//			conversation.editor.addAll(memoryId.getStringList(PathConversation.EDITOR.toString()));
+//			//Name will be imported from citizens data.
+//
+//			if(memoryId.contains(Enums.PathConversation.EN.toString()) && memoryId.contains(Enums.PathConversation.KANJI.toString()) && memoryId.contains(Enums.PathConversation.KANA.toString())) {
+//				List<String> kanji = memoryId.getStringList(PathConversation.KANJI.toString());
+//				List<String> kana = memoryId.getStringList(PathConversation.KANA.toString());
+//				List<String> en = memoryId.getStringList(PathConversation.EN.toString());
+//				Integer size = order.size();
+//				if(size.equals(kana.size()) && size.equals(kana.size()) && size.equals(en.size())) {
+//					for(int i = 0; i < size; i++) {
+//						if(Conversation.isValidCitizensId(order)) {
+//							String name = DataManagerCitizens.getDataCitizens(order.get(i)).name;
+//							Description description = Description.create(kanji.get(i), kana.get(i), en.get(i), new ArrayList<String>());
+//							Talk talk = new Talk().create(order.get(i), name, description);
+//							conversation.listTalk.add(talk);
+//						} else {
+//							UtilitiesProgramming.printDebugMessage("Invalid NPC: " + i, new Exception());
+//						}
+//					}
+//				} else {
+//					UtilitiesProgramming.printDebugMessage("Invalid: if(size.equals(kana.size()) && size.equals(kana.size()) && size.equals(en.size()))", new Exception());
+//				}
+//			}
+//
+//			String path = Enums.PathConversation.KEY.toString();
+//			if(memoryId.contains(path)) {
+//				List<Integer> key = new ArrayList<Integer>();
+//				for (int i : memoryId.getIntegerList(path)) {
+//					key.add(i - 1);
+//				}
+//				conversation.setKey(key);
+//			}
+//
+//			if(memoryId.contains(PathConversation.COMMENT.toString())) {
+//				Map<String, DataComment> mapComment = new HashMap<String, DataComment>();
+//				MemorySection memoryComment = (MemorySection) memoryId.get(PathConversation.COMMENT.toString());
+//				for(String sender : memoryComment.getKeys(false)) {
+//					DataComment comment = new DataComment();
+//					comment.sender = sender;
+//					String pathComment = sender;
+//					comment.expression = memoryComment.getString(pathComment + "." + PathComment.EXPRESSION);
+//					comment.state = CommentState.lookup(memoryComment.getString(pathComment + "." + PathComment.STATE));
+//					mapComment.put(sender, comment);
+//				}
+//				conversation.mapComment = mapComment;
+//			}
+//
+//			list.add(conversation);
+//		}
 		return list;
 	}
 	public static void saveConversation(Conversation conversation) {
@@ -112,7 +106,6 @@ public class ConfigHandlerConversation extends ConfigHandler {
 		config.set(path + "." + PathConversation.KANJI, kanji);
 		config.set(path + "." + PathConversation.KANA, kana);
 		config.set(path + "." + PathConversation.EN, en);
-		config.set(path + "." + PathConversation.KEY, conversation.getKey());
 		for(DataComment comment : conversation.mapComment.values()) {
 			String pathComment = path + "." + PathConversation.COMMENT + "." + comment.sender;
 			config.set(pathComment + "." + PathComment.STATE, comment.state.toString());

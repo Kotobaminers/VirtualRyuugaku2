@@ -17,7 +17,7 @@ public class CommandAnswer extends MyCommand {
 		super(player, command, args);
 	}
 	private enum Commands {
-		DEFAULT, PRACTICE, LEARN, TEST, CONVERSATION, CONV, C;
+		DEFAULT, TRAINING, T, LEARN, TEST, CONVERSATION, CONV, C;
 		private static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -43,7 +43,8 @@ public class CommandAnswer extends MyCommand {
 			case LEARN:
 				commandLearn();
 				break;
-			case PRACTICE:
+			case TRAINING:
+			case T:
 				commandPractice();
 				break;
 			case C:

@@ -24,7 +24,6 @@ public class Conversation {
 	public String stage = "";
 	public List<String> editor = new ArrayList<String>();
 	public List<Talk> listTalk = new ArrayList<Talk>();
-	private List<Integer> key = new ArrayList<Integer>();
 	public Map<String, DataComment> mapComment = new HashMap<String, DataComment>();
 	public ConversationQuestion question = new ConversationQuestion();
 
@@ -52,6 +51,7 @@ public class Conversation {
 			}
 		}
 	}
+
 	public void talkEffect(Player player, NPC npc) {
 		player.getWorld().playEffect(npc.getStoredLocation().add(0, 2, 0), Effect.SMOKE, 22);//data is 22(None direction value).
 	}
@@ -64,6 +64,17 @@ public class Conversation {
 			return false;
 		}
 		return true;
+	}
+
+	public List<Talk> getKeySentence() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		List<Talk> talks = new ArrayList<Talk>();
+		for (Talk talk : listTalk) {
+			if (talk.key) {
+				talks.add(talk);
+			}
+		}
+		return talks;
 	}
 
 	public void printInformation(Player player) {
@@ -113,12 +124,4 @@ public class Conversation {
 		}
 		return false;
 	}
-
-	public List<Integer> getKey() {
-		return key;
-	}
-	public void setKey(List<Integer> key) {
-		this.key = key;
-	}
-
 }

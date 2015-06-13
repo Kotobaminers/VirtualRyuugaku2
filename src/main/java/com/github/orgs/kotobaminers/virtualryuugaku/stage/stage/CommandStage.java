@@ -15,6 +15,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Co
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GameFindPeople.Mode;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
@@ -137,11 +138,19 @@ public class CommandStage extends MyCommand {
 	private void commandFindPeople() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		if(2 < args.length) {
-			String stage = args[3];
-			GameFindPeopleHandler.loadNewGame(player, player.getName(), stage);
+			String stage = args[2];
+			GameFindPeopleHandler.loadNewGameRandom(player, player.getName(), stage);
+			if (3 < args.length) {
+				String modeString = args[3];
+				if(modeString.equalsIgnoreCase(Mode.EN.toString())) {
+					GameFindPeopleHandler.setGameModeEN(player);
+				} else if (modeString.equalsIgnoreCase(Mode.JP.toString())) {
+					GameFindPeopleHandler.setGameModeJP(player);
+				}
+			}
+			GameFindPeopleHandler.startGame(player);
 		}
 	}
-
 
 	private void commandLearn() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());

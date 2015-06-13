@@ -13,6 +13,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGener
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer.PlayerScore;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
@@ -29,14 +30,9 @@ public abstract class StageGameHandler {
 			UtilitiesProgramming.printDebugMessage(conversation.stage + " " + stage, new Exception());
 			UtilitiesProgramming.printDebugConversation(conversation);
 			if(conversation.stage.equalsIgnoreCase(stage)) {
-				List<Integer> keys = conversation.getKey();
 				UtilitiesProgramming.printDebugMessage("", new Exception());
-				System.out.println(keys);
-				if (0 < keys.size()) {
-					for(Integer key : keys) {
-						UtilitiesProgramming.printDebugMessage("key = " + key.toString(), new Exception());
-						stageQuestions.add(new StageQuestion().loadStageQuestionRandom(conversation.listTalk.get(key)));
-					}
+				for(Talk talk : conversation.getKeySentence()) {
+					stageQuestions.add(new StageQuestion().loadStageQuestionRandom(talk));
 				}
 			}
 		}
@@ -110,7 +106,7 @@ public abstract class StageGameHandler {
 	public static boolean existsStage(String stage) {
 		for(Conversation conversation : DataManagerConversation.getMapConversation().values()) {
 			if(conversation.stage.equalsIgnoreCase(stage)) {
-				if(0 < conversation.getKey().size()) {
+				if(0 < conversation.getKeySentence().size()) {
 					return true;
 				}
 			}

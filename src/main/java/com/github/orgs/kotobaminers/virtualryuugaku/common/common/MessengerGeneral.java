@@ -10,8 +10,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utilitie
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class MessengerGeneral {
-	public static final String MARK_JP = ChatColor.RED +"*JP* " + ChatColor.RESET;
-	public static final String MARK_EN = ChatColor.AQUA +"*EN* " + ChatColor.RESET;
+	public static final String MARK_KEY = ChatColor.YELLOW +"*KEY* " + ChatColor.RESET;
 	private static final String MESSENGER_PREFIX = "" + ChatColor.GOLD + ChatColor.BOLD +"[" + ChatColor.YELLOW + "VRG" + ChatColor.GOLD + ChatColor.BOLD + "] " + ChatColor.RESET;
 	private static final String getPartition(String mark1, String mark2, ChatColor color1, ChatColor color2) {
 		String partition = "  ";
@@ -93,8 +92,8 @@ public class MessengerGeneral {
 		COMMAND_VRG_LANGUAGE_1,
 		COMMAND_VRG_EXPRESSIONS_1,
 		COMMAND_VRG_EXPRESSIONS_OFF_0,
-		DESCRIPTION_EN_2,
-		DESCRIPTION_JP_2,
+		DESCRIPTION_2,
+		DESCRIPTION_KEY_2,
 		CONVERSATION_HINT_2
 		;
 	}
@@ -158,8 +157,8 @@ public class MessengerGeneral {
 		case COMMAND_VRG_LANGUAGE_1: message += "Your learning language is set as " + opts[0] + "."; break;
 		case COMMAND_VRG_EXPRESSIONS_1: message += "Your current languages are " + opts[0] + "."; break;
 		case COMMAND_VRG_EXPRESSIONS_OFF_0: message += "Your current VRG output is OFF."; break;
-		case DESCRIPTION_EN_2: message = opts[0] + ChatColor.RESET + ": " + opts[1] + " " + MARK_EN; break;
-		case DESCRIPTION_JP_2: message = opts[0] + ChatColor.RESET + ": " + opts[1] + " " + MARK_JP; break;
+		case DESCRIPTION_2: message = opts[0] + ChatColor.RESET + ": " + opts[1]; break;
+		case DESCRIPTION_KEY_2: message = opts[0] + ChatColor.RESET + ": " + opts[1] + " " + MARK_KEY; break;
 		default: break;
 		}
 		return message;

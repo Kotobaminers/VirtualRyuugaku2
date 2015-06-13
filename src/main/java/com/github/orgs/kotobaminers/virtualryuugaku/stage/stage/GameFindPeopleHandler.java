@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.bukkit.entity.Player;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GameFindPeople.Mode;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class GameFindPeopleHandler {
@@ -13,11 +14,24 @@ public class GameFindPeopleHandler {
 		return mapGame;
 	}
 
-	public static void loadNewGame(Player player, String name, String stage) {
+	public static void loadNewGameRandom(Player player, String name, String stage) {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
 		GameFindPeople game = GameFindPeople.createGame(player, stage);
 		mapGame.put(name, game);
+	}
+	public static void setGameModeJP(Player player) {
+		GameFindPeople game = mapGame.get(player.getName());
+		game.mode = Mode.JP;
+	}
+	public static void setGameModeEN(Player player) {
+		GameFindPeople game = mapGame.get(player.getName());
+		game.mode = Mode.EN;
+	}
+	public static void startGame(Player player) {
+		GameFindPeople game = mapGame.get(player.getName());
 		game.tryNext();
 	}
+
 	public static void initializeGame(Player player) {
 		if (mapGame.containsKey(player.getName())) {
 			mapGame.remove(player.getName());

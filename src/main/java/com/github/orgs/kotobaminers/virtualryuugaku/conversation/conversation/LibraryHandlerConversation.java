@@ -52,16 +52,12 @@ public class LibraryHandlerConversation {
 
 					String path = Enums.PathConversation.KEY.toString();
 					if(memoryId.contains(path)) {
-						List<Integer> key = new ArrayList<Integer>();
-						key = memoryId.getIntegerList(path);
-						System.out.println(key);
-						if (0 < key.size()) {
-							for (int i = 0; i < key.size(); i++) {
-								key.set(i, key.get(i) - 1);
+						List<Integer> key = memoryId.getIntegerList(path);
+						for (int i = 0; i < conversation.listTalk.size(); i++) {
+							if(key.contains(i + 1)) {
+								conversation.listTalk.get(i).key = true;
 							}
 						}
-						System.out.println(key);
-						conversation.setKey(key);
 					}
 
 					if(memoryId.contains(PathConversation.Q.toString()) && memoryId.contains(PathConversation.A.toString())) {

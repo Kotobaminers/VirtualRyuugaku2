@@ -16,6 +16,7 @@ public class Talk {
 	public Integer id;
 	public String name;
 	public Description description;
+	public boolean key = false;
 
 	public Talk create(Integer id, String name, Description description) {
 		Talk talk = new Talk();
@@ -31,7 +32,11 @@ public class Talk {
 		}
 		if(expressions.contains(Expression.EN)) {
 			String[] opts = {name, description.getEnglishJoined()};
-			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.DESCRIPTION_EN_2, opts));
+			if(key) {
+				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.DESCRIPTION_KEY_2, opts));
+			} else {
+				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.DESCRIPTION_2, opts));
+			}
 		}
 		List<String> listJapanese = new ArrayList<String>();
 		if(expressions.contains(Expression.KANJI)) {
@@ -46,7 +51,11 @@ public class Talk {
 		String japanese = UtilitiesGeneral.joinStrings(listJapanese, ", ");
 		if(0 < japanese.length()) {
 			String[] opts = {name, description.getJapaneseJoined(player)};
-			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.DESCRIPTION_JP_2, opts));
+			if(key) {
+				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.DESCRIPTION_KEY_2, opts));
+			} else {
+				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.DESCRIPTION_2, opts));
+			}
 		}
 	}
 

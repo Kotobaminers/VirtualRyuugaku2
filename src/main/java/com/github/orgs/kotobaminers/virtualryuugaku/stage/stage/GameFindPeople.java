@@ -27,8 +27,10 @@ public class GameFindPeople {
 	public String stage = "";
 	public List<Talk> listTalk = new ArrayList<Talk>();
 	public Integer count = 0;
+	public Mode mode = Mode.RANDOM;
+	enum Mode {JP, EN, RANDOM}
 
-	public static GameFindPeople createGame(Player player, String stage) {
+ 	public static GameFindPeople createGame(Player player, String stage) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		GameFindPeople game = new GameFindPeople();
 		game.player = player;
@@ -36,9 +38,7 @@ public class GameFindPeople {
 		List<Talk> listTalk = new ArrayList<Talk>();
 		for(Conversation conversation : DataManagerConversation.getMapConversation().values()) {
 			if (conversation.stage.equalsIgnoreCase(stage)) {
-				for (Integer key : conversation.getKey()) {
-					listTalk.add(conversation.listTalk.get(key));
-				}
+				listTalk.addAll(conversation.getKeySentence());
 			}
 		}
 		if(0 < listTalk.size()) {
@@ -72,15 +72,27 @@ public class GameFindPeople {
 		UtilitiesProgramming.printDebugMessage("DBG: ANS ID == " + talk.id, new Exception());
 		Description description = talk.description;
 		String question = "";
-		Random random = new Random();
-		Integer i = random.nextInt(2);
-		UtilitiesProgramming.printDebugMessage(i.toString(), new Exception());
-		switch(i) {
-		default:
-		case 0:
+		Mode modeQuestion = mode;
+		if (mode.equals(Mode.RANDOM)) {
+			Random random = new Random();
+			Integer i = random.nextInt(2);
+			switch(i) {
+			case 0:
+				modeQuestion = Mode.EN;
+				break;
+			case 1:
+			default:
+				modeQuestion = Mode.JP;
+				break;
+			}
+		}
+		switch(modeQuestion) {
+		case EN:
 			question = UtilitiesGeneral.joinStrings(description.getEnglishList(), ", ");
 			break;
-		case 1:
+		case JP:
+		case RANDOM:
+		default:
 			question = UtilitiesGeneral.joinStrings(description.getJapaneseList(), ", ");
 			break;
 		}
