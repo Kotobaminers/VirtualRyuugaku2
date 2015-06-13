@@ -11,7 +11,6 @@ import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManagerCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.LibraryManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
@@ -35,34 +34,34 @@ public class DataManagerConversation implements DataManager {
 	private static void loadMapConversation() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		List<Conversation> list = new ArrayList<Conversation>();
-		list.addAll(ConfigHandlerConversation.importConversationDefault());
+//		list.addAll(ConfigHandlerConversation.importConversationDefault());
 		Map<String, YamlConfiguration> mapConfig = LibraryManager.getListLibraryStage();
 		for(String stage : mapConfig.keySet()) {
 			list.addAll(LibraryHandlerConversation.importConversationLibrary(stage, mapConfig.get(stage)));
 		}
 		for(Conversation conversation : list) {
-			if(Conversation.isValidCitizensId(conversation.getOrder())) {
-				overrideCitizens(conversation);
-				if(getMapConversation().containsKey(conversation.getOrder())) {
-					overrideComment(conversation);
-				}
-				putTalker(conversation);
-			} else {
+			if(!Conversation.isValidCitizensId(conversation.getOrder())) {
 				UtilitiesProgramming.printDebugMessage("Non Existing NPC ID: " + conversation.getOrder(), new Exception());
+//			} else {
+//				overrideCitizens(conversation);
+//				if(getMapConversation().containsKey(conversation.getOrder())) {
+//					overrideComment(conversation);
+//				}
 			}
+			putTalker(conversation);
 		}
 	}
-	private static void overrideComment(Conversation conversation) {
-		UtilitiesProgramming.printDebugMessage("Overriding Comment: ID: " + conversation.getOrder(), new Exception());
-		conversation.mapComment = getTalker(conversation.getOrder()).mapComment;
-	}
-	private static void overrideCitizens(Conversation conversation) {
-		for (Talk talk : conversation.listTalk) {
-			String name = DataManagerCitizens.getDataCitizens(talk.id).name;
-			UtilitiesProgramming.printDebugMessage("Overriding Citizens: ID: " + talk.id + ", Name: " + name, new Exception());
-			talk.name = name;
-		}
-	}
+//	private static void overrideComment(Conversation conversation) {
+//		UtilitiesProgramming.printDebugMessage("Overriding Comment: ID: " + conversation.getOrder(), new Exception());
+//		conversation.mapComment = getTalker(conversation.getOrder()).mapComment;
+//	}
+//	private static void overrideCitizens(Conversation conversation) {
+//		for (Talk talk : conversation.listTalk) {
+//			String name = DataManagerCitizens.getDataCitizens(talk.id).name;
+//			UtilitiesProgramming.printDebugMessage("Overriding Citizens: ID: " + talk.id + ", Name: " + name, new Exception());
+//			talk.name = name;
+//		}
+//	}
 
 	public static void printHint(Player player, String stage) {
 		List<String> answers = new ArrayList<String>();

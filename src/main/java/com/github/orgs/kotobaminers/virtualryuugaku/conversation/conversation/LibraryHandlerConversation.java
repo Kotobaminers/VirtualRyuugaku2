@@ -38,15 +38,14 @@ public class LibraryHandlerConversation {
 						if(size.equals(kanji.size()) && size.equals(kana.size()) && size.equals(en.size())) {
 							for(int i = 0; i < size; i++) {
 								UtilitiesProgramming.printDebugMessage("", new Exception());
-								if(Conversation.isValidCitizensId(order)) {
-									String name = DataManagerCitizens.getDataCitizens(order.get(i)).name;
-									Description description = Description.create(kanji.get(i), kana.get(i), en.get(i), new ArrayList<String>());
-									Talk talk = new Talk().create(order.get(i), name, description);
-									UtilitiesProgramming.printDebugTalk(talk);
-									conversation.listTalk.add(talk);
-								} else {
+								if(!Conversation.isValidCitizensId(order)) {
 									UtilitiesProgramming.printDebugMessage("Invalid Order: " + UtilitiesGeneral.toYamlStringListInteger(order), new Exception());
 								}
+								String name = DataManagerCitizens.getDataCitizens(order.get(i)).name;
+								Description description = Description.create(kanji.get(i), kana.get(i), en.get(i), new ArrayList<String>());
+								Talk talk = new Talk().create(order.get(i), name, description);
+								UtilitiesProgramming.printDebugTalk(talk);
+								conversation.listTalk.add(talk);
 							}
 						}
 					}
@@ -54,9 +53,14 @@ public class LibraryHandlerConversation {
 					String path = Enums.PathConversation.KEY.toString();
 					if(memoryId.contains(path)) {
 						List<Integer> key = new ArrayList<Integer>();
-						for (int i : memoryId.getIntegerList(path)) {
-							key.add(i - 1);
+						key = memoryId.getIntegerList(path);
+						System.out.println(key);
+						if (0 < key.size()) {
+							for (int i = 0; i < key.size(); i++) {
+								key.set(i, key.get(i) - 1);
+							}
 						}
+						System.out.println(key);
 						conversation.setKey(key);
 					}
 

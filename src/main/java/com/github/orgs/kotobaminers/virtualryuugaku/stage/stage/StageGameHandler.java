@@ -27,11 +27,16 @@ public abstract class StageGameHandler {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		for(Conversation conversation : DataManagerConversation.getMapConversation().values()) {
 			UtilitiesProgramming.printDebugMessage(conversation.stage + " " + stage, new Exception());
+			UtilitiesProgramming.printDebugConversation(conversation);
 			if(conversation.stage.equalsIgnoreCase(stage)) {
+				List<Integer> keys = conversation.getKey();
 				UtilitiesProgramming.printDebugMessage("", new Exception());
-				for(Integer key : conversation.getKey()) {
-					UtilitiesProgramming.printDebugMessage("", new Exception());
-					stageQuestions.add(new StageQuestion().loadStageQuestionRandom(conversation.listTalk.get(key)));
+				System.out.println(keys);
+				if (0 < keys.size()) {
+					for(Integer key : keys) {
+						UtilitiesProgramming.printDebugMessage("key = " + key.toString(), new Exception());
+						stageQuestions.add(new StageQuestion().loadStageQuestionRandom(conversation.listTalk.get(key)));
+					}
 				}
 			}
 		}
@@ -107,9 +112,6 @@ public abstract class StageGameHandler {
 			if(conversation.stage.equalsIgnoreCase(stage)) {
 				if(0 < conversation.getKey().size()) {
 					return true;
-				} else {
-					UtilitiesProgramming.printDebugMessage("Valid Game But Without Keys: " + stage, new Exception());
-					return false;
 				}
 			}
 		}

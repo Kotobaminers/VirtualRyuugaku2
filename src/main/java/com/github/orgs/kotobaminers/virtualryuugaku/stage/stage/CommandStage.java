@@ -24,7 +24,7 @@ public class CommandStage extends MyCommand {
 		super(player, command, args);
 	}
 	private enum Commands {
-		NONE, TEST, LEARN, PRACTICE, INFO, TP, FIND, FINDPPL, FINDPEOPLE, FP, HINT, LIST;
+		NONE, TEST, LEARN, TRAINING, T, INFO, TP, FIND, FINDPPL, FINDPEOPLE, FP, HINT, LIST;
 		private static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -53,8 +53,9 @@ public class CommandStage extends MyCommand {
 			case TEST:
 				commandTest();
 				break;
-			case PRACTICE:
-				commandPractice();
+			case TRAINING:
+			case T:
+				commandTraining();
 				break;
 			case LEARN:
 				commandLearn();
@@ -166,7 +167,7 @@ public class CommandStage extends MyCommand {
 //		}
 	}
 
-	private void commandPractice() {
+	private void commandTraining() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		if(2 < args.length) {
 			String stage = args[2];
