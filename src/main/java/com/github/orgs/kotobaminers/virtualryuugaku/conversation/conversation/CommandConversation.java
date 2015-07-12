@@ -3,14 +3,12 @@ package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerCommandUsage;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerCommandUsage.Usage;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.CommandConversationComment;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
-import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
@@ -52,7 +50,7 @@ public class CommandConversation extends MyCommand {
 				break;
 			case LANGUAGE:
 			case LANG:
-				commandLanguage();
+//				commandLanguage();
 				break;
 			case INFO:
 				commandInfo();
@@ -177,30 +175,6 @@ public class CommandConversation extends MyCommand {
 //			}
 //		}
 //		printUsageSentence();
-	}
-	private void commandLanguage() {
-		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-		switch(data.expression) {
-		case EN:
-			data.expression = Expression.KANJI;
-			break;
-		case KANJI:
-			data.expression = Expression.KANA;
-			break;
-		case KANA:
-			data.expression = Expression.ROMAJI;
-			break;
-		case ROMAJI:
-			data.expression = Expression.EN;
-			break;
-		case NONE:
-		default:
-			data.expression = Expression.KANJI;
-			break;
-		}
-		DataManagerPlayer.putDataPlayer(data);
-		String[] settings = {data.expression.toString()};
-		MessengerGeneral.print(player, Message.SET_LANGUAGE_1, settings);
 	}
 	private void commandAnswer() {
 //		UtilitiesProgramming.printDebugMessage("", new Exception());

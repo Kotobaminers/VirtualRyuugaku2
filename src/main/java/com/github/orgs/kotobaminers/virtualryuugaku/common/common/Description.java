@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Language;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
@@ -83,22 +84,39 @@ public class Description {
 		return list;
 	}
 
-//	public String getExpression(Player player) {
-//		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-//		String message = "";
-//		switch(data.language) {
-//		case EN:
-//			message = getEnglishJoined();
-//			break;
-//		case JP:
-//			message = getJapaneseJoined(player);
-//			break;
-//		case DEFAULT:
-//		default:
-//			break;
-//		}
-//		return message;
-//	}
+	public List<String> getJapaneseListPlayer(Player player) {
+		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
+		List<String> japanese = new ArrayList<String>();
+		if(data.expressions.contains(Expression.KANJI)) {
+			japanese.addAll(kanji);
+		}
+		if(data.expressions.contains(Expression.KANA)) {
+			japanese.addAll(kana);
+		}
+		if(data.expressions.contains(Expression.ROMAJI)) {
+			japanese.addAll(romaji);
+		}
+		if(!(0 < japanese.size())) {
+			japanese.addAll(kanji);
+		}
+		return japanese;
+	}
+
+	public String getSentenceLearning(Player player) {
+		String sentence = "";
+		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
+		Language language = data.language;
+		switch(language) {
+		case EN:
+			sentence = getEnglishJoined();
+			break;
+		case JP:
+			List<String> japanese = getJapaneseListPlayer(player);
+			sentence = UtilitiesGeneral.joinStrings(japanese, ", ");
+		default:
+			break;}
+		return sentence;
+	}
 
 
 }

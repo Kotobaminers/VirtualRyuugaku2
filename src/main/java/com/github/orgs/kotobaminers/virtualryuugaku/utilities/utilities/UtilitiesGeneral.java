@@ -5,9 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManagerRomaji;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManagerRomaji.TypeLetters;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Letters;
@@ -50,17 +47,6 @@ public class UtilitiesGeneral {
 			return true;
 		}
 		return false;
-	}
-
-	public static void sendMessageAll(String message) {
-		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-			if(player.isOnline()) {
-				try {
-					player.sendMessage(message);
-				} catch (Exception e) {
-				}
-			}
-		}
 	}
 
 	public static String joinStrings(List<String> strings, String spacer) {

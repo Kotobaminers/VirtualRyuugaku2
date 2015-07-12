@@ -45,6 +45,6 @@ public class CommandVirtualRyuugakuOP extends MyCommand {
 		DataManagerPlugin.loadPlugin();;
 	}
 	private void commandSave() {
-//		DataManagerPlugin.savePlugin();;
+		DataManagerPlugin.savePlugin();;
 	}
 }

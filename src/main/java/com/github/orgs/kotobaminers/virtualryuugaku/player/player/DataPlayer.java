@@ -17,7 +17,6 @@ public class DataPlayer {
 	public String name = "";
 	public Integer line = 0;
 	public Integer select = -1;
-	public Expression expression = Expression.ROMAJI;
 	public Language language = Language.JP;
 	public List<List<Integer>> questionDone = new ArrayList<List<Integer>>();
 	public List<Expression> expressions = new ArrayList<Expression>(Arrays.asList(Expression.EN, Expression.KANJI, Expression.KANA, Expression.ROMAJI));

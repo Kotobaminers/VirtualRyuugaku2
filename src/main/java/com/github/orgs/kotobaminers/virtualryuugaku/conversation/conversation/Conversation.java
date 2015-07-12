@@ -39,11 +39,15 @@ public class Conversation {
 		UtilitiesProgramming.printDebugMessage(listTalk.size() + " " + data.line, new Exception());
 		if(0 < listTalk.size()) {
 			if(listTalk.size() <= data.line) {
-				question.giveQuestion(player, question);
-			} else {
-				Talk talk = listTalk.get(data.line);
-				talk.print(player);
+				if ( 0 < question.getQuestion().length()) {
+					question.giveQuestion(player, question);
+					return;
+				} else {
+					data.line = 0;
+				}
 			}
+			Talk talk = listTalk.get(data.line);
+			talk.print(player);
 		} else {
 			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.NO_SENTENCE_0, null));
 			if(editor.contains(player.getName())) {
@@ -66,7 +70,7 @@ public class Conversation {
 		return true;
 	}
 
-	public List<Talk> getKeySentence() {
+	public List<Talk> getKeyTalk() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		List<Talk> talks = new ArrayList<Talk>();
 		for (Talk talk : listTalk) {

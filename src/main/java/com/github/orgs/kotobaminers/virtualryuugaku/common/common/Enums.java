@@ -32,7 +32,7 @@ public class Enums {//public enums
 			}
 		}
 	}
-	public enum Language {DEFAULT, EN, JP;
+	public enum Language {EN, JP;
 		public static Language lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());

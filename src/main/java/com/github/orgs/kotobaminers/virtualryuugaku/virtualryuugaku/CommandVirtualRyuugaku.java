@@ -13,6 +13,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGener
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.CommandGlobal;
 import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.CommandStage;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
@@ -23,7 +24,7 @@ public class CommandVirtualRyuugaku extends MyCommand {
 		super(player, command, args);
 	}
 	private enum Commands {
-		NONE, LANGUAGE, LANG, EN, KANJI, KANA, ROMAJI, TEST, BOOK, S, STAGE;
+		NONE, LANGUAGE, LANG, EN, KANJI, KANA, ROMAJI, TEST, BOOK, S, STAGE, GLOBAL;
 		public static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -38,7 +39,6 @@ public class CommandVirtualRyuugaku extends MyCommand {
 	@Override
 	public void runCommand() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		if(!player.isOp()) return;
 		if(0 < args.length) {
 			Commands commands = Commands.lookup(args[0]);
 			switch(commands) {
@@ -64,6 +64,8 @@ public class CommandVirtualRyuugaku extends MyCommand {
 			case STAGE:
 				new CommandStage(player, command, args).runCommand();
 				break;
+			case GLOBAL:
+				new CommandGlobal(player, command, args).runCommand();
 			default:
 				break;
 			}
@@ -99,7 +101,6 @@ public class CommandVirtualRyuugaku extends MyCommand {
 		case JP:
 			data.language = Language.EN;
 			break;
-		case DEFAULT:
 		default:
 			break;
 		}

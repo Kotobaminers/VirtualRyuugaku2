@@ -42,8 +42,8 @@ public final class DataManagerPlugin {
 		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Saving Player Data", new Exception());
 		new DataManagerPlayer().saveAll();
 
-		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Saving Talker Data", new Exception());
-		new DataManagerConversation().saveAll();
+//		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Saving Talker Data", new Exception());
+//		new DataManagerConversation().saveAll();
 
 	}
 }

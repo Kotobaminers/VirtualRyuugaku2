@@ -38,7 +38,7 @@ public class GameFindPeople {
 		List<Talk> listTalk = new ArrayList<Talk>();
 		for(Conversation conversation : DataManagerConversation.getMapConversation().values()) {
 			if (conversation.stage.equalsIgnoreCase(stage)) {
-				listTalk.addAll(conversation.getKeySentence());
+				listTalk.addAll(conversation.getKeyTalk());
 			}
 		}
 		if(0 < listTalk.size()) {
@@ -93,7 +93,7 @@ public class GameFindPeople {
 		case JP:
 		case RANDOM:
 		default:
-			question = UtilitiesGeneral.joinStrings(description.getJapaneseList(), ", ");
+			question = UtilitiesGeneral.joinStrings(description.getJapaneseListPlayer(player), ", ");
 			break;
 		}
 		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.FIND_PEOPLE_MISSION_0, null));

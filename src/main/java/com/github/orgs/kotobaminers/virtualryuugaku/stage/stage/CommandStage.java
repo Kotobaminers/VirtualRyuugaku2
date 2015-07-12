@@ -86,6 +86,8 @@ public class CommandStage extends MyCommand {
 			Integer npcs = 0;
 			Integer done = 0;
 			Integer questions = 0;
+			Integer keySentence = 0;
+			Integer sentence = 0;
 			for(Conversation conversation : DataManagerConversation.getMapConversation().values()) {
 				if(stage.equalsIgnoreCase(conversation.stage)) {
 					if(conversation.hasValidQuestion()) {
@@ -93,8 +95,6 @@ public class CommandStage extends MyCommand {
 					}
 
 					List<List<Integer>> keyDone = DataManagerPlayer.getDataPlayer(player).questionDone;
-					System.out.println(keyDone);
-					System.out.println(conversation.question.getKey());
 					if(keyDone.contains(conversation.question.getKey())) {
 						done++;
 					}
@@ -105,12 +105,16 @@ public class CommandStage extends MyCommand {
 						if(!ids.contains(id)) {
 							ids.add(id);
 						}
+						if(talk.key) {
+							keySentence++;
+						}
 					}
 					npcs += ids.size();
+					sentence += conversation.listTalk.size();
 				}
 			}
-			String[] opts = {stage, npcs.toString(), done.toString(), questions.toString()};
-			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.STAGE_INFO_4, opts));
+			String[] opts = {stage, npcs.toString(), sentence.toString(), done.toString(), questions.toString(), keySentence.toString()};
+			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.STAGE_INFO_6, opts));
 		}
 	}
 

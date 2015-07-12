@@ -84,9 +84,6 @@ public class DataManagerPlayer implements DataManager {
 
 	@Override
 	public void saveAll() {
-		saveMapDataPlayer();
-	}
-	private static void saveMapDataPlayer() {
 		for(DataPlayer data : getMapDataPlayer().values()) {
 			ConfigHandlerPlayer.saveDataPlayer(data);
 		}

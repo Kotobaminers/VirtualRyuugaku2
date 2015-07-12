@@ -31,7 +31,7 @@ public abstract class StageGameHandler {
 			UtilitiesProgramming.printDebugConversation(conversation);
 			if(conversation.stage.equalsIgnoreCase(stage)) {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
-				for(Talk talk : conversation.getKeySentence()) {
+				for(Talk talk : conversation.getKeyTalk()) {
 					stageQuestions.add(new StageQuestion().loadStageQuestionRandom(talk));
 				}
 			}
@@ -106,7 +106,7 @@ public abstract class StageGameHandler {
 	public static boolean existsStage(String stage) {
 		for(Conversation conversation : DataManagerConversation.getMapConversation().values()) {
 			if(conversation.stage.equalsIgnoreCase(stage)) {
-				if(0 < conversation.getKeySentence().size()) {
+				if(0 < conversation.getKeyTalk().size()) {
 					return true;
 				}
 			}

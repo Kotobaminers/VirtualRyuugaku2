@@ -76,6 +76,7 @@ public class UtilitiesProgramming {
 		printDebugMessage("[Debug DataPlayer] " + data.name, new Exception());
 		printDebugMessage(" LINE: " + data.line, new Exception());
 		printDebugMessage(" SELECT: " + data.select, new Exception());
+		printDebugMessage(" LANGUAGE: " + data.language, new Exception());
 	}
 	public static void printDebugConversation(Conversation conversation) {
 		if(!(0 < conversation.listTalk.size())) return;

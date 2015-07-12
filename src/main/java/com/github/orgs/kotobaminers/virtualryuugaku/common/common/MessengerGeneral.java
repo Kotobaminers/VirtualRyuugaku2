@@ -2,11 +2,11 @@ package com.github.orgs.kotobaminers.virtualryuugaku.common.common;
 
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class MessengerGeneral {
@@ -76,7 +76,7 @@ public class MessengerGeneral {
 		STAGE_WRONG_0,
 		STAGE_FINISH_1,
 		STAGE_LIST_1,
-		STAGE_INFO_4,
+		STAGE_INFO_6,
 
 		TELEPORT_0,
 		STAGE_QUESTION_2,
@@ -94,7 +94,9 @@ public class MessengerGeneral {
 		COMMAND_VRG_EXPRESSIONS_OFF_0,
 		DESCRIPTION_2,
 		DESCRIPTION_KEY_2,
-		CONVERSATION_HINT_2
+		CONVERSATION_HINT_2,
+
+		GAME_TRY_FINISH_0
 		;
 	}
 
@@ -140,17 +142,19 @@ public class MessengerGeneral {
 		case STAGE_WRONG_0: message += ChatColor.DARK_RED + "Wrong Answer!"; break;
 		case STAGE_FINISH_1: message += ChatColor.GREEN + opts[0] + " successfully completed the stage!"; break;
 		case STAGE_LIST_1: message = "" + ChatColor.GOLD + ChatColor.BOLD +"[" + ChatColor.YELLOW + "STAGES" + ChatColor.GOLD + ChatColor.BOLD + "] " + ChatColor.RESET + opts[0]; break;
-		case STAGE_INFO_4: message =
+		case STAGE_INFO_6: message =
 				getPartition("=", "*", ChatColor.GOLD, ChatColor.YELLOW, 3) + "  " + ChatColor.GREEN + ChatColor.BOLD + opts[0] + getPartition("=", "*", ChatColor.GOLD, ChatColor.YELLOW, 3) + ChatColor.RESET + "\n"
 				+ " NPCs: " + opts[1] + "\n"
-				+ " Questions: " + opts[2] + " / " + opts[3];
+				+ " Sentences: " + opts[2] + "\n"
+				+ " Questions: " + opts[3] + " / " + opts[4] + "\n"
+				+ " Key Sentences: " + opts[5];
 			break;
 		case TELEPORT_0: message += "Teleporting..."; break;
-		case FIND_PEOPLE_MISSION_0: message += ChatColor.LIGHT_PURPLE + "Find the Person!"; break;
+		case FIND_PEOPLE_MISSION_0: message += ChatColor.LIGHT_PURPLE + "Find This Person!"; break;
 		case FIND_PEOPLE_QUEST_1: message = ChatColor.GOLD + "???" + ChatColor.RESET + ": " + opts[0] ; break;
+		case FIND_PEOPLE_FINISH_2: message += ChatColor.GREEN + opts[0] + " successufully finished the game!" + ChatColor.RESET + " (FindPpl: " + opts[1] + ")"; break;
 		case CORRECT_0: message += ChatColor.GREEN + "Correct!"; break;
 		case WRONG_0: message += ChatColor.DARK_RED + "Wrong!"; break;
-		case FIND_PEOPLE_FINISH_2: message += ChatColor.GREEN + opts[0] + " successufully finished the game!" + ChatColor.RESET + " (FindPpl: " + opts[1] + ")"; break;
 
 		case FIND_PEOPLE_REMOVE_1: message = " [FindPpl: " + opts[0] + "] Removed the game!"; break;
 		case COMMAND_VRG_JAPANESE_1: message += "Your Japanese mode is set as " + opts[0] + "."; break;
@@ -159,6 +163,9 @@ public class MessengerGeneral {
 		case COMMAND_VRG_EXPRESSIONS_OFF_0: message += "Your current VRG output is OFF."; break;
 		case DESCRIPTION_2: message = opts[0] + ChatColor.RESET + ": " + opts[1]; break;
 		case DESCRIPTION_KEY_2: message = opts[0] + ChatColor.RESET + ": " + opts[1] + " " + MARK_KEY; break;
+
+		case GAME_TRY_FINISH_0: message += "There is no next sentence. Please finish the game."; break;
+
 		default: break;
 		}
 		return message;
@@ -217,7 +224,14 @@ public class MessengerGeneral {
 		}
 	}
 	public static void broadcast(String message) {
-		UtilitiesGeneral.sendMessageAll(message);
+		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
+			if(player.isOnline()) {
+				try {
+					player.sendMessage(message);
+				} catch (Exception e) {
+				}
+			}
+		}
 	}
 
 	public static void printReadComment(Player player, DataComment data, Integer line) {

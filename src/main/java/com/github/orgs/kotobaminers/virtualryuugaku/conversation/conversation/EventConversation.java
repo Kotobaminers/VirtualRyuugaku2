@@ -22,7 +22,6 @@ public class EventConversation {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
 		conversation.talkNext(player, data);
-//		conversation.talkEffect(player, npc);//Talking NPCs' locantion can't get because it's not saved.
 		conversation.talkSound(player);
 		new ScoreboardTalk().update(player, conversation, data);
 		addLine(data);

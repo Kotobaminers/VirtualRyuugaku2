@@ -7,38 +7,38 @@ import java.util.List;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Language;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.ConfigHandler;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class ConfigHandlerPlayer extends ConfigHandler {
 	public static YamlConfiguration config;
 	public static File file;
-	public static final String DIRECTORY = "PLAYER";
-	public static final String FILE_NAME = "PLAYER.yml";
+	public static final String DIRECTORY = "CONFIG";
+	public static final String FILE_NAME = "config.yml";
 	public static final Integer lineInitial = 0;
 	public static final Integer selectInitial = -1;
+	public static final String base = "PLAYER";
 	public enum PathPlayer {LINE, SELECT, LANGUAGE, DONE}
 	public static List<DataPlayer> importDataPlayer() {
 		List<DataPlayer> list = new ArrayList<DataPlayer>();
-		for(String name : config.getKeys(false)) {
-			MemorySection memory = (MemorySection) config.get(name);
-			DataPlayer data = new DataPlayer();
-			data.name = name;
-			data.line = loadLine(memory);
-			data.select = loadSelect(memory);
-			data.expression = loadLanguage(memory);
-			list.add(data);
+		for(String key : config.getKeys(false)) {
+			if(key.equalsIgnoreCase(base)) {
+				MemorySection memory = (MemorySection) config.get(key);
+				for(String name : memory.getKeys(false)) {
+					MemorySection memoryPlayer = (MemorySection) memory.get(name);
+					DataPlayer data = new DataPlayer();
+					data.name = name;
+					data.line = loadLine(memoryPlayer);
+					data.select = loadSelect(memoryPlayer);
+					data.language = loadLanguage(memoryPlayer);
+					list.add(data);
+				}
+			}
 		}
 		return list;
 	}
-	private static Expression loadLanguage(MemorySection memory) {
-		String language = "";
-		String path = PathPlayer.LANGUAGE.toString();
-		if(memory.isString(path)) {
-			language = memory.getString(path);
-		}
-		return Expression.lookup(language);
-	}
+
 	private static Integer loadLine(MemorySection memory) {
 		Integer line = lineInitial;
 		String path = PathPlayer.LINE.toString();
@@ -48,23 +48,34 @@ public class ConfigHandlerPlayer extends ConfigHandler {
 		return line;
 	}
 	private static Integer loadSelect(MemorySection memory) {
-		Integer select = -1;
+		Integer select = selectInitial;
 		String path = PathPlayer.SELECT.toString();
 		if(memory.isList(path)) {
 			select = memory.getInt(path);
 		}
 		return select;
 	}
+	private static Language loadLanguage(MemorySection memory) {
+		Language language = Language.JP;
+		String path = PathPlayer.LANGUAGE.toString();
+		if(memory.isString(path)) {
+			String string = memory.getString(path);
+			language = Language.lookup(string);
+		}
+		return language;
+	}
+
 	public static void saveDataPlayer(DataPlayer data) {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
 		String name = data.name;
-		String pathLine = name + "." + PathPlayer.LINE;
+		String pathLine = base + "." + name + "." + PathPlayer.LINE;
 		config.set(pathLine, data.line);
-		String pathSelect = name + "." + PathPlayer.SELECT;
+		String pathSelect = base + "." + name + "." + PathPlayer.SELECT;
 		config.set(pathSelect, data.select);
-		String pathLanguage = name + "." + PathPlayer.LANGUAGE;
-		config.set(pathLanguage, data.expression.toString());
-		String pathDone = name + "." + PathPlayer.DONE;
+		String pathDone = base + "." + name + "." + PathPlayer.DONE;
 		config.set(pathDone, data.questionDone);
+		String pathLanguage = base + "." + name + "." + PathPlayer.LANGUAGE.toString();
+		config.set(pathLanguage, data.language.toString());
 	}
 	@Override
 	public File getFile() {
