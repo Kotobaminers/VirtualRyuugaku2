@@ -24,7 +24,7 @@ public class CommandVirtualRyuugaku extends MyCommand {
 		super(player, command, args);
 	}
 	private enum Commands {
-		NONE, LANGUAGE, LANG, EN, KANJI, KANA, ROMAJI, TEST, BOOK, S, STAGE, GLOBAL;
+		NONE, LANGUAGE, LANG, EN, KANJI, KANA, ROMAJI, TEST, BOOK, S, STAGE, GLOBAL, G;
 		public static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -65,6 +65,7 @@ public class CommandVirtualRyuugaku extends MyCommand {
 				new CommandStage(player, command, args).runCommand();
 				break;
 			case GLOBAL:
+			case G:
 				new CommandGlobal(player, command, args).runCommand();
 			default:
 				break;

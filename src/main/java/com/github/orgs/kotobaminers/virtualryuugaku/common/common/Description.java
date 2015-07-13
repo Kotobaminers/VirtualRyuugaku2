@@ -117,6 +117,18 @@ public class Description {
 			break;}
 		return sentence;
 	}
-
-
+	public List<String> getListSentenceNotLearning(Player player) {
+		List<String> sentences = new ArrayList<String>();
+		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
+		Language language = data.language;
+		switch(language) {
+		case EN:
+			sentences = getJapaneseList();
+			break;
+		case JP:
+			sentences = getEnglishList();
+		default:
+			break;}
+		return sentences;
+	}
 }

@@ -96,9 +96,9 @@ public class GameFindPeople {
 			question = UtilitiesGeneral.joinStrings(description.getJapaneseListPlayer(player), ", ");
 			break;
 		}
-		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.FIND_PEOPLE_MISSION_0, null));
+		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.GAME_FIND_PEOPLE_MISSION_0, null));
 		String[] opts = {question};
-		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.FIND_PEOPLE_QUEST_1, opts));
+		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.GAME_FIND_PEOPLE_QUEST_1, opts));
 		player.playSound(player.getLocation(), Sound.CHICKEN_EGG_POP, 1, 1);
 	}
 

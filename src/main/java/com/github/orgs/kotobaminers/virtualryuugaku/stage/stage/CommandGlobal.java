@@ -3,6 +3,8 @@ package com.github.orgs.kotobaminers.virtualryuugaku.stage.stage;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
@@ -11,7 +13,7 @@ public class CommandGlobal extends MyCommand {
 		super(player, command, args);
 	}
 	private enum Commands {
-		NEXT, FINISH, FIND, FINDPPL, FINDPEOPLE, FP, DEFAULT;
+		N, NEXT, FINISH, FIND, FINDPPL, FINDPEOPLE, FP, DEFAULT, TRAINING, T;
 		private static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -30,7 +32,12 @@ public class CommandGlobal extends MyCommand {
 			Commands commands = Commands.lookup(args[1]);
 			switch(commands) {
 			case NEXT:
+			case N:
 				commandNext();
+				break;
+			case TRAINING:
+			case T:
+				commandTraining();
 				break;
 			case FIND:
 			case FINDPEOPLE:
@@ -49,13 +56,29 @@ public class CommandGlobal extends MyCommand {
 	}
 
 	private void commandFinish() {
-		GameGlobalHandler.finishGame();
+		if(0 < GameGlobal.keys.size()) {
+			GameGlobalHandler.finishGame();
+		} else {
+			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.GAME_PLEASE_LOAD_0, null));
+		}
 	}
 
 	private void commandNext() {
-		GameGlobalHandler.giveNextQuestion(player);
+		if(0 < GameGlobal.keys.size()) {
+			GameGlobalHandler.giveNextQuestion(player);
+		} else {
+			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.GAME_PLEASE_LOAD_0, null));
+		}
 	}
 
+	private void commandTraining() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		if(2 < args.length) {
+			String stage = args[2];
+			GameGlobalHandler.loadTraining(stage);
+			GameGlobalHandler.giveNextQuestion(player);
+		}
+	}
 	private void commandFindPeople() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		if(2 < args.length) {
@@ -64,5 +87,4 @@ public class CommandGlobal extends MyCommand {
 			GameGlobalHandler.giveNextQuestion(player);
 		}
 	}
-
 }

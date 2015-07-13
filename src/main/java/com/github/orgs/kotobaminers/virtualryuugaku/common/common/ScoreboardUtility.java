@@ -20,7 +20,9 @@ public abstract class ScoreboardUtility {
 		setupScoreboard(player);
 		Objective objective = getObjective(player.getName());
 		objective.setDisplayName(name);
+		UtilitiesProgramming.printDebugMessage("", new Exception());
 		for (String label : scores.keySet()) {
+			UtilitiesProgramming.printDebugMessage("" + label + " " + scores.get(label), new Exception());
 			Score score = objective.getScore(label);
 			score.setScore(scores.get(label).intValue());
 		}

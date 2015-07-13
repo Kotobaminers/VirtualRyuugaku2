@@ -80,8 +80,6 @@ public class MessengerGeneral {
 
 		TELEPORT_0,
 		STAGE_QUESTION_2,
-		FIND_PEOPLE_MISSION_0,
-		FIND_PEOPLE_QUEST_1,
 		CORRECT_0,
 		WRONG_0,
 
@@ -96,7 +94,14 @@ public class MessengerGeneral {
 		DESCRIPTION_KEY_2,
 		CONVERSATION_HINT_2,
 
-		GAME_TRY_FINISH_0
+		GAME_TRY_FINISH_0,
+		GAME_NOT_ALLOWED_TO_ANSWER_0,
+		GAME_FIND_PEOPLE_MISSION_0,
+		GAME_FIND_PEOPLE_QUEST_1,
+		GAME_PLEASE_LOAD_0,
+		GAME_NO_WINNERS_0,
+		GAME_RESULTS_1,
+		GAME_WINNERS_1,
 		;
 	}
 
@@ -150,8 +155,8 @@ public class MessengerGeneral {
 				+ " Key Sentences: " + opts[5];
 			break;
 		case TELEPORT_0: message += "Teleporting..."; break;
-		case FIND_PEOPLE_MISSION_0: message += ChatColor.LIGHT_PURPLE + "Find This Person!"; break;
-		case FIND_PEOPLE_QUEST_1: message = ChatColor.GOLD + "???" + ChatColor.RESET + ": " + opts[0] ; break;
+		case GAME_FIND_PEOPLE_MISSION_0: message += ChatColor.LIGHT_PURPLE + "Find This Person!"; break;
+		case GAME_FIND_PEOPLE_QUEST_1: message = ChatColor.GOLD + "???" + ChatColor.RESET + ": " + opts[0] ; break;
 		case FIND_PEOPLE_FINISH_2: message += ChatColor.GREEN + opts[0] + " successufully finished the game!" + ChatColor.RESET + " (FindPpl: " + opts[1] + ")"; break;
 		case CORRECT_0: message += ChatColor.GREEN + "Correct!"; break;
 		case WRONG_0: message += ChatColor.DARK_RED + "Wrong!"; break;
@@ -165,6 +170,11 @@ public class MessengerGeneral {
 		case DESCRIPTION_KEY_2: message = opts[0] + ChatColor.RESET + ": " + opts[1] + " " + MARK_KEY; break;
 
 		case GAME_TRY_FINISH_0: message += "There is no next sentence. Please finish the game."; break;
+		case GAME_NOT_ALLOWED_TO_ANSWER_0: message += "You are not allowed to answer the question."; break;
+		case GAME_PLEASE_LOAD_0: message += "Please load a global game at first."; break;
+		case GAME_NO_WINNERS_0: message += "No Winners!"; break;
+		case GAME_RESULTS_1: message += "Results: " + opts[0]; break;
+		case GAME_WINNERS_1: message += "Winners: " + opts[0]; break;
 
 		default: break;
 		}

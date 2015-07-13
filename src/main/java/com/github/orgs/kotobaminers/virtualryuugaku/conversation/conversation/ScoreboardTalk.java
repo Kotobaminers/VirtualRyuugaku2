@@ -8,10 +8,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.ScoreboardUtility;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 
-public class ScoreboardTalk extends ScoreboardUtility {
+public class ScoreboardTalk /*extends ScoreboardUtility */{
 	private static Map<String, Scoreboard> mapScoreboard = new HashMap<String, Scoreboard>();
 	private static Map<String, Objective> mapObjective = new HashMap<String, Objective>();
 	public static final String NAME_BOARD = ChatColor.LIGHT_PURPLE + "* Mahou Jisho *";
@@ -39,22 +38,28 @@ public class ScoreboardTalk extends ScoreboardUtility {
 //		scores.put(PRACTICE, data.getScore(PlayerScore.PRACTICE));//TODO data.practice will be replaced.
 //		updateScoreboard(player, NAME_BOARD, scores);
 	}
-
-	@Override
-	public Scoreboard getScoreboard(String key) {
-		return mapScoreboard.get(key);
-	}
-	@Override
-	public Objective getObjective(String key) {
-		return mapObjective.get(key);
-	}
-	@Override
-	public void putScoreboard(String name, Scoreboard board) {
-		mapScoreboard.put(name, board);
-	}
-	@Override
-	public void putObjective(String name, Objective objective) {
-		mapObjective.put(name, objective);
-	}
-
+//
+//	@Override
+//	public Scoreboard getScoreboard(String key) {
+//		return mapScoreboard.get(key);
+//	}
+//	@Override
+//	public Objective getObjective(String key) {
+//		return mapObjective.get(key);
+//	}
+//	@Override
+//	public void putScoreboard(String name, Scoreboard board) {
+//		mapScoreboard.put(name, board);
+//	}
+//	@Override
+//	public void putObjective(String name, Objective objective) {
+//		mapObjective.put(name, objective);
+//	}
+//
+//	@Override
+//	public void initialize() {
+//		// TODO Auto-generated method stub
+//
+//	}
+//
 }

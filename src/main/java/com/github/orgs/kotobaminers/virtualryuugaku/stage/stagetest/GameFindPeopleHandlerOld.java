@@ -45,7 +45,7 @@ public class GameFindPeopleHandlerOld {
 		}
 		GameFindPeopleOld game = getGame(name);
 		String[] opts = {game.stage};
-		player.sendMessage(MessengerGeneral.getMessage(Message.FIND_PEOPLE_MISSION_0, opts));
+		player.sendMessage(MessengerGeneral.getMessage(Message.GAME_FIND_PEOPLE_MISSION_0, opts));
 		DataManagerVRGNPC.printListDescription(game.listVRGNPC.get(game.count).id, player);
 	}
 
