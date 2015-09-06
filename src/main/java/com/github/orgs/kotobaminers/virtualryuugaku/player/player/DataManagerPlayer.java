@@ -6,8 +6,8 @@ import java.util.Map;
 
 import org.bukkit.entity.Player;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.DataManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class DataManagerPlayer implements DataManager {
@@ -64,7 +64,7 @@ public class DataManagerPlayer implements DataManager {
 	}
 
 	@Override
-	public void loadAll() {
+	public void load() {
 		initialize();
 		loadDataPlayer();
 	}
@@ -83,7 +83,7 @@ public class DataManagerPlayer implements DataManager {
 	}
 
 	@Override
-	public void saveAll() {
+	public void save() {
 		for(DataPlayer data : getMapDataPlayer().values()) {
 			ConfigHandlerPlayer.saveDataPlayer(data);
 		}

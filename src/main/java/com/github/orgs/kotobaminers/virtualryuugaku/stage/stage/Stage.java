@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMulti;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
 
 public class Stage {
-	public List<Conversation> conversations = new ArrayList<Conversation>();
+	public List<ConversationMulti> conversations = new ArrayList<ConversationMulti>();
 	public String name = "";
 
 	public static Stage createStage(String name) {
@@ -19,8 +19,8 @@ public class Stage {
 	}
 
 	public void setConversations(String name) {
-		conversations = new ArrayList<Conversation>();
-		for (Conversation conversation : DataManagerConversation.getMapConversation().values()) {
+		conversations = new ArrayList<ConversationMulti>();
+		for (ConversationMulti conversation : DataManagerConversation.getMapConversation().values()) {
 			if(conversation.stage.equalsIgnoreCase(name)) {
 				conversations.add(conversation);
 			}

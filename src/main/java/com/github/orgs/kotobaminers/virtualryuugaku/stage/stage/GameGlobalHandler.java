@@ -5,6 +5,8 @@ import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.ControllerMyself;
+import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.GameMyselfTrainingGlobal;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class GameGlobalHandler {
@@ -24,10 +26,20 @@ public class GameGlobalHandler {
 		game = new GameFindPeopleGlobal();
 		game.loadGame(name);
 	}
+	public static void loadMyselfTraining(String name) throws Exception{
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		if (ControllerMyself.existsStage(name)) {
+			game = new GameMyselfTrainingGlobal();
+			game.loadGame(name);
+			return;
+		} else {
+			throw new Exception("Invalid Stage Name: " + name);
+		}
+	}
 
 	public static void giveNextQuestion(Player player) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		if (game.hasNextKeyTalk()) {
+		if (game.hasNextTalk()) {
 			game.refreshCantAnswer();
 			player.playSound(player.getLocation(), Sound.CHICKEN_EGG_POP, 1, 1);
 			game.giveNextQuestion();
@@ -58,5 +70,5 @@ public class GameGlobalHandler {
 
 	public static void updataScoreboard(Player player) {
 		game.updateScoreboard(player);
-	};
+	}
 }

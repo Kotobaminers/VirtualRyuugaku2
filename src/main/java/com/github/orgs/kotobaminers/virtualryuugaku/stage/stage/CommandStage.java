@@ -11,7 +11,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataCitize
 import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManagerCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMulti;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
@@ -88,7 +88,7 @@ public class CommandStage extends MyCommand {
 			Integer questions = 0;
 			Integer keySentence = 0;
 			Integer sentence = 0;
-			for(Conversation conversation : DataManagerConversation.getMapConversation().values()) {
+			for(ConversationMulti conversation : DataManagerConversation.getMapConversation().values()) {
 				if(stage.equalsIgnoreCase(conversation.stage)) {
 					if(conversation.hasValidQuestion()) {
 						questions++;
@@ -121,7 +121,7 @@ public class CommandStage extends MyCommand {
 	private void commandList() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		List<String> stages = new ArrayList<String>();
-		for(Conversation conversation : DataManagerConversation.getMapConversation().values()) {
+		for(ConversationMulti conversation : DataManagerConversation.getMapConversation().values()) {
 			String stage = conversation.stage;
 			if(!stages.contains(stage)) {
 				stages.add(stage);
@@ -226,7 +226,7 @@ public class CommandStage extends MyCommand {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		if(2 < args.length) {
 			String stage = args[3];
-			for(Conversation conversation : DataManagerConversation.getMapConversation().values()) {
+			for(ConversationMulti conversation : DataManagerConversation.getMapConversation().values()) {
 				if(conversation.stage.equalsIgnoreCase(stage)) {
 					for(Talk talk : conversation.listTalk) {
 						Integer id = talk.id;

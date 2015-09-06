@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.DataManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.DataManagerPlugin;
 
@@ -68,7 +67,7 @@ public class DataManagerRomaji implements DataManager {
 		setMapLetters(new HashMap<String, List<Letters>>());
 	}
 	@Override
-	public void loadAll() {
+	public void load() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		initialize();
 		try {
@@ -78,7 +77,7 @@ public class DataManagerRomaji implements DataManager {
 		}
 	}
 	@Override
-	public void saveAll() {
+	public void save() {
 	}
 	public static Map<String, List<Letters>> getMapLetters() {
 		return mapLetters;

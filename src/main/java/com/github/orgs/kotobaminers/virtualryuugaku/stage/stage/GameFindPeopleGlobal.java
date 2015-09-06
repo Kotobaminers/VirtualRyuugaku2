@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMulti;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
@@ -38,12 +38,12 @@ public class GameFindPeopleGlobal extends GameGlobal{
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		initializeGameGlobal();
 
-		for(Conversation conversation : DataManagerConversation.getMapConversation().values()) {
+		for(ConversationMulti conversation : DataManagerConversation.getMapConversation().values()) {
 			if (conversation.stage.equalsIgnoreCase(name)) {
-				keys.addAll(conversation.getKeyTalk());
+				talks.addAll(conversation.getKeyTalk());
 			}
 		}
-		Collections.shuffle(keys);
+		Collections.shuffle(talks);
 	}
 
 	@Override

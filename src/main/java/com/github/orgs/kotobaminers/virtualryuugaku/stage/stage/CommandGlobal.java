@@ -56,7 +56,7 @@ public class CommandGlobal extends MyCommand {
 	}
 
 	private void commandFinish() {
-		if(0 < GameGlobal.keys.size()) {
+		if(0 < GameGlobal.talks.size()) {
 			GameGlobalHandler.finishGame();
 		} else {
 			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.GAME_PLEASE_LOAD_0, null));
@@ -64,7 +64,7 @@ public class CommandGlobal extends MyCommand {
 	}
 
 	private void commandNext() {
-		if(0 < GameGlobal.keys.size()) {
+		if(0 < GameGlobal.talks.size()) {
 			GameGlobalHandler.giveNextQuestion(player);
 		} else {
 			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.GAME_PLEASE_LOAD_0, null));

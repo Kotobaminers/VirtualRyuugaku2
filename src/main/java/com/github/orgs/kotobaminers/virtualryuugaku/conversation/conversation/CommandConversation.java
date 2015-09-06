@@ -84,7 +84,7 @@ public class CommandConversation extends MyCommand {
 	private void commandStage() {
 		if(args.length == 3) {
 			String stage = args[2];
-			Conversation talker = DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select);
+			ConversationMulti talker = DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select);
 			DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select).printInformation(player);
 			if(talker.canEdit(player.getName())) {
 				talker.stage = stage;
@@ -99,7 +99,7 @@ public class CommandConversation extends MyCommand {
 
 	}
 	private void commandInfo() {
-		Conversation talker = DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select);
+		ConversationMulti talker = DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select);
 		talker.printInformation(player);
 	}
 	private void commandRemove() {
@@ -110,7 +110,7 @@ public class CommandConversation extends MyCommand {
 			} catch(NumberFormatException e) {
 				return;
 			}
-			Conversation talker = DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select);
+			ConversationMulti talker = DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select);
 			if(line <= talker.listTalk.size()) {
 				talker.listTalk.remove(line - 1);
 				talker.printInformation(player);

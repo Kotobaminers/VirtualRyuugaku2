@@ -13,7 +13,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPla
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 
 public class Talk {
-	public Integer id;
+	public Integer id = 0;
 	public String name;
 	public Description description;
 	public boolean key = false;
@@ -59,4 +59,8 @@ public class Talk {
 		}
 	}
 
+	public String getDebugMessage() {
+		String message = "ID: " + id.toString() + ", NAME: " + name + ", " + description.getEnglishJoined() + "/" + description.getKanjiJoined() + "/" + description.getKanaJoined() + "/" + description.getRomajiJoined();
+		return message;
+	}
 }

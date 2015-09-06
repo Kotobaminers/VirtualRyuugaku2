@@ -9,7 +9,7 @@ import org.bukkit.World;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.DataManager;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.DataManagerPlugin;
 
@@ -60,7 +60,7 @@ public class DataManagerCitizens implements DataManager {
 	}
 
 	@Override
-	public void loadAll() {
+	public void load() {
 		initialize();
 		importCitizens();
 	}
@@ -96,7 +96,7 @@ public class DataManagerCitizens implements DataManager {
 	}
 
 	@Override
-	public void saveAll() {
+	public void save() {
 	}
 
 	public static Map<Integer, DataCitizens> getMapDataCitizens() {

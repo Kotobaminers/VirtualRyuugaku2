@@ -11,6 +11,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expressi
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Language;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.CommandMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.CommandGlobal;
@@ -24,7 +25,7 @@ public class CommandVirtualRyuugaku extends MyCommand {
 		super(player, command, args);
 	}
 	private enum Commands {
-		NONE, LANGUAGE, LANG, EN, KANJI, KANA, ROMAJI, TEST, BOOK, S, STAGE, GLOBAL, G;
+		NONE, LANGUAGE, LANG, EN, KANJI, KANA, ROMAJI, TEST, BOOK, S, STAGE, GLOBAL, G, MYSELF, MY, SELF, ME;
 		public static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -53,6 +54,7 @@ public class CommandVirtualRyuugaku extends MyCommand {
 				commandToggleExpression();
 				break;
 			case TEST:
+				commandTest();
 				break;
 			case NONE:
 				break;
@@ -67,10 +69,20 @@ public class CommandVirtualRyuugaku extends MyCommand {
 			case GLOBAL:
 			case G:
 				new CommandGlobal(player, command, args).runCommand();
+				break;
+			case ME:
+			case MY:
+			case MYSELF:
+			case SELF:
+				new CommandMyself(player, command, args).runCommand();
+				break;
 			default:
 				break;
 			}
 		}
+	}
+
+	private void commandTest() {
 	}
 
 	private void commandToggleExpression() {

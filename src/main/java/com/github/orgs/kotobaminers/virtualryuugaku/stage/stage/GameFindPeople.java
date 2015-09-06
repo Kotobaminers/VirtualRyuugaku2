@@ -14,7 +14,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.FireworkUtilit
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.FireworkUtility.FireworkColor;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMulti;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
@@ -36,7 +36,7 @@ public class GameFindPeople {
 		game.player = player;
 		game.stage = stage;
 		List<Talk> listTalk = new ArrayList<Talk>();
-		for(Conversation conversation : DataManagerConversation.getMapConversation().values()) {
+		for(ConversationMulti conversation : DataManagerConversation.getMapConversation().values()) {
 			if (conversation.stage.equalsIgnoreCase(stage)) {
 				listTalk.addAll(conversation.getKeyTalk());
 			}

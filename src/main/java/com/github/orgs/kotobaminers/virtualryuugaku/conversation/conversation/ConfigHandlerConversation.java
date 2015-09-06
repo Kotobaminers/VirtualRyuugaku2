@@ -20,9 +20,9 @@ public class ConfigHandlerConversation extends ConfigHandler {
 	public static final String DIRECTORY = "TALKER";
 	public static final String FILE_NAME = "TALKER.yml";
 	//Not used for now
-	public static List<Conversation> importConversationDefault() {
+	public static List<ConversationMulti> importConversationDefault() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		List<Conversation> list = new ArrayList<Conversation>();
+		List<ConversationMulti> list = new ArrayList<ConversationMulti>();
 //		for(String idString : config.getKeys(false)) {
 //			MemorySection memoryId = (MemorySection) config.get(idString);
 //			List<Integer> order = UtilitiesGeneral.toListInteger(idString);
@@ -79,13 +79,13 @@ public class ConfigHandlerConversation extends ConfigHandler {
 //		}
 		return list;
 	}
-	public static void saveConversation(Conversation conversation) {
+	public static void saveConversation(ConversationMulti conversation) {
 		if(conversation.listTalk.size() < 1) return;
 		List<Integer> id = new ArrayList<Integer>();
 		for (Talk talk : conversation.listTalk) {
 			id.add(talk.id);
 		}
-		String path = UtilitiesGeneral.toYamlStringListInteger(id);
+		String path = UtilitiesGeneral.toYamlStringFromListInteger(id);
 		config.set(path + "." + PathConversation.EDITOR, conversation.editor);
 		config.set(path + "." + PathConversation.STAGE, conversation.stage);
 		List<String> kanji = new ArrayList<String>();

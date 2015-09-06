@@ -21,14 +21,14 @@ import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utilitie
 
 public abstract class GameGlobal {
 	public static LinkedHashMap<String, Integer> scores = new LinkedHashMap<String, Integer>();
-	public static List<Talk> keys = new ArrayList<Talk>();
+	public static List<Talk> talks = new ArrayList<Talk>();
 	protected static Integer count = -1;
 	public static List<String> cantAnswer = new ArrayList<String>();
 	public static List<Language> listLanguage = new ArrayList<Language>();
 
 	public static void initializeGameGlobal() {
 		scores = new LinkedHashMap<String, Integer>();
-		keys = new ArrayList<Talk>();
+		talks = new ArrayList<Talk>();
 		count = -1;
 		cantAnswer = new ArrayList<String>();
 		listLanguage = new ArrayList<Language>();
@@ -54,14 +54,14 @@ public abstract class GameGlobal {
 				if(max == scores.get(name)) {
 					winners.add(name);
 				}
-				String[] opts = {UtilitiesGeneral.joinStrings(results, ", ")};
-				MessengerGeneral.broadcast(MessengerGeneral.getMessage(Message.GAME_RESULTS_1, opts));
-				String[] optsWinners = {UtilitiesGeneral.joinStrings(winners, ", ")};
-				MessengerGeneral.broadcast(MessengerGeneral.getMessage(Message.GAME_WINNERS_1, optsWinners));
-				for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-					if(winners.contains(player.getName())) {
-						shootFirework(player);
-					}
+			}
+			String[] opts = {UtilitiesGeneral.joinStrings(results, ", ")};
+			MessengerGeneral.broadcast(MessengerGeneral.getMessage(Message.GAME_RESULTS_1, opts));
+			String[] optsWinners = {UtilitiesGeneral.joinStrings(winners, ", ")};
+			MessengerGeneral.broadcast(MessengerGeneral.getMessage(Message.GAME_WINNERS_1, optsWinners));
+			for(Player player : Bukkit.getServer().getOnlinePlayers()) {
+				if(winners.contains(player.getName())) {
+					shootFirework(player);
 				}
 			}
 		} else {
@@ -87,7 +87,7 @@ public abstract class GameGlobal {
 
 	public Talk getCurrentKeyTalk() {
 		Talk talk = new Talk();
-		talk = keys.get(count);
+		talk = talks.get(count);
 		return talk;
 	}
 	public List<String> getCurrentAnswers() {
@@ -176,10 +176,10 @@ public abstract class GameGlobal {
 		return language;
 	}
 
-	public boolean hasNextKeyTalk() {
-		UtilitiesProgramming.printDebugMessage("" + keys.size() 	, new Exception());
-		if (0 < keys.size()) {
-			if(count + 1 < keys.size()) {
+	public boolean hasNextTalk() {
+		UtilitiesProgramming.printDebugMessage("" + talks.size() 	, new Exception());
+		if (0 < talks.size()) {
+			if(count + 1 < talks.size()) {
 				return true;
 			}
 		}
@@ -205,13 +205,13 @@ public abstract class GameGlobal {
 
 	public void setLanguageJapanese() {
 		listLanguage = new ArrayList<Language>();
-		for (int i = 0; i < keys.size(); i++) {
+		for (int i = 0; i < talks.size(); i++) {
 			listLanguage.add(Language.JP);
 		}
 	}
 	public void setLanguageEnglish() {
 		listLanguage = new ArrayList<Language>();
-		for (int i = 0; i < keys.size(); i++) {
+		for (int i = 0; i < talks.size(); i++) {
 			listLanguage.add(Language.EN);
 		}
 	}
@@ -220,8 +220,8 @@ public abstract class GameGlobal {
 		listLanguage = new ArrayList<Language>();
 		Random random = new Random();
 		Language language = Language.JP;
-		UtilitiesProgramming.printDebugMessage("" + keys.size(), new Exception());
-		for (int i = 0; i < keys.size(); i++) {
+		UtilitiesProgramming.printDebugMessage("" + talks.size(), new Exception());
+		for (int i = 0; i < talks.size(); i++) {
 			Integer value = random.nextInt(2);
 			UtilitiesProgramming.printDebugMessage("" + value, new Exception());
 			switch(value) {

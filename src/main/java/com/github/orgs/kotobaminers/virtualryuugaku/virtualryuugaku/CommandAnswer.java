@@ -74,7 +74,7 @@ public class CommandAnswer extends MyCommand {
 
 	private void commandGlobal() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		if(0 < GameGlobal.keys.size()) {
+		if(0 < GameGlobal.talks.size()) {
 			GameGlobalHandler.validataAnswer(player, answer);
 			GameGlobalHandler.updataScoreboard(player);
 		} else {

@@ -3,12 +3,13 @@ package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.LibraryManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConfigHandlerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.ControllerMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.DataManagerVRGNPC;
 
 public class CommandVirturalRyuugakuDebug {
 	public enum Debug {
-		NONE, CITIZENS, PLAYER, RELOAD, CONVERSATION, COMMENT, MODE, CONV, LOADCONV, LOADCONVERSATION, NPC, LOADNPC;
+		NONE, CITIZENS, PLAYER, RELOAD, CONVERSATION, COMMENT, MODE, CONV, LOADCONV, LOADCONVERSATION, NPC, LOADNPC, MYSELF;
 		public static Debug lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -23,6 +24,9 @@ public class CommandVirturalRyuugakuDebug {
 		if(0 < args.length) {
 			Debug debug = Debug.lookup(args[0]);
 			switch(debug) {
+			case MYSELF:
+				ControllerMyself.printDebugMyselfAll();
+				break;
 			case CITIZENS:
 				UtilitiesProgramming.printDebugCitizensAll();
 				break;
@@ -45,14 +49,14 @@ public class CommandVirturalRyuugakuDebug {
 			case LOADCONVERSATION:
 			case LOADCONV:
 				new ConfigHandlerConversation().initialize(DataManagerPlugin.plugin);
-				new DataManagerConversation().loadAll();
+				new DataManagerConversation().load();
 				break;
 			case NPC:
 				UtilitiesProgramming.printDebugVRGNPCAll();
 				break;
 			case LOADNPC:
 				new LibraryManager().initialize(DataManagerPlugin.plugin);
-				new DataManagerVRGNPC().loadAll();
+				new DataManagerVRGNPC().load();
 				break;
 			case NONE:
 				break;

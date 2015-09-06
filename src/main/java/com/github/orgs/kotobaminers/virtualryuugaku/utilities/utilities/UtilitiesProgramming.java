@@ -8,6 +8,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManage
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMulti;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
@@ -34,6 +35,7 @@ public class UtilitiesProgramming {
 			Bukkit.getLogger().info(UtilitiesGeneral.joinStrings(broadcast, " "));
 		}
 	}
+
 	public static void printDebugCitizensAll() {
 		printDebugMessage("", new Exception());
 		for(DataCitizens data : DataManagerCitizens.getMapDataCitizens().values()) {
@@ -48,13 +50,13 @@ public class UtilitiesProgramming {
 	}
 	public static void printDebugConversationAll() {
 		printDebugMessage("", new Exception());
-		for(Conversation data : DataManagerConversation.getMapConversation().values()) {
+		for(ConversationMulti data : DataManagerConversation.getMapConversation().values()) {
 			printDebugConversation(data);
 		}
 	}
 	public static void printDebugCommentAll() {
 		printDebugMessage("", new Exception());
-		for(Conversation data : DataManagerConversation.getMapConversation().values()) {
+		for(ConversationMulti data : DataManagerConversation.getMapConversation().values()) {
 			for(DataComment comment : data.mapComment.values()) {
 				printDebugComment(comment);
 			}
@@ -102,7 +104,6 @@ public class UtilitiesProgramming {
 		printDebugDescription(talk.description);
 	}
 	public static void printDebugDescription(Description description) {
-		printDebugMessage(description.getEnglishJoined(), new Exception());
-		printDebugMessage(description.getKanjiJoined(), new Exception());
+		printDebugMessage(description.getEnglishJoined() + "/" + description.getKanjiJoined() + "/" + description.getKanaJoined() + "/" + description.getRomajiJoined(), new Exception());
 	}
 }

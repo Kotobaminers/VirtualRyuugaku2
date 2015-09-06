@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerCommandUsage;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMulti;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
@@ -16,7 +16,7 @@ public class CommentHandler {
 	public static void printCommentNew(Player player) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		Boolean existsNew = false;
-		for (Conversation talker : DataManagerConversation.getMapConversation().values()) {
+		for (ConversationMulti talker : DataManagerConversation.getMapConversation().values()) {
 			if (talker.editor.contains(player.getName())) {
 				List<String> listSenders = new ArrayList<String>();
 				Integer count = 0;

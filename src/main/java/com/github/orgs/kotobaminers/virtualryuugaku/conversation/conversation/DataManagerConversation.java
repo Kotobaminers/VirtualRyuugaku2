@@ -13,34 +13,34 @@ import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.LibraryManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.DataManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class DataManagerConversation implements DataManager {
 	//mapTalker
-	private static Map<List<Integer>, Conversation> mapConversation = new HashMap<List<Integer>, Conversation>();
+	private static Map<List<Integer>, ConversationMulti> mapConversation = new HashMap<List<Integer>, ConversationMulti>();
 
 	@Override
-	public void loadAll() {
+	public void load() {
 		initialize();
 		loadMapConversation();
 	}
 	@Override
 	public void initialize() {
-		mapConversation = new HashMap<List<Integer>, Conversation>();
+		mapConversation = new HashMap<List<Integer>, ConversationMulti>();
 	}
 	private static void loadMapConversation() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		List<Conversation> list = new ArrayList<Conversation>();
+		List<ConversationMulti> list = new ArrayList<ConversationMulti>();
 //		list.addAll(ConfigHandlerConversation.importConversationDefault());
 		Map<String, YamlConfiguration> mapConfig = LibraryManager.getListLibraryStage();
 		for(String stage : mapConfig.keySet()) {
 			list.addAll(LibraryHandlerConversation.importConversationLibrary(stage, mapConfig.get(stage)));
 		}
-		for(Conversation conversation : list) {
-			if(!Conversation.isValidCitizensId(conversation.getOrder())) {
+		for(ConversationMulti conversation : list) {
+			if(!ConversationMulti.isValidCitizensId(conversation.getOrder())) {
 				UtilitiesProgramming.printDebugMessage("Non Existing NPC ID: " + conversation.getOrder(), new Exception());
 //			} else {
 //				overrideCitizens(conversation);
@@ -65,7 +65,7 @@ public class DataManagerConversation implements DataManager {
 
 	public static void printHint(Player player, String stage) {
 		List<String> answers = new ArrayList<String>();
-		for(Conversation conversation : getMapConversation().values()) {
+		for(ConversationMulti conversation : getMapConversation().values()) {
 			if(conversation.stage.equalsIgnoreCase(stage)) {
 				answers.addAll(conversation.question.getAnswers());
 			}
@@ -76,16 +76,16 @@ public class DataManagerConversation implements DataManager {
 	}
 
 	@Override
-	public void saveAll() {
+	public void save() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		for(Conversation talker : getMapConversation().values()) {
-			UtilitiesProgramming.printDebugMessage("", new Exception());
+//		for(ConversationQuestioner talker : getMapConversation().values()) {
+//			UtilitiesProgramming.printDebugMessage("", new Exception());
 //			ConfigHandlerConversation.saveConversation(talker);
-		}
-		new ConfigHandlerConversation().save();
+//		}
+//		new ConfigHandlerConversation().save();
 	}
 
-	public static void registerConversation(Conversation conversation) {
+	public static void registerConversation(ConversationMulti conversation) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		if(conversation.isEmpty()) {
 			UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -106,7 +106,7 @@ public class DataManagerConversation implements DataManager {
 
 	public static Integer getNumberQuestion(String stage) {
 		Integer question = 0;
-		for(Conversation search : DataManagerConversation.getMapConversation().values()) {
+		for(ConversationMulti search : DataManagerConversation.getMapConversation().values()) {
 			if(search.stage.equalsIgnoreCase(stage)) {
 				if(search.hasValidQuestion()) {
 					question++;
@@ -117,18 +117,18 @@ public class DataManagerConversation implements DataManager {
 	}
 
 
-	public static Map<List<Integer>, Conversation> getMapConversation() {
+	public static Map<List<Integer>, ConversationMulti> getMapConversation() {
 		return mapConversation;
 	}
-	public static Conversation getTalker(List<Integer> order) {
-		Conversation conversation = new Conversation();
+	public static ConversationMulti getTalker(List<Integer> order) {
+		ConversationMulti conversation = new ConversationMulti();
 		if(getMapConversation().containsKey(order)) {
 			conversation = getMapConversation().get(order);
 		}
 		return conversation;
 	}
-	public static Conversation getConversation(Integer id) {
-		Conversation conversation = new Conversation();
+	public static ConversationMulti getConversation(Integer id) {
+		ConversationMulti conversation = new ConversationMulti();
 		for(List<Integer> order : getMapConversation().keySet()) {
 			if(order.contains(id)) {
 				conversation = getMapConversation().get(order);
@@ -137,7 +137,7 @@ public class DataManagerConversation implements DataManager {
 		}
 		return conversation;
 	}
-	private static void putTalker(Conversation talker) {
+	private static void putTalker(ConversationMulti talker) {
 		getMapConversation().put(talker.getOrder(), talker);
 	}
 }

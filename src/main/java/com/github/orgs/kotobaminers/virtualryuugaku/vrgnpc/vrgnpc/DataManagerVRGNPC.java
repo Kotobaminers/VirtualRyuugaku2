@@ -11,11 +11,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManagerCitizens;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.LibraryManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConfigHandlerConversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.DataManager;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class DataManagerVRGNPC implements DataManager {
@@ -23,7 +22,7 @@ public class DataManagerVRGNPC implements DataManager {
 	private static Map<Integer, VRGNPC> mapVRGNPC = new HashMap<Integer, VRGNPC>();
 
 	@Override
-	public void loadAll() {
+	public void load() {
 		initialize();
 		loadMapVRGNPC();
 	}
@@ -51,7 +50,7 @@ public class DataManagerVRGNPC implements DataManager {
 	}
 
 	@Override
-	public void saveAll() {
+	public void save() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		for(VRGNPC vrgnpc : getMapVRGNPC().values()) {
 			UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -98,14 +97,6 @@ public class DataManagerVRGNPC implements DataManager {
 		return listVRGNPC;
 	}
 
-	public static void printVRGNPCInfo(int id, Player player) {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		if(existsVRGNPC(id)) {
-			VRGNPC vrgnpc = getVRGNPC(id);
-			player.sendMessage("[NPC] NAME: " + vrgnpc.name + ", STAGE: " + vrgnpc.stage + ", ID: " + vrgnpc.id + ", EDITOR: " + UtilitiesGeneral.joinStrings(vrgnpc.editor, ", "));
-			printListDescriptionAll(id, player);
-		}
-	}
 	public static void printListDescription(int id, Player player) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		if(existsVRGNPC(id)) {

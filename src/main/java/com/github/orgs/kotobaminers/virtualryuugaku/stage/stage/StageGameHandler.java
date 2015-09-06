@@ -11,7 +11,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.FireworkUtilit
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.FireworkUtility.FireworkColor;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMulti;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
@@ -26,7 +26,7 @@ public abstract class StageGameHandler {
 	public abstract void loadNewGame(String name, String stage);
 	public void loadNewGameSorted(String stage) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		for(Conversation conversation : DataManagerConversation.getMapConversation().values()) {
+		for(ConversationMulti conversation : DataManagerConversation.getMapConversation().values()) {
 			UtilitiesProgramming.printDebugMessage(conversation.stage + " " + stage, new Exception());
 			UtilitiesProgramming.printDebugConversation(conversation);
 			if(conversation.stage.equalsIgnoreCase(stage)) {
@@ -104,7 +104,7 @@ public abstract class StageGameHandler {
 	}
 
 	public static boolean existsStage(String stage) {
-		for(Conversation conversation : DataManagerConversation.getMapConversation().values()) {
+		for(ConversationMulti conversation : DataManagerConversation.getMapConversation().values()) {
 			if(conversation.stage.equalsIgnoreCase(stage)) {
 				if(0 < conversation.getKeyTalk().size()) {
 					return true;

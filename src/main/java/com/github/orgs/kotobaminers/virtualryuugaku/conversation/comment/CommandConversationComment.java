@@ -11,7 +11,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerComma
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment.CommentState;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMulti;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
@@ -67,7 +67,7 @@ public class CommandConversationComment extends MyCommand {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		if(2 < args.length) {
 			String name = args[2];
-			Conversation talker = DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select);
+			ConversationMulti talker = DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select);
 			if(talker.canEdit(player.getName())) {
 				MessengerGeneral.print(player, Message.CANT_EDIT_TALKER_0, null);
 			}
@@ -87,7 +87,7 @@ public class CommandConversationComment extends MyCommand {
 	}
 	private void commandRead() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		Conversation talker = DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select);
+		ConversationMulti talker = DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select);
 //		String[] opts = {talker.name, talker.id.toString()};
 //		MessengerGeneral.print(player, Message.SHOW_COMMENT_2, opts);
 		Integer count = 0;
@@ -103,7 +103,7 @@ public class CommandConversationComment extends MyCommand {
 	private void commandSend() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		if(2 < args.length){
-			Conversation talker = DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select);
+			ConversationMulti talker = DataManagerConversation.getConversation(DataManagerPlayer.getDataPlayer(player).select);
 			List<String> list = new ArrayList<String>();
 			for (int i = 2; i < args.length; i++) {
 				list.add(args[i]);

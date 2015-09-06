@@ -68,7 +68,7 @@ public class CommandConversationOP extends MyCommand {
 	private void commandDebug() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-		Conversation talker = DataManagerConversation.getConversation(data.select);
+		ConversationMulti talker = DataManagerConversation.getConversation(data.select);
 		UtilitiesProgramming.printDebugConversation(talker);
 	}
 	private void commandCreate() {

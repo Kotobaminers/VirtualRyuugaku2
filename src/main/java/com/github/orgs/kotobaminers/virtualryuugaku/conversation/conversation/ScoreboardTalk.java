@@ -18,7 +18,7 @@ public class ScoreboardTalk /*extends ScoreboardUtility */{
 	public static final String FIND_PEOPLE = ChatColor.GREEN + "Find People";
 	public static final String PRACTICE = ChatColor.AQUA + "Practice";
 
-	public void update(Player player, Conversation conversation, DataPlayer data) {
+	public void update(Player player, ConversationMulti conversation, DataPlayer data) {
 //		LinkedHashMap<String, Integer> scores = new LinkedHashMap<String, Integer>();
 //		Integer keyTotal = 0;
 //		String stage = conversation.stage;

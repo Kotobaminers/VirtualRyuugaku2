@@ -9,12 +9,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMulti;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.EventConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.ControllerMyself;
+import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GameFindPeopleHandler;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
-import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.DataManagerVRGNPC;
+import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.NPCHandler;
 
 public class Events implements Listener {
 	public static EventCreate flagEventCreate = EventCreate.NONE;
@@ -26,22 +27,30 @@ public class Events implements Listener {
 	public void onClickNPCLeft(NPCLeftClickEvent event) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		Player player = event.getClicker();
-		DataManagerVRGNPC.printVRGNPCInfo(event.getNPC().getId(), player);
+		Integer id = event.getNPC().getId();
+		NPCHandler.NPCType type = NPCHandler.getNPCType(id);
+		DataManagerPlayer.getDataPlayer(player).select = id;
+		UtilitiesProgramming.printDebugMessage("NPC SELECTED: TYPE: " + type.name() + ", ID: " + id.toString(), new Exception());//TODO
 	}
 
 	@EventHandler
 	public void onClickNPCRight(NPCRightClickEvent event) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		NPC npc = event.getNPC();
+		if (ControllerMyself.isNPCMyself(npc)) {
+			ControllerMyself.happensEvent(npc, event.getClicker());
+			return;
+		}
+
 		if(DataManagerConversation.existsConversation(npc)) {
 			Integer id = npc.getId();
-			Conversation conversation = DataManagerConversation.getConversation(id);
+			ConversationMulti conversation = DataManagerConversation.getConversation(id);
 			if(conversation.hasEditor()) {
 				Player player = event.getClicker();
 				if(GameFindPeopleHandler.hasGame(player)) {
 					GameFindPeopleHandler.getGame(player.getName()).validate(id);
 				} else {
-					new EventConversation(npc, conversation, player).talk();
+					conversation.talk(player);
 				}
 			}
 			return;

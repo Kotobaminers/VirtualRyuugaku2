@@ -15,9 +15,9 @@ import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utilitie
 
 public class LibraryHandlerConversation {
 	private enum PathStage {CONVERSATION, EDITOR}
-	public static List<Conversation> importConversationLibrary(String stage, YamlConfiguration library) {
+	public static List<ConversationMulti> importConversationLibrary(String stage, YamlConfiguration library) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		List<Conversation> list = new ArrayList<Conversation>();
+		List<ConversationMulti> list = new ArrayList<ConversationMulti>();
 		UtilitiesProgramming.printDebugMessage("Stage: " + stage, new Exception());
 		List<String> editor = library.getStringList(PathConversation.EDITOR.toString());
 		for(String talkerPath : library.getKeys(false)) {
@@ -26,7 +26,7 @@ public class LibraryHandlerConversation {
 				for(String idString : memory.getKeys(false)) {
 					MemorySection memoryId = (MemorySection) memory.get(idString);
 					List<Integer> order = UtilitiesGeneral.toListInteger(idString);
-					Conversation conversation = new Conversation();
+					ConversationMulti conversation = new ConversationMulti();
 					conversation.stage = stage;
 					conversation.editor.addAll(editor);
 					//Name will be imported from citizens data.
@@ -38,8 +38,8 @@ public class LibraryHandlerConversation {
 						if(size.equals(kanji.size()) && size.equals(kana.size()) && size.equals(en.size())) {
 							for(int i = 0; i < size; i++) {
 								UtilitiesProgramming.printDebugMessage("", new Exception());
-								if(!Conversation.isValidCitizensId(order)) {
-									UtilitiesProgramming.printDebugMessage("Invalid Order: " + UtilitiesGeneral.toYamlStringListInteger(order), new Exception());
+								if(!ConversationMulti.isValidCitizensId(order)) {
+									UtilitiesProgramming.printDebugMessage("Invalid Order: " + UtilitiesGeneral.toYamlStringFromListInteger(order), new Exception());
 								}
 								String name = DataManagerCitizens.getDataCitizens(order.get(i)).name;
 								Description description = Description.create(kanji.get(i), kana.get(i), en.get(i), new ArrayList<String>());

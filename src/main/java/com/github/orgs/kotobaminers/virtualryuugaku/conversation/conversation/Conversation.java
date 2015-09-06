@@ -12,54 +12,65 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManagerCitizens;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerCommandUsage;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerCommandUsage.Usage;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment;
+import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
+import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.NPCHandler;
+import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.NPCHandler.NPCType;
 
-public class Conversation {
+public abstract class Conversation {
 	public String stage = "";
 	public List<String> editor = new ArrayList<String>();
 	public List<Talk> listTalk = new ArrayList<Talk>();
 	public Map<String, DataComment> mapComment = new HashMap<String, DataComment>();
 	public ConversationQuestion question = new ConversationQuestion();
 
-	public List<Integer> getOrder() {
-		List<Integer> order = new ArrayList<Integer>();
-		for(Talk talk : listTalk) {
-			order.add(talk.id);
-		}
-		return order;
-	}
-
-	public void talkNext(Player player, DataPlayer data) {
-		UtilitiesProgramming.printDebugMessage(listTalk.size() + " " + data.line, new Exception());
+	public void talk(Player player) {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
+//		printNext(player, data);
 		if(0 < listTalk.size()) {
 			if(listTalk.size() <= data.line) {
+				data.line = 0;
 				if ( 0 < question.getQuestion().length()) {
 					question.giveQuestion(player, question);
 					return;
-				} else {
-					data.line = 0;
 				}
 			}
 			Talk talk = listTalk.get(data.line);
-			talk.print(player);
-		} else {
-			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.NO_SENTENCE_0, null));
-			if(editor.contains(player.getName())) {
-				MessengerCommandUsage.print(player, Usage.TALKER_SENTENCE_0, null);
+			Integer id = talk.id;
+			NPC npc = NPCHandler.getNPC(id);
+			NPCType type = NPCHandler.getNPCType(id);
+			if (!type.equals(NPCType.NOT_EXISTS)) {
+				talk.print(player);
+				addLine(data);
+				soundTalk(player);
+				effectTalk(player, npc);
 			}
+			return;
+		} else {
+
+		}
+
+
+//		new ScoreboardTalk().update(player, conversation, data);
+	}
+
+	private void addLine(DataPlayer data) {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		if(listTalk.size() <= data.line) {
+			data.line = 0;
+		} else {
+			data.line++;
 		}
 	}
 
-	public void talkEffect(Player player, NPC npc) {
-		player.getWorld().playEffect(npc.getStoredLocation().add(0, 2, 0), Effect.SMOKE, 22);//data is 22(None direction value).
+	private void effectTalk(Player player, NPC npc) {
+		player.getWorld().playEffect(npc.getStoredLocation().add(0, 2, 0), Effect.SMOKE, 22);//data is 22(No direction value).
 	}
-	public void talkSound(Player player) {
+	private void soundTalk(Player player) {
 		player.playSound(player.getLocation(), Sound.NOTE_PIANO, 1, 1);
 	}
 
@@ -82,22 +93,6 @@ public class Conversation {
 	}
 
 	public void printInformation(Player player) {
-//		if(isEmpty()) return;
-//		String[] opts = {name};
-//		MessengerGeneral.print(player, Message.TALKER_INFO_LABEL_1, opts);
-//		String editors = UtilitiesGeneral.joinStrings(editor, ", ");
-//		String[] opts2 = {id.toString(), editors, stage};
-//		MessengerGeneral.print(player, Message.TALKER_INFO_DATA_3, opts2);
-//		Integer count = 0;
-//		List<Expression> expressions = Arrays.asList(Expression.EN, Expression.KANJI, Expression.KANA);
-//		for(Talk talk : listTalk) {
-//			Description sentence = talk.description;
-//			count++;
-//			for(Expression expression : expressions) {
-//				String[] opts3 = {count.toString(), expression.toString(), sentence.express(expression)};
-//				MessengerGeneral.print(player, Message.TALKER_INFO_SENTENCE_3, opts3);
-//			}
-//		}
 	}
 
 	public Boolean canEdit(String playerName) {
@@ -121,6 +116,7 @@ public class Conversation {
 		}
 		return false;
 	}
+
 	public boolean hasValidQuestion() {
 		UtilitiesProgramming.printDebugMessage("" + editor.size(), new Exception());
 		if(0 < question.getQuestion().length() && 0 < question.getAnswers().size()) {
@@ -128,4 +124,11 @@ public class Conversation {
 		}
 		return false;
 	}
+
+	public String getDebugMessage() {
+		String edit = "[" + UtilitiesGeneral.joinStrings(editor, ", ") + "]";
+		String message = "[CONV] STAGE: " + stage + ", EDITOR: " + edit + "ID:" + getKeyTalk().toString() ;
+		return message;
+	}
+
 }
