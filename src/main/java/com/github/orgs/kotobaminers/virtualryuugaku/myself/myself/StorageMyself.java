@@ -20,6 +20,8 @@ import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.DataManagerP
 public class StorageMyself implements Storage, YamlController{
 	public static HashMap<DataKeyMyself, ConversationMyself> mapConversationMyself = new HashMap<DataKeyMyself, ConversationMyself>();
 	public static Map<String, List<Integer>> mapMyselfNPC = new HashMap<String, List<Integer>>();
+	public static HashMap<Integer, String> mapMe = new HashMap<Integer, String>();
+
 	public static final String FILE = DataManagerPlugin.plugin.getDataFolder() + "//CONFIG//MYSELF.yml";
 	private static YamlConfiguration config = null;
 	private static final Integer DUMMY_ID = 0;
@@ -33,6 +35,7 @@ public class StorageMyself implements Storage, YamlController{
 	public void initialize() {
 		mapConversationMyself = new HashMap<DataKeyMyself, ConversationMyself>();
 		mapMyselfNPC = new HashMap<String, List<Integer>>();
+		mapMe = new HashMap<Integer, String>();
 		setConfig();
 		load();
 	}
@@ -63,16 +66,19 @@ public class StorageMyself implements Storage, YamlController{
 		MemorySection search = null;
 		for(String key : config.getKeys(true)) {
 			UtilitiesProgramming.printDebugMessage(key, new Exception());
-			//mapMyselfNPC
-			if(key.equalsIgnoreCase("MYSELF.ID")) {
+			//SETTING
+			if(key.equalsIgnoreCase("MYSELF.SETTING")) {
 				search = (MemorySection) config.get(key);
-				for(String stage : search.getKeys(false)) {
-					mapMyselfNPC.put(stage, search.getIntegerList(stage));
+				MemorySection stage = null;
+				for(String name : search.getKeys(false)) {
+					stage = (MemorySection) search.get(name);
+					mapMyselfNPC.put(name, stage.getIntegerList("ID"));
+					mapMe.put(stage.getInt("ME"), name);
 				}
 			}
 
-			//mapConversationMyself
-			if(key.equalsIgnoreCase("MYSELF.STAGE")) {
+			//CONVERSATION
+			if(key.equalsIgnoreCase("MYSELF.CONVERSATION")) {
 				search = (MemorySection) config.get(key);
 				MemorySection memoryStage = null;
 				List<String> kanji = new ArrayList<String>();

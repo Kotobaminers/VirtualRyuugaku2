@@ -37,13 +37,18 @@ public class Events implements Listener {
 	public void onClickNPCRight(NPCRightClickEvent event) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		NPC npc = event.getNPC();
+		Integer id = npc.getId();
+		if (ControllerMyself.isMe(id)) {
+			ControllerMyself.printMe(npc, event.getClicker());
+			return;
+		}
+
 		if (ControllerMyself.isNPCMyself(npc)) {
 			ControllerMyself.happensEvent(npc, event.getClicker());
 			return;
 		}
 
 		if(DataManagerConversation.existsConversation(npc)) {
-			Integer id = npc.getId();
 			ConversationMulti conversation = DataManagerConversation.getConversation(id);
 			if(conversation.hasEditor()) {
 				Player player = event.getClicker();

@@ -64,8 +64,8 @@ public class ControllerMyself extends Controller {
 		if(isNPCMyself(npc)) {
 			Integer id = npc.getId();
 			String stage = getStageFromID(id).toUpperCase();
-			DataKeyMyself key = new DataKeyMyself(npc.getName(), stage);
 			ConversationMyself conversation = new ConversationMyself();
+			DataKeyMyself key = new DataKeyMyself(npc.getName(), stage);
 			if(StorageMyself.mapConversationMyself.containsKey(key)) {
 				conversation = StorageMyself.mapConversationMyself.get(key);
 			}
@@ -125,7 +125,6 @@ public class ControllerMyself extends Controller {
 			DataKeyMyself key = new DataKeyMyself(npc.getName(), stage);
 			UtilitiesProgramming.printDebugMessage(npc.getName() + stage, new Exception());
 			if(StorageMyself.mapConversationMyself.containsKey(key)) {
-				System.out.println(StorageMyself.mapConversationMyself.containsKey(key));
 				conversations.add(StorageMyself.mapConversationMyself.get(key));
 			}
 		}
@@ -162,6 +161,52 @@ public class ControllerMyself extends Controller {
 		}
 	}
 
+	public static void printMe(NPC npc, Player player) {
+		Integer id = npc.getId();
+		String stage = StorageMyself.mapMe.get(id);
+		ConversationMyself conversation = new ConversationMyself();
+		DataKeyMyself key = new DataKeyMyself(npc.getName(), stage);
+		if(StorageMyself.mapConversationMyself.containsKey(key)) {
+			conversation = StorageMyself.mapConversationMyself.get(key);
+		}
+		conversation.talk(player);
+	}
+
+	public static void updateMe(Player player) {
+		List<String> myStage = new ArrayList<String>();
+		String name = player.getName();
+		for (DataKeyMyself key : StorageMyself.mapConversationMyself.keySet()) {
+			if (key.owner.equalsIgnoreCase(name)) {
+				myStage.add(key.stage.toUpperCase());
+			}
+		}
+		for (Entry<Integer, String> entry : StorageMyself.mapMe.entrySet()) {
+			String stage = entry.getValue().toUpperCase();
+			Integer id = entry.getKey();
+			if (myStage.contains(stage)) {
+				try {
+					NPCHandler.changeNPCAsPlayer(id, stage, name);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			} else {
+				try {
+					NPCHandler.changeNPCAsEmpty(id);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public static boolean isMe(Integer id) {
+		if (StorageMyself.mapMe.containsKey(id)) {
+			UtilitiesProgramming.printDebugMessage("It's ME: " + id.toString(), new Exception());
+			return true;
+		}
+		return false;
+	}
+
 	public static void printDebugMyselfAll() {
 		for(Conversation conversation :StorageMyself.mapConversationMyself.values()) {
 			UtilitiesProgramming.printDebugMessage(conversation.getDebugMessage(), new Exception());
@@ -170,4 +215,5 @@ public class ControllerMyself extends Controller {
 			}
 		}
 	}
+
 }

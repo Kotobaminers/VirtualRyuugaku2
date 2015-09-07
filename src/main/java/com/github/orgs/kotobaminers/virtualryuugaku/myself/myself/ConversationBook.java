@@ -22,6 +22,7 @@ public class ConversationBook {
 	//Fields for handling
 	private Player holder;
 	public BookMeta book = null;
+	public static final String separator = "\n";
 
 	private ConversationBook() {};
 
@@ -56,11 +57,42 @@ public class ConversationBook {
 			if(tmp.hasPages()) {
 				book = tmp;
 			}
+
 		}
 		return book;
 	}
 
+	private String loadPage(Integer number) throws Exception{
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		String black = "";
+		if(number <= book.getPageCount()) {
+			String section = "§";
+			String page = book.getPage(number);
+
+			List<Integer> index = new ArrayList<Integer>();
+			for (int i = 0; i < page.length(); i++) {
+				String search = page.substring(i, i+1);
+				if (search.equalsIgnoreCase(section)) {
+					i++;
+				} else {
+					index.add(i);
+				}
+			}
+
+			for(int i : index) {
+				black += page.substring(i, i+1);
+			}
+			UtilitiesProgramming.printDebugMessage(black, new Exception());
+			System.out.println(index);
+		} else {
+			throw new Exception();
+		}
+		return black;
+	}
+
 	public boolean isMine() {
+		UtilitiesProgramming.printCharCode(owner);
+		UtilitiesProgramming.printCharCode(holder.getName());
 		if(holder.getName().equalsIgnoreCase(owner)) {
 			return true;
 		}
@@ -69,32 +101,43 @@ public class ConversationBook {
 
 	private String loadOwner() {
 		String owner = "";
-		String page = book.getPage(1);
-		String[] strings = page.split("\n");
-		if(0 < strings.length) {
-			owner = strings[0];
+		try {
+			String page = loadPage(1);
+			String[] strings = page.split(separator);
+			if(0 < strings.length) {
+				owner = strings[0];
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return owner;
 	}
 
 	private String loadStage() {
-		String page = book.getPage(1);
-		String[] strings = page.split("\n");
 		String stage = "";
-		if(1 < strings.length) {
-			stage = strings[1];
+		try {
+			String page = loadPage(1);
+			String[] strings = page.split(separator);
+			if(1 < strings.length) {
+				stage = strings[1];
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return stage;
 	}
 
 	private ConversationMyself loadConversations() {
-		System.out.println(book.getPageCount());
 		ConversationMyself conversation = new ConversationMyself();
 		if(1 < book.getPageCount()) {
 			List<List<String>> pages = new ArrayList<List<String>>();
 			List<String> lines = new ArrayList<String>();
 			for(Integer index = 2; index <= book.getPageCount(); index++) {
-				lines = Arrays.asList(book.getPage(index).split("\n"));
+				try {
+					lines = Arrays.asList(loadPage(index).split(separator));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				pages.add(lines);
 			}
 			conversation = createConversation(pages);

@@ -106,4 +106,15 @@ public class UtilitiesProgramming {
 	public static void printDebugDescription(Description description) {
 		printDebugMessage(description.getEnglishJoined() + "/" + description.getKanjiJoined() + "/" + description.getKanaJoined() + "/" + description.getRomajiJoined(), new Exception());
 	}
+
+	public static void printCharCode(String string) {
+		String dat = string;
+		char[] buf1 = dat.toCharArray();
+		String buf2 = new String("");
+
+		for (char buf : buf1) {
+			buf2 += Integer.toString(buf, 16) + " ";
+		}
+		UtilitiesProgramming.printDebugMessage("CharCode: " + buf2, new Exception());
+	}
 }

@@ -3,8 +3,6 @@ package com.github.orgs.kotobaminers.virtualryuugaku.myself.myself;
 import java.util.Collections;
 import java.util.List;
 
-import org.bukkit.entity.EntityType;
-
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.NPCHandler;
 
@@ -40,13 +38,19 @@ public class StageMyself {
 		Collections.shuffle(ids);
 		Collections.shuffle(players);
 		for (int i = 0; i < max; i++) {
-			NPCHandler.changeType(ids.get(i), EntityType.PLAYER);
-			NPCHandler.changeName(ids.get(i), players.get(i));
-			ControllerMyself.setTalkParams(players.get(i), name, ids.get(i));
+			try {
+				NPCHandler.changeNPCAsPlayer(ids.get(i), name, players.get(i));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		for (int i = max; i < ids.size(); i++) {
-			NPCHandler.changeName(ids.get(i), "EMPTY");
-			NPCHandler.changeType(ids.get(i), EntityType.CREEPER);
+			try {
+				NPCHandler.changeNPCAsEmpty(ids.get(i));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
+
 }
