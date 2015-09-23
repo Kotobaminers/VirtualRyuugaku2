@@ -175,7 +175,6 @@ public class ConversationBook {
 			}
 			if(1 < page.size()) {
 				Talk talk = new Talk();
-				talk.name = owner;
 				en = page.get(0);
 				kana = page.get(1);
 				List<String> tips = new ArrayList<String>();

@@ -6,11 +6,10 @@ import java.util.List;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManagerCitizens;
+import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.ConfigCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.PathConversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0.ConversationQuestion;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
@@ -21,6 +20,10 @@ public class LibraryHandlerConversation {
 		List<ConversationMulti> list = new ArrayList<ConversationMulti>();
 		UtilitiesProgramming.printDebugMessage("Stage: " + stage, new Exception());
 		List<String> editor = library.getStringList(PathConversation.EDITOR.toString());
+
+		ConfigCitizens citizens = new ConfigCitizens();
+		citizens.importConfiguration();
+
 		for(String talkerPath : library.getKeys(false)) {
 			if(talkerPath.equalsIgnoreCase(PathStage.CONVERSATION.toString())) {
 				MemorySection memory = (MemorySection) library.get(talkerPath);
@@ -39,11 +42,16 @@ public class LibraryHandlerConversation {
 						if(size.equals(kanji.size()) && size.equals(kana.size()) && size.equals(en.size())) {
 							for(int i = 0; i < size; i++) {
 								UtilitiesProgramming.printDebugMessage("", new Exception());
-								String name = DataManagerCitizens.getDataCitizens(order.get(i)).name;
-								Description description = Description.create(kanji.get(i), kana.get(i), en.get(i), new ArrayList<String>());
-								Talk talk = new Talk().create(order.get(i), name, description);
-								UtilitiesProgramming.printDebugTalk(talk);
-								conversation.listTalk.add(talk);
+								Integer id = order.get(i);
+								if (citizens.existsNPC(id)) {
+									String name = citizens.getNPCName(id);
+									Description description = Description.create(kanji.get(i), kana.get(i), en.get(i), new ArrayList<String>());
+									Talk talk = new Talk().create(id, name, description);
+									UtilitiesProgramming.printDebugTalk(talk);
+									conversation.listTalk.add(talk);
+								} else {
+									UtilitiesProgramming.printDebugMessage("NotExistNPC: " + id.toString(), new Exception());
+								}
 							}
 						}
 					}

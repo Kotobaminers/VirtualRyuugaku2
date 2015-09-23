@@ -5,7 +5,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.LibraryManager
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ControllerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.ConfigHandlerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
-import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GameGlobalHandler0;
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage1.GameGlobalHandler0;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public final class DataManagerPlugin {

@@ -8,8 +8,8 @@ import org.bukkit.entity.Player;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMyself;
-import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GameGlobal0;
-import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GameScoreboardTrainingGlobal;
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage1.GameGlobal0;
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage1.GameScoreboardTrainingGlobal;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 

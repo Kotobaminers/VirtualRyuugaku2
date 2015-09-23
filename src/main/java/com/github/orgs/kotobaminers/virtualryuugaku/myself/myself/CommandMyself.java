@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation.CheckState;
-import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GameGlobalHandler0;
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage1.GameGlobalHandler0;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.SoundMeta.Scene;

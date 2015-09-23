@@ -16,7 +16,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utilitie
 
 public class Talk {
 	public Integer id = 0;
-	public String name;
+	public String name = "";
 	public Description description;
 	public boolean key = false;
 	public Map<String, String> mapComment = new HashMap<String, String>();
@@ -24,7 +24,6 @@ public class Talk {
 	public Talk create(Integer id, String name, Description description) {
 		Talk talk = new Talk();
 		talk.id = id;
-		talk.name = name;
 		talk.description = description;
 		return talk;
 	}
@@ -63,7 +62,7 @@ public class Talk {
 	}
 
 	public String getDebugMessage() {
-		String message = "ID: " + id.toString() + ", NAME: " + name + ", " + description.getEnglishJoined() + "/" + description.getKanjiJoined() + "/" + description.getKanaJoined() + "/" + description.getRomajiJoined();
+		String message = "ID: " + id.toString() + ", " + description.getEnglishJoined() + "/" + description.getKanjiJoined() + "/" + description.getKanaJoined() + "/" + description.getRomajiJoined();
 		return message;
 	}
 

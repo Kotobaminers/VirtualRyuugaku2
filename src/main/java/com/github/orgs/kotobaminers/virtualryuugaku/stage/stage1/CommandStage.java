@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.stage.stage;
+package com.github.orgs.kotobaminers.virtualryuugaku.stage.stage1;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,14 +8,14 @@ import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataCitizens;
-import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManagerCitizens;
+import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.ConfigCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMulti;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
-import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GameFindPeople.Mode;
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage1.GameFindPeople.Mode;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
@@ -230,8 +230,8 @@ public class CommandStage extends MyCommand {
 				if(conversation.stage.equalsIgnoreCase(stage)) {
 					for(Talk talk : conversation.listTalk) {
 						Integer id = talk.id;
-						if(DataManagerCitizens.getMapDataCitizens().containsKey(id)) {
-							DataCitizens data = DataManagerCitizens.getDataCitizens(id);
+						if(ConfigCitizens.getMapDataCitizens().containsKey(id)) {
+							DataCitizens data = ConfigCitizens.getDataCitizens(id);
 							player.teleport(data.location);
 							MessengerGeneral.print(player, Message.TELEPORT_0, null);
 							return;

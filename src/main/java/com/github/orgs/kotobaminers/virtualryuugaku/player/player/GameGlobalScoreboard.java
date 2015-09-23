@@ -1,17 +1,21 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.stage.stage;
+package com.github.orgs.kotobaminers.virtualryuugaku.player.player;
 
+import java.util.LinkedHashMap;
+
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.ScoreboardUtility;
 
-public abstract class GameScoreboard extends ScoreboardUtility {
+public class GameGlobalScoreboard extends ScoreboardUtility {
 	private static Scoreboard scoreboard;
 	private static Objective objective;
+	private static final String NAME_BOARD = "" + ChatColor.LIGHT_PURPLE + ChatColor.BOLD + "* SCORE *";
 
-	public void update(Player player) {
-		updateScoreboard(player, getNameBoard(), GameGlobal0.scores);
+	public void update(Player player, LinkedHashMap<String, Integer> scores) {
+		updateScoreboard(player, NAME_BOARD, scores);
 	}
 
 	@Override
@@ -33,5 +37,4 @@ public abstract class GameScoreboard extends ScoreboardUtility {
 	public void putObjective(String name, Objective obj) {
 		objective = obj;
 	}
-	public abstract String getNameBoard();
 }

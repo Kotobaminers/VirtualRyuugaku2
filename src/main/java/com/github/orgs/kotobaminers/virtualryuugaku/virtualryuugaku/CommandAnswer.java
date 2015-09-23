@@ -8,10 +8,9 @@ import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.game.game.GameGlobalController;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
-import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GameGlobal0;
-import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GameGlobalHandler0;
-import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.StageGameDataStorage;
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage1.StageGameDataStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
@@ -74,9 +73,9 @@ public class CommandAnswer extends MyCommand {
 
 	private void commandGlobal() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		if(0 < GameGlobal0.talks.size()) {
-			GameGlobalHandler0.validataAnswer(player, answer);
-			GameGlobalHandler0.updataScoreboard(player);
+		if(GameGlobalController.isValidGame()) {
+			GameGlobalController.validataAnswer(player, answer);
+			GameGlobalController.updataScoreboard(player);
 		} else {
 			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.GAME_PLEASE_LOAD_0, null));
 		}

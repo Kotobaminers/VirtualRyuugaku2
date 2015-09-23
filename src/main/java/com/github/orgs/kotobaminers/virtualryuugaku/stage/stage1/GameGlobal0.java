@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.stage.stage;
+package com.github.orgs.kotobaminers.virtualryuugaku.stage.stage1;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -216,14 +216,11 @@ public abstract class GameGlobal0 {
 		}
 	}
 	public void setLanguageRandom() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
 		listLanguage = new ArrayList<Language>();
 		Random random = new Random();
 		Language language = Language.JP;
-		UtilitiesProgramming.printDebugMessage("" + talks.size(), new Exception());
 		for (int i = 0; i < talks.size(); i++) {
 			Integer value = random.nextInt(2);
-			UtilitiesProgramming.printDebugMessage("" + value, new Exception());
 			switch(value) {
 			case 0:
 				language = Language.JP;

@@ -10,7 +10,7 @@ import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManagerCitizens;
+import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.ConfigCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.LibraryManager;
@@ -38,14 +38,14 @@ public class DataManagerVRGNPC implements DataManager {
 			list.addAll(LibraryHandlerVRGNPC.importVRGNPCLibrary(stage, mapConfig.get(stage)));
 		}
 		for(VRGNPC vrgnpc : list) {
-			if(DataManagerCitizens.existsNPC(vrgnpc.id)) {
+			if(ConfigCitizens.existsNPC(vrgnpc.id)) {
 				overrideCitizens(vrgnpc);
 				getMapVRGNPC().put(vrgnpc.id, vrgnpc);
 			}
 		}
 	}
 	private static void overrideCitizens(VRGNPC vrgnpc) {
-		String name = DataManagerCitizens.getDataCitizens(vrgnpc.id).name;
+		String name = ConfigCitizens.getDataCitizens(vrgnpc.id).name;
 		vrgnpc.name = name;
 	}
 

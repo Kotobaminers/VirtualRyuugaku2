@@ -1,11 +1,11 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.stage.stage;
+package com.github.orgs.kotobaminers.virtualryuugaku.stage.stage1;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GameFindPeople.Mode;
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage1.GameFindPeople.Mode;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class GameFindPeopleHandler {

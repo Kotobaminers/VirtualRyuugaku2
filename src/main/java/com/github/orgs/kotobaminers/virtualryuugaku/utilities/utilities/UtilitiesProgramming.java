@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataCitizens;
-import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManagerCitizens;
+import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.ConfigCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
@@ -38,7 +38,7 @@ public class UtilitiesProgramming {
 
 	public static void printDebugCitizensAll() {
 		printDebugMessage("", new Exception());
-		for(DataCitizens data : DataManagerCitizens.getMapDataCitizens().values()) {
+		for(DataCitizens data : ConfigCitizens.getMapDataCitizens().values()) {
 			printDebugCitizens(data);
 		}
 	}
@@ -100,7 +100,7 @@ public class UtilitiesProgramming {
 		printDebugMessage(" COMMENT: " + comment.expression, new Exception());
 	}
 	public static void printDebugTalk(Talk talk) {
-		printDebugMessage("[Debug Talk] NAME: " + talk.name + ", ID: " + talk.id, new Exception());
+		printDebugMessage("[Debug Talk] ID: " + talk.id, new Exception());
 		printDebugDescription(talk.description);
 	}
 	public static void printDebugDescription(Description description) {

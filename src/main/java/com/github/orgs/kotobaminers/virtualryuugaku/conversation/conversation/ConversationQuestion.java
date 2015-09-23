@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0;
+package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +11,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.FireworkUtilit
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.FireworkUtility.FireworkColor;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 

@@ -19,20 +19,16 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.LibraryManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Storage;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.YamlController;
-import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.DataKeyMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.DataManagerPlugin;
 import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.NPCHandler;
 
-public class ConversationStorage implements Storage, YamlController {
+public class StorageConversation implements Storage, YamlController {
 
 	protected static Set<Conversation> conversations = new HashSet<Conversation>();
 
-	public static HashMap<DataKeyMyself, ConversationMyself> mapConversationMyself = new HashMap<DataKeyMyself, ConversationMyself>();
-
 	public static Map<String, List<Integer>> mapMyselfNPC = new HashMap<String, List<Integer>>();
 	public static HashMap<Integer, String> mapMe = new HashMap<Integer, String>();
-
 	public static List<String> teachers = new ArrayList<String>();
 
 
@@ -51,6 +47,9 @@ public class ConversationStorage implements Storage, YamlController {
 
 	@Override
 	public void initialize() {
+		conversations = new HashSet<Conversation>();
+		mapMyselfNPC = new HashMap<String, List<Integer>>();
+		mapMe = new HashMap<Integer, String>();
 		setConfig();
 		importConfiguration();
 	}
@@ -58,13 +57,10 @@ public class ConversationStorage implements Storage, YamlController {
 	@Override
 	public void save() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void setData() {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

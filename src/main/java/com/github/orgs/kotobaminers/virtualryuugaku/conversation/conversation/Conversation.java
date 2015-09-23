@@ -14,14 +14,11 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0.ConversationQuestion;
 import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.ControllerMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
-import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.NPCHandler;
-import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.NPCHandler.NPCType;
 
 public abstract class Conversation {
 	public String stage = "";
@@ -62,7 +59,7 @@ public abstract class Conversation {
 		return correctors;
 	}
 
-	public void talk(Player player) {
+	public void talk(Player player, NPC npc) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
 		data.conversation = this;
@@ -75,15 +72,10 @@ public abstract class Conversation {
 				}
 			}
 			Talk talk = listTalk.get(data.line);
-			Integer id = talk.id;
-			NPC npc = NPCHandler.getNPC(id);
-			NPCType type = NPCHandler.getNPCType(id);
-			if (!type.equals(NPCType.NOT_EXISTS)) {
-				talk.print(player);
-				addLine(data);
-				soundTalk(player);
-				effectTalk(player, npc);
-			}
+			talk.print(player);
+			addLine(data);
+			soundTalk(player);
+			effectTalk(player, npc);
 			return;
 		}
 //		new ScoreboardTalk().update(player, conversation, data);

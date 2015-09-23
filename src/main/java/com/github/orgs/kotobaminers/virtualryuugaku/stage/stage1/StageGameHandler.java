@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.stage.stage;
+package com.github.orgs.kotobaminers.virtualryuugaku.stage.stage1;
 
 import java.util.ArrayList;
 import java.util.List;

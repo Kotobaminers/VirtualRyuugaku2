@@ -11,9 +11,9 @@ import org.bukkit.entity.Player;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Controller;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Storage;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation.CheckState;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation.CheckState;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.NPCHandler;
 import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.NPCHandler.NPCType;
@@ -65,7 +65,7 @@ public class ControllerMyself extends Controller {
 			if(StorageMyself.mapConversationMyself.containsKey(key)) {
 				conversation = StorageMyself.mapConversationMyself.get(key);
 			}
-			conversation.talk(player);
+//			conversation.talk(player);
 		}
 	}
 
@@ -179,7 +179,7 @@ public class ControllerMyself extends Controller {
 		if(StorageMyself.mapConversationMyself.containsKey(key)) {
 			conversation = StorageMyself.mapConversationMyself.get(key);
 		}
-		conversation.talk(player);
+//		conversation.talk(player);
 	}
 
 	public static void updateMe(Player player) {

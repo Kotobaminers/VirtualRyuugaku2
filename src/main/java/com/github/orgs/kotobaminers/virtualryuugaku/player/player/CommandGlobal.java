@@ -1,10 +1,12 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.stage.stage;
+package com.github.orgs.kotobaminers.virtualryuugaku.player.player;
 
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.game.game.GameGlobalController;
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage1.GameGlobalHandler0;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
@@ -63,22 +65,22 @@ public class CommandGlobal extends MyCommand {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		if(2 < args.length) {
 			String stage = args[2];
-//			GameGlobalController.loadGame(stage);
-//			GameGlobalController.giveNextQuestion(player);
+			GameGlobalController.loadGame(stage);
+			GameGlobalController.giveNextQuestion(player);
 		}
 	}
 
 	private void commandFinish() {
-		if(0 < GameGlobal0.talks.size()) {
-			GameGlobalHandler0.finishGame();
+		if(GameGlobalController.isValidGame()) {
+			GameGlobalController.finishGame();
 		} else {
 			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.GAME_PLEASE_LOAD_0, null));
 		}
 	}
 
 	private void commandNext() {
-		if(0 < GameGlobal0.talks.size()) {
-			GameGlobalHandler0.giveNextQuestion(player);
+		if(GameGlobalController.isValidGame()) {
+			GameGlobalController.giveNextQuestion(player);
 		} else {
 			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.GAME_PLEASE_LOAD_0, null));
 		}

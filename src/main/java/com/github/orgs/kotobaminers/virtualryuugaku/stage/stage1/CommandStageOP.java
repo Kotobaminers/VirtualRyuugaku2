@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.stage.stage;
+package com.github.orgs.kotobaminers.virtualryuugaku.stage.stage1;
 
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;

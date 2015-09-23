@@ -98,6 +98,7 @@ public class UtilitiesGeneral {
 		}
 		return list;
 	}
+
 	public static String toYamlStringFromListInteger(List<Integer> list) {
 		List<String> strings = new ArrayList<String>();
 		for(Integer i : list) {
