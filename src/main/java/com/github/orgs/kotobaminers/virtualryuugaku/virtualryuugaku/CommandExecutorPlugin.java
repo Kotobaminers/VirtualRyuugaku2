@@ -5,7 +5,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.CommandEmpty;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Commands;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.CommandConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.CommandConversationOP;
@@ -30,7 +29,7 @@ public class CommandExecutorPlugin implements CommandExecutor {
 		if(sender instanceof Player) {
 			UtilitiesProgramming.printDebugMessage("", new Exception());
 			Player player = (Player) sender;
-			MyCommand myCommand = new CommandEmpty(player, command, args);
+			MyCommand myCommand = null;
 			switch(commands) {
 			case CONVERSATION:
 			case CONV:
@@ -58,7 +57,7 @@ public class CommandExecutorPlugin implements CommandExecutor {
 			case VRGDBG:
 			//VRGDBG should be placed the upper section.
 			default:
-				break;
+				return false;
 			}
 			myCommand.runCommand();
 			return true;

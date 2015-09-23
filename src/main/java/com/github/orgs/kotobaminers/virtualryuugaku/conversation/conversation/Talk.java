@@ -24,6 +24,7 @@ public class Talk {
 	public Talk create(Integer id, String name, Description description) {
 		Talk talk = new Talk();
 		talk.id = id;
+		talk.name = name;
 		talk.description = description;
 		return talk;
 	}
