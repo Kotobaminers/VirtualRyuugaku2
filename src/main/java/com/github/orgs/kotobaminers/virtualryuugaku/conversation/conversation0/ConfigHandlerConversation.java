@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
+package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -10,6 +10,8 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.PathComment;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.PathConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMulti;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.ConfigHandler;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;

@@ -105,6 +105,7 @@ public class NPCHandler {
 		}
 	}
 
-
-
+	public static Iterator<NPC> getNPCs() {
+		return CitizensAPI.getNPCRegistry().iterator();
+	}
 }

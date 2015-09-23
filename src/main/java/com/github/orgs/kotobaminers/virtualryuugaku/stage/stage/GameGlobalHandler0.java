@@ -9,8 +9,8 @@ import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.ControllerMyse
 import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.GameMyselfTrainingGlobal;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
-public class GameGlobalHandler {
-	public static GameGlobal game;
+public class GameGlobalHandler0 {
+	public static GameGlobal0 game;
 
 	public static void initializeGameGlobal() {
 		game = new GameTrainingGlobal();
@@ -54,7 +54,7 @@ public class GameGlobalHandler {
 	}
 
 	public static void validataAnswer(Player player, String answer) {
-		if(GameGlobal.cantAnswer.contains(player.getName())) {
+		if(GameGlobal0.cantAnswer.contains(player.getName())) {
 			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.GAME_NOT_ALLOWED_TO_ANSWER_0, null));
 			return;
 		}

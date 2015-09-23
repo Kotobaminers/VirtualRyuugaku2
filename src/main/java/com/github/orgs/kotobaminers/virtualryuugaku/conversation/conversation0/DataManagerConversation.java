@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
+package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,6 +15,8 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.LibraryManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMulti;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.LibraryHandlerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
@@ -40,9 +42,6 @@ public class DataManagerConversation implements DataManager {
 			list.addAll(LibraryHandlerConversation.importConversationLibrary(stage, mapConfig.get(stage)));
 		}
 		for(ConversationMulti conversation : list) {
-			if(!ConversationMulti.isValidCitizensId(conversation.getOrder())) {
-				UtilitiesProgramming.printDebugMessage("Non Existing NPC ID: " + conversation.getOrder(), new Exception());
-			}
 			putTalker(conversation);
 		}
 	}

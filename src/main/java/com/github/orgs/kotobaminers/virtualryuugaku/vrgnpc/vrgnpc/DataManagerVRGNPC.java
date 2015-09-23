@@ -14,7 +14,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManage
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.LibraryManager;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConfigHandlerConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0.ConfigHandlerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class DataManagerVRGNPC implements DataManager {

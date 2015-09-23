@@ -1,9 +1,10 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
+package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0;
 
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.CommandConversationComment;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.ControllerMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;

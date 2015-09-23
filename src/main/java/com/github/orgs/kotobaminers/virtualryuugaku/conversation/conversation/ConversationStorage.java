@@ -1,55 +1,70 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.myself.myself;
+package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import net.citizensnpcs.api.npc.NPC;
 
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.LibraryManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Storage;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.YamlController;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMyself;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
+import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.DataKeyMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.DataManagerPlugin;
+import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.NPCHandler;
 
-public class StorageMyself implements Storage, YamlController{
+public class ConversationStorage implements Storage, YamlController {
+
+	protected static Set<Conversation> conversations = new HashSet<Conversation>();
+
 	public static HashMap<DataKeyMyself, ConversationMyself> mapConversationMyself = new HashMap<DataKeyMyself, ConversationMyself>();
+
 	public static Map<String, List<Integer>> mapMyselfNPC = new HashMap<String, List<Integer>>();
 	public static HashMap<Integer, String> mapMe = new HashMap<Integer, String>();
+
 	public static List<String> teachers = new ArrayList<String>();
 
-	public static final String FILE = DataManagerPlugin.plugin.getDataFolder() + "//CONFIG//MYSELF.yml";
+
+	public static final String FILE = DataManagerPlugin.plugin.getDataFolder() + "//CONFIG//CONFIG.yml";
 	private static YamlConfiguration config = null;
 	private static final Integer DUMMY_ID = 0;
 
 	@Override
 	public void load() {
-		importConfiguration();
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void load(String key) {
 	}
 
 	@Override
 	public void initialize() {
-		mapConversationMyself = new HashMap<DataKeyMyself, ConversationMyself>();
-		mapMyselfNPC = new HashMap<String, List<Integer>>();
-		mapMe = new HashMap<Integer, String>();
-		teachers = new ArrayList<String>();
 		setConfig();
-		load();
-	}
-
-	@Override
-	public void setData() {
-
+		importConfiguration();
 	}
 
 	@Override
 	public void save() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setData() {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
@@ -62,8 +77,7 @@ public class StorageMyself implements Storage, YamlController{
 		return config;
 	}
 
-	@Override
-	public void importConfiguration() {
+	public void importMyself() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		MemorySection search = null;
 		for(String key : config.getKeys(true)) {
@@ -85,7 +99,7 @@ public class StorageMyself implements Storage, YamlController{
 				}
 			}
 
-			//CONVERSATION
+			//CONVERSATION_MYSELF
 			if(key.equalsIgnoreCase("MYSELF.CONVERSATION")) {
 				search = (MemorySection) config.get(key);
 				MemorySection memoryStage = null;
@@ -112,18 +126,51 @@ public class StorageMyself implements Storage, YamlController{
 								conversation.listTalk.add(talk);
 							}
 							if(0 < conversation.listTalk.size()) {
-								mapConversationMyself.put(new DataKeyMyself(owner, stage), conversation);
+								conversations.add(conversation);
 							}
 						}
 					}
 				}
 			}
 		}
+
+	}
+
+	private void importMulti() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		List<ConversationMulti> list = new ArrayList<ConversationMulti>();
+
+		Map<String, YamlConfiguration> mapConfig = LibraryManager.getListLibraryStage();
+		for(String stage : mapConfig.keySet()) {
+			list.addAll(LibraryHandlerConversation.importConversationLibrary(stage, mapConfig.get(stage)));
+		}
+		Set<Integer> ids = new HashSet<Integer>();
+		for(Iterator<NPC> npcs = NPCHandler.getNPCs(); npcs.hasNext();) {
+			ids.add(npcs.next().getId());
+		}
+		for(ConversationMulti conversation : list) {
+			Set<Integer> target = new HashSet<Integer>(conversation.getOrder());
+			for (Integer search : target) {
+				if(!ids.contains(search)) {
+					UtilitiesProgramming.printDebugMessage("NOT EXISTS ID: " + search.toString() + ": " + conversation.stage, new Exception());
+					break;
+				}
+			}
+			conversations.add(conversation);
+		}
 	}
 
 	@Override
-	public void load(String key) {
-		// TODO Auto-generated method stub
+	public void importConfiguration() {
+		importMyself();
+		importMulti();
+		printDebug();
+	}
 
+	public void printDebug() {
+		for(Conversation c : conversations) {
+			UtilitiesProgramming.printDebugConversation(c);
+			System.out.println("" + c.getClass());
+		}
 	}
 }

@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation.CheckState;
-import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GameGlobalHandler;
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GameGlobalHandler0;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.SoundMeta.Scene;
@@ -82,12 +82,12 @@ public class CommandMyself extends MyCommand{
 		if(2 < args.length) {
 			String stage = args[2].toUpperCase();
 			try {
-				GameGlobalHandler.loadMyselfTraining(stage);
+				GameGlobalHandler0.loadMyselfTraining(stage);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return;
 			}
-			GameGlobalHandler.giveNextQuestion(player);
+			GameGlobalHandler0.giveNextQuestion(player);
 		}
 	}
 

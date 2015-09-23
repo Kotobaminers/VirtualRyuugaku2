@@ -13,7 +13,7 @@ public class CommandGlobal extends MyCommand {
 		super(player, command, args);
 	}
 	private enum Commands {
-		N, NEXT, FINISH, FIND, FINDPPL, FINDPEOPLE, FP, DEFAULT, TRAINING, T;
+		N, NEXT, FINISH, FIND, FINDPPL, FINDPEOPLE, FP, DEFAULT, TRAINING, T, START;
 		private static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -35,6 +35,7 @@ public class CommandGlobal extends MyCommand {
 			case N:
 				commandNext();
 				break;
+
 			case TRAINING:
 			case T:
 				commandTraining();
@@ -48,6 +49,9 @@ public class CommandGlobal extends MyCommand {
 			case FINISH:
 				commandFinish();
 				break;
+			case START:
+				commandStart();
+				break;
 			case DEFAULT:
 			default:
 				break;
@@ -55,17 +59,26 @@ public class CommandGlobal extends MyCommand {
 		}
 	}
 
+	private void commandStart() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		if(2 < args.length) {
+			String stage = args[2];
+//			GameGlobalController.loadGame(stage);
+//			GameGlobalController.giveNextQuestion(player);
+		}
+	}
+
 	private void commandFinish() {
-		if(0 < GameGlobal.talks.size()) {
-			GameGlobalHandler.finishGame();
+		if(0 < GameGlobal0.talks.size()) {
+			GameGlobalHandler0.finishGame();
 		} else {
 			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.GAME_PLEASE_LOAD_0, null));
 		}
 	}
 
 	private void commandNext() {
-		if(0 < GameGlobal.talks.size()) {
-			GameGlobalHandler.giveNextQuestion(player);
+		if(0 < GameGlobal0.talks.size()) {
+			GameGlobalHandler0.giveNextQuestion(player);
 		} else {
 			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.GAME_PLEASE_LOAD_0, null));
 		}
@@ -75,16 +88,16 @@ public class CommandGlobal extends MyCommand {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		if(2 < args.length) {
 			String stage = args[2];
-			GameGlobalHandler.loadTraining(stage);
-			GameGlobalHandler.giveNextQuestion(player);
+			GameGlobalHandler0.loadTraining(stage);
+			GameGlobalHandler0.giveNextQuestion(player);
 		}
 	}
 	private void commandFindPeople() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		if(2 < args.length) {
 			String stage = args[2];
-			GameGlobalHandler.loadFindPeople(stage);
-			GameGlobalHandler.giveNextQuestion(player);
+			GameGlobalHandler0.loadFindPeople(stage);
+			GameGlobalHandler0.giveNextQuestion(player);
 		}
 	}
 }

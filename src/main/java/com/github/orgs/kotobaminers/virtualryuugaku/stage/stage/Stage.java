@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMulti;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0.DataManagerConversation;
 
 public class Stage {
 	public List<ConversationMulti> conversations = new ArrayList<ConversationMulti>();

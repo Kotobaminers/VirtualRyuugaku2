@@ -7,13 +7,14 @@ import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GameGlobal;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMyself;
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GameGlobal0;
 import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GameScoreboardTrainingGlobal;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 
-public class GameMyselfTrainingGlobal extends GameGlobal{
+public class GameMyselfTrainingGlobal extends GameGlobal0{
 
 	@Override
 	public void giveNextQuestion() {

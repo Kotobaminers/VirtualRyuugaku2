@@ -10,6 +10,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManage
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.PathConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0.ConversationQuestion;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
@@ -38,9 +39,6 @@ public class LibraryHandlerConversation {
 						if(size.equals(kanji.size()) && size.equals(kana.size()) && size.equals(en.size())) {
 							for(int i = 0; i < size; i++) {
 								UtilitiesProgramming.printDebugMessage("", new Exception());
-								if(!ConversationMulti.isValidCitizensId(order)) {
-									UtilitiesProgramming.printDebugMessage("Invalid Order: " + UtilitiesGeneral.toYamlStringFromListInteger(order), new Exception());
-								}
 								String name = DataManagerCitizens.getDataCitizens(order.get(i)).name;
 								Description description = Description.create(kanji.get(i), kana.get(i), en.get(i), new ArrayList<String>());
 								Talk talk = new Talk().create(order.get(i), name, description);

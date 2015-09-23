@@ -10,7 +10,7 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.SchedulerScoreboardHide;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0.SchedulerScoreboardHide;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.DataManagerPlugin;
 

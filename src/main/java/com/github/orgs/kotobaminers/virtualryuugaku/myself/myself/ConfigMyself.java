@@ -18,7 +18,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Ta
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.DataManagerPlugin;
 
-public class StorageMyself implements Storage, YamlController{
+public class ConfigMyself implements Storage, YamlController{
 	public static HashMap<DataKeyMyself, ConversationMyself> mapConversationMyself = new HashMap<DataKeyMyself, ConversationMyself>();
 	public static Map<String, List<Integer>> mapMyselfNPC = new HashMap<String, List<Integer>>();
 	public static HashMap<Integer, String> mapMe = new HashMap<Integer, String>();

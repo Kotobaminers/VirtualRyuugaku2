@@ -14,7 +14,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expressi
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Language;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.CommandConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0.CommandConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.CommandMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;

@@ -13,8 +13,8 @@ import org.bukkit.Effect;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManagerCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0.ConversationQuestion;
 import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.ControllerMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
@@ -132,14 +132,7 @@ public abstract class Conversation {
 		}
 		return false;
 	}
-	public static Boolean isValidCitizensId(List<Integer> order) {
-		for(Integer id : order) {
-			if(!DataManagerCitizens.getMapDataCitizens().keySet().contains(id)) {
-				return false;
-			}
-		}
-		return true;
-	}
+
 	public boolean hasEditor() {
 		UtilitiesProgramming.printDebugMessage("" + editor.size(), new Exception());
 		if(0 < editor.size()) {
@@ -154,6 +147,14 @@ public abstract class Conversation {
 			return true;
 		}
 		return false;
+	}
+
+	public List<Integer> getOrder() {
+		List<Integer> order = new ArrayList<Integer>();
+		for(Talk talk : listTalk) {
+			order.add(talk.id);
+		}
+		return order;
 	}
 
 	public String getDebugMessage() {

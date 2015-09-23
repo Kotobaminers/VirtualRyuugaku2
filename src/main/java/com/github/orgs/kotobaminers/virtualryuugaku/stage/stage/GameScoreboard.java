@@ -11,7 +11,7 @@ public abstract class GameScoreboard extends ScoreboardUtility {
 	private static Objective objective;
 
 	public void update(Player player) {
-		updateScoreboard(player, getNameBoard(), GameGlobal.scores);
+		updateScoreboard(player, getNameBoard(), GameGlobal0.scores);
 	}
 
 	@Override

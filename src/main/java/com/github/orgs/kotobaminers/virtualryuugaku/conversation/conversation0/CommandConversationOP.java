@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
+package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMulti;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;

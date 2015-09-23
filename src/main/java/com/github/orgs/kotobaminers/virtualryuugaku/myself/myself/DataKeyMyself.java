@@ -24,4 +24,6 @@ public class DataKeyMyself implements DataKey {
 	public int hashCode() {
 		return owner.hashCode() + stage.hashCode();
 	}
+
+
 }

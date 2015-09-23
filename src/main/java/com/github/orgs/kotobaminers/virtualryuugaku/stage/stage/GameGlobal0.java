@@ -19,7 +19,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Ta
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
-public abstract class GameGlobal {
+public abstract class GameGlobal0 {
 	public static LinkedHashMap<String, Integer> scores = new LinkedHashMap<String, Integer>();
 	public static List<Talk> talks = new ArrayList<Talk>();
 	protected static Integer count = -1;

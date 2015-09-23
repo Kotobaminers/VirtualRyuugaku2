@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
+package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

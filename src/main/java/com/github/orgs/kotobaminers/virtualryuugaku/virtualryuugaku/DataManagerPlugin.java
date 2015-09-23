@@ -2,12 +2,10 @@ package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManagerRomaji;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.LibraryManager;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConfigHandlerConversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.DataManagerConversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.ControllerMyself;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ControllerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.ConfigHandlerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
-import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GameGlobalHandler;
+import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.GameGlobalHandler0;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public final class DataManagerPlugin {
@@ -23,6 +21,14 @@ public final class DataManagerPlugin {
 //		new LibraryManager().initialize(plugin);
 //		new DataManagerVRGNPC().load();
 
+//		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Loading Conversation Data", new Exception());
+//		new ConfigHandlerConversation().initialize(plugin);
+//		new DataManagerConversation().load();
+
+
+//		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Initializing Myself", new Exception());
+//		new ControllerMyself().initializeStorage();
+
 		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Loading Library Data", new Exception());
 		new LibraryManager().initialize(plugin);
 		new DataManagerRomaji().load();
@@ -31,17 +37,11 @@ public final class DataManagerPlugin {
 		new ConfigHandlerPlayer().initialize(plugin);
 		new DataManagerPlayer().load();
 
-		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Loading Conversation Data", new Exception());
-		new ConfigHandlerConversation().initialize(plugin);
-		new DataManagerConversation().load();
-
+		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Initializing Conversation", new Exception());
+		new ControllerConversation().initializeStorage();
 
 		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Initializing Game Global", new Exception());
-		GameGlobalHandler.initializeGameGlobal();
-
-		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Initializing Myself", new Exception());
-		new ControllerMyself().initializeStorage();
-
+		GameGlobalHandler0.initializeGameGlobal();
 
 		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Finishing Loading Plugin Data", new Exception());
 	}

@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
+package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMulti;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 
 public class ScoreboardTalk /*extends ScoreboardUtility */{
