@@ -7,8 +7,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataCitizens;
-import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.ConfigCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMulti;
@@ -25,7 +23,7 @@ public class CommandStage extends MyCommand {
 		super(player, command, args);
 	}
 	private enum Commands {
-		NONE, TEST, LEARN, TRAINING, T, INFO, TP, FIND, FINDPPL, FINDPEOPLE, FP, HINT, LIST;
+		NONE, TEST, LEARN, TRAINING, T, INFO, FIND, FINDPPL, FINDPEOPLE, FP, HINT, LIST;
 		private static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -44,9 +42,6 @@ public class CommandStage extends MyCommand {
 			Commands commands = Commands.lookup(args[1]);
 			switch(commands) {
 			case NONE:
-				break;
-			case TP:
-				commandTP();
 				break;
 			case INFO:
 				commandInfo();
@@ -220,27 +215,5 @@ public class CommandStage extends MyCommand {
 //			GlobalStageGameHandler.running = true;
 //			GlobalStageGameHandler.getGame().runTaskTimer(DataManagerPlugin.plugin, GlobalStageGameHandler.ready, GlobalStageGameHandler.interval);
 //		}
-	}
-
-	private void commandTP() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		if(2 < args.length) {
-			String stage = args[3];
-			for(ConversationMulti conversation : DataManagerConversation.getMapConversation().values()) {
-				if(conversation.stage.equalsIgnoreCase(stage)) {
-					for(Talk talk : conversation.listTalk) {
-						Integer id = talk.id;
-						if(ConfigCitizens.getMapDataCitizens().containsKey(id)) {
-							DataCitizens data = ConfigCitizens.getDataCitizens(id);
-							player.teleport(data.location);
-							MessengerGeneral.print(player, Message.TELEPORT_0, null);
-							return;
-						} else {
-							UtilitiesProgramming.printDebugMessage("Invalid ID: " + id, new Exception());
-						}
-					}
-				}
-			}
-		}
 	}
 }

@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataCitizens;
-import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.ConfigCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
@@ -14,8 +13,6 @@ import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0.D
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Settings;
-import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.DataManagerVRGNPC;
-import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.VRGNPC;
 
 
 public class UtilitiesProgramming {
@@ -36,12 +33,6 @@ public class UtilitiesProgramming {
 		}
 	}
 
-	public static void printDebugCitizensAll() {
-		printDebugMessage("", new Exception());
-		for(DataCitizens data : ConfigCitizens.getMapDataCitizens().values()) {
-			printDebugCitizens(data);
-		}
-	}
 	public static void printDebugPlayerAll() {
 		printDebugMessage("", new Exception());
 		for(DataPlayer data : DataManagerPlayer.getMapDataPlayer().values()) {
@@ -60,18 +51,6 @@ public class UtilitiesProgramming {
 			for(DataComment comment : data.mapComment.values()) {
 				printDebugComment(comment);
 			}
-		}
-	}
-	public static void printDebugVRGNPCAll() {
-		printDebugMessage("", new Exception());
-		for(VRGNPC vrgnpc : DataManagerVRGNPC.getMapVRGNPC().values()) {
-			printDebugVRGNPC(vrgnpc);
-		}
-	}
-	private static void printDebugVRGNPC(VRGNPC data) {
-		printDebugMessage("[Debug VRGNPC] NAME: " + data.name + ", STAGE: " + data.stage + ", ID: " + data.id + ", EDITOR: " + UtilitiesGeneral.joinStrings(data.editor, ", ") + UtilitiesGeneral.joinStrings(data.editor, ", "), new Exception());
-		for(Description description : data.listDescription) {
-			printDebugDescription(description);
 		}
 	}
 	public static void printDebugPlayer(DataPlayer data) {

@@ -1,11 +1,9 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.LibraryManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0.ConfigHandlerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.ControllerMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
-import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.DataManagerVRGNPC;
 
 public class CommandVirturalRyuugakuDebug {
 	public enum Debug {
@@ -27,9 +25,6 @@ public class CommandVirturalRyuugakuDebug {
 			case MYSELF:
 				ControllerMyself.printDebugMyselfAll();
 				break;
-			case CITIZENS:
-				UtilitiesProgramming.printDebugCitizensAll();
-				break;
 			case PLAYER:
 				UtilitiesProgramming.printDebugPlayerAll();
 				break;
@@ -50,13 +45,6 @@ public class CommandVirturalRyuugakuDebug {
 			case LOADCONV:
 				new ConfigHandlerConversation().initialize(DataManagerPlugin.plugin);
 				new DataManagerConversation().load();
-				break;
-			case NPC:
-				UtilitiesProgramming.printDebugVRGNPCAll();
-				break;
-			case LOADNPC:
-				new LibraryManager().initialize(DataManagerPlugin.plugin);
-				new DataManagerVRGNPC().load();
 				break;
 			case NONE:
 				break;
