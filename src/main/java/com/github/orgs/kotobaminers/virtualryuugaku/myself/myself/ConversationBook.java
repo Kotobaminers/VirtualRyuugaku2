@@ -10,7 +10,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.SoundMeta.Scene;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class ConversationBook {
@@ -26,7 +30,7 @@ public class ConversationBook {
 
 	private ConversationBook() {};
 
-	public static ConversationBook createConversatinBook(Player player) {
+	public static ConversationBook createConversatinBook(Player player) throws Exception {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		ConversationBook conversationBook = new ConversationBook();
 		conversationBook.holder = player;
@@ -37,15 +41,27 @@ public class ConversationBook {
 				conversationBook.owner = conversationBook.loadOwner();
 				conversationBook.stage = conversationBook.loadStage();
 				conversationBook.conversation = conversationBook.loadConversations();
-				UtilitiesProgramming.printDebugMessage("", new Exception());
+				if (!ControllerMyself.isValidBook(conversationBook)) {
+					String[] opts = {};
+					MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.BOOK_INVALID_0, opts));
+					Effects.playSound(player, Scene.BAD);
+					throw new Exception("Invalid book.");
+				}
+			} else {
+				String[] opts = {};
+				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.BOOK_INVALID_0, opts));
+				Effects.playSound(player, Scene.BAD);
+				throw new Exception("No page.");
 			}
+		} else {
+			String[] opts = {};
+			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.BOOK_NOT_IN_HAND_0, opts));
+			Effects.playSound(player, Scene.BAD);
+			throw new Exception("Not book.");
 		}
 		conversationBook.printDebug();;
 
 		return conversationBook;
-	}
-
-	public void update() {
 	}
 
 	private BookMeta loadBook() {
@@ -91,8 +107,6 @@ public class ConversationBook {
 	}
 
 	public boolean isMine() {
-		UtilitiesProgramming.printCharCode(owner);
-		UtilitiesProgramming.printCharCode(holder.getName());
 		if(holder.getName().equalsIgnoreCase(owner)) {
 			return true;
 		}

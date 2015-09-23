@@ -2,8 +2,10 @@ package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.citizensnpcs.api.npc.NPC;
 
@@ -13,6 +15,7 @@ import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataManagerCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment;
+import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.ControllerMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
@@ -27,10 +30,42 @@ public abstract class Conversation {
 	public Map<String, DataComment> mapComment = new HashMap<String, DataComment>();
 	public ConversationQuestion question = new ConversationQuestion();
 
+	public Set<String> recommenders = new HashSet<String>();
+	public enum CheckState {NOT_EXISTS, UNCHECKED, CHECKED, RECOMMENDED, }
+	public CheckState getCheckState() {
+		CheckState state = CheckState.UNCHECKED;
+		if (!(0 < listTalk.size())) {
+			state = CheckState.NOT_EXISTS;
+			return state;
+		}
+
+		for (String teacher : ControllerMyself.getTeachers()) {
+			if (recommenders.contains(teacher)) {
+				state = CheckState.RECOMMENDED;
+				return state;
+			}
+		}
+
+		if (0 < getCorrectors().size() || 0 < recommenders.size()) {
+			state = CheckState.CHECKED;
+			return state;
+		}
+
+		return state;
+	}
+
+	public List<String> getCorrectors() {
+		List<String> correctors = new ArrayList<String>();
+		for (Talk talk : listTalk) {
+			correctors.addAll(talk.getCorrectors());
+		}
+		return correctors;
+	}
+
 	public void talk(Player player) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-//		printNext(player, data);
+		data.conversation = this;
 		if(0 < listTalk.size()) {
 			if(listTalk.size() <= data.line) {
 				data.line = 0;
@@ -50,11 +85,7 @@ public abstract class Conversation {
 				effectTalk(player, npc);
 			}
 			return;
-		} else {
-
 		}
-
-
 //		new ScoreboardTalk().update(player, conversation, data);
 	}
 
@@ -127,8 +158,9 @@ public abstract class Conversation {
 
 	public String getDebugMessage() {
 		String edit = "[" + UtilitiesGeneral.joinStrings(editor, ", ") + "]";
-		String message = "[CONV] STAGE: " + stage + ", EDITOR: " + edit + "ID:" + getKeyTalk().toString() ;
+		String message = "[CONV] STAGE: " + stage + ", EDITOR: " + edit + "ID:" + getKeyTalk().toString();
 		return message;
 	}
-
 }
+
+

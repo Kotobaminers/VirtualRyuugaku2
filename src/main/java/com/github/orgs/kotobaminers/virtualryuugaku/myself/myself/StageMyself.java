@@ -3,6 +3,8 @@ package com.github.orgs.kotobaminers.virtualryuugaku.myself.myself;
 import java.util.Collections;
 import java.util.List;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation.CheckState;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.NPCHandler;
 
@@ -26,11 +28,13 @@ public class StageMyself {
 		return list;
 	}
 
-	public void changeNPCRandom() {
+	public void changeNPC(CheckState state) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		List<Integer> ids = getListID();
 
-		List<String> players = ControllerMyself.getPlayerNamesAll(name);
+		List<String> players = ControllerMyself.getPlayerNamesByCheckState(name, state);
+		UtilitiesProgramming.printDebugMessage(state.toString() + ": " + UtilitiesGeneral.joinStrings(players, ", "), new Exception());//TODO
+
 		Integer max = ids.size();
 		if(players.size() < max) {
 			max = players.size();
@@ -52,5 +56,4 @@ public class StageMyself {
 			}
 		}
 	}
-
 }

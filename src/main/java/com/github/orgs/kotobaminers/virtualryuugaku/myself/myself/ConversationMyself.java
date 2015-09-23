@@ -4,5 +4,4 @@ import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Co
 
 
 public class ConversationMyself extends Conversation {
-
 }

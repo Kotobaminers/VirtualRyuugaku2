@@ -1,22 +1,28 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.BookOpen;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Language;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.CommandConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.CommandMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.CommandGlobal;
 import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage.CommandStage;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.SoundMeta.Scene;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
@@ -25,7 +31,7 @@ public class CommandVirtualRyuugaku extends MyCommand {
 		super(player, command, args);
 	}
 	private enum Commands {
-		NONE, LANGUAGE, LANG, EN, KANJI, KANA, ROMAJI, TEST, BOOK, S, STAGE, GLOBAL, G, MYSELF, MY, SELF, ME;
+		NONE, LANGUAGE, LANG, EN, KANJI, KANA, ROMAJI, TEST, BOOK, S, STAGE, GLOBAL, G, MYSELF, MY, SELF, ME, CONVERSATION, CONV;
 		public static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -59,8 +65,10 @@ public class CommandVirtualRyuugaku extends MyCommand {
 			case NONE:
 				break;
 			case BOOK:
-				String[] book = {"aaa", "bbb"};
-				BookOpen.openBook(player, book);
+				commandBook();
+
+//				String[] book = {"aaa", "bbb"};
+//				BookOpen.openBook(player, book);
 				break;
 			case S:
 			case STAGE:
@@ -76,9 +84,35 @@ public class CommandVirtualRyuugaku extends MyCommand {
 			case SELF:
 				new CommandMyself(player, command, args).runCommand();
 				break;
+			case CONV:
+			case CONVERSATION:
+				new CommandConversation(player, command, args).runCommand();
+				break;
 			default:
 				break;
 			}
+		}
+	}
+
+	private void commandBook() {
+		if (player.getItemInHand().getType().equals(Material.AIR)) {
+			String stage = "<STAGE>";
+			if (1 < args.length) {
+				stage = args[1];
+			}
+			ItemStack item = new ItemStack(Material.BOOK_AND_QUILL, 1);
+			BookMeta book = (BookMeta) item.getItemMeta();
+			List<String> pages = Arrays.asList(player.getName() + "\n" + stage);
+			book.setPages(pages);
+			item.setItemMeta(book);
+			player.setItemInHand(item);
+			String opts[] = {};
+			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.BOOK_GET_0, opts));
+			Effects.playSound(player, Scene.APPEAR);
+		} else {
+			String opts[] = {};
+			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.COMMON_NOT_AIR_IN_HAND_0, opts));
+			Effects.playSound(player, Scene.BAD);
 		}
 	}
 

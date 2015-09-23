@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConversationMulti extends Conversation {
-
 	public List<Integer> getOrder() {
 		List<Integer> order = new ArrayList<Integer>();
 		for(Talk talk : listTalk) {

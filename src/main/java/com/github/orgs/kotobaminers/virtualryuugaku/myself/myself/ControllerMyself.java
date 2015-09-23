@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Controller;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Storage;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation.CheckState;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.NPCHandler;
@@ -49,14 +50,8 @@ public class ControllerMyself extends Controller {
 	}
 
 	public static void importBook(ConversationBook book) {
-		UtilitiesProgramming.printDebugMessage("",new Exception());
-		if(isValidBook(book)) {
-			DataKeyMyself key = new DataKeyMyself(book.owner, book.stage);
-			StorageMyself.mapConversationMyself.put(key, book.conversation);
-			UtilitiesProgramming.printDebugMessage("Conversation is updated.",new Exception());//TODO
-		} else {
-			UtilitiesProgramming.printDebugMessage("Invalid book",new Exception());//TODO
-		}
+		DataKeyMyself key = new DataKeyMyself(book.owner, book.stage);
+		StorageMyself.mapConversationMyself.put(key, book.conversation);
 	}
 
 	public static void happensEvent(NPC npc, Player player) {
@@ -107,6 +102,20 @@ public class ControllerMyself extends Controller {
 		for (DataKeyMyself key : StorageMyself.mapConversationMyself.keySet()) {
 			if (key.stage.equalsIgnoreCase(stage)) {
 				names.add(key.owner);
+			}
+		}
+		return names;
+	}
+
+	public static List<String> getPlayerNamesByCheckState(String stage, CheckState state) {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		List<String> names = new ArrayList<String>();
+		for (Entry<DataKeyMyself, ConversationMyself> entry : StorageMyself.mapConversationMyself.entrySet()) {
+			if (entry.getKey().stage.equalsIgnoreCase(stage)) {
+				UtilitiesProgramming.printDebugMessage(entry.getValue().getCheckState().toString(), new Exception());
+				if (entry.getValue().getCheckState().equals(state)) {
+					names.add(entry.getKey().owner);
+				}
 			}
 		}
 		return names;
@@ -207,6 +216,14 @@ public class ControllerMyself extends Controller {
 		return false;
 	}
 
+	public static InfoMyselfPlayer createInfo(String player) {
+		InfoMyselfPlayer info = new InfoMyselfPlayer();
+		info.player = player;
+
+
+		return info;
+	}
+
 	public static void printDebugMyselfAll() {
 		for(Conversation conversation :StorageMyself.mapConversationMyself.values()) {
 			UtilitiesProgramming.printDebugMessage(conversation.getDebugMessage(), new Exception());
@@ -214,6 +231,10 @@ public class ControllerMyself extends Controller {
 				UtilitiesProgramming.printDebugMessage(talk.getDebugMessage(), new Exception());
 			}
 		}
+	}
+
+	public static List<String> getTeachers() {
+		return StorageMyself.teachers;
 	}
 
 }

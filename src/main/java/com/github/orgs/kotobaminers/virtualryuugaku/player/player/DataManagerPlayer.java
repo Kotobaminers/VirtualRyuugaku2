@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class DataManagerPlayer implements DataManager {
@@ -59,8 +60,6 @@ public class DataManagerPlayer implements DataManager {
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
 		data.select = id;
 		data.line = 0;
-//		String[] opts = {id.toString()};
-//		MessengerGeneral.print(player, Message.SELECT_TALKER_1, opts);
 	}
 
 	@Override
@@ -88,5 +87,11 @@ public class DataManagerPlayer implements DataManager {
 			ConfigHandlerPlayer.saveDataPlayer(data);
 		}
 		new ConfigHandlerPlayer().save();
+	}
+
+	public Conversation loadCurrentConversation(Player player) {
+		DataPlayer data = getDataPlayer(player);
+		Conversation conversation = data.conversation;
+		return conversation;
 	}
 }

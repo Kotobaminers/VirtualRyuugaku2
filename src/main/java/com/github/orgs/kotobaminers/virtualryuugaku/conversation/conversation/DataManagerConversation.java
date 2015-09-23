@@ -11,9 +11,9 @@ import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.LibraryManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManager;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
@@ -42,26 +42,10 @@ public class DataManagerConversation implements DataManager {
 		for(ConversationMulti conversation : list) {
 			if(!ConversationMulti.isValidCitizensId(conversation.getOrder())) {
 				UtilitiesProgramming.printDebugMessage("Non Existing NPC ID: " + conversation.getOrder(), new Exception());
-//			} else {
-//				overrideCitizens(conversation);
-//				if(getMapConversation().containsKey(conversation.getOrder())) {
-//					overrideComment(conversation);
-//				}
 			}
 			putTalker(conversation);
 		}
 	}
-//	private static void overrideComment(Conversation conversation) {
-//		UtilitiesProgramming.printDebugMessage("Overriding Comment: ID: " + conversation.getOrder(), new Exception());
-//		conversation.mapComment = getTalker(conversation.getOrder()).mapComment;
-//	}
-//	private static void overrideCitizens(Conversation conversation) {
-//		for (Talk talk : conversation.listTalk) {
-//			String name = DataManagerCitizens.getDataCitizens(talk.id).name;
-//			UtilitiesProgramming.printDebugMessage("Overriding Citizens: ID: " + talk.id + ", Name: " + name, new Exception());
-//			talk.name = name;
-//		}
-//	}
 
 	public static void printHint(Player player, String stage) {
 		List<String> answers = new ArrayList<String>();

@@ -23,7 +23,6 @@ public class CommandConversationComment extends MyCommand {
 		super(player, command, args);
 	}
 	public enum CommandsComment {
-
 		NONE, SEND, READ, REMOVE, NEW, DONE;
 		public static CommandsComment lookup(String name) {
 			try {
@@ -35,6 +34,7 @@ public class CommandConversationComment extends MyCommand {
 			}
 		}
 	}
+
 	@Override
 	public void runCommand() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());

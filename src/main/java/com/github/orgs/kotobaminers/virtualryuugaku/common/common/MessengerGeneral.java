@@ -102,12 +102,27 @@ public class MessengerGeneral {
 		GAME_NO_WINNERS_0,
 		GAME_RESULTS_1,
 		GAME_WINNERS_1,
+
+		MYSELF_STAGE_RELOAD_2,
+
+		COMMON_INVALID_PARAMETER_1,
+		COMMON_NOT_AIR_IN_HAND_0,
+
+		BOOK_NOT_YOURS_0,
+		BOOK_INVALID_0,
+		BOOK_IMPORTED_0,
+		BOOK_NOT_IN_HAND_0, BOOK_GET_0,
 		;
 	}
 
 	public static String getMessage(Message key, String[] opts) {
 		String message = MESSENGER_PREFIX;
 		switch(key) {
+		case COMMON_INVALID_PARAMETER_1: message += "Invalid Parameters: " + opts[0]; break;
+		case COMMON_NOT_AIR_IN_HAND_0: message += "Please hand nothing in your hand"; break;
+
+		case MYSELF_STAGE_RELOAD_2: message += "The stage was reloaded. (" + opts[0] + ", " + opts[1] + ")"; break;
+
 		case CANT_EDIT_TALKER_0: message += "You can't edit this talker."; break;
 		case EDITED_TALKER_0: message += "This talker was edited."; break;
 		case SET_LANGUAGE_1: message += "You set your language in " + opts[0] + "."; break;
@@ -175,6 +190,12 @@ public class MessengerGeneral {
 		case GAME_NO_WINNERS_0: message += "No Winners!"; break;
 		case GAME_RESULTS_1: message += "Results: " + opts[0]; break;
 		case GAME_WINNERS_1: message += "Winners: " + opts[0]; break;
+
+		case BOOK_NOT_YOURS_0: message += "This book is not yours."; break;
+		case BOOK_NOT_IN_HAND_0: message += "Please Hold a written book in your hand."; break;
+		case BOOK_INVALID_0: message += "Invalid book. Check how to write one."; break;
+		case BOOK_IMPORTED_0: message += "Your sentences are successfully imported."; break;
+		case BOOK_GET_0: message += "You got a new book. Enjoy writing!"; break;
 
 		default: break;
 		}

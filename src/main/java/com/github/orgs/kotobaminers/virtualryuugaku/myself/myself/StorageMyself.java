@@ -21,6 +21,7 @@ public class StorageMyself implements Storage, YamlController{
 	public static HashMap<DataKeyMyself, ConversationMyself> mapConversationMyself = new HashMap<DataKeyMyself, ConversationMyself>();
 	public static Map<String, List<Integer>> mapMyselfNPC = new HashMap<String, List<Integer>>();
 	public static HashMap<Integer, String> mapMe = new HashMap<Integer, String>();
+	public static List<String> teachers = new ArrayList<String>();
 
 	public static final String FILE = DataManagerPlugin.plugin.getDataFolder() + "//CONFIG//MYSELF.yml";
 	private static YamlConfiguration config = null;
@@ -36,6 +37,7 @@ public class StorageMyself implements Storage, YamlController{
 		mapConversationMyself = new HashMap<DataKeyMyself, ConversationMyself>();
 		mapMyselfNPC = new HashMap<String, List<Integer>>();
 		mapMe = new HashMap<Integer, String>();
+		teachers = new ArrayList<String>();
 		setConfig();
 		load();
 	}
@@ -47,7 +49,6 @@ public class StorageMyself implements Storage, YamlController{
 
 	@Override
 	public void save() {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -66,6 +67,12 @@ public class StorageMyself implements Storage, YamlController{
 		MemorySection search = null;
 		for(String key : config.getKeys(true)) {
 			UtilitiesProgramming.printDebugMessage(key, new Exception());
+
+			//TEACHER
+			if(key.equalsIgnoreCase("MYSELF.TEACHER")) {
+				teachers.addAll(config.getStringList(key));
+			}
+
 			//SETTING
 			if(key.equalsIgnoreCase("MYSELF.SETTING")) {
 				search = (MemorySection) config.get(key);
