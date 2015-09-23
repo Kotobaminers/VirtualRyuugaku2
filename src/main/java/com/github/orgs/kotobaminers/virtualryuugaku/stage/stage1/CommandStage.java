@@ -3,19 +3,16 @@ package com.github.orgs.kotobaminers.virtualryuugaku.stage.stage1;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMulti;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ControllerConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
-import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage1.GameFindPeople.Mode;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class CommandStage extends MyCommand {
@@ -23,7 +20,7 @@ public class CommandStage extends MyCommand {
 		super(player, command, args);
 	}
 	private enum Commands {
-		NONE, TEST, LEARN, TRAINING, T, INFO, FIND, FINDPPL, FINDPEOPLE, FP, HINT, LIST;
+		NONE, INFO;
 		private static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -41,32 +38,10 @@ public class CommandStage extends MyCommand {
 		if(1 < args.length) {
 			Commands commands = Commands.lookup(args[1]);
 			switch(commands) {
-			case NONE:
-				break;
 			case INFO:
 				commandInfo();
 				break;
-			case TEST:
-				commandTest();
-				break;
-			case TRAINING:
-			case T:
-				commandTraining();
-				break;
-			case LEARN:
-				commandLearn();
-				break;
-			case FIND:
-			case FINDPEOPLE:
-			case FINDPPL:
-			case FP:
-				commandFindPeople();
-				break;
-			case HINT:
-				commandHint();
-				break;
-			case LIST:
-				commandList();
+			case NONE:
 				break;
 			default:
 				break;
@@ -83,7 +58,7 @@ public class CommandStage extends MyCommand {
 			Integer questions = 0;
 			Integer keySentence = 0;
 			Integer sentence = 0;
-			for(ConversationMulti conversation : DataManagerConversation.getMapConversation().values()) {
+			for(Conversation conversation : ControllerConversation.getConversations()) {
 				if(stage.equalsIgnoreCase(conversation.stage)) {
 					if(conversation.hasValidQuestion()) {
 						questions++;
@@ -111,109 +86,5 @@ public class CommandStage extends MyCommand {
 			String[] opts = {stage, npcs.toString(), sentence.toString(), done.toString(), questions.toString(), keySentence.toString()};
 			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.STAGE_INFO_6, opts));
 		}
-	}
-
-	private void commandList() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		List<String> stages = new ArrayList<String>();
-		for(ConversationMulti conversation : DataManagerConversation.getMapConversation().values()) {
-			String stage = conversation.stage;
-			if(!stages.contains(stage)) {
-				stages.add(stage);
-			}
-		}
-		String[] opts = {UtilitiesGeneral.joinStrings(stages, ChatColor.GRAY + ", " + ChatColor.RESET)};
-		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.STAGE_LIST_1, opts));
-	}
-
-	private void commandHint() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		if(2 < args.length) {
-			String stage = args[2];
-			DataManagerConversation.printHint(player, stage);
-		}
-	}
-
-	private void commandFindPeople() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		if(2 < args.length) {
-			String stage = args[2];
-			GameFindPeopleHandler.loadNewGameRandom(player, player.getName(), stage);
-			if (3 < args.length) {
-				String modeString = args[3];
-				if(modeString.equalsIgnoreCase(Mode.EN.toString())) {
-					GameFindPeopleHandler.setGameModeEN(player);
-				} else if (modeString.equalsIgnoreCase(Mode.JP.toString())) {
-					GameFindPeopleHandler.setGameModeJP(player);
-				}
-			}
-			GameFindPeopleHandler.startGame(player);
-		}
-	}
-
-	private void commandLearn() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-//		if(1< args.length) {
-//			String stage = args[1];
-//			String name = player.getName();
-//			LocalStageHandler.loadNewGame(name, stage);
-//			LocalStageHandler.addPlayers(name, player);
-//			if(!LocalStageHandler.isValidGame(name)) {
-//				String[] opts = {stage};
-//				MessengerGeneral.print(player, Message.GAME_STAGE_INVALID_1, opts);
-//				return;
-//			}
-//			String[] opts = {stage.toUpperCase()};
-//			MessengerGeneral.broadcast(Broadcast.GAME_STAGE_START_1, opts);
-//			List<String> strings = new ArrayList<String>();
-//			for(Player player : LocalStageHandler.getGame(name).getPlayers()) {
-//				strings.add(player.getName());
-//			}
-//			String[] opts2 = {UtilitiesGeneral.joinStrings(strings, ChatColor.RESET + ", ")};
-//			MessengerGeneral.broadcast(Broadcast.STAGE_PLAYERS_1, opts2);
-//			LocalStageHandler.runNext(name);
-//		}
-	}
-
-	private void commandTraining() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		if(2 < args.length) {
-			String stage = args[2];
-			String name = player.getName();
-			if(!PracticeStageHandler.existsStage(stage)) {
-				String[] opts = {stage};
-				MessengerGeneral.print(player, Message.STAGE_INVALID_1, opts);
-				return;
-			}
-			UtilitiesProgramming.printDebugMessage("", new Exception());
-			PracticeStageHandler practice = new PracticeStageHandler();
-			practice.loadNewGame(name, stage);
-//			String[] opts = {stage.toUpperCase()};
-//			MessengerGeneral.broadcast(Broadcast.GAME_STAGE_START_1, opts);
-			UtilitiesProgramming.printDebugMessage("", new Exception());
-			practice.runNext(player);
-		}
-	}
-
-	private void commandTest() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-//		if(1< args.length) {
-//			if(GlobalStageGameHandler.running) {
-//				MessengerGeneral.print(player, Message.GAME_STAGE_RUNNING_0, null);
-//				return;
-//			}
-//			String stage = args[1];
-//			GlobalStageGameHandler.loadNewGame(stage);
-//			if(!GlobalStageGameHandler.getGame().isValid()) {
-//				String[] opts = {stage};
-//				MessengerGeneral.print(player, Message.GAME_STAGE_INVALID_1, opts);
-//				return;
-//			}
-//
-//			String[] opts = {stage.toUpperCase()};
-//			MessengerGeneral.broadcast(Broadcast.GAME_STAGE_START_1, opts);
-//			GlobalStageGameHandler.running = true;
-//			GlobalStageGameHandler.getGame().runTaskTimer(DataManagerPlugin.plugin, GlobalStageGameHandler.ready, GlobalStageGameHandler.interval);
-//		}
 	}
 }

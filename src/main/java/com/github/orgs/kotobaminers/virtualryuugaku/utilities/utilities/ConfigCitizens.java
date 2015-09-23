@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens;
+package com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities;
 
 import java.io.File;
 import java.util.HashMap;
@@ -8,7 +8,6 @@ import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.YamlController;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.DataManagerPlugin;
 
 public class ConfigCitizens implements YamlController {

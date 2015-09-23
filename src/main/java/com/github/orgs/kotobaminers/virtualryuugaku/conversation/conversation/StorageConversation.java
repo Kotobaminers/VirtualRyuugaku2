@@ -21,7 +21,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Storage;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.YamlController;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.DataManagerPlugin;
-import com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc.NPCHandler;
+import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.NPCHandler;
 
 public class StorageConversation implements Storage, YamlController {
 

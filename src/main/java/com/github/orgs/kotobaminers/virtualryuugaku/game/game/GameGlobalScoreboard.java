@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.player.player;
+package com.github.orgs.kotobaminers.virtualryuugaku.game.game;
 
 import java.util.LinkedHashMap;
 

@@ -1,10 +1,8 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import net.citizensnpcs.api.npc.NPC;
@@ -13,8 +11,6 @@ import org.bukkit.Effect;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment;
-import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.ControllerMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
@@ -24,7 +20,6 @@ public abstract class Conversation {
 	public String stage = "";
 	public List<String> editor = new ArrayList<String>();
 	public List<Talk> listTalk = new ArrayList<Talk>();
-	public Map<String, DataComment> mapComment = new HashMap<String, DataComment>();
 	public ConversationQuestion question = new ConversationQuestion();
 
 	public Set<String> recommenders = new HashSet<String>();
@@ -36,7 +31,7 @@ public abstract class Conversation {
 			return state;
 		}
 
-		for (String teacher : ControllerMyself.getTeachers()) {
+		for (String teacher : ControllerConversation.getTeachers()) {
 			if (recommenders.contains(teacher)) {
 				state = CheckState.RECOMMENDED;
 				return state;

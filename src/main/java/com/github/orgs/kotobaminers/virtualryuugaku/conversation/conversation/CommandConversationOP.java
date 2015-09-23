@@ -7,9 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0.DataManagerConversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
-import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
@@ -23,7 +20,7 @@ public class CommandConversationOP extends MyCommand {
 		super(player, command, args);
 	}
 	public enum Commands {
-		NONE, DEBUG, CREATE, REGISTER, DEREGISTER,;
+		NONE, CREATE, REGISTER, DEREGISTER,;
 		public static Commands lookup(String name) {
 			UtilitiesProgramming.printDebugMessage("", new Exception());
 			Commands commands = Commands.NONE;
@@ -44,9 +41,6 @@ public class CommandConversationOP extends MyCommand {
 			switch(commands) {
 			case NONE:
 				break;
-			case DEBUG:
-				commandDebug();
-				break;
 			case CREATE:
 				commandCreate();
 				break;
@@ -65,12 +59,6 @@ public class CommandConversationOP extends MyCommand {
 
 		}
 
-	}
-	private void commandDebug() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-		ConversationMulti talker = DataManagerConversation.getConversation(data.select);
-		UtilitiesProgramming.printDebugConversation(talker);
 	}
 	private void commandCreate() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());

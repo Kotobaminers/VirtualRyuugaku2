@@ -42,12 +42,12 @@ public class ConversationBook {
 				conversationBook.owner = conversationBook.loadOwner();
 				conversationBook.stage = conversationBook.loadStage();
 				conversationBook.conversation = conversationBook.loadConversations();
-				if (!ControllerMyself.isValidBook(conversationBook)) {
-					String[] opts = {};
-					MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.BOOK_INVALID_0, opts));
-					Effects.playSound(player, Scene.BAD);
-					throw new Exception("Invalid book.");
-				}
+//				if (!ControllerMyself.isValidBook(conversationBook)) {
+//					String[] opts = {};
+//					MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.BOOK_INVALID_0, opts));
+//					Effects.playSound(player, Scene.BAD);
+//					throw new Exception("Invalid book.");
+//				}
 			} else {
 				String[] opts = {};
 				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.BOOK_INVALID_0, opts));

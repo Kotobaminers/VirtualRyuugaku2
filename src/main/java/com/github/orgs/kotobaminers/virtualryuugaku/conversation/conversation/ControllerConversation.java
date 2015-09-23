@@ -3,6 +3,7 @@ package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import net.citizensnpcs.api.npc.NPC;
 
@@ -12,7 +13,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utilitie
 
 public class ControllerConversation extends Controller {
 
-	public StorageConversation storage;
+	public static StorageConversation storage;
 
 	@Override
 	public void setStorage() {
@@ -24,7 +25,7 @@ public class ControllerConversation extends Controller {
 		return storage;
 	}
 
-	public static List<Conversation> getConversationsByStage(String stage) throws Exception {
+	public static List<Conversation> getConversations(String stage) throws Exception {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		List<Conversation> conversations = new ArrayList<Conversation>();
 		for (Conversation conversation : StorageConversation.conversations) {
@@ -36,6 +37,10 @@ public class ControllerConversation extends Controller {
 			throw new Exception("Invalid Stage: " + stage);
 		}
 		return conversations;
+	}
+
+	public static Set<Conversation> getConversations() {
+		return StorageConversation.conversations;
 	}
 
 	public static Conversation getConversation(NPC npc) throws Exception {
@@ -103,6 +108,11 @@ public class ControllerConversation extends Controller {
 		}
 		throw new Exception("Not Myself: " + id.toString());
 	}
+
+	public static List<String> getTeachers() {
+		return StorageConversation.teachers;
+	}
+
 }
 
 

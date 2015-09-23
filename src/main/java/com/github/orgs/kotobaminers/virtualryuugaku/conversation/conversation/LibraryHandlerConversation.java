@@ -6,10 +6,10 @@ import java.util.List;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.ConfigCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.PathConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.ConfigCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 

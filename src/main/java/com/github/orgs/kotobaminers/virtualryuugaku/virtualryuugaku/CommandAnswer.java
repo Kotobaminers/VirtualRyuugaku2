@@ -10,7 +10,6 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGener
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.game.game.GameGlobalController;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
-import com.github.orgs.kotobaminers.virtualryuugaku.stage.stage1.StageGameDataStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
@@ -46,16 +45,6 @@ public class CommandAnswer extends MyCommand {
 			switch(commands) {
 			case DEFAULT:
 				break;
-			case TEST:
-				commandTest();
-				break;
-			case LEARN:
-				commandLearn();
-				break;
-			case TRAINING:
-			case T:
-				commandPractice();
-				break;
 			case C:
 			case CONV:
 			case CONVERSATION:
@@ -84,40 +73,5 @@ public class CommandAnswer extends MyCommand {
 	private void commandConversation() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataManagerPlayer.getDataPlayer(player).question.validateQuestion(player, answer);
-	}
-
-	private void commandLearn() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-	}
-
-	private void commandTest() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-//		if(1< args.length) {
-//			List<String> list = new ArrayList<String>();
-//			for(Integer i = 1; i < args.length; i++) {
-//				list.add(args[i]);
-//			}
-//			String answer = UtilitiesGeneral.joinStrings(list, " ");
-//			for(String correct : GlobalStageGameHandler.answers) {
-//				if(correct.equalsIgnoreCase(answer)) {
-//					GlobalStageGameHandler.correct(player);
-//					String total = GlobalStageGameHandler.getScoreCurrent(player).toString();
-//					String[] opts = {UtilitiesGeneral.joinStrings(GlobalStageGameHandler.answers, ", "), total};
-//					MessengerGeneral.print(player, Message.GAME_STAGE_CORRECT_2, opts);
-//					return;
-//				}
-//			}
-//			String[] opts = {answer};
-//			MessengerGeneral.print(player, Message.GAME_STAGE_WRONG_1, opts);
-//		}
-	}
-
-	private void commandPractice() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		if(StageGameDataStorage.existsPractice(player.getName())) {
-			StageGameDataStorage.getPractice(player.getName()).validateAnswer(player, answer);
-		} else {
-			player.sendMessage("PracticeStage does not exist.");
-		}
 	}
 }

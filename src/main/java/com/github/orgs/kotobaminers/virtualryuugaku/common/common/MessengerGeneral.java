@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class MessengerGeneral {
@@ -139,7 +138,6 @@ public class MessengerGeneral {
 		case SENT_COMMENT_0: message += "You sent a comment."; break;
 		case NO_NEW_COMMENT_0: message += "You don't have any new comments."; break;
 		case NO_COMMENT_0: message += "The selected talker doesn't have any comments."; break;
-		case DONE_COMMENT_1: message += "The comment from " + opts[0] + "'s state was switched to " + DataComment.CommentState.DONE.toString() + "."; break;
 
 		case CONVERSATION_SPEAK_2: message = opts[0] + ChatColor.GREEN + " \"" + ChatColor.RESET + opts[1] + ChatColor.GREEN + "\"" + ChatColor.RESET; break;
 		case CONVERSATION_QUESTION_1: message = ChatColor.GREEN + "[Question] " + ChatColor.RESET + opts[0]; break;
@@ -222,7 +220,6 @@ public class MessengerGeneral {
 		case SENT_COMMENT_0: message += "You sent a comment."; break;
 		case NO_NEW_COMMENT_0: message += "You don't have any new comments."; break;
 		case NO_COMMENT_0: message += "The selected talker doesn't have any comments."; break;
-		case DONE_COMMENT_1: message += "The comment from " + opts[0] + "'s state was switched to " + DataComment.CommentState.DONE.toString() + "."; break;
 		case CONVERSATION_SPEAK_2: message = opts[0] + ChatColor.GREEN + " \"" + ChatColor.RESET + opts[1] + ChatColor.GREEN + "\"" + ChatColor.RESET; break;
 		case CONVERSATION_QUESTION_1: message += "[Question] " + opts[0]; break;
 		case CONVERSATION_TALK_START_1: message += "The conversation has started."; break;
@@ -264,12 +261,4 @@ public class MessengerGeneral {
 			}
 		}
 	}
-
-	public static void printReadComment(Player player, DataComment data, Integer line) {
-		String info = "[Comment: " + line + "] FROM: " + data.sender + ", STATE: " + data.state;
-		String expression = "  " + data.expression;
-		player.sendMessage(info);
-		player.sendMessage(expression);
-	}
-
 }

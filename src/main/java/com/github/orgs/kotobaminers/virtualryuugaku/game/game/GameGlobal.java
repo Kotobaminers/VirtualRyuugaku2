@@ -35,7 +35,7 @@ public class GameGlobal implements Storage {
 	public void load(String stage) {
 		initialize();
 		try {
-			for (Conversation conversation : ControllerConversation.getConversationsByStage(stage)) {
+			for (Conversation conversation : ControllerConversation.getConversations(stage)) {
 				talks.addAll(conversation.getKeyTalk());
 			}
 		} catch (Exception e) {

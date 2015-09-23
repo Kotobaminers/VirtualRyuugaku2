@@ -9,7 +9,6 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Controller;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Storage;
-import com.github.orgs.kotobaminers.virtualryuugaku.player.player.GameGlobalScoreboard;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 

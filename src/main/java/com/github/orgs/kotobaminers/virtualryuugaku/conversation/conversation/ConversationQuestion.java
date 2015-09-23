@@ -11,7 +11,6 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.FireworkUtilit
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.FireworkUtility.FireworkColor;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 
@@ -45,7 +44,16 @@ public class ConversationQuestion {
 				player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 1);
 				DataPlayer data = DataManagerPlayer.getDataPlayer(player);
 				data.addQuestionDone(player, key);
-				Integer question = DataManagerConversation.getNumberQuestion(stage);
+				Integer question = 0;
+				try {
+					for (Conversation conversation : ControllerConversation.getConversations(stage)) {
+						if (0 < conversation.question.getAnswers().size()) {
+							question++;
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				if (question <= data.questionDone.size()) {
 					String[] opts = {stage};
 					FireworkUtility.shootFirework(player.getWorld(), player.getLocation(), Type.BALL_LARGE, FireworkColor.GREEN, FireworkColor.AQUA, 0);

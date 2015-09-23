@@ -3,8 +3,6 @@ package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.CommandConversationComment;
-import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.ControllerMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
@@ -38,9 +36,6 @@ public class CommandConversation extends MyCommand {
 			case BAD:
 				commandBad(player, command, args);
 				break;
-			case COMMENT:
-				new CommandConversationComment(player, command, args).runCommand();
-				break;
 			case DEFAULT:
 			default:
 				break;
@@ -53,7 +48,7 @@ public class CommandConversation extends MyCommand {
 		Conversation conversation = data.conversation;
 		if (0 < conversation.listTalk.size()) {
 			UtilitiesProgramming.printDebugMessage("Removing the teachers from Recommenders", new Exception());//TODO
-			for (String teacher : ControllerMyself.getTeachers()) {
+			for (String teacher : ControllerConversation.getTeachers()) {
 				if (conversation.recommenders.contains(teacher)) {
 					conversation.recommenders.remove(teacher);
 					UtilitiesProgramming.printDebugMessage("Removed from Recommenders: " + teacher, new Exception());//TODO

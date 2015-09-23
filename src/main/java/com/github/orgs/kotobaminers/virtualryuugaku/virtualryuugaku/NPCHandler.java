@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.vrgnpc.vrgnpc;
+package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -9,7 +9,6 @@ import net.citizensnpcs.api.npc.NPC;
 
 import org.bukkit.entity.EntityType;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.ControllerMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class NPCHandler {
@@ -45,41 +44,41 @@ public class NPCHandler {
 	}
 
 	public static boolean canEdit(Integer id) {
-		NPCType type = getNPCType(id);
-		if(type.canEdit()) {
-			return true;
-		}
-		UtilitiesProgramming.printDebugMessage("YOU CAN'T EDIT THIS NPC: " + id.toString(), new Exception());//TODO
+//		NPCType type = getNPCType(id);
+//		if(type.canEdit()) {
+//			return true;
+//		}
+//		UtilitiesProgramming.printDebugMessage("YOU CAN'T EDIT THIS NPC: " + id.toString(), new Exception());//TODO
 		return false;
 	}
 
 	public static NPCType getNPCType(Integer id) {
-		for(Iterator<NPC> i = CitizensAPI.getNPCRegistry().iterator(); i.hasNext();) {
-			NPC npc = i.next();
-			Integer target = npc.getId();
-			if(target.equals(id)) {
-				if(ControllerMyself.isNPCMyself(npc)) {
-					return NPCType.MYSELF;
-				}
-				if (ControllerMyself.isMe(id)) {
-					return NPCType.ME;
-				}
-				return NPCType.DEFAULT;
-			}
-		}
+//		for(Iterator<NPC> i = CitizensAPI.getNPCRegistry().iterator(); i.hasNext();) {
+//			NPC npc = i.next();
+//			Integer target = npc.getId();
+//			if(target.equals(id)) {
+//				if(ControllerMyself.isNPCMyself(npc)) {
+//					return NPCType.MYSELF;
+//				}
+//				if (ControllerMyself.isMe(id)) {
+//					return NPCType.ME;
+//				}
+//				return NPCType.DEFAULT;
+//			}
+//		}
 		return NPCType.NOT_EXISTS;
 	}
 
 	public static void changeNPCAsPlayer(Integer id, String stage, String player) throws Exception {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		if(canEdit(id)) {
-			UtilitiesProgramming.printDebugMessage("", new Exception());
-			NPCHandler.changeType(id, EntityType.PLAYER);
-			NPCHandler.changeName(id, player);
-			ControllerMyself.setTalkParams(player, stage, id);
-		} else {
-			throw new Exception("You can't edit this NPC: " + id.toString());
-		}
+//		if(canEdit(id)) {
+//			UtilitiesProgramming.printDebugMessage("", new Exception());
+//			NPCHandler.changeType(id, EntityType.PLAYER);
+//			NPCHandler.changeName(id, player);
+//			ControllerMyself.setTalkParams(player, stage, id);
+//		} else {
+//			throw new Exception("You can't edit this NPC: " + id.toString());
+//		}
 	}
 
 	public static void changeNPCAsEmpty(Integer id) throws Exception {

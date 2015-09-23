@@ -1,13 +1,10 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0.ConfigHandlerConversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0.DataManagerConversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.ControllerMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class CommandVirturalRyuugakuDebug {
 	public enum Debug {
-		NONE, CITIZENS, PLAYER, RELOAD, CONVERSATION, COMMENT, MODE, CONV, LOADCONV, LOADCONVERSATION, NPC, LOADNPC, MYSELF;
+		NONE, PLAYER, RELOAD, MODE;
 		public static Debug lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
@@ -22,29 +19,14 @@ public class CommandVirturalRyuugakuDebug {
 		if(0 < args.length) {
 			Debug debug = Debug.lookup(args[0]);
 			switch(debug) {
-			case MYSELF:
-				ControllerMyself.printDebugMyselfAll();
-				break;
 			case PLAYER:
 				UtilitiesProgramming.printDebugPlayerAll();
 				break;
 			case RELOAD:
 				DataManagerPlugin.loadPlugin();;
 				break;
-			case CONVERSATION:
-			case CONV:
-				UtilitiesProgramming.printDebugConversationAll();
-				break;
-			case COMMENT:
-				UtilitiesProgramming.printDebugCommentAll();
-				break;
 			case MODE:
 				commandDebugMode();
-				break;
-			case LOADCONVERSATION:
-			case LOADCONV:
-				new ConfigHandlerConversation().initialize(DataManagerPlugin.plugin);
-				new DataManagerConversation().load();
 				break;
 			case NONE:
 				break;

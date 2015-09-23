@@ -3,13 +3,9 @@ package com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.citizens.citizens.DataCitizens;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.comment.DataComment;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMulti;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation0.DataManagerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Settings;
@@ -39,20 +35,6 @@ public class UtilitiesProgramming {
 			printDebugPlayer(data);
 		}
 	}
-	public static void printDebugConversationAll() {
-		printDebugMessage("", new Exception());
-		for(ConversationMulti data : DataManagerConversation.getMapConversation().values()) {
-			printDebugConversation(data);
-		}
-	}
-	public static void printDebugCommentAll() {
-		printDebugMessage("", new Exception());
-		for(ConversationMulti data : DataManagerConversation.getMapConversation().values()) {
-			for(DataComment comment : data.mapComment.values()) {
-				printDebugComment(comment);
-			}
-		}
-	}
 	public static void printDebugPlayer(DataPlayer data) {
 		printDebugMessage("[Debug DataPlayer] " + data.name, new Exception());
 		printDebugMessage(" LINE: " + data.line, new Exception());
@@ -67,16 +49,6 @@ public class UtilitiesProgramming {
 		}
 		printDebugMessage(conversation.question.getQuestion(), new Exception());
 		printDebugMessage(UtilitiesGeneral.joinStrings(conversation.question.getAnswers(), ", "), new Exception());
-		for(DataComment comment : conversation.mapComment.values()) {
-			printDebugComment(comment);
-		}
-	}
-	public static void printDebugCitizens(DataCitizens citizens) {
-		printDebugMessage("ID: " + citizens.id + ", NAME: " + citizens.name, new Exception());
-	}
-	public static void printDebugComment(DataComment comment) {
-		printDebugMessage("[Debug Comment] " + " SENDER: " + comment.sender + ", STATE: " + comment.state, new Exception());
-		printDebugMessage(" COMMENT: " + comment.expression, new Exception());
 	}
 	public static void printDebugTalk(Talk talk) {
 		printDebugMessage("[Debug Talk] ID: " + talk.id, new Exception());
