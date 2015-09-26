@@ -11,8 +11,9 @@ import org.bukkit.inventory.meta.BookMeta;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message0;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMyself;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.StorageConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.SoundMeta.Scene;
@@ -42,26 +43,25 @@ public class ConversationBook {
 				conversationBook.owner = conversationBook.loadOwner();
 				conversationBook.stage = conversationBook.loadStage();
 				conversationBook.conversation = conversationBook.loadConversations();
-//				if (!ControllerMyself.isValidBook(conversationBook)) {
-//					String[] opts = {};
-//					MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.BOOK_INVALID_0, opts));
-//					Effects.playSound(player, Scene.BAD);
-//					throw new Exception("Invalid book.");
-//				}
+				if (isValid(conversationBook)) {
+					String[] opts = {};
+					MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.BOOK_INVALID_0, opts));
+					Effects.playSound(player, Scene.BAD);
+					throw new Exception("Invalid book.");
+				}
 			} else {
 				String[] opts = {};
-				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.BOOK_INVALID_0, opts));
+				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.BOOK_INVALID_0, opts));
 				Effects.playSound(player, Scene.BAD);
 				throw new Exception("No page.");
 			}
 		} else {
 			String[] opts = {};
-			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.BOOK_NOT_IN_HAND_0, opts));
+			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.BOOK_NOT_IN_HAND_0, opts));
 			Effects.playSound(player, Scene.BAD);
 			throw new Exception("Not book.");
 		}
 		conversationBook.printDebug();;
-
 		return conversationBook;
 	}
 
@@ -179,6 +179,7 @@ public class ConversationBook {
 				kana = page.get(1);
 				List<String> tips = new ArrayList<String>();
 				talk.description = Description.create(kanji, kana, en, tips);
+				talk.name = owner;
 				talks.add(talk);
 			} else {
 				holder.sendMessage("ERROR in a page.");
@@ -187,6 +188,18 @@ public class ConversationBook {
 		conversation.listTalk = talks;
 		return conversation;
 	}
+
+	public static boolean isValid(ConversationBook book) {
+		if(0 < book.owner.length() && 0 < book.stage.length() && 0 < book.conversation.listTalk.size()) {
+			for(String search : StorageConversation.mapMyselfNPC.keySet()) {
+				if(search.equalsIgnoreCase(book.stage)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 
 	private void printDebug() {
 		String message = "OWNER: " + owner + " STAGE: " + stage;

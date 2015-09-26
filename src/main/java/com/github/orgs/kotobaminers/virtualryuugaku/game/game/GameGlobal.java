@@ -6,18 +6,20 @@ import java.util.List;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Language;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message0;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Storage;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ControllerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.SoundMeta.Scene;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
@@ -25,10 +27,39 @@ public class GameGlobal implements Storage {
 
 	private static final Integer COUNT_INITIAL = -1;
 
+	enum EventScore {
+		ANSWER_CORRECTLY(3),
+		ANSWER_WRONGLY(0),
+		LEFT_CLICK_NPC_CORRECTLY(2),
+		LEFT_CLICK_NPC_WRONGLY(-1),
+		CHEAT_A_CONVERSATION(-1);
+		private final int score;
+		private EventScore(int code) {
+			this.score = code;
+		}
+		public int getScore() {
+			return score;
+		}
+
+		public String[] getMessageOpts() {
+			String name = this.toString();
+			String pre = "" + ChatColor.RESET;
+			if (0 < score) {
+				pre = ChatColor.GREEN  + "+";
+			} else if(score < 0) {
+				pre = "" + ChatColor.DARK_RED;
+			}
+			String scoreStr = pre + this.score;
+			String[] opts = {name, scoreStr};
+			return opts;
+		}
+	}
+
 	public LinkedHashMap<String, Integer> scores = new LinkedHashMap<String, Integer>();
 	public List<Talk> talks = new ArrayList<Talk>();
 	protected static Integer count = COUNT_INITIAL;
 	public List<String> cantAnswer = new ArrayList<String>();
+	public List<String> cantFind = new ArrayList<String>();
 	public List<Language> listLanguage = new ArrayList<Language>();
 
 	@Override
@@ -56,11 +87,12 @@ public class GameGlobal implements Storage {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		addCount();
 		refreshCantAnswer();
+		refreshCantFind();
 		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
 			player.playSound(player.getLocation(), Sound.CHICKEN_EGG_POP, 1, 1);
 			String message = getCurrentQuestionsPlayer(player);
 			String[] opts = {message, getOppositeLanguage().toString()};
-			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.STAGE_QUESTION_2, opts));
+			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.STAGE_QUESTION_2, opts));
 		}
 	}
 
@@ -88,16 +120,19 @@ public class GameGlobal implements Storage {
 				}
 			}
 			String[] opts = {UtilitiesGeneral.joinStrings(results, ", ")};
-			MessengerGeneral.broadcast(MessengerGeneral.getMessage(Message.GAME_RESULTS_1, opts));
+			MessengerGeneral.broadcast(MessengerGeneral.getMessage(Message0.GAME_RESULTS_1, opts));
 			String[] optsWinners = {UtilitiesGeneral.joinStrings(winners, ", ")};
-			MessengerGeneral.broadcast(MessengerGeneral.getMessage(Message.GAME_WINNERS_1, optsWinners));
+			MessengerGeneral.broadcast(MessengerGeneral.getMessage(Message0.GAME_WINNERS_1, optsWinners));
 			for(Player player : Bukkit.getServer().getOnlinePlayers()) {
 				if(winners.contains(player.getName())) {
 					Effects.shootFirework(player);
 				}
 			}
 		} else {
-			MessengerGeneral.broadcast(MessengerGeneral.getMessage(Message.GAME_NO_WINNERS_0, null));
+			MessengerGeneral.broadcast(MessengerGeneral.getMessage(Message0.GAME_NO_WINNERS_0, null));
+			for(Player player : Bukkit.getServer().getOnlinePlayers()) {
+				Effects.playSound(player, Scene.BAD);
+			}
 		}
 	}
 
@@ -111,7 +146,6 @@ public class GameGlobal implements Storage {
 
 		return false;
 	}
-
 
 	public Talk getCurrentKeyTalk() {
 		Talk talk = new Talk();
@@ -217,17 +251,20 @@ public class GameGlobal implements Storage {
 	public void addCount() {
 		count++;
 	}
-	public void addScore(Player player, Integer plus) {
+	public void addScore(Player player, EventScore event) {
 		Integer score = 0;
 		if(scores.containsKey(player.getName())) {
 			score = scores.get(player.getName());
 		}
-		score = score + plus;
+		score = score + event.score;
 		scores.put(player.getName(), score);
 	}
 
 	public void refreshCantAnswer() {
 		cantAnswer = new ArrayList<String>();
+	}
+	public void refreshCantFind() {
+		cantFind = new ArrayList<String>();
 	}
 
 	public void setLanguageJapanese() {
@@ -261,6 +298,15 @@ public class GameGlobal implements Storage {
 			}
 		}
 		System.out.println(listLanguage);
+	}
+
+	public List<String> getRule() {
+		List<String> rule = new ArrayList<String>();
+		for (EventScore event : EventScore.values()) {
+			String line= event.toString() + ": ";
+		}
+
+		return rule;
 	}
 
 	@Override

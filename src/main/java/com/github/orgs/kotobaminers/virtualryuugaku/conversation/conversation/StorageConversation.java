@@ -160,13 +160,5 @@ public class StorageConversation implements Storage, YamlController {
 	public void importConfiguration() {
 		importMyself();
 		importMulti();
-		printDebug();
-	}
-
-	public void printDebug() {
-		for(Conversation c : conversations) {
-			UtilitiesProgramming.printDebugConversation(c);
-			System.out.println("" + c.getClass());
-		}
 	}
 }

@@ -7,8 +7,8 @@ import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.game.game.GameGlobalController;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message0;
+import com.github.orgs.kotobaminers.virtualryuugaku.game.game.ControllerGameGlobal;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
@@ -62,11 +62,11 @@ public class CommandAnswer extends MyCommand {
 
 	private void commandGlobal() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		if(GameGlobalController.isValidGame()) {
-			GameGlobalController.validataAnswer(player, answer);
-			GameGlobalController.updataScoreboard(player);
+		if(ControllerGameGlobal.isValidGame()) {
+			ControllerGameGlobal.validataAnswer(player, answer);
+			ControllerGameGlobal.updataScoreboard(player);
 		} else {
-			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.GAME_PLEASE_LOAD_0, null));
+			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.GAME_PLEASE_LOAD_0, null));
 		}
 	}
 

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.citizensnpcs.api.npc.NPC;
+
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
@@ -13,8 +16,10 @@ import org.bukkit.inventory.meta.BookMeta;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Language;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message0;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.CommandConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ControllerConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.game.game.CommandGlobal;
 import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.CommandMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
@@ -31,11 +36,11 @@ public class CommandVirtualRyuugaku extends MyCommand {
 		super(player, command, args);
 	}
 	private enum Commands {
-		NONE, LANGUAGE, LANG, EN, KANJI, KANA, ROMAJI, TEST, BOOK, S, STAGE, GLOBAL, G, MYSELF, MY, SELF, ME, CONVERSATION, CONV;
+		NONE, LANGUAGE, LANG, EN, KANJI, KANA, ROMAJI, TEST, BOOK, S, STAGE, GLOBAL, G, MYSELF, MY, SELF, ME, CONVERSATION, CONV, TP;
 		public static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
-				return Commands.valueOf(name.toUpperCase());
+				return Commands.valueOf(name.toUpperCase());	
 			} catch (IllegalArgumentException e) {
 				UtilitiesProgramming.printDebugMessage(e.toString(), new Exception());
 				return Commands.NONE;
@@ -49,6 +54,9 @@ public class CommandVirtualRyuugaku extends MyCommand {
 		if(0 < args.length) {
 			Commands commands = Commands.lookup(args[0]);
 			switch(commands) {
+			case TP:
+				commandTP();
+				break;
 			case LANGUAGE:
 			case LANG:
 				commandLanguage();
@@ -94,6 +102,29 @@ public class CommandVirtualRyuugaku extends MyCommand {
 		}
 	}
 
+	private void commandTP() {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		if(1 < args.length) {
+			String stage = args[1].toUpperCase();
+			try {
+				List<Conversation> conversations = ControllerConversation.getConversations(stage);
+				if (0< conversations.size()) {
+					Conversation conversation = conversations.get(0);
+					if (0 < conversation.listTalk.size()) {
+						Integer id = conversation.getOrder().get(0);
+						NPC npc = NPCHandler.getNPC(id);
+						Location location = npc.getStoredLocation();
+						player.teleport(location);
+						String[] opts = {stage};
+						MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.STAGE_TP_1, opts));
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	private void commandBook() {
 		if (player.getItemInHand().getType().equals(Material.AIR)) {
 			String stage = "<STAGE>";
@@ -107,11 +138,11 @@ public class CommandVirtualRyuugaku extends MyCommand {
 			item.setItemMeta(book);
 			player.setItemInHand(item);
 			String opts[] = {};
-			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.BOOK_GET_0, opts));
+			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.BOOK_GET_0, opts));
 			Effects.playSound(player, Scene.APPEAR);
 		} else {
 			String opts[] = {};
-			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.COMMON_NOT_AIR_IN_HAND_0, opts));
+			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.COMMON_NOT_AIR_IN_HAND_0, opts));
 			Effects.playSound(player, Scene.BAD);
 		}
 	}
@@ -132,9 +163,9 @@ public class CommandVirtualRyuugaku extends MyCommand {
 			}
 			if(0 < expressions.size()) {
 				String[] opts = {UtilitiesGeneral.joinStrings(expressions, ", ")};
-				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.COMMAND_VRG_EXPRESSIONS_1, opts));
+				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.COMMAND_VRG_EXPRESSIONS_1, opts));
 			} else {
-				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.COMMAND_VRG_EXPRESSIONS_OFF_0, null));
+				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.COMMAND_VRG_EXPRESSIONS_OFF_0, null));
 			}
 		}
 	}
@@ -152,6 +183,6 @@ public class CommandVirtualRyuugaku extends MyCommand {
 			break;
 		}
 		String[] opts = {data.language.toString()};
-		player.sendMessage(MessengerGeneral.getMessage(Message.COMMAND_VRG_LANGUAGE_1, opts));
+		player.sendMessage(MessengerGeneral.getMessage(Message0.COMMAND_VRG_LANGUAGE_1, opts));
 	}
 }

@@ -7,11 +7,10 @@ import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ControllerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.game.game.GameGlobalController;
+import com.github.orgs.kotobaminers.virtualryuugaku.game.game.ControllerGameGlobal;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class Events implements Listener {
@@ -24,10 +23,8 @@ public class Events implements Listener {
 	public void onClickNPCLeft(NPCLeftClickEvent event) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		Player player = event.getClicker();
-		Integer id = event.getNPC().getId();
-
-		if (GameGlobalController.isValidGame()) {
-			GameGlobalController.checkFindPeople(event.getNPC());
+		if (ControllerGameGlobal.isValidGame()) {
+			ControllerGameGlobal.checkFindPeople(player, event.getNPC());
 		}
 	}
 
@@ -39,14 +36,16 @@ public class Events implements Listener {
 		try {
 			Conversation conversation = ControllerConversation.getConversation(npc);
 			conversation.talk(event.getClicker(), npc);
+			if (ControllerGameGlobal.isValidGame()) {
+				ControllerGameGlobal.cheat(event.getClicker());
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	@EventHandler
-	public void onJoin(PlayerJoinEvent event) {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-	}
-
+//	@EventHandler
+//	public void onJoin(PlayerJoinEvent event) {
+//		UtilitiesProgramming.printDebugMessage("", new Exception());
+//	}
 }

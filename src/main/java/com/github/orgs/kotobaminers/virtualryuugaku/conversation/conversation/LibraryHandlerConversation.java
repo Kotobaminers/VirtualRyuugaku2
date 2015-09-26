@@ -47,7 +47,6 @@ public class LibraryHandlerConversation {
 									String name = citizens.getNPCName(id);
 									Description description = Description.create(kanji.get(i), kana.get(i), en.get(i), new ArrayList<String>());
 									Talk talk = new Talk().create(id, name, description);
-									UtilitiesProgramming.printDebugTalk(talk);
 									conversation.listTalk.add(talk);
 								} else {
 									UtilitiesProgramming.printDebugMessage("NotExistNPC: " + id.toString(), new Exception());

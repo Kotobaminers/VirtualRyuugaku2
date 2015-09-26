@@ -7,7 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message0;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ControllerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
@@ -84,7 +84,7 @@ public class CommandStage extends MyCommand {
 				}
 			}
 			String[] opts = {stage, npcs.toString(), sentence.toString(), done.toString(), questions.toString(), keySentence.toString()};
-			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.STAGE_INFO_6, opts));
+			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.STAGE_INFO_6, opts));
 		}
 	}
 }

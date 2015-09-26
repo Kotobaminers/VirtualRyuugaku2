@@ -7,7 +7,7 @@ import java.util.Random;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message0;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
@@ -64,9 +64,9 @@ public class StageQuestion {
 	}
 
 	public void printQuestion(Player player) {
-		MessengerGeneral.print(player, MessengerGeneral.getPartitionQuestion());
+		MessengerGeneral.print(player, MessengerGeneral.getPartitionPurple());
 		String[] opts = {getQuestion(player), Language.convertStringOpposite(language)};
-		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.STAGE_QUESTION_2, opts));
+		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.STAGE_QUESTION_2, opts));
 	}
 
 	public String getQuestion(Player player) {

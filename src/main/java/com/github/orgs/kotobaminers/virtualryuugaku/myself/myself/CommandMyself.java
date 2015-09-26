@@ -3,7 +3,12 @@ package com.github.orgs.kotobaminers.virtualryuugaku.myself.myself;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message0;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ControllerConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.SoundMeta.Scene;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class CommandMyself extends MyCommand{
@@ -95,24 +100,24 @@ public class CommandMyself extends MyCommand{
 	}
 
 	private void commandUpdate() {
-//		UtilitiesProgramming.printDebugMessage("", new Exception());
-//		ConversationBook book = null;
-//		try {
-//			book = ConversationBook.createConversatinBook(player);
-//			UtilitiesProgramming.printDebugMessage("", new Exception());
-//			if(book.isMine()) {
-//				UtilitiesProgramming.printDebugMessage("", new Exception());
-//				ControllerMyself.importBook(book);
-//				String[] opts = {};
-//				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.BOOK_IMPORTED_0, opts));
-//				Effects.playSound(player, Scene.GOOD);
-//			} else {
-//				String[] opts = {};
-//				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.BOOK_NOT_YOURS_0, opts));
-//				Effects.playSound(player, Scene.BAD);
-//			}
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		ConversationBook book = null;
+		try {
+			book = ConversationBook.createConversatinBook(player);
+			UtilitiesProgramming.printDebugMessage("", new Exception());
+			if(book.isMine()) {
+				UtilitiesProgramming.printDebugMessage("", new Exception());
+				ControllerConversation.importBook(book);
+				String[] opts = {};
+				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.BOOK_IMPORTED_0, opts));
+				Effects.playSound(player, Scene.GOOD);
+			} else {
+				String[] opts = {};
+				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.BOOK_NOT_YOURS_0, opts));
+				Effects.playSound(player, Scene.BAD);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message0;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 
@@ -31,14 +31,14 @@ public class Talk {
 	public void print(Player player) {
 		List<Expression> expressions = DataManagerPlayer.getDataPlayer(player).expressions;
 		if(0 < expressions.size()) {
-			MessengerGeneral.print(player, MessengerGeneral.getPartitionTalk());
+			MessengerGeneral.print(player, MessengerGeneral.getPartitionGreen());
 		}
 		if(expressions.contains(Expression.EN)) {
 			String[] opts = {name, description.getEnglishJoined()};
 			if(key) {
-				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.DESCRIPTION_KEY_2, opts));
+				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.DESCRIPTION_KEY_2, opts));
 			} else {
-				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.DESCRIPTION_2, opts));
+				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.DESCRIPTION_2, opts));
 			}
 		}
 		List<String> listJapanese = new ArrayList<String>();
@@ -55,9 +55,9 @@ public class Talk {
 		if(0 < japanese.length()) {
 			String[] opts = {name, description.getJapaneseJoined(player)};
 			if(key) {
-				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.DESCRIPTION_KEY_2, opts));
+				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.DESCRIPTION_KEY_2, opts));
 			} else {
-				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.DESCRIPTION_2, opts));
+				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.DESCRIPTION_2, opts));
 			}
 		}
 	}

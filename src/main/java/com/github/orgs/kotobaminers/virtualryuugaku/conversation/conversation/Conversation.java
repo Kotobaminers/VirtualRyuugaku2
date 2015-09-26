@@ -73,7 +73,6 @@ public abstract class Conversation {
 			effectTalk(player, npc);
 			return;
 		}
-//		new ScoreboardTalk().update(player, conversation, data);
 	}
 
 	private void addLine(DataPlayer data) {

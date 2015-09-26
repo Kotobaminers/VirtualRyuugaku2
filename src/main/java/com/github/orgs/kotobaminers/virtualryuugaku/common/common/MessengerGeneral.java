@@ -1,5 +1,6 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.common.common;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -31,14 +32,56 @@ public class MessengerGeneral {
 		partition += color1 + mark1;
 		return partition;
 	}
-	public static final String getPartitionTalk() {
+	public static final String getPartitionGreen() {
 		return getPartition("=", "*", ChatColor.DARK_GREEN, ChatColor.GREEN);
 	}
-	public static final String getPartitionQuestion() {
+	public static final String getPartitionPurple() {
 		return getPartition("=", "*", ChatColor.DARK_PURPLE, ChatColor.LIGHT_PURPLE);
 	}
 
+	public enum Prefix {
+		VRG("" + ChatColor.GOLD + ChatColor.BOLD +"[" + ChatColor.YELLOW + "VRG" + ChatColor.GOLD + ChatColor.BOLD + "] " + ChatColor.RESET);
+
+		private String prefix = "";
+		private Prefix(String prefix) {
+			this.prefix = prefix;
+		}
+		public String getPrefix() {
+			return prefix;
+		}
+
+	}
+
 	public enum Message {
+		GAME_RULE_TITLE_0(Arrays.asList("" + ChatColor.GREEN + ChatColor.BOLD + "The Rules of Global Games")),
+		GAME_RULE_2(Arrays.asList(" ", " : ")),
+		;
+
+		private List<String> messages = Arrays.asList("");
+		private Message(List<String> messages) {
+			this.messages = messages;
+		}
+
+		private String getMessage(String[] opts) {
+			String message = "";
+			for (int i = 0; i < messages.size(); i++) {
+				message += messages.get(i) + ChatColor.RESET;
+				if(!opts.equals(null)) {
+					if (i < opts.length) {
+						message += opts[i] + ChatColor.RESET;
+					}
+				}
+			}
+			return message;
+		}
+		public void printMessage(Player[] players, String[] opts) {
+			for (Player player : players) {
+				player.sendMessage(getMessage(opts));
+			}
+		}
+	}
+
+	public enum Message0 {
 		CANT_EDIT_TALKER_0,
 		EDITED_TALKER_0, SET_LANGUAGE_1,
 		OWN_TALKER_0,
@@ -76,6 +119,7 @@ public class MessengerGeneral {
 		STAGE_FINISH_1,
 		STAGE_LIST_1,
 		STAGE_INFO_6,
+		STAGE_TP_1,
 
 		TELEPORT_0,
 		STAGE_QUESTION_2,
@@ -101,6 +145,9 @@ public class MessengerGeneral {
 		GAME_NO_WINNERS_0,
 		GAME_RESULTS_1,
 		GAME_WINNERS_1,
+		GAME_CHEAT_1,
+		GAME_JOIN_TP_1,
+		GAME_EVENT_RULE_2,
 
 		MYSELF_STAGE_RELOAD_2,
 
@@ -110,11 +157,13 @@ public class MessengerGeneral {
 		BOOK_NOT_YOURS_0,
 		BOOK_INVALID_0,
 		BOOK_IMPORTED_0,
-		BOOK_NOT_IN_HAND_0, BOOK_GET_0,
+		BOOK_NOT_IN_HAND_0,
+		BOOK_GET_0,
+
 		;
 	}
 
-	public static String getMessage(Message key, String[] opts) {
+	public static String getMessage(Message0 key, String[] opts) {
 		String message = MESSENGER_PREFIX;
 		switch(key) {
 		case COMMON_INVALID_PARAMETER_1: message += "Invalid Parameters: " + opts[0]; break;
@@ -167,6 +216,8 @@ public class MessengerGeneral {
 				+ " Questions: " + opts[3] + " / " + opts[4] + "\n"
 				+ " Key Sentences: " + opts[5];
 			break;
+		case STAGE_TP_1: message = "Teleporting to " + opts[0] + "."; break;
+
 		case TELEPORT_0: message += "Teleporting..."; break;
 		case GAME_FIND_PEOPLE_MISSION_0: message += ChatColor.LIGHT_PURPLE + "Find This Person!"; break;
 		case GAME_FIND_PEOPLE_QUEST_1: message = ChatColor.GOLD + "???" + ChatColor.RESET + ": " + opts[0] ; break;
@@ -182,12 +233,15 @@ public class MessengerGeneral {
 		case DESCRIPTION_2: message = opts[0] + ChatColor.RESET + ": " + opts[1]; break;
 		case DESCRIPTION_KEY_2: message = opts[0] + ChatColor.RESET + ": " + opts[1] + " " + MARK_KEY; break;
 
+		case GAME_JOIN_TP_1: message += "Join the game and start learning!: " + ChatColor.YELLOW + "/vrg tp " + ChatColor.GOLD + ChatColor.BOLD + opts[0]; break;
 		case GAME_TRY_FINISH_0: message += "There is no next sentence. Please finish the game."; break;
 		case GAME_NOT_ALLOWED_TO_ANSWER_0: message += "You are not allowed to answer the question."; break;
 		case GAME_PLEASE_LOAD_0: message += "Please load a global game at first."; break;
 		case GAME_NO_WINNERS_0: message += "No Winners!"; break;
 		case GAME_RESULTS_1: message += "Results: " + opts[0]; break;
 		case GAME_WINNERS_1: message += "Winners: " + opts[0]; break;
+		case GAME_CHEAT_1: message += "You are cheating!(Score: " + opts[0] + ")"; break;
+		case GAME_EVENT_RULE_2: message += opts[0] + ": Score(" + opts[1] + ")"; break;
 
 		case BOOK_NOT_YOURS_0: message += "This book is not yours."; break;
 		case BOOK_NOT_IN_HAND_0: message += "Please Hold a written book in your hand."; break;
@@ -201,7 +255,7 @@ public class MessengerGeneral {
 	}
 
 	@Deprecated
-	public static void print(Player player, Message key, String[] opts) {
+	public static void print(Player player, Message0 key, String[] opts) {
 		String message = MESSENGER_PREFIX;
 		switch(key) {
 		case CANT_EDIT_TALKER_0: message += "You can't edit this talker."; break;

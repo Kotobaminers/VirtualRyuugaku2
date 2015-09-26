@@ -9,6 +9,7 @@ import net.citizensnpcs.api.npc.NPC;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Controller;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Storage;
+import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.ConversationBook;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class ControllerConversation extends Controller {
@@ -64,7 +65,6 @@ public class ControllerConversation extends Controller {
 
 	public static boolean isMyself(Integer id) {
 		for (List<Integer> ids: StorageConversation.mapMyselfNPC.values()) {
-			System.out.println(ids + "" + id);
 			if (ids.contains(id)) {
 				return true;
 			}
@@ -113,6 +113,9 @@ public class ControllerConversation extends Controller {
 		return StorageConversation.teachers;
 	}
 
+	public static void importBook(ConversationBook book) {
+		StorageConversation.conversations.add(book.conversation);
+	}
 }
 
 
