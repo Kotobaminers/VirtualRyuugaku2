@@ -128,9 +128,9 @@ public class ControllerGameGlobal extends Controller {
 	public static void printRule(Player player) {
 		Player[] players = {player};
 		String[] opts = {""};
-		Message.GAME_RULE_TITLE_0.printMessage(players, opts);
+		Message.GAME_RULE_TITLE_0.print(players, opts);
 		for (EventScore event : EventScore.values()) {
-			Message.GAME_RULE_2.printMessage(players, event.getMessageOpts());
+			Message.GAME_RULE_2.print(players, event.getMessageOpts());
 		}
 	}
 }

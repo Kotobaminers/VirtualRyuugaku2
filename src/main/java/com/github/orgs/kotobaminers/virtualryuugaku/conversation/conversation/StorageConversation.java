@@ -5,12 +5,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import net.citizensnpcs.api.npc.NPC;
 
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -21,7 +18,6 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Storage;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.YamlController;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.DataManagerPlugin;
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.NPCHandler;
 
 public class StorageConversation implements Storage, YamlController {
 
@@ -138,21 +134,7 @@ public class StorageConversation implements Storage, YamlController {
 
 		Map<String, YamlConfiguration> mapConfig = LibraryManager.getListLibraryStage();
 		for(String stage : mapConfig.keySet()) {
-			list.addAll(LibraryHandlerConversation.importConversationLibrary(stage, mapConfig.get(stage)));
-		}
-		Set<Integer> ids = new HashSet<Integer>();
-		for(Iterator<NPC> npcs = NPCHandler.getNPCs(); npcs.hasNext();) {
-			ids.add(npcs.next().getId());
-		}
-		for(ConversationMulti conversation : list) {
-			Set<Integer> target = new HashSet<Integer>(conversation.getOrder());
-			for (Integer search : target) {
-				if(!ids.contains(search)) {
-					UtilitiesProgramming.printDebugMessage("NOT EXISTS ID: " + search.toString() + ": " + conversation.stage, new Exception());
-					break;
-				}
-			}
-			conversations.add(conversation);
+			conversations.addAll(LibraryHandlerConversation.importConversationLibrary(stage, mapConfig.get(stage)));
 		}
 	}
 

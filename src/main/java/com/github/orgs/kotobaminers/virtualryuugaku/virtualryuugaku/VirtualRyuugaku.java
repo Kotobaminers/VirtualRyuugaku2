@@ -15,7 +15,7 @@ public class VirtualRyuugaku extends JavaPlugin {
 		DataManagerPlugin.loadPlugin();
 
 		getServer().getPluginManager().registerEvents(new Events(), this);
-		for(Commands command : Commands.values()) {
+		for(Commands command : Commands.getRoot()) {
 			this.getCommand(command.toString()).setExecutor(new CommandExecutorPlugin(this));
 		}
 

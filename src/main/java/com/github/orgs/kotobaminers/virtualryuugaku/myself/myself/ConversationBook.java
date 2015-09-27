@@ -10,8 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message0;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.StorageConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
@@ -44,25 +43,37 @@ public class ConversationBook {
 				conversationBook.stage = conversationBook.loadStage();
 				conversationBook.conversation = conversationBook.loadConversations();
 				if (isValid(conversationBook)) {
-					String[] opts = {};
-					MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.BOOK_INVALID_0, opts));
+					Message.BOOK_INVALID_0.print(player, null);
 					Effects.playSound(player, Scene.BAD);
 					throw new Exception("Invalid book.");
 				}
 			} else {
-				String[] opts = {};
-				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.BOOK_INVALID_0, opts));
+				Message.BOOK_INVALID_0.print(player, null);
 				Effects.playSound(player, Scene.BAD);
 				throw new Exception("No page.");
 			}
 		} else {
-			String[] opts = {};
-			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.BOOK_NOT_IN_HAND_0, opts));
+			Message.BOOK_NOT_IN_HAND_0.print(player, null);
 			Effects.playSound(player, Scene.BAD);
 			throw new Exception("Not book.");
 		}
 		conversationBook.printDebug();;
 		return conversationBook;
+	}
+
+	public static void giveConversationBookEmpty(Player player, String stage)  {
+		if (player.getItemInHand().getType().equals(Material.AIR)) {
+			ItemStack item = new ItemStack(Material.BOOK_AND_QUILL);
+			BookMeta book = (BookMeta) item.getItemMeta();
+			String page = player.getName() + "\n" + stage.toUpperCase();
+			book.setPages(Arrays.asList(page));
+			item.setItemMeta(book);
+			player.setItemInHand(item);
+			Message.BOOK_GET_0.print(player, null);;
+			Effects.playSound(player, Scene.APPEAR);
+		} else {
+			Message.COMMON_NOT_AIR_IN_HAND_0.print(player, null);
+		}
 	}
 
 	private BookMeta loadBook() {

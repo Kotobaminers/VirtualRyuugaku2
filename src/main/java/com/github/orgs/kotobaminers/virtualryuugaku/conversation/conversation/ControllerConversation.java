@@ -1,6 +1,7 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -111,6 +112,18 @@ public class ControllerConversation extends Controller {
 
 	public static List<String> getTeachers() {
 		return StorageConversation.teachers;
+	}
+
+	public static List<String> getStages() {
+		Set<String> set = new HashSet<String>();
+		for (Conversation conversation : getConversations()) {
+			set.add(conversation.stage);
+		}
+		List<String> stages = new ArrayList<String>();
+		for (String stage : set) {
+			stages.add(stage);
+		}
+		return stages;
 	}
 
 	public static void importBook(ConversationBook book) {

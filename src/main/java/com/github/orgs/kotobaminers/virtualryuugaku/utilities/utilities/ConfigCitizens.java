@@ -41,14 +41,14 @@ public class ConfigCitizens implements YamlController {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		MemorySection memory = (MemorySection) config.get(KEY_NPC);
 		for(String key : memory.getKeys(false)) {
+			try {
 			Integer id = Integer.parseInt(key);
-			if(0 <= id) {
-				try {
+				if(0 <= id) {
 					String name = memory.getString(key + "." + KEY_NAME);
 					names.put(id, name);
-				} catch(Exception e){
-					e.printStackTrace();
 				}
+			} catch(Exception e){
+				e.printStackTrace();
 			}
 		}
 	}

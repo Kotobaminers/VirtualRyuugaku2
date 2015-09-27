@@ -40,7 +40,9 @@ public class MessengerGeneral {
 	}
 
 	public enum Prefix {
-		VRG("" + ChatColor.GOLD + ChatColor.BOLD +"[" + ChatColor.YELLOW + "VRG" + ChatColor.GOLD + ChatColor.BOLD + "] " + ChatColor.RESET);
+		VRG("" + ChatColor.GOLD + ChatColor.BOLD +"[" + ChatColor.YELLOW + "VRG" + ChatColor.GOLD + ChatColor.BOLD + "] " + ChatColor.RESET),
+		NONE(""),
+		;
 
 		private String prefix = "";
 		private Prefix(String prefix) {
@@ -49,37 +51,122 @@ public class MessengerGeneral {
 		public String getPrefix() {
 			return prefix;
 		}
-
 	}
 
 	public enum Message {
-		GAME_RULE_TITLE_0(Arrays.asList("" + ChatColor.GREEN + ChatColor.BOLD + "The Rules of Global Games")),
-		GAME_RULE_2(Arrays.asList(" ", " : ")),
+		COMMON_NOT_AIR_IN_HAND_0(Arrays.asList("Please hold nothing."), Prefix.VRG),
+
+		GAME_RULE_TITLE_0(Arrays.asList("" + ChatColor.GREEN + ChatColor.BOLD + "The Rules of Global Games"), Prefix.NONE),
+		GAME_RULE_2(Arrays.asList(" ", " : "), Prefix.NONE),
+		GAME_PLEASE_LOAD_0(Arrays.asList("Please load a global game at first."), Prefix.VRG),
+
+		STAGE_INFO_6(Arrays.asList(
+				getPartition("=", "*", ChatColor.GOLD, ChatColor.YELLOW, 3) + "  " + ChatColor.GOLD + ChatColor.BOLD,
+				getPartition("=", "*", ChatColor.GOLD, ChatColor.YELLOW, 3) + ChatColor.RESET + "\n NPCs: ",
+				"\n Sentences: ",
+				"\n Questions: ",
+				" / ",
+				"\n Key Sentences: "),
+				Prefix.NONE),
+		STAGE_LIST_1(Arrays.asList(ChatColor.AQUA + "Stages: " + ChatColor.RESET), Prefix.VRG),
+
+		BOOK_GET_0(Arrays.asList("You got a new book. Enjoy writing!"), Prefix.VRG),
+		BOOK_INVALID_0(Arrays.asList("Invalid book. Check how to write one."), Prefix.VRG),
+		BOOK_IMPORTED_0(Arrays.asList("Your sentences are successfully imported."), Prefix.VRG),
+		BOOK_NOT_YOURS_0(Arrays.asList("This book is not yours."), Prefix.VRG),
+		BOOK_NOT_IN_HAND_0(Arrays.asList("Please Hold a written book in your hand."), Prefix.VRG),
+
+		COMMAND_HELP_TITLE_0(Arrays.asList(
+				getPartition("=", "*", ChatColor.GOLD, ChatColor.YELLOW, 3) + "  " +
+				ChatColor.GOLD + ChatColor.BOLD + "Command Help" +
+				getPartition("=", "*", ChatColor.GOLD, ChatColor.YELLOW, 3) + ChatColor.RESET),
+				Prefix.NONE),
+		COMMAND_HELP_2(Arrays.asList("", ChatColor.GRAY + "  :  " + ChatColor.RESET), Prefix.NONE),
+		COMMAND_INVALID_PARAMS_1(Arrays.asList(ChatColor.RED + "Invalid parameters: " + ChatColor.RESET), Prefix.VRG),
+
+
 		;
 
 		private List<String> messages = Arrays.asList("");
-		private Message(List<String> messages) {
+		private Prefix prefix = Prefix.NONE;
+		private Message(List<String> messages, Prefix prefix) {
 			this.messages = messages;
+			this.prefix = prefix;
 		}
 
 		private String getMessage(String[] opts) {
 			String message = "";
 			for (int i = 0; i < messages.size(); i++) {
-				message += messages.get(i) + ChatColor.RESET;
-				if(!opts.equals(null)) {
-					if (i < opts.length) {
-						message += opts[i] + ChatColor.RESET;
-					}
+				message += messages.get(i);
+				if(opts == null) {
+					return message;
+				} else if (i < opts.length) {
+					message += opts[i];
 				}
 			}
 			return message;
 		}
-		public void printMessage(Player[] players, String[] opts) {
+
+		public void print(Player player, String[] opts) {
+			player.sendMessage(prefix.getPrefix() + getMessage(opts));
+		}
+		public void print(Player[] players, String[] opts) {
 			for (Player player : players) {
-				player.sendMessage(getMessage(opts));
+				print(player, opts);
 			}
 		}
+		public void broadcast(String[] opts) {
+			for(Player player: Bukkit.getServer().getOnlinePlayers()) {
+				print(player, opts);
+			}
+		}
+
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	public enum Message0 {
 		CANT_EDIT_TALKER_0,
