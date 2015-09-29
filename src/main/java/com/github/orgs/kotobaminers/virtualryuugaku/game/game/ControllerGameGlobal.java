@@ -63,6 +63,7 @@ public class ControllerGameGlobal extends Controller {
 
 	private static void eventWriteWrong(Player player) {
 		player.playSound(player.getLocation(), Sound.ITEM_BREAK, 1, 1);
+		Message.COMMON_WRONG_0.print(player, null);
 		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.WRONG_0, null) );
 		game.addScore(player, EventScore.ANSWER_WRONGLY);
 	}
@@ -78,14 +79,14 @@ public class ControllerGameGlobal extends Controller {
 
 	private static void eventFindWrong(Player player) {
 		player.playSound(player.getLocation(), Sound.ITEM_BREAK, 1, 1);
-		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.WRONG_0, null) );
+		Message.COMMON_WRONG_0.print(player, null);
 		game.addScore(player, EventScore.LEFT_CLICK_NPC_WRONGLY);
 	}
 
 
 	private static void eventFindCorrect(Player player) {
 		player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 1);
-		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.CORRECT_0, null));
+		Message.COMMON_CORRECT_0.print(player, null);
 		game.addScore(player, EventScore.LEFT_CLICK_NPC_CORRECTLY);
 		game.cantFind.add(player.getName());
 	}

@@ -15,36 +15,14 @@ import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPla
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
+import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.NPCHandler;
 
 public abstract class Conversation {
-	public String stage = "";
+	public String stageName = "";
 	public List<String> editor = new ArrayList<String>();
 	public List<Talk> listTalk = new ArrayList<Talk>();
 	public ConversationQuestion question = new ConversationQuestion();
-
 	public Set<String> recommenders = new HashSet<String>();
-	public enum CheckState {NOT_EXISTS, UNCHECKED, CHECKED, RECOMMENDED, }
-	public CheckState getCheckState() {
-		CheckState state = CheckState.UNCHECKED;
-		if (!(0 < listTalk.size())) {
-			state = CheckState.NOT_EXISTS;
-			return state;
-		}
-
-		for (String teacher : ControllerConversation.getTeachers()) {
-			if (recommenders.contains(teacher)) {
-				state = CheckState.RECOMMENDED;
-				return state;
-			}
-		}
-
-		if (0 < getCorrectors().size() || 0 < recommenders.size()) {
-			state = CheckState.CHECKED;
-			return state;
-		}
-
-		return state;
-	}
 
 	public List<String> getCorrectors() {
 		List<String> correctors = new ArrayList<String>();
@@ -134,20 +112,30 @@ public abstract class Conversation {
 		}
 		return false;
 	}
-
-	public List<Integer> getOrder() {
-		List<Integer> order = new ArrayList<Integer>();
-		for(Talk talk : listTalk) {
-			order.add(talk.id);
+	public Set<NPC> getNPCs() throws Exception{
+		Set<Integer> set = new HashSet<Integer>();
+		List<Integer> list = getIDSorted();
+		set.addAll(list);
+		Set<NPC> npcs = new HashSet<NPC>();
+		for (Integer id : set) {
+			npcs.add(NPCHandler.getNPC(id));
 		}
-		return order;
+		if (0 < npcs.size()) {
+			return npcs;
+		} else {
+			throw new Exception("NPC not exists: " + list);
+		}
 	}
+
+	public abstract List<Integer> getIDSorted() throws Exception;
+	public abstract boolean isChangebleID() throws Exception;
 
 	public String getDebugMessage() {
 		String edit = "[" + UtilitiesGeneral.joinStrings(editor, ", ") + "]";
-		String message = "[CONV] STAGE: " + stage + ", EDITOR: " + edit + "ID:" + getKeyTalk().toString();
+		String message = "[CONV] STAGE: " + stageName + ", EDITOR: " + edit + "ID:" + getKeyTalk().toString();
 		return message;
 	}
+
 }
 
 

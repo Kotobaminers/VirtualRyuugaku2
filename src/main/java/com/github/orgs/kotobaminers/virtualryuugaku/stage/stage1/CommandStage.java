@@ -59,7 +59,7 @@ public class CommandStage extends MyCommand {
 			Integer keySentence = 0;
 			Integer sentence = 0;
 			for(Conversation conversation : ControllerConversation.getConversations()) {
-				if(stage.equalsIgnoreCase(conversation.stage)) {
+				if(stage.equalsIgnoreCase(conversation.stageName)) {
 					if(conversation.hasValidQuestion()) {
 						questions++;
 					}

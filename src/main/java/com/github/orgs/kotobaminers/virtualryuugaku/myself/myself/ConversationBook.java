@@ -11,8 +11,8 @@ import org.bukkit.inventory.meta.BookMeta;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ControllerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMyself;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.StorageConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.SoundMeta.Scene;
@@ -20,8 +20,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utilitie
 
 public class ConversationBook {
 	//Fields for the book itself
-	public String owner = "";
-	public String stage = "";
+	public List<List<String>> pages = new ArrayList<List<String>>();
 	public ConversationMyself conversation = new ConversationMyself();
 
 	//Fields for handling
@@ -29,35 +28,28 @@ public class ConversationBook {
 	public BookMeta book = null;
 	public static final String separator = "\n";
 
-	private ConversationBook() {};
+	public ConversationBook() {}
+	private ConversationBook(BookMeta meta) {
+		book = meta;
+	}
 
-	public static ConversationBook createConversatinBook(Player player) throws Exception {
+	public ConversationBook createConversatinBook(Player player) throws Exception {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		ConversationBook conversationBook = new ConversationBook();
-		conversationBook.holder = player;
-		conversationBook.book = conversationBook.loadBook();
+		BookMeta meta = loadBook(player);
+		ConversationBook conversationBook = new ConversationBook(meta);
+		conversationBook.pages = conversationBook.loadPages(meta);
 
-		if(conversationBook.book instanceof BookMeta) {
+		if(conversationBook.isValid()) {
 			if(conversationBook.book.hasPages()) {
-				conversationBook.owner = conversationBook.loadOwner();
-				conversationBook.stage = conversationBook.loadStage();
+				conversationBook.holder = player;
 				conversationBook.conversation = conversationBook.loadConversations();
-				if (isValid(conversationBook)) {
-					Message.BOOK_INVALID_0.print(player, null);
-					Effects.playSound(player, Scene.BAD);
-					throw new Exception("Invalid book.");
-				}
-			} else {
-				Message.BOOK_INVALID_0.print(player, null);
-				Effects.playSound(player, Scene.BAD);
-				throw new Exception("No page.");
 			}
 		} else {
-			Message.BOOK_NOT_IN_HAND_0.print(player, null);
+			Message.BOOK_INVALID_0.print(player, null);
 			Effects.playSound(player, Scene.BAD);
-			throw new Exception("Not book.");
+			throw new Exception("Invalid book.");
 		}
-		conversationBook.printDebug();;
+		conversationBook.printDebug();
 		return conversationBook;
 	}
 
@@ -76,105 +68,120 @@ public class ConversationBook {
 		}
 	}
 
-	private BookMeta loadBook() {
+	private static BookMeta loadBook(Player player) throws Exception {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		BookMeta book = null;
-		ItemStack item = holder.getItemInHand();
+		ItemStack item = player.getItemInHand();
 		if(item.getType().equals(Material.BOOK_AND_QUILL) || item.getType().equals(Material.WRITTEN_BOOK)) {
 			BookMeta tmp = (BookMeta) item.getItemMeta();
 			if(tmp.hasPages()) {
 				book = tmp;
+				return book;
 			}
-
 		}
-		return book;
+		throw new Exception("Invalid Book");
 	}
 
-	private String loadPage(Integer number) throws Exception{
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		String black = "";
-		if(number <= book.getPageCount()) {
-			String section = "§";
-			String page = book.getPage(number);
+//	private String loadPage(Integer number) throws Exception{
+//		UtilitiesProgramming.printDebugMessage("", new Exception());
+//		String black = "";
+//		if(number <= book.getPageCount()) {
+//			String section = "§";
+//			String page = book.getPage(number);
+//
+//			List<Integer> index = new ArrayList<Integer>();
+//			for (int i = 0; i < page.length(); i++) {
+//				String search = page.substring(i, i+1);
+//				if (search.equalsIgnoreCase(section)) {
+//					i++;
+//				} else {
+//					index.add(i);
+//				}
+//			}
+//
+//			for(int i : index) {
+//				black += page.substring(i, i+1);
+//			}
+//			UtilitiesProgramming.printDebugMessage(black, new Exception());
+//			System.out.println(index);
+//		} else {
+//			throw new Exception();
+//		}
+//		return black;
+//	}
 
-			List<Integer> index = new ArrayList<Integer>();
-			for (int i = 0; i < page.length(); i++) {
-				String search = page.substring(i, i+1);
-				if (search.equalsIgnoreCase(section)) {
-					i++;
-				} else {
-					index.add(i);
+	private List<List<String>> loadPages(BookMeta meta) {
+		List<List<String>> pages = new ArrayList<List<String>>();
+		if (0 < meta.getPageCount()) {
+			for (int i = 1; i <= book.getPageCount(); i++) {
+				String black = "";
+				String section = "§";
+				String page = meta.getPage(i);
+
+				List<Integer> index = new ArrayList<Integer>();
+				for (int j = 0; j < page.length(); j++) {
+					String search = page.substring(j, j+1);
+					if (search.equalsIgnoreCase(section)) {
+						j++;
+					} else {
+						index.add(j);
+					}
 				}
-			}
 
-			for(int i : index) {
-				black += page.substring(i, i+1);
+				for(int j : index) {
+					black += page.substring(j, j+1);
+				}
+				List<String> lines = new ArrayList<String>();
+				lines.addAll(Arrays.asList(black.split(separator)));
+				pages.add(lines);
 			}
-			UtilitiesProgramming.printDebugMessage(black, new Exception());
-			System.out.println(index);
-		} else {
-			throw new Exception();
 		}
-		return black;
+		return pages;
 	}
 
 	public boolean isMine() {
-		if(holder.getName().equalsIgnoreCase(owner)) {
+		if(holder.getName().equalsIgnoreCase(getOwner())) {
 			return true;
 		}
 		return false;
 	}
 
-	private String loadOwner() {
+	private String getOwner() {
 		String owner = "";
-		try {
-			String page = loadPage(1);
-			String[] strings = page.split(separator);
-			if(0 < strings.length) {
-				owner = strings[0];
+		if (0 < pages.size()) {
+			if (0 < pages.get(0).size()) {
+				owner = pages.get(0).get(0);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return owner;
 	}
 
-	private String loadStage() {
+	private String getStage() {
 		String stage = "";
-		try {
-			String page = loadPage(1);
-			String[] strings = page.split(separator);
-			if(1 < strings.length) {
-				stage = strings[1];
+		if (0 < pages.size()) {
+			if (1 < pages.get(0).size()) {
+				stage = pages.get(0).get(1);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return stage;
 	}
 
 	private ConversationMyself loadConversations() {
 		ConversationMyself conversation = new ConversationMyself();
-		if(1 < book.getPageCount()) {
-			List<List<String>> pages = new ArrayList<List<String>>();
-			List<String> lines = new ArrayList<String>();
-			for(Integer index = 2; index <= book.getPageCount(); index++) {
-				try {
-					lines = Arrays.asList(loadPage(index).split(separator));
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				pages.add(lines);
+		if(1 < pages.size()) {
+			List<List<String>> talks = new ArrayList<List<String>>();
+			for(Integer index = 1; index < pages.size(); index++) {
+				talks.add(pages.get(index));
 			}
-			conversation = createConversation(pages);
+			conversation = createConversation(talks);
 		}
 		return conversation;
 	}
 
 	private ConversationMyself createConversation(List<List<String>> pages) {
 		ConversationMyself conversation = new ConversationMyself();
-		conversation.stage = stage;
-		conversation.editor = Arrays.asList(owner);
+		conversation.stageName = getStage();
+		conversation.editor = Arrays.asList(getOwner());
 
 		List<Talk> talks = new ArrayList<Talk>();
 		for(List<String> page : pages) {
@@ -190,7 +197,7 @@ public class ConversationBook {
 				kana = page.get(1);
 				List<String> tips = new ArrayList<String>();
 				talk.description = Description.create(kanji, kana, en, tips);
-				talk.name = owner;
+				talk.name = getOwner();
 				talks.add(talk);
 			} else {
 				holder.sendMessage("ERROR in a page.");
@@ -200,10 +207,23 @@ public class ConversationBook {
 		return conversation;
 	}
 
-	public static boolean isValid(ConversationBook book) {
-		if(0 < book.owner.length() && 0 < book.stage.length() && 0 < book.conversation.listTalk.size()) {
-			for(String search : StorageConversation.mapMyselfNPC.keySet()) {
-				if(search.equalsIgnoreCase(book.stage)) {
+	public boolean isValid() {
+		UtilitiesProgramming.printDebugMessage("" + pages, new Exception());
+		if (1 < pages.size()) {
+			UtilitiesProgramming.printDebugMessage("", new Exception());
+			List<String> info = pages.get(0);
+			if (1 < info.size()) {
+				UtilitiesProgramming.printDebugMessage("", new Exception());
+				for (int i = 1; i < pages.size(); i++) {
+					UtilitiesProgramming.printDebugMessage("", new Exception());
+					List<String> lines = pages.get(i);
+					UtilitiesProgramming.printDebugMessage("" + lines.size(), new Exception());
+					if (!(1 < lines.size())) {
+						return false;
+					}
+				}
+				String stage = info.get(1);
+				if (ControllerConversation.existsMyselfStage(stage)) {
 					return true;
 				}
 			}
@@ -213,7 +233,7 @@ public class ConversationBook {
 
 
 	private void printDebug() {
-		String message = "OWNER: " + owner + " STAGE: " + stage;
+		String message = "OWNER: " + getOwner() + " STAGE: " + getStage();
 		UtilitiesProgramming.printDebugMessage(message, new Exception());
 		UtilitiesProgramming.printDebugConversation(conversation);
 	}

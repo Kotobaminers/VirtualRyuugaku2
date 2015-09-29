@@ -111,7 +111,7 @@ public class CommandVirtualRyuugaku extends MyCommand {
 				if (0< conversations.size()) {
 					Conversation conversation = conversations.get(0);
 					if (0 < conversation.listTalk.size()) {
-						Integer id = conversation.getOrder().get(0);
+						Integer id = conversation.getIDSorted().get(0);
 						NPC npc = NPCHandler.getNPC(id);
 						Location location = npc.getStoredLocation();
 						player.teleport(location);

@@ -28,6 +28,9 @@ public class CommandExecutorPlugin implements CommandExecutor {
 			command2.printInfo(sender);
 			CommandPerformer performer = new CommandPerformer(sender, command2, label, args);
 			switch (command2) {
+			case TP:
+				performer.commandTP();
+				break;
 			case INFO:
 				performer.commandInfo();
 				break;
@@ -52,12 +55,15 @@ public class CommandExecutorPlugin implements CommandExecutor {
 				performer.commandMyselfBook();
 				break;
 			case MYSELF_UPDATE:
+				performer.commandMyselfUpdate();
+				break;
+			case ANSWER_GAME:
+				performer.commandAnswerGame();
 				break;
 
 			case GAME:
 			case VIRTUALRYUUGAKU:
 			case ANSWER:
-			case ANSWER_GAME:
 			case MYSELF:
 			default:
 				break;

@@ -21,6 +21,12 @@ public class Enums {//public enums
 				new ArrayList<String>(),
 				CommandPermission.PLAYERS),
 
+		TP(
+				VIRTUALRYUUGAKU,
+				Arrays.asList("tp"),
+				"Teleport to the stage",
+				Arrays.asList("<STAGE>"),
+				CommandPermission.PLAYERS),
 		INFO(
 				VIRTUALRYUUGAKU,
 				Arrays.asList("info", "infomation", "i"),
@@ -45,7 +51,7 @@ public class Enums {//public enums
 				MYSELF,
 				Arrays.asList("book", "b"),
 				"Get a new empty book",
-				new ArrayList<String>(),
+				Arrays.asList("<MYSELF STAGE>"),
 				CommandPermission.PLAYERS),
 		MYSELF_UPDATE(
 				MYSELF,
@@ -253,24 +259,6 @@ public class Enums {//public enums
 
 
 
-	public enum Commands0 {
-		VIRTUALRYUUGAKU, VRG,
-		VIRTUALRYUUGAKUOP, VRGOP, VRGDBG,
-		STAGEOP,
-		CONVERSATION, CONVERSATIONOP,
-		CONV, CONVOP,
-		ANSWER, ANS,
-		;
-		public static Commands0 lookup(String name) {
-			try {
-				UtilitiesProgramming.printDebugMessage("", new Exception());
-				return Commands0.valueOf(name.toUpperCase());
-			} catch (IllegalArgumentException e) {
-				UtilitiesProgramming.printDebugMessage(e.toString(), new Exception());
-				return Commands0.VRG;
-			}
-		}
-	}
 	public enum Expression {NONE, EN, KANJI, KANA, ROMAJI;
 		public static Expression lookup(String name) {
 			try {
@@ -294,5 +282,4 @@ public class Enums {//public enums
 		}
 	}
 	public enum PathConversation {STAGE, EDITOR, EN, KANJI, KANA, KEY, Q, A, COMMENT}
-	public enum PathComment {STATE, EXPRESSION}
 }

@@ -21,7 +21,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.DataManagerP
 
 public class StorageConversation implements Storage, YamlController {
 
-	protected static Set<Conversation> conversations = new HashSet<Conversation>();
+	public static Set<Conversation> conversations = new HashSet<Conversation>();
 
 	public static Map<String, List<Integer>> mapMyselfNPC = new HashMap<String, List<Integer>>();
 	public static HashMap<Integer, String> mapMe = new HashMap<Integer, String>();
@@ -110,7 +110,7 @@ public class StorageConversation implements Storage, YamlController {
 						Integer size = en.size();
 						if(size.equals(kana.size()) && size.equals(kana.size())) {
 							ConversationMyself conversation = new ConversationMyself();
-							conversation.stage = stage;
+							conversation.stageName = stage;
 							conversation.editor = Arrays.asList(owner);
 							for(int i = 0; i < size; i++) {
 								Description description = Description.create(kanji.get(i), kana.get(i), en.get(i), new ArrayList<String>());

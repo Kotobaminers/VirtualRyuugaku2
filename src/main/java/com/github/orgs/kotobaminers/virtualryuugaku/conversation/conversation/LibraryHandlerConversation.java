@@ -31,7 +31,7 @@ public class LibraryHandlerConversation {
 					MemorySection memoryId = (MemorySection) memory.get(idString);
 					List<Integer> order = UtilitiesGeneral.toListInteger(idString);
 					ConversationMulti conversation = new ConversationMulti();
-					conversation.stage = stage;
+					conversation.stageName = stage;
 					conversation.editor.addAll(editor);
 					//Name will be imported from citizens data.
 					if(memoryId.contains(Enums.PathConversation.EN.toString()) && memoryId.contains(Enums.PathConversation.KANJI.toString()) && memoryId.contains(Enums.PathConversation.KANA.toString())) {

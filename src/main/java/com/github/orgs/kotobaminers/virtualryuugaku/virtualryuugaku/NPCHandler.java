@@ -17,7 +17,8 @@ public class NPCHandler {
 		DEFAULT(0),
 		NOT_EXISTS(0),
 		MYSELF(1),
-		ME(1),;
+		ME(1),
+		;
 
 		private final int code;
 		private NPCType(int code) {
@@ -37,10 +38,12 @@ public class NPCHandler {
 
 	public static final List<EntityType> ALLOWED_ENTITY_TYPE = Arrays.asList(EntityType.PLAYER, EntityType.CREEPER);
 
-	public static NPC getNPC(Integer id) {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		NPC npc = CitizensAPI.getNPCRegistry().getById(id);
-		return npc;
+	public static NPC getNPC(Integer id) throws Exception {
+		if (existsNPC(id)) {
+			NPC npc = CitizensAPI.getNPCRegistry().getById(id);
+			return npc;
+		}
+		throw new Exception();
 	}
 
 	public static boolean canEdit(Integer id) {
@@ -69,16 +72,13 @@ public class NPCHandler {
 		return NPCType.NOT_EXISTS;
 	}
 
-	public static void changeNPCAsPlayer(Integer id, String stage, String player) throws Exception {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-//		if(canEdit(id)) {
-//			UtilitiesProgramming.printDebugMessage("", new Exception());
-//			NPCHandler.changeType(id, EntityType.PLAYER);
-//			NPCHandler.changeName(id, player);
-//			ControllerMyself.setTalkParams(player, stage, id);
-//		} else {
-//			throw new Exception("You can't edit this NPC: " + id.toString());
-//		}
+	public static void changeNPCAsPlayer(Integer id, String player) {
+		try {
+			NPCHandler.changeType(id, EntityType.PLAYER);
+			NPCHandler.changeName(id, player);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void changeNPCAsEmpty(Integer id) throws Exception {
@@ -91,14 +91,22 @@ public class NPCHandler {
 	}
 
 	private static void changeName(Integer id, String name) {
-		NPC npc = getNPC(id);
-		npc.setName(name);
+		if (existsNPC(id)) {
+			try {
+				NPC npc = getNPC(id);
+				npc.setName(name);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return;
+		}
 	}
 
 	private static void changeType(Integer id, EntityType type) throws Exception {
 		if(ALLOWED_ENTITY_TYPE.contains(type)) {
 			NPC npc = getNPC(id);
 			npc.setBukkitEntityType(type);
+			return;
 		} else {
 			throw new Exception("NOT ALLOWED ENTITY TYPE: " + type.toString());
 		}
@@ -106,5 +114,14 @@ public class NPCHandler {
 
 	public static Iterator<NPC> getNPCs() {
 		return CitizensAPI.getNPCRegistry().iterator();
+	}
+
+	public static boolean existsNPC(Integer id) {
+		for (Iterator<NPC> i = getNPCs(); i.hasNext();) {
+			if(id == i.next().getId()) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

@@ -8,9 +8,14 @@ import java.util.Set;
 
 import net.citizensnpcs.api.npc.NPC;
 
+import org.bukkit.entity.Player;
+
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Controller;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Storage;
 import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.ConversationBook;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.SoundMeta.Scene;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class ControllerConversation extends Controller {
@@ -31,7 +36,7 @@ public class ControllerConversation extends Controller {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		List<Conversation> conversations = new ArrayList<Conversation>();
 		for (Conversation conversation : StorageConversation.conversations) {
-			if (conversation.stage.equalsIgnoreCase(stage)) {
+			if (conversation.stageName.equalsIgnoreCase(stage)) {
 				conversations.add(conversation);
 			}
 		}
@@ -56,7 +61,7 @@ public class ControllerConversation extends Controller {
 		//Multi
 		for (Conversation conversation : StorageConversation.conversations) {
 			if (conversation instanceof ConversationMulti) {
-				if (conversation.getOrder().contains(id)) {
+				if (conversation.getIDSorted().contains(id)) {
 					return conversation;
 				}
 			}
@@ -83,11 +88,11 @@ public class ControllerConversation extends Controller {
 		throw new Exception("Not Myself ID: " + id.toString());
 	}
 
-	public static ConversationMyself getConversationMyself(String name, String stage) throws Exception{
+	private static ConversationMyself getConversationMyself(String name, String stage) throws Exception{
 		for (Conversation conversation : StorageConversation.conversations) {
 			if (conversation instanceof ConversationMyself) {
 				ConversationMyself myself = (ConversationMyself) conversation;
-				if (myself.stage.equalsIgnoreCase(stage)) {
+				if (myself.stageName.equalsIgnoreCase(stage)) {
 					for (String e : myself.editor) {
 						if (e.equalsIgnoreCase(name)) {
 							UtilitiesProgramming.printDebugMessage("Myself: " + name + ", " + stage, new Exception());
@@ -100,7 +105,7 @@ public class ControllerConversation extends Controller {
 		throw new Exception("Not Myself: " + name + ", " + stage);
 	}
 
-	public static ConversationMyself getConversationMyself(NPC npc) throws Exception{
+	private static ConversationMyself getConversationMyself(NPC npc) throws Exception{
 		Integer id = npc.getId();
 		if (isMyself(id)) {
 			String name = npc.getName();
@@ -117,18 +122,61 @@ public class ControllerConversation extends Controller {
 	public static List<String> getStages() {
 		Set<String> set = new HashSet<String>();
 		for (Conversation conversation : getConversations()) {
-			set.add(conversation.stage);
+			set.add(conversation.stageName);
 		}
 		List<String> stages = new ArrayList<String>();
-		for (String stage : set) {
-			stages.add(stage);
+		stages.addAll(set);
+		return stages;
+	}
+
+	public static List<String> getStagesMyself() {
+		List<String> stages = new ArrayList<String>();
+		for(String search : StorageConversation.mapMyselfNPC.keySet()) {
+			stages.add(search);
 		}
 		return stages;
 	}
 
-	public static void importBook(ConversationBook book) {
-		StorageConversation.conversations.add(book.conversation);
+	public static List<String> getStagesCourse() {
+		List<String> myself = getStagesMyself();
+		List<String> all = getStages();
+		List<String> course = new ArrayList<String>();
+		for (String stage : all) {
+			if (!myself.contains(stage)) {
+				course.add(stage);
+			}
+		}
+		return course;
 	}
+
+	public static void importBook(Player player) {
+		ConversationBook ready = new ConversationBook();
+		ConversationBook book = new ConversationBook();
+		try {
+			book = ready.createConversatinBook(player);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+		if(book.isMine()) {
+			StorageConversation.conversations.add(book.conversation);
+			Message.BOOK_IMPORTED_0.print(player, null);
+			Effects.playSound(player, Scene.GOOD);
+		} else {
+			Message.BOOK_NOT_YOURS_0.print(player, null);
+			Effects.playSound(player, Scene.BAD);
+		}
+	}
+
+	public static boolean existsMyselfStage(String stage) {
+		for(String search : StorageConversation.mapMyselfNPC.keySet()) {
+			if(search.equalsIgnoreCase(stage)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 }
 
 

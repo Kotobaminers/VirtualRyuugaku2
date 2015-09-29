@@ -66,10 +66,10 @@ public class CommandConversation extends MyCommand {
 			String name = player.getName();
 			if (conversation.recommenders.contains(name)) {
 				conversation.recommenders.remove(name);
-				UtilitiesProgramming.printDebugMessage("Not Good: (" + conversation.stage + " : " +UtilitiesGeneral.joinStrings(conversation.editor, ", ") + ")", new Exception());//TODO
+				UtilitiesProgramming.printDebugMessage("Not Good: (" + conversation.stageName + " : " +UtilitiesGeneral.joinStrings(conversation.editor, ", ") + ")", new Exception());//TODO
 			} else {
 				conversation.recommenders.add(player.getName());
-				UtilitiesProgramming.printDebugMessage("Good: (" + conversation.stage + " : " +UtilitiesGeneral.joinStrings(conversation.editor, ", ") + ")", new Exception());//TODO
+				UtilitiesProgramming.printDebugMessage("Good: (" + conversation.stageName + " : " +UtilitiesGeneral.joinStrings(conversation.editor, ", ") + ")", new Exception());//TODO
 			}
 		} else {
 			UtilitiesProgramming.printDebugMessage("You need to select a valid conversation at first.", new Exception());//TODO

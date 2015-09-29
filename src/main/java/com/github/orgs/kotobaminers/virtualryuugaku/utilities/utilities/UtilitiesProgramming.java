@@ -43,7 +43,7 @@ public class UtilitiesProgramming {
 	}
 	public static void printDebugConversation(Conversation conversation) {
 		if(!(0 < conversation.listTalk.size())) return;
-		printDebugMessage("[Debug Conversation] " + "STAGE: " + conversation.stage + ", EDITOR: " + conversation.editor, new Exception());
+		printDebugMessage("[Debug Conversation] " + "STAGE: " + conversation.stageName + ", EDITOR: " + conversation.editor, new Exception());
 		for(Talk talk : conversation.listTalk) {
 			printDebugTalk(talk);
 		}
