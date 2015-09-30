@@ -24,6 +24,19 @@ public abstract class Conversation {
 	public ConversationQuestion question = new ConversationQuestion();
 	public Set<String> recommenders = new HashSet<String>();
 
+	public enum CheckState {NOT_EXISTS, UNCHECKED, CHECKED, KEY,;}
+
+	public CheckState getCheckState() {
+		if (!(0 < listTalk.size())) {
+			return CheckState.NOT_EXISTS;
+		} else if (0 < getKeyTalk().size()) {
+			return CheckState.KEY;
+		} else if (0 < getCorrectors().size() || 0 < recommenders.size()) {
+			return CheckState.UNCHECKED;
+		}
+		return CheckState.UNCHECKED;
+	}
+
 	public List<String> getCorrectors() {
 		List<String> correctors = new ArrayList<String>();
 		for (Talk talk : listTalk) {
@@ -128,7 +141,6 @@ public abstract class Conversation {
 	}
 
 	public abstract List<Integer> getIDSorted() throws Exception;
-	public abstract boolean isChangebleID() throws Exception;
 
 	public String getDebugMessage() {
 		String edit = "[" + UtilitiesGeneral.joinStrings(editor, ", ") + "]";

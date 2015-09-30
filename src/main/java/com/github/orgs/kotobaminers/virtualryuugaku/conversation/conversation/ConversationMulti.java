@@ -16,9 +16,4 @@ public class ConversationMulti extends Conversation {
 		return order;
 	}
 
-	@Override
-	public boolean isChangebleID() {
-		return false;
-	}
-
 }

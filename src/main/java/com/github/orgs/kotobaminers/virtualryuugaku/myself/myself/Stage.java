@@ -1,6 +1,7 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.myself.myself;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -8,81 +9,86 @@ import net.citizensnpcs.api.npc.NPC;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ControllerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.StorageConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation.CheckState;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMyself;
 
-public class Stage {
+public abstract class Stage {
 	private List<Conversation> conversations = new ArrayList<Conversation>();
 
-	public enum CheckState {NOT_EXISTS, UNCHECKED, CHECKED, RECOMMENDED,;
-		public CheckState getCheckState(Conversation conversation) {
-			CheckState state = CheckState.UNCHECKED;
-			if (!(0 < conversation.listTalk.size())) {
-				state = CheckState.NOT_EXISTS;
-				return state;
-			}
 
-			for (String teacher : ControllerConversation.getTeachers()) {
-				if ( conversation.recommenders.contains(teacher)) {
-					state = CheckState.RECOMMENDED;
-					return state;
+	public static StageMyself createStageMyself(String name) throws Exception {
+		if (ControllerConversation.existsMyselfStage(name)) {
+			StageMyself stage = new StageMyself();
+			stage.conversations = new HashSet<ConversationMyself>();
+			List<Conversation> conversations2 = ControllerConversation.getConversations(name);
+			for (Conversation conversation : conversations2) {
+				if (conversation instanceof ConversationMyself) {
+					stage.conversations.add((ConversationMyself) conversation);
 				}
 			}
-
-			if (0 <  conversation.getCorrectors().size() || 0 <  conversation.recommenders.size()) {
-				state = CheckState.CHECKED;
-				return state;
+			if (0 < stage.conversations.size()) {
+				return stage;
 			}
-
-			return state;
 		}
-	}
-
-
-
-	private Stage() {}
-
-	public static Stage createStage(String name) throws Exception {
-		Stage stage = new Stage();
-		stage.conversations = new ArrayList<Conversation>();
-		stage.conversations.addAll(ControllerConversation.getConversations(name));
-		return stage;
+		throw new Exception("Invalid Stage Name: " + name);
 	}
 
 	public String getName() {
 		return conversations.get(0).stageName;
 	}
 
-	public Set<NPC> getNPCs() throws Exception {
-		List<Integer> ids = new ArrayList<Integer>();
+	private Set<Conversation> getConversations(CheckState check) {
+		Set<Conversation> conversations = new HashSet<Conversation>();
 		for (Conversation conversation : conversations) {
-			conversation.getIDSorted();
-		}
-
-		throw new Exception("NPC not exists: Stage Name: " + getName());
-	}
-
-	public List<Integer> getIDs() throws Exception {
-		String stageName = getName();
-
-		for (String name : StorageConversation.mapMyselfNPC.keySet()) {
-			if (name.equalsIgnoreCase(stageName)) {
-				return StorageConversation.mapMyselfNPC.get(name);
+			if (conversation.getCheckState().equals(check)) {
+				conversations.add(conversation);
 			}
 		}
+		return conversations;
+	}
 
-		List<Integer> ids = new ArrayList<Integer>();
-		for (Conversation conversation : StorageConversation.conversations) {
-			if (conversation.stageName.equalsIgnoreCase(stageName)) {
-				if (!conversation.isChangebleID()) {
-					ids.addAll(conversation.getIDSorted());
-				}
+	public Set<ConversationMyself> getConversationsMyself(CheckState check) {
+		Set<Conversation> conversations2 = getConversations(check);
+		Set<ConversationMyself> set = new HashSet<ConversationMyself>();
+		for (Conversation conversation : conversations2) {
+			if (conversation instanceof ConversationMyself) {
+				set.add((ConversationMyself) conversation);
 			}
 		}
-		if (0 < ids.size()) {
-			return ids;
-		}
-		throw new Exception("Invalid Stage Name: " + stageName);
+		return set;
 	}
+
+	public abstract Set<NPC> getNPCs() throws Exception;
+//		List<Integer> ids = new ArrayList<Integer>();
+//		for (Conversation conversation : conversations) {
+//			conversation.getIDSorted();
+//		}
+//
+//		throw new Exception("NPC not exists: Stage Name: " + getName());
+//	}
+
+	public abstract Set<Integer> getIDs() throws Exception;
+
+//		String stageName = getName();
+//
+//		for (String name : StorageConversation.mapMyselfNPC.keySet()) {
+//			if (name.equalsIgnoreCase(stageName)) {
+//				return StorageConversation.mapMyselfNPC.get(name);
+//			}
+//		}
+//
+//		List<Integer> ids = new ArrayList<Integer>();
+//		for (Conversation conversation : StorageConversation.conversations) {
+//			if (conversation.stageName.equalsIgnoreCase(stageName)) {
+//				if (!conversation.isChangebleID()) {
+//					ids.addAll(conversation.getIDSorted());
+//				}
+//			}
+//		}
+//		if (0 < ids.size()) {
+//			return ids;
+//		}
+//		throw new Exception("Invalid Stage Name: " + stageName);
 
 //	public void changeNPC(CheckState state) throws Exception {
 //		for (Conversation conversation : conversations) {

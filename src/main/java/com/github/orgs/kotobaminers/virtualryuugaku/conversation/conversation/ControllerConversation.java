@@ -177,6 +177,13 @@ public class ControllerConversation extends Controller {
 		return false;
 	}
 
+	public static List<Integer> getMyselfIDs(String stage) throws Exception {
+		if (existsMyselfStage(stage)) {
+			List<Integer> list = StorageConversation.mapMyselfNPC.get(stage);
+			return list;
+		}
+		throw new Exception("Invalis Stage Name: " + stage);
+	}
 }
 
 
