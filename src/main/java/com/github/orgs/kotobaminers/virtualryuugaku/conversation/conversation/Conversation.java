@@ -15,7 +15,6 @@ import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPla
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.NPCHandler;
 
 public abstract class Conversation {
 	public String stageName = "";
@@ -24,7 +23,15 @@ public abstract class Conversation {
 	public ConversationQuestion question = new ConversationQuestion();
 	public Set<String> recommenders = new HashSet<String>();
 
-	public enum CheckState {NOT_EXISTS, UNCHECKED, CHECKED, KEY,;}
+	public enum CheckState {NOT_EXISTS, UNCHECKED, CHECKED, KEY,;
+		public static CheckState lookup(String name) {
+			try {
+				return valueOf(name.toUpperCase());
+			} catch (IllegalArgumentException e) {
+				return NOT_EXISTS;
+			}
+		}
+	}
 
 	public CheckState getCheckState() {
 		if (!(0 < listTalk.size())) {
@@ -32,7 +39,7 @@ public abstract class Conversation {
 		} else if (0 < getKeyTalk().size()) {
 			return CheckState.KEY;
 		} else if (0 < getCorrectors().size() || 0 < recommenders.size()) {
-			return CheckState.UNCHECKED;
+			return CheckState.CHECKED;
 		}
 		return CheckState.UNCHECKED;
 	}
@@ -90,7 +97,6 @@ public abstract class Conversation {
 	}
 
 	public List<Talk> getKeyTalk() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
 		List<Talk> talks = new ArrayList<Talk>();
 		for (Talk talk : listTalk) {
 			if (talk.key) {
@@ -125,22 +131,9 @@ public abstract class Conversation {
 		}
 		return false;
 	}
-	public Set<NPC> getNPCs() throws Exception{
-		Set<Integer> set = new HashSet<Integer>();
-		List<Integer> list = getIDSorted();
-		set.addAll(list);
-		Set<NPC> npcs = new HashSet<NPC>();
-		for (Integer id : set) {
-			npcs.add(NPCHandler.getNPC(id));
-		}
-		if (0 < npcs.size()) {
-			return npcs;
-		} else {
-			throw new Exception("NPC not exists: " + list);
-		}
-	}
 
-	public abstract List<Integer> getIDSorted() throws Exception;
+
+	public abstract List<Integer> getIDSorted();
 
 	public String getDebugMessage() {
 		String edit = "[" + UtilitiesGeneral.joinStrings(editor, ", ") + "]";
@@ -148,6 +141,20 @@ public abstract class Conversation {
 		return message;
 	}
 
+//	public Set<NPC> getNPCs() throws Exception{
+//		Set<Integer> set = new HashSet<Integer>();
+//		List<Integer> list = getIDSorted();
+//		set.addAll(list);
+//		Set<NPC> npcs = new HashSet<NPC>();
+//		for (Integer id : set) {
+//			npcs.add(NPCHandler.getNPC(id));
+//		}
+//		if (0 < npcs.size()) {
+//			return npcs;
+//		} else {
+//			throw new Exception("NPC not exists: " + list);
+//		}
+//	}
 }
 
 

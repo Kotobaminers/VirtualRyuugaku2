@@ -79,6 +79,8 @@ public class MessengerGeneral {
 		BOOK_NOT_YOURS_0(Arrays.asList("This book is not yours."), Prefix.VRG),
 		BOOK_NOT_IN_HAND_0(Arrays.asList("Please Hold a written book in your hand."), Prefix.VRG),
 
+		NPC_CHANGE_1(Arrays.asList("Some NPCs may be Changed (", ")."), Prefix.VRG),
+
 		COMMAND_HELP_TITLE_0(Arrays.asList(
 				getPartition("=", "*", ChatColor.GOLD, ChatColor.YELLOW, 3) + "  " +
 				ChatColor.GOLD + ChatColor.BOLD + "Command Help" +
@@ -87,8 +89,10 @@ public class MessengerGeneral {
 		COMMAND_HELP_2(Arrays.asList("", ChatColor.GRAY + "  :  " + ChatColor.RESET), Prefix.NONE),
 		COMMAND_INVALID_PARAMS_1(Arrays.asList(ChatColor.RED + "Invalid parameters: " + ChatColor.RESET), Prefix.VRG),
 
+		EXPRESSIONS_1(Arrays.asList("Current display mode: "), Prefix.VRG),
+		EXPRESSIONS_OFF_0(Arrays.asList("Current display mode: OFF"), Prefix.VRG);
 
-
+//		(Arrays.asList(""), Prefix.VRG),
 		;
 
 		private List<String> messages = Arrays.asList("");

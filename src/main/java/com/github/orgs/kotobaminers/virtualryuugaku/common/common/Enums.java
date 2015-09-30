@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation.CheckState;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
@@ -20,6 +21,32 @@ public class Enums {//public enums
 				"Learning languages and Minigames",
 				new ArrayList<String>(),
 				CommandPermission.PLAYERS),
+
+		EN(
+				VIRTUALRYUUGAKU,
+				Arrays.asList("en"),
+				"Toggle the EN description mode.",
+				new ArrayList<String>(),
+				CommandPermission.PLAYERS),
+		ROMAJI(
+				VIRTUALRYUUGAKU,
+				Arrays.asList("romaji", "r"),
+				"Toggle the ROMAJI description mode.",
+				new ArrayList<String>(),
+				CommandPermission.PLAYERS),
+		KANA(
+				VIRTUALRYUUGAKU,
+				Arrays.asList("kana"),
+				"Toggle the KANA description mode.",
+				new ArrayList<String>(),
+				CommandPermission.PLAYERS),
+		KANJI(
+				VIRTUALRYUUGAKU,
+				Arrays.asList("kanji"),
+				"Toggle the KANJI description mode.",
+				new ArrayList<String>(),
+				CommandPermission.PLAYERS),
+
 
 		TP(
 				VIRTUALRYUUGAKU,
@@ -59,8 +86,12 @@ public class Enums {//public enums
 				"Update your own npcs and sentences",
 				new ArrayList<String>(),
 				CommandPermission.PLAYERS),
-
-
+		MYSELF_RELOAD(
+				MYSELF,
+				Arrays.asList("reload", "r"),
+				"Reload the npcs",
+				Arrays.asList("<MYSELF STAGE>", "<" + CheckState.KEY.toString() + "|" + CheckState.UNCHECKED.toString() + "|" + CheckState.CHECKED.toString()),
+				CommandPermission.PLAYERS),
 
 		GAME(
 				VIRTUALRYUUGAKU,
@@ -259,14 +290,12 @@ public class Enums {//public enums
 
 
 
-	public enum Expression {NONE, EN, KANJI, KANA, ROMAJI;
+	public enum Expression {EN, KANJI, KANA, ROMAJI;
 		public static Expression lookup(String name) {
 			try {
-				UtilitiesProgramming.printDebugMessage("", new Exception());
 				return Expression.valueOf(name.toUpperCase());
 			} catch (IllegalArgumentException e) {
-				UtilitiesProgramming.printDebugMessage(e.toString(), new Exception());
-				return Expression.ROMAJI;
+				return Expression.EN;
 			}
 		}
 	}

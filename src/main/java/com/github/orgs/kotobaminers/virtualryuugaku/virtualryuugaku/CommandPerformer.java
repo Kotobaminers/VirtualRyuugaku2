@@ -1,7 +1,8 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities;
+package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,16 +14,21 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Commands;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message0;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ControllerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation.CheckState;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
 import com.github.orgs.kotobaminers.virtualryuugaku.game.game.ControllerGameGlobal;
 import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.ConversationBook;
+import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.Stage;
+import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.StageMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.NPCHandler;
+import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 
 public class CommandPerformer {
 	public CommandSender sender;
@@ -225,6 +231,7 @@ public class CommandPerformer {
 			String stage = params.get(0);
 			if (ControllerConversation.existsMyselfStage(stage)) {
 				ConversationBook.giveConversationBookEmpty(player, stage);
+				return;
 			}
 		}
 		printInvalidParams(player);
@@ -244,47 +251,6 @@ public class CommandPerformer {
 			e.printStackTrace();
 		}
 	}
-
-	public void commandReload() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-
-
-
-
-//		if(2 < args.length) {
-//			StageMyself stage = null;
-//			String name = args[2].toUpperCase();
-//			CheckState state = CheckState.RECOMMENDED;
-//			if (3 < args.length) {
-//				String stateString = args[3];
-//				for (CheckState search : CheckState.values()) {
-//					if (search.toString().equalsIgnoreCase(stateString)) {
-//						state = CheckState.valueOf(stateString.toUpperCase());
-//						break;
-//					}
-//				}
-//			}
-//
-//			try {
-//				stage = StageMyself.createStageMyself(name);
-//				stage.changeNPC(state);
-//				String[] opts = {name, state.toString()};
-//				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.MYSELF_STAGE_RELOAD_2, opts));
-//				Effects.playSound(player, Scene.NOTICE);
-//				return;
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//				String[] opts = {name};
-//				UtilitiesProgramming.printDebugMessage("Invalid Stage Name: " + name, new Exception());
-//				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message.COMMON_INVALID_PARAMETER_1, opts));
-//				Effects.playSound(player, Scene.BAD);
-//				return;
-//			}
-//		} else {
-//			UtilitiesProgramming.printDebugMessage("/vrg myself random <STAGE>", new Exception());//TODO
-//		}
-	}
-
 
 	public void commandAnswerGame() {
 		Player player;
@@ -306,6 +272,73 @@ public class CommandPerformer {
 			ControllerGameGlobal.updataScoreboard(player);
 		} else {
 			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.GAME_PLEASE_LOAD_0, null));
+		}
+	}
+
+	public void commandMyselfReload() {
+		Player player;
+		try {
+			player = getPlayer();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+
+		if (1 < params.size()) {
+			String stageName = params.get(0).toUpperCase();
+			CheckState check = CheckState.lookup(params.get(1));
+			if (!check.equals(CheckState.NOT_EXISTS)) {
+				try {
+					StageMyself myself = Stage.createStageMyself(stageName);
+					myself.changeNPCs(check);
+					String[] opts = {stageName};
+					Message.NPC_CHANGE_1.print(player, opts);
+					return;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		printInvalidParams(player);
+	}
+
+	public void commandEN() {
+		commandToggleExpression(Expression.EN);
+	}
+	public void commandRomaji() {
+		commandToggleExpression(Expression.ROMAJI);
+	}
+	public void commandKana() {
+		commandToggleExpression(Expression.KANA);
+	}
+	public void commandKanji() {
+		commandToggleExpression(Expression.KANJI);
+	}
+
+	private void commandToggleExpression(Expression expression) {
+		Player player;
+		try {
+			player = getPlayer();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+
+		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
+		DataManagerPlayer.toggleExpression(data, expression);
+		List<String> expressions = new ArrayList<String>();
+		for(Expression search : data.expressions) {
+			expressions.add(search.toString());
+		}
+		Collections.sort(expressions);
+
+		if(0 < expressions.size()) {
+			String[] opts = {UtilitiesGeneral.joinStrings(expressions, ", ")};
+			Message.EXPRESSIONS_1.print(player, opts);
+			return;
+		} else {
+			Message.EXPRESSIONS_OFF_0.print(player, null);
+			return;
 		}
 	}
 

@@ -18,7 +18,6 @@ public class DataManagerPlayer implements DataManager {
 		return getDataPlayer(player.getName());
 	}
 	public static DataPlayer getDataPlayer(String name) {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataPlayer data = new DataPlayer();
 		if(getMapDataPlayer().containsKey(name)) {
 			data = getMapDataPlayer().get(name);
@@ -32,19 +31,11 @@ public class DataManagerPlayer implements DataManager {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		getMapDataPlayer().put(data.name, data);
 	}
-	public static void toggleExpression(String name, Expression expression) {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		if(expression.equals(Expression.NONE)) {
-			UtilitiesProgramming.printDebugMessage("", new Exception());
-			return;
-		}
-		DataPlayer data = getDataPlayer(name);
+	public static void toggleExpression(DataPlayer data, Expression expression) {
 		List<Expression> expressions = data.expressions;
 		if(expressions.contains(expression)) {
-			UtilitiesProgramming.printDebugMessage("", new Exception());
 			while(expressions.remove(expression)) {};
 		} else {
-			UtilitiesProgramming.printDebugMessage("", new Exception());
 			expressions.add(expression);
 		}
 	}
@@ -54,12 +45,6 @@ public class DataManagerPlayer implements DataManager {
 	}
 	private static void setMapDataPlayer(Map<String, DataPlayer> mapDataPlayer) {
 		DataManagerPlayer.mapDataPlayer = mapDataPlayer;
-	}
-
-	public static void selectTalker(Player player, Integer id) {
-		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-		data.select = id;
-		data.line = 0;
 	}
 
 	@Override

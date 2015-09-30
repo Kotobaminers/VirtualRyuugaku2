@@ -9,7 +9,6 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Commands;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.CommandPerformer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class CommandExecutorPlugin implements CommandExecutor {
@@ -28,6 +27,19 @@ public class CommandExecutorPlugin implements CommandExecutor {
 			command2.printInfo(sender);
 			CommandPerformer performer = new CommandPerformer(sender, command2, label, args);
 			switch (command2) {
+			case EN:
+				performer.commandEN();
+				break;
+			case ROMAJI:
+				performer.commandRomaji();
+				break;
+			case KANA:
+				performer.commandKana();
+				break;
+			case KANJI:
+				performer.commandKanji();
+				break;
+
 			case TP:
 				performer.commandTP();
 				break;
@@ -57,6 +69,10 @@ public class CommandExecutorPlugin implements CommandExecutor {
 			case MYSELF_UPDATE:
 				performer.commandMyselfUpdate();
 				break;
+			case MYSELF_RELOAD:
+				performer.commandMyselfReload();
+				break;
+
 			case ANSWER_GAME:
 				performer.commandAnswerGame();
 				break;
@@ -74,6 +90,7 @@ public class CommandExecutorPlugin implements CommandExecutor {
 		}
 		return true;
 	}
+
 
 }
 

@@ -159,13 +159,27 @@ public class ControllerConversation extends Controller {
 			return;
 		}
 		if(book.isMine()) {
-			StorageConversation.conversations.add(book.conversation);
+			updateConversationMyself(book.conversation);
 			Message.BOOK_IMPORTED_0.print(player, null);
 			Effects.playSound(player, Scene.GOOD);
 		} else {
 			Message.BOOK_NOT_YOURS_0.print(player, null);
 			Effects.playSound(player, Scene.BAD);
 		}
+	}
+
+	private static void updateConversationMyself(ConversationMyself myself) {
+		String editor = "";
+		if (0< myself.editor.size()) {
+			editor = myself.editor.get(0);
+			try {
+				ConversationMyself target = getConversationMyself(editor, myself.stageName);
+				StorageConversation.conversations.remove(target);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		StorageConversation.conversations.add(myself);
 	}
 
 	public static boolean existsMyselfStage(String stage) {
@@ -184,6 +198,7 @@ public class ControllerConversation extends Controller {
 		}
 		throw new Exception("Invalis Stage Name: " + stage);
 	}
+
 }
 
 

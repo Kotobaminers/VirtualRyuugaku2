@@ -17,7 +17,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utilitie
 
 public class DataPlayer {
 	public String name = "";
-	public Integer line = 0;
+	public Integer line = lineIni;
 	public Integer select = -1;
 	public Language language = Language.JP;
 	public Conversation conversation = new ConversationMyself();
@@ -27,20 +27,7 @@ public class DataPlayer {
 	public Map<PlayerScore, Integer> mapScore = new HashMap<PlayerScore, Integer>();
 	public enum PlayerScore {PRACTICE, FIND_PEOPLE}
 
-	public Integer getScore(PlayerScore score) {
-		Integer value = 0;
-		if (mapScore.containsKey(score)) {
-			value = mapScore.get(score);
-		} else {
-			mapScore.put(score, value);
-		}
-		return value;
-	}
-
-	public void addScore(Player player, PlayerScore score) {
-		Integer value = getScore(score);
-		mapScore.put(score, ++value);
-	}
+	public static final Integer lineIni = -1;
 
 	public void addQuestionDone(Player player, List<Integer> key) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());

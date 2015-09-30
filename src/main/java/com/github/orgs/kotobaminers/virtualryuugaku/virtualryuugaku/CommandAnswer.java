@@ -6,9 +6,6 @@ import java.util.List;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message0;
-import com.github.orgs.kotobaminers.virtualryuugaku.game.game.ControllerGameGlobal;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
@@ -20,14 +17,14 @@ public class CommandAnswer extends MyCommand {
 		super(player, command, args);
 	}
 	private enum Commands {
-		DEFAULT, TRAINING, T, LEARN, TEST, CONVERSATION, CONV, C, GLOBAL, G;
+		CONVERSATION,;
 		private static Commands lookup(String name) {
 			try {
 				UtilitiesProgramming.printDebugMessage("", new Exception());
 				return Commands.valueOf(name.toUpperCase());
 			} catch (IllegalArgumentException e) {
 				UtilitiesProgramming.printDebugMessage(e.toString(), new Exception());
-				return Commands.DEFAULT;
+				return Commands.CONVERSATION;
 			}
 		}
 	}
@@ -43,30 +40,12 @@ public class CommandAnswer extends MyCommand {
 			}
 			answer = UtilitiesGeneral.joinStrings(list, " ");
 			switch(commands) {
-			case DEFAULT:
-				break;
-			case C:
-			case CONV:
 			case CONVERSATION:
 				commandConversation();
-				break;
-			case G:
-			case GLOBAL:
-				commandGlobal();
 				break;
 			default:
 				break;
 			}
-		}
-	}
-
-	private void commandGlobal() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		if(ControllerGameGlobal.isValidGame()) {
-			ControllerGameGlobal.validataAnswer(player, answer);
-			ControllerGameGlobal.updataScoreboard(player);
-		} else {
-			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.GAME_PLEASE_LOAD_0, null));
 		}
 	}
 
