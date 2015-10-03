@@ -3,7 +3,6 @@ package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Language;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message0;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.CommandConversation;
@@ -11,6 +10,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPla
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.MyCommand;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
+import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Language;
 
 public class CommandVirtualRyuugaku extends MyCommand {
 	public CommandVirtualRyuugaku(Player player, Command command, String[] args) {

@@ -13,11 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Commands;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message0;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ControllerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation.CheckState;
@@ -29,13 +25,25 @@ import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.StageMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
+import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Commands;
+import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Expression;
 
 public class CommandPerformer {
 	public CommandSender sender;
+	public ConsoleCommandSender console = null;
+	public Player player = null;
+
 	public Commands command;
 	public List<String> params;
+
 	public CommandPerformer(CommandSender sender, Commands command, String label, String[] args) {
 		this.sender = sender;
+
+		if (sender instanceof Player) {
+			this.player = (Player) sender;
+		} else if (sender instanceof ConsoleCommandSender) {
+			this.console = (ConsoleCommandSender) sender;
+		}
 		this.command = command;
 
 		List<String> list = new LinkedList<String>();
@@ -47,37 +55,116 @@ public class CommandPerformer {
 			i++;
 		}
 		this.params = list;
+
 	}
 
-	private Player getPlayer() throws Exception {
-		if (sender instanceof Player) {
-			return (Player) sender;
-		} else {
-			throw new Exception("The command sender must be a player");
+	public boolean performCommand() {
+		boolean success = false;
+		switch (command) {
+		default:
+		case VIRTUALRYUUGAKU_OP:
+		case VIRTUALRYUUGAKU_TEACHER:
+		case GAME:
+		case VIRTUALRYUUGAKU:
+		case ANSWER:
+		case MYSELF:
+			break;
+		case SAVE:
+			success = commandSave();
+			break;
+		case RELOAD:
+			success = commandReload();
+			break;
+
+		case KEY:
+			success = commandKey();
+			break;
+
+		case EN:
+			success = commandEN();
+			break;
+		case ROMAJI:
+			success = commandRomaji();
+			break;
+		case KANA:
+			success = commandKana();
+			break;
+		case KANJI:
+			success = commandKanji();
+			break;
+
+		case TP:
+			success = commandTP();
+			break;
+		case INFO:
+			success = commandInfo();
+			break;
+		case LIST:
+			success = commandList();
+			break;
+
+		case GAME_START:
+			success = commandGameStart();
+			break;
+		case GAME_FINISH:
+			success = commandGameFinish();
+			break;
+		case GAME_NEXT:
+			success = commandGameNext();
+			break;
+		case GAME_RULE:
+			success = commandGameRule();
+			break;
+
+		case MYSELF_BOOK:
+			success = commandMyselfBook();
+			break;
+		case MYSELF_UPDATE:
+			success = commandMyselfUpdate();
+			break;
+		case MYSELF_RELOAD:
+			success = commandMyselfReload();
+			break;
+
+		case ANSWER_GAME:
+			success = commandAnswerGame();
+			break;
 		}
+		return  success;
 	}
 
-	private ConsoleCommandSender getConsole() throws Exception {
-		if (sender instanceof ConsoleCommandSender) {
-			return (ConsoleCommandSender) sender;
-		} else {
-			throw new Exception("The command sender must be a console");
+
+	public void printInfo() {
+		command.printInfo(sender);
+	}
+
+	public boolean canPerform() {
+		if (command.canPerform(sender)) {
+			return true;
 		}
+		String[] opts = {command.permission.toString()};
+		Message.COMMAND_NO_PERMISSION_1.print(sender, opts);
+		return false;
 	}
 
-	private void printInvalidParams(Player player) {
+	private boolean hasValidPlayer() {
+		if (player == null) {
+			String[] opts = {"Player == null"};
+			Message.COMMON_INVALID_1.print(sender, opts);
+			return false;
+		}
+		return true;
+	}
+
+	public void printInvalidParams() {
 		String[] opts = {UtilitiesGeneral.joinStrings(params, ", ")};
-		Message.COMMAND_INVALID_PARAMS_1.print(player, opts);
+		Message.COMMAND_INVALID_PARAMS_1.print(sender, opts);
 		command.printUsage(player);
 	}
 
-	public void commandTP() {
-		Player player;
-		try {
-			player = getPlayer();
-		} catch (Exception e1) {
-			e1.printStackTrace();
-			return;
+	private boolean commandTP() {
+		if (!hasValidPlayer()) {
+			return true;
 		}
 		if(0 < params.size()) {
 			String stage = params.get(0).toUpperCase();
@@ -92,79 +179,58 @@ public class CommandPerformer {
 						player.teleport(location);
 						String[] opts = {stage};
 						Message.STAGE_TP_1.print(player, opts);
-						return;
+						return true;
 					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		printInvalidParams(player);
+		return false;
 	}
 
-	public void commandGameStart() {
-		Player player;
-		try {
-			player = getPlayer();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
-		}
+	private boolean commandGameStart() {
 		if (0 < params.size()) {
 			String stage = params.get(0);
-				ControllerGameGlobal.loadGame(stage);
-				ControllerGameGlobal.giveNextQuestion(player);
-		} else {
-			printInvalidParams(player);
+			ControllerGameGlobal.loadGame(stage);
+			if (ControllerGameGlobal.isValidGame()) {
+				String[] opts = {stage};
+				Message.GAME_JOIN_TP_1.broadcast(opts);
+				ControllerGameGlobal.giveNextQuestion(sender);
+				return true;
+			}
 		}
+		return false;
 	}
 
-	public void commandGameFinish() {
+	private boolean commandGameFinish() {
 		if(ControllerGameGlobal.isValidGame()) {
 			ControllerGameGlobal.finishGame();
 		} else {
-			try {
-				MessengerGeneral.print(getPlayer(), MessengerGeneral.getMessage(Message0.GAME_PLEASE_LOAD_0, null));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			Message.GAME_PLEASE_LOAD_0.print(sender, null);;
 		}
+		return true;
 	}
 
-	public void commandGameNext() {
-		try {
-			Player player = getPlayer();
-			if(ControllerGameGlobal.isValidGame()) {
-				ControllerGameGlobal.giveNextQuestion(player);
-			} else {
-				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.GAME_PLEASE_LOAD_0, null));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+	private boolean commandGameNext() {
+		if(ControllerGameGlobal.isValidGame()) {
+			ControllerGameGlobal.giveNextQuestion(player);
+		} else {
+			Message.GAME_PLEASE_LOAD_0.print(sender, null);;
 		}
+		return true;
 	}
 
-	public void commandGameRule() {
-		Player player;
-		try {
-			player = getPlayer();
-			ControllerGameGlobal.printRule(player);
-			Commands.ANSWER_GAME.printUsage(player);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
-		}
+	private boolean commandGameRule() {
+		ControllerGameGlobal.printRule(sender);
+		Commands.ANSWER_GAME.printUsage(sender);
+		return true;
 	}
 
-	public void commandInfo() {
-		Player player;
-		try {
-			player = getPlayer();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
+	private boolean commandInfo() {
+		if (!hasValidPlayer()) {
+			return true;
 		}
-
 		if(0 < params.size()) {
 			String stage = params.get(0).toUpperCase();
 			Integer npcs = 0;
@@ -199,91 +265,67 @@ public class CommandPerformer {
 			}
 			if (0 < npcs && 0 < sentence) {
 				String[] opts = {stage, npcs.toString(), sentence.toString(), done.toString(), questions.toString(), keySentence.toString()};
-				Message.STAGE_INFO_6.print(player, opts);
-			} else {
-				printInvalidParams(player);
+				Message.STAGE_INFO_6.print(sender, opts);
+				return true;
 			}
-		} else {
-			printInvalidParams(player);
 		}
+		return false;
 	}
 
-	public void commandList() {
+	private boolean commandList() {
 		String course = UtilitiesGeneral.joinStrings(ControllerConversation.getStagesCourse(), ", ");
 		String myself = UtilitiesGeneral.joinStrings(ControllerConversation.getStagesMyself(), ", ");
 		String[] opts = {course, myself};
-		try {
-			Message.STAGE_LIST_2.print(getPlayer(), opts);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Message.STAGE_LIST_2.print(sender, opts);
+		return true;
 	}
 
-	public void commandMyselfBook() {
-		Player player;
-		try {
-			player = getPlayer();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
+	private boolean commandMyselfBook() {
+		if (!hasValidPlayer()) {
+			return true;
 		}
 		if (0 < params.size()) {
 			String stage = params.get(0);
 			if (ControllerConversation.existsMyselfStage(stage)) {
 				ConversationBook.giveConversationBookEmpty(player, stage);
-				return;
+				return true;
 			}
 		}
-		printInvalidParams(player);
+		return false;
 	}
 
-	public void commandMyselfUpdate() {
-		Player player;
-		try {
-			player = getPlayer();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
+	private boolean commandMyselfUpdate() {
+		if (!hasValidPlayer()) {
+			return true;
 		}
 		try {
 			ControllerConversation.importBook(player);
+			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return false;
 	}
 
-	public void commandAnswerGame() {
-		Player player;
-		try {
-			player = getPlayer();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
+	private boolean commandAnswerGame() {
+		if (!hasValidPlayer()) {
+			return true;
 		}
 		String answer = "";
 		if (0 < params.size()) {
 			answer = UtilitiesGeneral.joinStrings(params, " ");
-		} else {
-			printInvalidParams(player);
-			return;
+			if(ControllerGameGlobal.isValidGame()) {
+				ControllerGameGlobal.validataAnswer(player, answer);
+				ControllerGameGlobal.updataScoreboard(player);
+			} else {
+				Message.GAME_PLEASE_LOAD_0.print(sender, null);
+			}
+			return true;
 		}
-		if(ControllerGameGlobal.isValidGame()) {
-			ControllerGameGlobal.validataAnswer(player, answer);
-			ControllerGameGlobal.updataScoreboard(player);
-		} else {
-			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.GAME_PLEASE_LOAD_0, null));
-		}
+		return false;
 	}
 
-	public void commandMyselfReload() {
-		Player player;
-		try {
-			player = getPlayer();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
-		}
-
+	private boolean commandMyselfReload() {
 		if (1 < params.size()) {
 			String stageName = params.get(0).toUpperCase();
 			CheckState check = CheckState.lookup(params.get(1));
@@ -292,36 +334,32 @@ public class CommandPerformer {
 					StageMyself myself = Stage.createStageMyself(stageName);
 					myself.changeNPCs(check);
 					String[] opts = {stageName};
-					Message.NPC_CHANGE_1.print(player, opts);
-					return;
+					Message.NPC_CHANGE_1.print(sender, opts);
+					return true;
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
 		}
-		printInvalidParams(player);
+		return false;
 	}
 
-	public void commandEN() {
-		commandToggleExpression(Expression.EN);
+	private boolean commandEN() {
+		return commandToggleExpression(Expression.EN);
 	}
-	public void commandRomaji() {
-		commandToggleExpression(Expression.ROMAJI);
+	private boolean commandRomaji() {
+		return commandToggleExpression(Expression.ROMAJI);
 	}
-	public void commandKana() {
-		commandToggleExpression(Expression.KANA);
+	private boolean commandKana() {
+		return commandToggleExpression(Expression.KANA);
 	}
-	public void commandKanji() {
-		commandToggleExpression(Expression.KANJI);
+	private boolean commandKanji() {
+		return commandToggleExpression(Expression.KANJI);
 	}
 
-	private void commandToggleExpression(Expression expression) {
-		Player player;
-		try {
-			player = getPlayer();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
+	private boolean commandToggleExpression(Expression expression) {
+		if (!hasValidPlayer()) {
+			return true;
 		}
 
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
@@ -334,12 +372,42 @@ public class CommandPerformer {
 
 		if(0 < expressions.size()) {
 			String[] opts = {UtilitiesGeneral.joinStrings(expressions, ", ")};
-			Message.EXPRESSIONS_1.print(player, opts);
-			return;
+			Message.EXPRESSIONS_1.print(sender, opts);
 		} else {
-			Message.EXPRESSIONS_OFF_0.print(player, null);
-			return;
+			Message.EXPRESSIONS_OFF_0.print(sender, null);
 		}
+		return true;
 	}
 
+	private boolean commandKey() {
+		if (!hasValidPlayer()) {
+			return true;
+		}
+
+		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
+		try {
+			Talk talk = DataManagerPlayer.getTalk(data);
+			talk.key = !talk.key;
+			String[] opts = {"" + talk.key};
+			Message.KEY_TOGGLE_1.print(player, opts);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Message.COMMON_NOT_SELECT_CONVERSATION_0.print(player, null);
+		}
+		return true;
+	}
+
+	private boolean commandSave() {
+		Message.OP_SAVE_.print(sender, null);
+		DataManagerPlugin.savePlugin();
+		return true;
+	}
+
+	private boolean commandReload() {
+		Message.OP_RELOAD_.print(sender, null);
+		DataManagerPlugin.loadPlugin();
+		return true;
+	}
 }
+
+

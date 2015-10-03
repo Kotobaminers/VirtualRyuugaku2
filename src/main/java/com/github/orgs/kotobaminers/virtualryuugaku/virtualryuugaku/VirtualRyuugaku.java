@@ -2,8 +2,8 @@ package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Commands;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
+import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Commands;
 
 public class VirtualRyuugaku extends JavaPlugin {
 	@Override
@@ -26,6 +26,6 @@ public class VirtualRyuugaku extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-//		DataManagerPlugin.savePlugin();
+		DataManagerPlugin.savePlugin();
 	}
 }

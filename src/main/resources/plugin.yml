@@ -3,6 +3,18 @@ main: com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VirtualRyuuga
 version: ${git.commit.id.describe}
 commands:
   VIRTUALRYUUGAKU:
+    usage: /vrg
+    description: For more infomation /vrg
     aliases: [vrg, virtualryuugaku]
+  VIRTUALRYUUGAKU_TEACHER:
+    usage: /vrgt
+    description: For more infomation /vrgt
+    aliases: [vrgt, virtualryuugakuteacher]
   ANSWER:
+    usage: /ans
+    description: For more infomation /ans
     aliases: [ans, answer]
+  VIRTUALRYUUGAKU_OP:
+    usage: /vrgop
+    description: For more infomation /vrgop
+    aliases: [vrgop, virtualryuugakuop]

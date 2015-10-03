@@ -3,6 +3,7 @@ package com.github.orgs.kotobaminers.virtualryuugaku.game.game;
 import net.citizensnpcs.api.npc.NPC;
 
 import org.bukkit.Sound;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Controller;
@@ -32,16 +33,14 @@ public class ControllerGameGlobal extends Controller {
 
 	public static void loadGame(String stage) {
 		game.load(stage);
-		String[] opts = {stage.toLowerCase()};
-		MessengerGeneral.broadcast(MessengerGeneral.getMessage(Message0.GAME_JOIN_TP_1, opts));
 	}
 
-	public static void giveNextQuestion(Player player) {
+	public static void giveNextQuestion(CommandSender sender) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		if (game.hasNextTalk()) {
 			game.giveNextQuestion();
 		} else {
-			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.GAME_TRY_FINISH_0, null));
+			Message.GAME_TRY_FINISH_0.print(sender, null);
 		}
 	}
 
@@ -126,12 +125,10 @@ public class ControllerGameGlobal extends Controller {
 		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.GAME_CHEAT_1, opts));
 	}
 
-	public static void printRule(Player player) {
-		Player[] players = {player};
-		String[] opts = {""};
-		Message.GAME_RULE_TITLE_0.print(players, opts);
+	public static void printRule(CommandSender sender) {
+		Message.GAME_RULE_TITLE_0.print(sender, null);
 		for (EventScore event : EventScore.values()) {
-			Message.GAME_RULE_2.print(players, event.getMessageOpts());
+			Message.GAME_RULE_2.print(sender, event.getMessageOpts());
 		}
 	}
 }

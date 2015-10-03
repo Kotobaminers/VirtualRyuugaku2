@@ -29,8 +29,10 @@ public final class DataManagerPlugin {
 	}
 
 	public static void savePlugin() {
-		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Saving Player Data", new Exception());
-		new DataManagerPlayer().save();
+		UtilitiesProgramming.printDebugMessage("[VRG] Saving Virtual Ryuugaku...", new Exception());
+		new ControllerConversation().saveStorage();
+
+//		new DataManagerPlayer().save();
 
 	}
 }

@@ -1,6 +1,7 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -52,7 +53,63 @@ public class StorageConversation implements Storage, YamlController {
 
 	@Override
 	public void save() {
-		// TODO Auto-generated method stub
+		saveMyself();
+		try {
+			config.save(new File(FILE));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void saveMyself() {
+		Set<ConversationMyself> myselfs = new HashSet<ConversationMyself>();
+		for (Conversation conversation : conversations) {
+			if (conversation instanceof ConversationMyself) {
+				myselfs.add((ConversationMyself) conversation);
+			}
+		}
+		String pathHome = "MYSELF.CONVERSATION";
+		config.createSection(pathHome, toSection(myselfs));
+	}
+
+	private Map<String, Map<String, Map<String, List<String>>>> toSection(Set<ConversationMyself> conversations) {
+		UtilitiesProgramming.printDebugMessage("", new Exception());
+		Map<String, Map<String, Map<String, List<String>>>> stages = new HashMap<String, Map<String,Map<String,List<String>>>>();
+
+		for (ConversationMyself myself : conversations) {
+			Map<String, List<String>> descriptions = new HashMap<String, List<String>>();
+			List<String> kanji = new ArrayList<String>();
+			List<String> kana = new ArrayList<String>();
+			List<String> en = new ArrayList<String>();
+
+			for (Talk talk : myself.listTalk) {
+				kanji.addAll(talk.description.kanji);
+				kana.addAll(talk.description.kana);
+				en.addAll(talk.description.en);
+			}
+			descriptions.put("KANJI",kanji);
+			descriptions.put("KANA",kana);
+			descriptions.put("EN", en);
+
+			UtilitiesProgramming.printDebugMessage("", new Exception());
+			if (0 < myself.editor.size() && 0 < myself.stageName.length()) {
+				String editor = myself.editor.get(0);
+				String stageName = myself.stageName;
+				UtilitiesProgramming.printDebugMessage(editor + " " + stageName, new Exception());
+				if (stages.containsKey(stageName)) {
+					UtilitiesProgramming.printDebugMessage("", new Exception());
+					Map<String, Map<String, List<String>>> tmpPlayers = stages.get(stageName);
+					tmpPlayers.put(editor, descriptions);
+					stages.put(stageName, tmpPlayers);
+				} else {
+					UtilitiesProgramming.printDebugMessage("", new Exception());
+					Map<String, Map<String, List<String>>> tmpPlayers = new HashMap<String, Map<String,List<String>>>();
+					tmpPlayers.put(editor, descriptions);
+					stages.put(stageName, tmpPlayers);
+				}
+ 			}
+		}
+		return stages;
 	}
 
 	@Override
@@ -130,8 +187,6 @@ public class StorageConversation implements Storage, YamlController {
 
 	private void importMulti() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
-		List<ConversationMulti> list = new ArrayList<ConversationMulti>();
-
 		Map<String, YamlConfiguration> mapConfig = LibraryManager.getListLibraryStage();
 		for(String stage : mapConfig.keySet()) {
 			conversations.addAll(LibraryHandlerConversation.importConversationLibrary(stage, mapConfig.get(stage)));

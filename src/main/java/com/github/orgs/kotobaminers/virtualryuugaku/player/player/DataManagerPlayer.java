@@ -7,9 +7,10 @@ import java.util.Map;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManager;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
+import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Expression;
 
 public class DataManagerPlayer implements DataManager {
 	private static Map<String, DataPlayer> mapDataPlayer = new HashMap<String, DataPlayer>();
@@ -39,6 +40,14 @@ public class DataManagerPlayer implements DataManager {
 			expressions.add(expression);
 		}
 	}
+
+	public static Talk getTalk(DataPlayer data) throws Exception{
+		if (data.line < data.conversation.listTalk.size()) {
+			return data.conversation.listTalk.get(data.line);
+		}
+		throw new Exception("Invalid talk: Name" + data.name);
+	}
+
 
 	public static Map<String, DataPlayer> getMapDataPlayer() {
 		return mapDataPlayer;

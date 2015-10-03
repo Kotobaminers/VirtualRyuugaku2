@@ -8,12 +8,12 @@ import java.util.Map;
 
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Expression;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Language;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationQuestion;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
+import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Expression;
+import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Language;
 
 public class DataPlayer {
 	public String name = "";
@@ -34,6 +34,16 @@ public class DataPlayer {
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
 		if(!data.questionDone.contains(key)) {
 			data.questionDone.add(key);
+		}
+	}
+
+	public void addLine(Conversation current) {
+		if (!conversation.equals(current)) {
+			line = 0;
+		} else if(line + 1 < current.listTalk.size()) {
+			line++;
+		} else {
+			line = 0;
 		}
 	}
 }

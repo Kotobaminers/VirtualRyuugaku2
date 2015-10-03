@@ -55,30 +55,24 @@ public abstract class Conversation {
 	public void talk(Player player, NPC npc) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-		data.conversation = this;
 		if(0 < listTalk.size()) {
-			if(listTalk.size() <= data.line) {
+			data.line++;
+			if (listTalk.size() < data.line || !data.conversation.equals(this)) {
 				data.line = 0;
-				if ( 0 < question.getQuestion().length()) {
+			} else if (listTalk.size() == data.line) {
+				if(0 < question.getQuestion().length()) {
+					data.line++;
+					data.conversation = this;
 					question.giveQuestion(player, question);
 					return;
+				} else {
+					data.line = 0;
 				}
 			}
-			Talk talk = listTalk.get(data.line);
-			talk.print(player);
-			addLine(data);
+			data.conversation = this;
+			listTalk.get(data.line).print(player);
 			soundTalk(player);
 			effectTalk(player, npc);
-			return;
-		}
-	}
-
-	private void addLine(DataPlayer data) {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		if(listTalk.size() <= data.line) {
-			data.line = 0;
-		} else {
-			data.line++;
 		}
 	}
 

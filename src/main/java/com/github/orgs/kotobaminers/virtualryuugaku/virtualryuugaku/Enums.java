@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.common.common;
+package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,19 +6,53 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ControllerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation.CheckState;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class Enums {//public enums
 	public enum Commands {
+		VIRTUALRYUUGAKU_OP(
+				null,
+				Arrays.asList("vrgop", "virtualryuugakuop"),
+				"Commands for the ops.",
+				new ArrayList<String>(),
+				CommandPermission.OP),
+		SAVE(
+				VIRTUALRYUUGAKU_OP,
+				Arrays.asList("save", "s"),
+				"Commands for the teachers.",
+				new ArrayList<String>(),
+				CommandPermission.OP),
+		RELOAD(
+				VIRTUALRYUUGAKU_OP,
+				Arrays.asList("reload", "r"),
+				"Commands for the teachers.",
+				new ArrayList<String>(),
+				CommandPermission.OP),
+
+
+		VIRTUALRYUUGAKU_TEACHER(
+				null,
+				Arrays.asList("vrgt", "virtualryuugakuteacher"),
+				"Commands for the teachers.",
+				new ArrayList<String>(),
+				CommandPermission.TEACHER),
+		KEY(
+				VIRTUALRYUUGAKU_TEACHER,
+				Arrays.asList("key", "k"),
+				"Toggle your current sentence as key.",
+				new ArrayList<String>(),
+				CommandPermission.TEACHER),
+
 		VIRTUALRYUUGAKU(
 				null,
 				Arrays.asList("vrg", "virtualryuugaku"),
-				"Learning languages and Minigames",
+				"Learning languages and Minigames.",
 				new ArrayList<String>(),
 				CommandPermission.PLAYERS),
 
@@ -46,7 +80,6 @@ public class Enums {//public enums
 				"Toggle the KANJI description mode.",
 				new ArrayList<String>(),
 				CommandPermission.PLAYERS),
-
 
 		TP(
 				VIRTUALRYUUGAKU,
@@ -143,7 +176,7 @@ public class Enums {//public enums
 		private List<String> aliace = new ArrayList<String>();
 		private String description;
 		private List<String> usage;
-		private CommandPermission permission;
+		protected CommandPermission permission;
 
 		private static List<String> commandColor = Arrays.asList("" + ChatColor.GOLD + ChatColor.BOLD, "" + ChatColor.YELLOW, "" + ChatColor.GREEN, "" + ChatColor.AQUA);
 
@@ -173,60 +206,54 @@ public class Enums {//public enums
 			return full;
 		}
 
-		public static Commands getCommand(List<String> path) throws Exception {
-			if (0 < path.size()) {
-				for(Commands root : getRoot()) {
-					if(root.aliace.contains(path.get(0).toLowerCase())) {
-						Commands parent = root;
-						boolean next = false;
-						if (1 < path.size()) {
-							for (int i = 1; i < path.size(); i++) {
-								next = false;
-								for(Commands child : parent.getChildren()) {
-									if(child.aliace.contains(path.get(i))) {
-										parent = child;
-										next = true;
-										break;
-									}
-								}
-								if (next == false) {
+		public static Commands getCommand(List<String> path) {
+			Commands parent = Commands.VIRTUALRYUUGAKU;
+			for(Commands root : getRoot()) {
+				if(root.aliace.contains(path.get(0).toLowerCase())) {
+					parent = root;
+					boolean next = false;
+					if (1 < path.size()) {
+						for (int i = 1; i < path.size(); i++) {
+							next = false;
+							for(Commands child : parent.getChildren()) {
+								if(child.aliace.contains(path.get(i))) {
+									parent = child;
+									next = true;
 									break;
 								}
 							}
+							if (next == false) {
+								break;
+							}
 						}
-						return parent;
 					}
 				}
 			}
-			throw new Exception("Invalid Command: " + UtilitiesGeneral.joinStrings(path, " "));
+			return parent;
 		}
 
 		public void printInfo(CommandSender sender) {
-			if (sender instanceof Player) {
-				Player player = (Player) sender;
-				List<Commands> children = getChildren();
-				if (0 < children.size()) {
-					Message.COMMAND_HELP_TITLE_0.print(player, null);
-					for (Commands child : children) {
-						child.printHelp(player);
-					}
+			List<Commands> children = getChildren();
+			if (0 < children.size()) {
+				Message.COMMAND_HELP_TITLE_0.print(sender, null);
+				for (Commands child : children) {
+					child.printHelp(sender);
 				}
 			}
-			//Nothing will be printed when the command has no children.
 		}
 
-		public void printHelp(Player player) {
+		public void printHelp(CommandSender sender) {
 			List<Commands> children = getChildren();
 			if (0 < children.size()) {
 				for (Commands commands : children) {
-					commands.printHelp(player);
+					commands.printHelp(sender);
 				}
 			} else {
-				printUsage(player);
+				printUsage(sender);
 			}
 		}
 
-		public void printUsage(Player player) {
+		public void printUsage(CommandSender sender) {
 			List<String> usage = getFullUsage();
 			String command = ChatColor.GRAY + " /";
 			for (int i = 0; i < usage.size(); i++) {
@@ -239,7 +266,7 @@ public class Enums {//public enums
 			}
 			command = command.substring(0, command.length() - 1);
 			String[] opts = {command, this.description};
-			Message.COMMAND_HELP_2.print(player, opts);
+			Message.COMMAND_HELP_2.print(sender, opts);
 		}
 
 		private List<Commands> getChildren() {
@@ -262,21 +289,24 @@ public class Enums {//public enums
 			return commands;
 		}
 
-	}
-
-	public enum CommandPermission {
-		PLAYERS, OP, TEACHER, CONSOLE,;
 		public boolean canPerform(CommandSender sender) {
-			switch(this) {
+			switch(permission) {
 			case PLAYERS:
 				return true;
 			case OP:
 				if (sender instanceof Player) {
 					sender.isOp();
 					return true;
+				} else if(sender instanceof ConsoleCommandSender) {
+					return true;
 				}
 				break;
 			case TEACHER:
+				if (sender instanceof Player) {
+					if (ControllerConversation.getTeachers().contains(sender.getName())) {
+					return true;
+					}
+				}
 				break;
 			case CONSOLE:
 				break;
@@ -285,6 +315,17 @@ public class Enums {//public enums
 			}
 			return false;
 		}
+
+		public boolean isRunnableChild() {
+			if (0 == getChildren().size()) {
+				return true;
+			}
+			return false;
+		}
+	}
+
+	public enum CommandPermission {
+		PLAYERS, OP, TEACHER, CONSOLE,;
 	}
 
 

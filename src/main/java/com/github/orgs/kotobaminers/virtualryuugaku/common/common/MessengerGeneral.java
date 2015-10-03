@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
@@ -54,13 +55,19 @@ public class MessengerGeneral {
 	}
 
 	public enum Message {
+		OP_SAVE_(Arrays.asList("Saving VirtualRyuugaku2..."), Prefix.VRG),
+		OP_RELOAD_(Arrays.asList("Loading VirtualRyuugaku2..."), Prefix.VRG),
+
+		COMMON_INVALID_1(Arrays.asList("Invalid: "), Prefix.VRG),
 		COMMON_NOT_AIR_IN_HAND_0(Arrays.asList("Please hold nothing."), Prefix.VRG),
 		COMMON_WRONG_0(Arrays.asList(ChatColor.RED + "Wrong!"), Prefix.VRG),
 		COMMON_CORRECT_0(Arrays.asList(ChatColor.GREEN + "Correct!"), Prefix.VRG),
+		COMMON_NOT_SELECT_CONVERSATION_0(Arrays.asList("You haven't select any NPCs."), Prefix.VRG),
 
 		GAME_RULE_TITLE_0(Arrays.asList("" + ChatColor.GREEN + ChatColor.BOLD + "The Rules of Global Games"), Prefix.NONE),
 		GAME_RULE_2(Arrays.asList(" ", " : "), Prefix.NONE),
 		GAME_PLEASE_LOAD_0(Arrays.asList("Please load a global game at first."), Prefix.VRG),
+		GAME_JOIN_TP_1(Arrays.asList("Join the game and start learning!: " + ChatColor.YELLOW + "/vrg tp " + ChatColor.GOLD + ChatColor.BOLD), Prefix.VRG),
 
 		STAGE_TP_1(Arrays.asList("Teleporting to " + ChatColor.AQUA), Prefix.VRG),
 		STAGE_INFO_6(Arrays.asList(
@@ -88,9 +95,13 @@ public class MessengerGeneral {
 				Prefix.NONE),
 		COMMAND_HELP_2(Arrays.asList("", ChatColor.GRAY + "  :  " + ChatColor.RESET), Prefix.NONE),
 		COMMAND_INVALID_PARAMS_1(Arrays.asList(ChatColor.RED + "Invalid parameters: " + ChatColor.RESET), Prefix.VRG),
+		COMMAND_NO_PERMISSION_1(Arrays.asList("You don't have the permission: "), Prefix.VRG),
 
 		EXPRESSIONS_1(Arrays.asList("Current display mode: "), Prefix.VRG),
-		EXPRESSIONS_OFF_0(Arrays.asList("Current display mode: OFF"), Prefix.VRG);
+		EXPRESSIONS_OFF_0(Arrays.asList("Current display mode: OFF"), Prefix.VRG),
+
+		KEY_TOGGLE_1(Arrays.asList("You toggled the selected sentence as key or not: "), Prefix.VRG),
+		GAME_TRY_FINISH_0(Arrays.asList("There is no next sentence. Please finish the game. /vrg game finish"), Prefix.VRG),
 
 //		(Arrays.asList(""), Prefix.VRG),
 		;
@@ -115,12 +126,16 @@ public class MessengerGeneral {
 			return message;
 		}
 
-		public void print(Player player, String[] opts) {
-			player.sendMessage(prefix.getPrefix() + getMessage(opts));
+		public void print(CommandSender sender, String[] opts) {
+			if(sender != null) {
+				sender.sendMessage(prefix.getPrefix() + getMessage(opts));
+			}
 		}
-		public void print(Player[] players, String[] opts) {
-			for (Player player : players) {
-				print(player, opts);
+		public void print(CommandSender[] senders, String[] opts) {
+			if (senders != null) {
+				for (CommandSender sender : senders) {
+					print(sender, opts);
+				}
 			}
 		}
 		public void broadcast(String[] opts) {
@@ -232,11 +247,9 @@ public class MessengerGeneral {
 		DESCRIPTION_KEY_2,
 		CONVERSATION_HINT_2,
 
-		GAME_TRY_FINISH_0,
 		GAME_NOT_ALLOWED_TO_ANSWER_0,
 		GAME_FIND_PEOPLE_MISSION_0,
 		GAME_FIND_PEOPLE_QUEST_1,
-		GAME_PLEASE_LOAD_0,
 		GAME_NO_WINNERS_0,
 		GAME_RESULTS_1,
 		GAME_WINNERS_1,
@@ -328,10 +341,7 @@ public class MessengerGeneral {
 		case DESCRIPTION_2: message = opts[0] + ChatColor.RESET + ": " + opts[1]; break;
 		case DESCRIPTION_KEY_2: message = opts[0] + ChatColor.RESET + ": " + opts[1] + " " + MARK_KEY; break;
 
-		case GAME_JOIN_TP_1: message += "Join the game and start learning!: " + ChatColor.YELLOW + "/vrg tp " + ChatColor.GOLD + ChatColor.BOLD + opts[0]; break;
-		case GAME_TRY_FINISH_0: message += "There is no next sentence. Please finish the game."; break;
 		case GAME_NOT_ALLOWED_TO_ANSWER_0: message += "You are not allowed to answer the question."; break;
-		case GAME_PLEASE_LOAD_0: message += "Please load a global game at first."; break;
 		case GAME_NO_WINNERS_0: message += "No Winners!"; break;
 		case GAME_RESULTS_1: message += "Results: " + opts[0]; break;
 		case GAME_WINNERS_1: message += "Winners: " + opts[0]; break;
