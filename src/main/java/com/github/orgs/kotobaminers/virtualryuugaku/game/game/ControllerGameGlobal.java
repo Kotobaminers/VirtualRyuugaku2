@@ -63,7 +63,6 @@ public class ControllerGameGlobal extends Controller {
 	private static void eventWriteWrong(Player player) {
 		player.playSound(player.getLocation(), Sound.ITEM_BREAK, 1, 1);
 		Message.COMMON_WRONG_0.print(player, null);
-		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.WRONG_0, null) );
 		game.addScore(player, EventScore.ANSWER_WRONGLY);
 	}
 

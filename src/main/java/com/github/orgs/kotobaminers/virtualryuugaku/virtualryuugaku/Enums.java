@@ -25,13 +25,13 @@ public class Enums {//public enums
 		SAVE(
 				VIRTUALRYUUGAKU_OP,
 				Arrays.asList("save", "s"),
-				"Commands for the teachers.",
+				"To save Virtual Ryuugaku.",
 				new ArrayList<String>(),
 				CommandPermission.OP),
 		RELOAD(
 				VIRTUALRYUUGAKU_OP,
 				Arrays.asList("reload", "r"),
-				"Commands for the teachers.",
+				"To load Virtual Ryuugaku.",
 				new ArrayList<String>(),
 				CommandPermission.OP),
 
@@ -295,8 +295,9 @@ public class Enums {//public enums
 				return true;
 			case OP:
 				if (sender instanceof Player) {
-					sender.isOp();
-					return true;
+					if(sender.isOp()) {
+						return true;
+					}
 				} else if(sender instanceof ConsoleCommandSender) {
 					return true;
 				}
