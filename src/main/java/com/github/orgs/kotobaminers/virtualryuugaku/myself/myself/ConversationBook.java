@@ -78,6 +78,8 @@ public class ConversationBook {
 				book = tmp;
 				return book;
 			}
+		} else {
+			Message.BOOK_NOT_IN_HAND_0.print(player, null);
 		}
 		throw new Exception("Invalid Book");
 	}

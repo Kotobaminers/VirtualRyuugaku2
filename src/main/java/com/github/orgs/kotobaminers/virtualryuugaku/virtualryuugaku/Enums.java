@@ -55,6 +55,18 @@ public class Enums {//public enums
 				"Learning languages and Minigames.",
 				new ArrayList<String>(),
 				CommandPermission.PLAYERS),
+		DICTIONARY(
+				VIRTUALRYUUGAKU,
+				Arrays.asList("d", "dic", "dictionary"),
+				"Show a link for the JP word/sentence",
+				Arrays.asList("<WORD|SENTENCE>"),
+				CommandPermission.PLAYERS),
+		DICTIONARY_BROADCAST(
+				VIRTUALRYUUGAKU,
+				Arrays.asList("dbc", "dicbc"),
+				"Show a translation for EN learners.",
+				Arrays.asList("<WORD|SENTENCE>"),
+				CommandPermission.PLAYERS),
 
 		EN(
 				VIRTUALRYUUGAKU,
@@ -166,7 +178,13 @@ public class Enums {//public enums
 		ANSWER_GAME(
 				ANSWER,
 				Arrays.asList("g", "game"),
-				"Answer for the global game",
+				"Answering for the global game",
+				Arrays.asList("<ANSWER>"),
+				CommandPermission.PLAYERS),
+		ANSWER_CONVERSATION(
+				ANSWER,
+				Arrays.asList("c", "conv", "conversation"),
+				"Answering for the conversation question",
 				Arrays.asList("<ANSWER>"),
 				CommandPermission.PLAYERS),
 

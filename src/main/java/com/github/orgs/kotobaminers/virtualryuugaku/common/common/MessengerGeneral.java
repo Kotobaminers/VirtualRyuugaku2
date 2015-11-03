@@ -39,6 +39,9 @@ public class MessengerGeneral {
 	public static final String getPartitionPurple() {
 		return getPartition("=", "*", ChatColor.DARK_PURPLE, ChatColor.LIGHT_PURPLE);
 	}
+	public static final String getPartitionGray() {
+		return getPartition("=", "*", ChatColor.DARK_GRAY, ChatColor.GRAY);
+	}
 
 	public enum Prefix {
 		VRG("" + ChatColor.GOLD + ChatColor.BOLD +"[" + ChatColor.YELLOW + "VRG" + ChatColor.GOLD + ChatColor.BOLD + "] " + ChatColor.RESET),
@@ -63,6 +66,15 @@ public class MessengerGeneral {
 		COMMON_WRONG_0(Arrays.asList(ChatColor.RED + "Wrong!"), Prefix.VRG),
 		COMMON_CORRECT_0(Arrays.asList(ChatColor.GREEN + "Correct!"), Prefix.VRG),
 		COMMON_NOT_SELECT_CONVERSATION_0(Arrays.asList("You haven't select any NPCs."), Prefix.VRG),
+		COMMON_EMPTY_1(Arrays.asList(""), Prefix.NONE),
+
+		CONVERSATION_FINISH_0(Arrays.asList(ChatColor.GREEN + "You have finished the new conversation."), Prefix.VRG),
+		CONEVRSATION_FINISH_ALL_1(Arrays.asList(ChatColor.GREEN + "You have finished all of the conversation(", ")."), Prefix.VRG),
+
+		TALK_TITLE_1(Arrays.asList(
+				ChatColor.GRAY + "\n === ",
+				ChatColor.GRAY + " === "),
+				Prefix.NONE),
 
 		GAME_RULE_TITLE_0(Arrays.asList("" + ChatColor.GREEN + ChatColor.BOLD + "The Rules of Global Games"), Prefix.NONE),
 		GAME_RULE_2(Arrays.asList(" ", " : "), Prefix.NONE),
@@ -70,14 +82,17 @@ public class MessengerGeneral {
 		GAME_JOIN_TP_1(Arrays.asList("Join the game and start learning!: " + ChatColor.YELLOW + "/vrg tp " + ChatColor.GOLD + ChatColor.BOLD), Prefix.VRG),
 
 		STAGE_TP_1(Arrays.asList("Teleporting to " + ChatColor.AQUA), Prefix.VRG),
-		STAGE_INFO_6(Arrays.asList(
+		STAGE_INFO_TITLE_1(Arrays.asList(
 				getPartition("=", "*", ChatColor.GOLD, ChatColor.YELLOW, 3) + "  " + ChatColor.GOLD + ChatColor.BOLD,
-				getPartition("=", "*", ChatColor.GOLD, ChatColor.YELLOW, 3) + ChatColor.RESET + "\n NPCs: ",
-				"\n Sentences: ",
-				"\n Questions: ",
-				" / ",
-				"\n Key Sentences: "),
+				getPartition("=", "*", ChatColor.GOLD, ChatColor.YELLOW, 3)),
 				Prefix.NONE),
+		STAGE_INFO_NPC_1(Arrays.asList(" NPCs: "), Prefix.NONE),
+		STAGE_INFO_CONVERSATION_1(Arrays.asList(" Conversations: "), Prefix.NONE),
+		STAGE_INFO_QUESTION_1(Arrays.asList(" Questions: "), Prefix.NONE),
+		STAGE_INFO_KEY_SENTENCE_1(Arrays.asList(" Key Sentences: "), Prefix.NONE),
+		STAGE_INFO_SCORE_1(Arrays.asList(" Minigame: "), Prefix.NONE),
+
+
 		STAGE_LIST_2(Arrays.asList(ChatColor.AQUA + "Course: " + ChatColor.RESET, "\n " + ChatColor.RED + "Myself: " + ChatColor.RESET), Prefix.VRG),
 
 		BOOK_GET_0(Arrays.asList("You got a new book. Enjoy writing!"), Prefix.VRG),
@@ -102,6 +117,13 @@ public class MessengerGeneral {
 
 		KEY_TOGGLE_1(Arrays.asList("You toggled the selected sentence as key or not: "), Prefix.VRG),
 		GAME_TRY_FINISH_0(Arrays.asList("There is no next sentence. Please finish the game. /vrg game finish"), Prefix.VRG),
+		COMMAND_DICTIONARY_1(Arrays.asList("[Jisho] http://jisho.org/search/", "\n[Weblio] http://ejje.weblio.jp/content/", "\n[ALC] http://eow.alc.co.jp/search?q="), Prefix.NONE),
+		COMMAND_DICTIONARY_0(Arrays.asList(
+				"[Jisho] http://jisho.org/"
+				+ "\n[Weblio] http://ejje.weblio.jp/"
+				+ "\n[Alc] http://www.alc.co.jp/"
+				+ "\n[GoogleTranslate] https://translate.google.com/"
+				), Prefix.NONE),
 
 //		(Arrays.asList(""), Prefix.VRG),
 		;

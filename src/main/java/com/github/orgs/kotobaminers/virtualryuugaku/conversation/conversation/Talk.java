@@ -5,14 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.entity.Player;
-
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message0;
-import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Expression;
 
 public class Talk {
 	public Integer id = 0;
@@ -28,39 +21,42 @@ public class Talk {
 		talk.description = description;
 		return talk;
 	}
-	public void print(Player player) {
-		List<Expression> expressions = DataManagerPlayer.getDataPlayer(player).expressions;
-		if(0 < expressions.size()) {
-			MessengerGeneral.print(player, MessengerGeneral.getPartitionGreen());
-		}
-		if(expressions.contains(Expression.EN)) {
-			String[] opts = {name, description.getEnglishJoined()};
-			if(key) {
-				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.DESCRIPTION_KEY_2, opts));
-			} else {
-				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.DESCRIPTION_2, opts));
-			}
-		}
-		List<String> listJapanese = new ArrayList<String>();
-		if(expressions.contains(Expression.KANJI)) {
-			listJapanese.add(description.getKanjiJoined());
-		}
-		if(expressions.contains(Expression.KANA)) {
-			listJapanese.add(description.getKanaJoined());
-		}
-		if(expressions.contains(Expression.ROMAJI)) {
-			listJapanese.add(description.getRomajiJoined());
-		}
-		String japanese = UtilitiesGeneral.joinStrings(listJapanese, ", ");
-		if(0 < japanese.length()) {
-			String[] opts = {name, description.getJapaneseJoined(player)};
-			if(key) {
-				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.DESCRIPTION_KEY_2, opts));
-			} else {
-				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.DESCRIPTION_2, opts));
-			}
-		}
-	}
+//	public void print(Player player, Conversation conversation) {
+//		List<Expression> expressions = DataManagerPlayer.getDataPlayer(player).expressions;
+//		if(0 < expressions.size()) {
+//			String opts[] = {"" + conversation.getTalkerColor(id), name};
+//			Message.TALK_TITLE_2.print(player, opts);
+//		}
+//
+//
+//		if(expressions.contains(Expression.EN)) {
+//			String[] opts = {"" + conversation.getTalkerColor(id) + ChatColor.BOLD + name + ChatColor.RESET, };
+//			if(key) {
+//				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.DESCRIPTION_KEY_2, opts));
+//			} else {
+//				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.DESCRIPTION_2, opts));
+//			}
+//		}
+//		List<String> listJapanese = new ArrayList<String>();
+//		if(expressions.contains(Expression.KANJI)) {
+//			listJapanese.add(description.getKanjiJoined());
+//		}
+//		if(expressions.contains(Expression.KANA)) {
+//			listJapanese.add(description.getKanaJoined());
+//		}
+//		if(expressions.contains(Expression.ROMAJI)) {
+//			listJapanese.add(description.getRomajiJoined());
+//		}
+//		String japanese = UtilitiesGeneral.joinStrings(listJapanese, ", ");
+//		if(0 < japanese.length()) {
+//			String[] opts = {name, description.getJapaneseJoined(player)};
+//			if(key) {
+//				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.DESCRIPTION_KEY_2, opts));
+//			} else {
+//				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.DESCRIPTION_2, opts));
+//			}
+//		}
+//	}
 
 	public String getDebugMessage() {
 		String message = "ID: " + id.toString() + ", " + description.getEnglishJoined() + "/" + description.getKanjiJoined() + "/" + description.getKanaJoined() + "/" + description.getRomajiJoined();

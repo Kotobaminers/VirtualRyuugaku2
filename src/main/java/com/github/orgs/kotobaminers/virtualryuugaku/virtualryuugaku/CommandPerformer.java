@@ -17,10 +17,10 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGener
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ControllerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation.CheckState;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Stage;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
 import com.github.orgs.kotobaminers.virtualryuugaku.game.game.ControllerGameGlobal;
 import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.ConversationBook;
-import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.Stage;
 import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.StageMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
@@ -55,13 +55,11 @@ public class CommandPerformer {
 			i++;
 		}
 		this.params = list;
-
 	}
 
 	public boolean performCommand() {
 		boolean success = false;
 		switch (command) {
-		default:
 		case VIRTUALRYUUGAKU_OP:
 		case VIRTUALRYUUGAKU_TEACHER:
 		case GAME:
@@ -91,6 +89,12 @@ public class CommandPerformer {
 			break;
 		case KANJI:
 			success = commandKanji();
+			break;
+		case DICTIONARY:
+			success = commandDictionary();
+			break;
+		case DICTIONARY_BROADCAST:
+			success = commandDictionaryBroadcast();
 			break;
 
 		case TP:
@@ -129,10 +133,39 @@ public class CommandPerformer {
 		case ANSWER_GAME:
 			success = commandAnswerGame();
 			break;
+		case ANSWER_CONVERSATION:
+			success = commandAnswerConversation();
+			break;
+		default:
+			break;
 		}
 		return  success;
 	}
 
+
+
+	private boolean commandDictionaryBroadcast() {
+		if (0 < params.size()) {
+			String[] opts = {UtilitiesGeneral.joinStrings(params, "+")};
+			Message.COMMAND_DICTIONARY_1.broadcast(opts);
+		} else {
+			Message.COMMAND_DICTIONARY_0.broadcast(null);
+		}
+		return true;
+	}
+
+	private boolean commandDictionary() {
+		if (0 < params.size()) {
+			String jisho = UtilitiesGeneral.joinStrings(params, "%20");
+			String weblio = UtilitiesGeneral.joinStrings(params, "+");
+			String alc = weblio;
+			String[] opts = {jisho, weblio, alc};
+			Message.COMMAND_DICTIONARY_1.print(sender, opts);
+		} else {
+			Message.COMMAND_DICTIONARY_0.print(sender, null);
+		}
+		return true;
+	}
 
 	public void printInfo() {
 		command.printInfo(sender);
@@ -170,17 +203,22 @@ public class CommandPerformer {
 			String stage = params.get(0).toUpperCase();
 			try {
 				List<Conversation> conversations = ControllerConversation.getConversations(stage);
-				if (0< conversations.size()) {
-					Conversation conversation = conversations.get(0);
+				List<Integer> ids = new ArrayList<Integer>();
+				for (Conversation conversation : conversations) {
 					if (0 < conversation.listTalk.size()) {
-						Integer id = conversation.getIDSorted().get(0);
-						NPC npc = NPCHandler.getNPC(id);
-						Location location = npc.getStoredLocation();
-						player.teleport(location);
-						String[] opts = {stage};
-						Message.STAGE_TP_1.print(player, opts);
-						return true;
+						ids.addAll(conversation.getIDSorted());
 					}
+				}
+				if (0 < ids.size()) {
+					Collections.sort(ids);
+					System.out.println(ids);
+					Integer id = ids.get(0);
+					NPC npc = NPCHandler.getNPC(id);
+					Location location = npc.getStoredLocation();
+					player.teleport(location);
+					String[] opts = {stage};
+					Message.STAGE_TP_1.print(player, opts);
+					return true;
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -232,40 +270,34 @@ public class CommandPerformer {
 			return true;
 		}
 		if(0 < params.size()) {
-			String stage = params.get(0).toUpperCase();
-			Integer npcs = 0;
-			Integer done = 0;
-			Integer questions = 0;
-			Integer keySentence = 0;
-			Integer sentence = 0;
-			for(Conversation conversation : ControllerConversation.getConversations()) {
-				if(stage.equalsIgnoreCase(conversation.stageName)) {
-					if(conversation.hasValidQuestion()) {
-						questions++;
-					}
-
-					List<List<Integer>> keyDone = DataManagerPlayer.getDataPlayer(player).questionDone;
-					if(keyDone.contains(conversation.question.getKey())) {
-						done++;
-					}
-
-					List<Integer> ids = new ArrayList<Integer>();
-					for(Talk talk : conversation.listTalk) {
-						Integer id = talk.id;
-						if(!ids.contains(id)) {
-							ids.add(id);
-						}
-						if(talk.key) {
-							keySentence++;
-						}
-					}
-					npcs += ids.size();
-					sentence += conversation.listTalk.size();
-				}
+			String name = params.get(0).toUpperCase();
+			Stage stage;
+			try {
+				stage = Stage.createStage(name);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return false;
 			}
-			if (0 < npcs && 0 < sentence) {
-				String[] opts = {stage, npcs.toString(), sentence.toString(), done.toString(), questions.toString(), keySentence.toString()};
-				Message.STAGE_INFO_6.print(sender, opts);
+			if (0 < stage.getConversations().size()) {
+				DataPlayer data = DataManagerPlayer.getDataPlayer(player);
+
+				String npcs = stage.getNPCsTotal().toString();
+				String question = stage.getQuestionDoneByMax(data);
+				String conversation = stage.getConversationDoneByMax(data);
+				String keySentence = stage.getKeySentenceTotal().toString();
+				String score = stage.getScoreDoneByMax(data);
+				String[] opts = {name};
+				Message.STAGE_INFO_TITLE_1.print(sender, opts);
+				String[] opts2 = {npcs};
+				Message.STAGE_INFO_NPC_1.print(sender, opts2);
+				String[] opts3 = {conversation};
+				Message.STAGE_INFO_CONVERSATION_1.print(sender, opts3);
+				String[] opts4 = {question};
+				Message.STAGE_INFO_QUESTION_1.print(sender, opts4);
+				String[] opts5 = {keySentence};
+				Message.STAGE_INFO_KEY_SENTENCE_1.print(sender, opts5);
+				String[] opts6 = {score};
+				Message.STAGE_INFO_SCORE_1.print(sender, opts6);
 				return true;
 			}
 		}
@@ -298,13 +330,8 @@ public class CommandPerformer {
 		if (!hasValidPlayer()) {
 			return true;
 		}
-		try {
-			ControllerConversation.importBook(player);
-			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
+		ControllerConversation.importBook(player);
+		return true;
 	}
 
 	private boolean commandAnswerGame() {
@@ -320,6 +347,18 @@ public class CommandPerformer {
 			} else {
 				Message.GAME_PLEASE_LOAD_0.print(sender, null);
 			}
+			return true;
+		}
+		return false;
+	}
+	private boolean commandAnswerConversation() {
+		if (!hasValidPlayer()) {
+			return true;
+		}
+		String answer = "";
+		if (0 < params.size()) {
+			answer = UtilitiesGeneral.joinStrings(params, " ");
+			DataManagerPlayer.getDataPlayer(player).question.validateQuestion(player, answer);
 			return true;
 		}
 		return false;

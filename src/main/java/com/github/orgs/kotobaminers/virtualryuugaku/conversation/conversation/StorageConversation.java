@@ -246,43 +246,8 @@ public class StorageConversation implements Storage, YamlController {
 		}
 		Set<ConversationMyself> myselfs = toConversationMyself(mapKeys, mapDescriptions);
 		StorageConversation.conversations.addAll(myselfs);
-
 	}
 
-
-			//CONVERSATION_MYSELF
-//			if(key.equalsIgnoreCase("MYSELF.DESCRIPTION")) {
-//				search = (MemorySection) config.get(key);
-//				MemorySection memoryStage = null;
-//				List<String> kanji = new ArrayList<String>();
-//				List<String> kana = new ArrayList<String>();
-//				List<String> en = new ArrayList<String>();
-//
-//				for(String stage : search.getKeys(false)) {
-//					memoryStage = (MemorySection) search.get(stage);
-//					MemorySection memoryPlayer = null;
-//					for(String owner : memoryStage.getKeys(false)) {
-//						memoryPlayer = (MemorySection) memoryStage.get(owner);
-//						kanji = memoryPlayer.getStringList("KANJI");
-//						kana = memoryPlayer.getStringList("KANA");
-//						en = memoryPlayer.getStringList("EN");
-//						Integer size = en.size();
-//						if(size.equals(kana.size()) && size.equals(kana.size())) {
-//							ConversationMyself conversation = new ConversationMyself();
-//							conversation.stageName = stage;
-//							conversation.editor = Arrays.asList(owner);
-//							for(int i = 0; i < size; i++) {
-//								Description description = Description.create(kanji.get(i), kana.get(i), en.get(i), new ArrayList<String>());
-//								Talk talk = new Talk().create(DUMMY_ID, owner, description);
-//								conversation.listTalk.add(talk);
-//							}
-//							if(0 < conversation.listTalk.size()) {
-//								conversations.add(conversation);
-//							}
-//						}
-//					}
-//				}
-//			}
 
 	private void importMulti() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());

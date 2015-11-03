@@ -1,8 +1,10 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.game.game;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -17,6 +19,8 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Storage;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ControllerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
+import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
+import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.SoundMeta.Scene;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
@@ -26,8 +30,15 @@ import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Langua
 public class GameGlobal implements Storage {
 
 	protected static final Integer COUNT_INITIAL = -1;
+	public String stageName = "";
+	public LinkedHashMap<String, Integer> scores = new LinkedHashMap<String, Integer>();
+	public List<Talk> talks = new ArrayList<Talk>();
+	protected static Integer count = COUNT_INITIAL;
+	public List<String> cantAnswer = new ArrayList<String>();
+	public List<String> cantFind = new ArrayList<String>();
+	public List<Language> listLanguage = new ArrayList<Language>();
 
-	enum EventScore {
+	public enum EventScore {
 		ANSWER_CORRECTLY(3),
 		ANSWER_WRONGLY(0),
 		LEFT_CLICK_NPC_CORRECTLY(2),
@@ -55,19 +66,17 @@ public class GameGlobal implements Storage {
 		}
 	}
 
-	public LinkedHashMap<String, Integer> scores = new LinkedHashMap<String, Integer>();
-	public List<Talk> talks = new ArrayList<Talk>();
-	protected static Integer count = COUNT_INITIAL;
-	public List<String> cantAnswer = new ArrayList<String>();
-	public List<String> cantFind = new ArrayList<String>();
-	public List<Language> listLanguage = new ArrayList<Language>();
-
 	@Override
 	public void load(String stage) {
 		initialize();
 		try {
+			stageName = stage;
 			for (Conversation conversation : ControllerConversation.getConversations(stage)) {
 				talks.addAll(conversation.getKeyTalk());
+				Collections.shuffle(talks);
+			}
+			for (int i = 0; i < talks.size(); i++) {
+				listLanguage.add(getLanguageRandom());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -99,7 +108,17 @@ public class GameGlobal implements Storage {
 	public void finishGame() {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		printResult();
+		saveScores();
 		initialize();
+	}
+
+	public void saveScores() {
+		for (Entry<String, Integer> entry : scores.entrySet()) {
+			DataPlayer data = DataManagerPlayer.getDataPlayer(entry.getKey());
+			if (data.getScore(stageName) < entry.getValue()) {
+				data.putScore(stageName, entry.getValue());
+			}
+		}
 	}
 
 
@@ -279,25 +298,20 @@ public class GameGlobal implements Storage {
 			listLanguage.add(Language.EN);
 		}
 	}
-	public void setLanguageRandom() {
-		listLanguage = new ArrayList<Language>();
+	private Language getLanguageRandom() {
 		Random random = new Random();
 		Language language = Language.JP;
-		for (int i = 0; i < talks.size(); i++) {
-			Integer value = random.nextInt(2);
-			switch(value) {
-			case 0:
-				language = Language.JP;
-				listLanguage.add(language);
-				break;
-			case 1:
-			default:
-				language = Language.EN;
-				listLanguage.add(language);
-				break;
-			}
+		Integer value = random.nextInt(2);
+		switch(value) {
+		case 0:
+			language = Language.JP;
+			break;
+		case 1:
+		default:
+			language = Language.EN;
+			break;
 		}
-		System.out.println(listLanguage);
+		return language;
 	}
 
 	public List<String> getRule() {

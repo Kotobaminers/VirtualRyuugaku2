@@ -32,7 +32,7 @@ public class NPCHandler {
 	public static void changeNPCAsEmpty(NPC npc) {
 		try {
 			NPCHandler.changeType(npc, EntityType.CREEPER);
-			NPCHandler.changeName(npc, "ENPTY");
+			NPCHandler.changeName(npc, "EMPTY");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

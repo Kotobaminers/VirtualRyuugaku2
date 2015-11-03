@@ -9,21 +9,27 @@ import java.util.Set;
 import net.citizensnpcs.api.npc.NPC;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ControllerConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation.CheckState;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMyself;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Stage;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.NPCHandler;
 
 public class StageMyself extends Stage {
 	public Set<ConversationMyself> conversations = new HashSet<ConversationMyself>();
 
+	private StageMyself() {}
+	public static StageMyself create() {
+		return new StageMyself();
+	}
+
 	public void changeNPCs(CheckState check) {
-		Set<ConversationMyself> conversationsMyself = getConversationsMyself(conversations, check);
 		Set<Integer> ids = getIDsAll();
 		List<NPC> npcs = new ArrayList<NPC>();
 		List<String> players = new ArrayList<String>();
-		for (ConversationMyself myself : conversationsMyself) {
-			if (0 < myself.listTalk.size()) {
-				players.add(myself.listTalk.get(0).name);
+		for (Conversation conversation : conversations) {
+			if (0 < conversation.listTalk.size()) {
+				players.add(conversation.listTalk.get(0).name);
 			}
 		}
 
@@ -52,10 +58,9 @@ public class StageMyself extends Stage {
 	}
 
 	public Set<Integer> getIDsAll() {
-		String stageName = getStageName();
 		Set<Integer> ids = new HashSet<Integer>();
 		try {
-			ids.addAll(ControllerConversation.getMyselfIDs(stageName));
+			ids.addAll(ControllerConversation.getMyselfIDs(name));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -63,11 +68,23 @@ public class StageMyself extends Stage {
 	}
 
 	@Override
-	public String getStageName() {
-		String name = "";
+	public Set<Conversation> getConversations(CheckState check) {
+		Set<Conversation> set = new HashSet<Conversation>();
 		for (ConversationMyself conversation : conversations) {
-			return conversation.stageName;
+			if (conversation.getCheckState().equals(check)) {
+				set.add(conversation);
+			}
 		}
-		return name;
+		return set;
 	}
+	@Override
+	public Set<Conversation> getConversations() {
+		Set<Conversation> set = new HashSet<Conversation>();
+		for (ConversationMyself conversation : conversations) {
+			set.add((Conversation) conversation);
+		}
+		return set;
+	}
+
+
 }
