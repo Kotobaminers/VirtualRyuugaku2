@@ -10,6 +10,8 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManagerRom
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Letters;
 
 public class UtilitiesGeneral {
+	private static final List<String> SHOWN_CHARACTERS = Arrays.asList(",", " ", ".", "、", "。");
+
 	public static String toRomaji(String kana) {
 		Map<String, List<Letters>> map = DataManagerRomaji.getMapLetters();
 		for(TypeLetters type : TypeLetters.values()) {
@@ -112,4 +114,22 @@ public class UtilitiesGeneral {
 		return string;
 	}
 
+	public static String showSameCharacters(String answer, String suggestion) {
+		String show = "";
+		for (int i = 0; i < answer.length(); i++) {
+			String target = answer.substring(i, i+1);
+			if (SHOWN_CHARACTERS.contains(target)) {
+				show += target;
+			} else if (suggestion.length() < i) {
+				show += "*";
+			} else if (target.equalsIgnoreCase(suggestion.substring(i, i+1))) {
+				show += target;
+			} else {
+				show += "*";
+			}
+		}
+		return show;
+	}
 }
+
+

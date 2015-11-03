@@ -163,6 +163,7 @@ public class GameGlobal implements Storage {
 			}
 		}
 
+
 		return false;
 	}
 
@@ -182,6 +183,25 @@ public class GameGlobal implements Storage {
 			break;
 		case JP:
 			answers.addAll(description.getEnglishList());
+		default:
+			break;
+		}
+		return answers;
+	}
+	public List<String> printHints(String answer) {
+		List<String> answers = new ArrayList<String>();
+		Description description = getCurrentKeyTalk().description;
+		Language language = getCurrentLanguage();
+		switch(language) {
+		case EN:
+			answers.addAll(description.getJapaneseList());
+			break;
+		case JP:
+			List<String> hints = new ArrayList<String>();
+			for (String string : description.getEnglishList()) {
+				hints.add(UtilitiesGeneral.showSameCharacters(string, answer));
+			}
+//			Message.COMMON_EMPTY_1.print(player, ); TODO
 		default:
 			break;
 		}
