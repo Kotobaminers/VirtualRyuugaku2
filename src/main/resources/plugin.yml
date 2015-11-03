@@ -1,21 +1,20 @@
 name: VirtualRyuugaku2
-main: com.gmail.fukushima.kai.virtualryuugaku2.virtualryuugaku2.VirtualRyuugaku2
-version: 0.1
+main: com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VirtualRyuugaku
+version: ${git.commit.id.describe}
 commands:
-  VRG:
   VIRTUALRYUUGAKU:
-  TALKER:
-  STAGE:
-  VRGOP:
-    permission: vertualryuugaku.op
-  VIRTUALRYUUGAKUOP:
-    permission: vertualryuugaku.op
-  TALKEROP:
-    permission: vertualryuugaku.op
-  STAGEOP:
-    permission: vertualryuugaku.op
-  VRGCO:
-
-permissions:
-  vertualryuugaku.op:
-    default: op
+    usage: /vrg
+    description: For more infomation /vrg
+    aliases: [vrg, virtualryuugaku]
+  VIRTUALRYUUGAKU_TEACHER:
+    usage: /vrgt
+    description: For more infomation /vrgt
+    aliases: [vrgt, virtualryuugakuteacher]
+  ANSWER:
+    usage: /ans
+    description: For more infomation /ans
+    aliases: [ans, answer]
+  VIRTUALRYUUGAKU_OP:
+    usage: /vrgop
+    description: For more infomation /vrgop
+    aliases: [vrgop, virtualryuugakuop]

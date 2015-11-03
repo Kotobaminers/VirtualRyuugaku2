@@ -1,0 +1,32 @@
+name: VirtualRyuugaku2
+main: com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VirtualRyuugaku
+version: ${git.commit.id.describe}
+commands:
+  VRG:
+  VIRTUALRYUUGAKU:
+  CONVERSATION:
+    usage: |
+      /<command> select [id]
+      /<command> sentence [line] (kanji/kana/en) [expression]
+      /<command> language
+      /<command> info
+      /<command> comment (read/send/new/done)
+  CONV:
+  ANSWER:
+  ANS:
+  VRGOP:
+    permission: vertualryuugaku.op
+  VIRTUALRYUUGAKUOP:
+    permission: vertualryuugaku.op
+  VRGDBG:
+    permission: vertualryuugaku.op
+  CONVERSATIONOP:
+    permission: vertualryuugaku.op
+  CONVOP:
+    permission: vertualryuugaku.op
+  STAGEOP:
+    permission: vertualryuugaku.op
+
+permissions:
+  vertualryuugaku.op:
+    default: op
