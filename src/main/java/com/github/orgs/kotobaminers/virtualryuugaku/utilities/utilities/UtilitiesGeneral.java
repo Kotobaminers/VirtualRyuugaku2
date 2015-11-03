@@ -120,7 +120,7 @@ public class UtilitiesGeneral {
 			String target = answer.substring(i, i+1);
 			if (SHOWN_CHARACTERS.contains(target)) {
 				show += target;
-			} else if (suggestion.length() < i) {
+			} else if (suggestion.length() < i + 1) {
 				show += "*";
 			} else if (target.equalsIgnoreCase(suggestion.substring(i, i+1))) {
 				show += target;

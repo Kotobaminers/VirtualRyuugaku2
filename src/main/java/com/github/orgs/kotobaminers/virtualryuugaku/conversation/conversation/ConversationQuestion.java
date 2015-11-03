@@ -12,6 +12,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPla
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.SoundMeta.Scene;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 
 
 public class ConversationQuestion {
@@ -64,6 +65,14 @@ public class ConversationQuestion {
 			}
 		}
 		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.WRONG_0, null));
+
+		List<String> hints = new ArrayList<String>();
+		for (String string : answers) {
+			hints.add(UtilitiesGeneral.showSameCharacters(string, answer));
+		}
+		String[] opts = {" [Hints] " + UtilitiesGeneral.joinStrings(hints, ", ")};
+		Message.COMMON_EMPTY_1.print(player, opts);
+
 		Effects.playSound(player, Scene.BAD);
 	}
 

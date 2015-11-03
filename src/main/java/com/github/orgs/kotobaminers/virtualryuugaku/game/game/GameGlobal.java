@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message0;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Storage;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ControllerConversation;
@@ -162,8 +163,6 @@ public class GameGlobal implements Storage {
 				return true;
 			}
 		}
-
-
 		return false;
 	}
 
@@ -188,20 +187,39 @@ public class GameGlobal implements Storage {
 		}
 		return answers;
 	}
-	public List<String> printHints(String answer) {
+	public List<String> printHints(Player player, String answer) {
 		List<String> answers = new ArrayList<String>();
 		Description description = getCurrentKeyTalk().description;
 		Language language = getCurrentLanguage();
 		switch(language) {
 		case EN:
-			answers.addAll(description.getJapaneseList());
+			List<String> romaji = new ArrayList<String>();
+			for (String string : description.romaji) {
+				romaji.add(UtilitiesGeneral.showSameCharacters(string, answer));
+			}
+			String[] optsRomaji = {"[Romaji] " + UtilitiesGeneral.joinStrings(romaji, ", ")};
+			Message.COMMON_EMPTY_1.print(player, optsRomaji);
+			List<String> kana = new ArrayList<String>();
+			for (String string : description.kana) {
+				kana.add(UtilitiesGeneral.showSameCharacters(string, answer));
+			}
+			String[] optsKana = {"[Kana] " + UtilitiesGeneral.joinStrings(kana, ", ")};
+			Message.COMMON_EMPTY_1.print(player, optsKana);
+			List<String> kanji = new ArrayList<String>();
+			for (String string : description.kanji) {
+				kanji.add(UtilitiesGeneral.showSameCharacters(string, answer));
+			}
+			String[] optsKanji = {"[Kanji] " + UtilitiesGeneral.joinStrings(kanji, ", ")};
+			Message.COMMON_EMPTY_1.print(player, optsKanji);
 			break;
 		case JP:
-			List<String> hints = new ArrayList<String>();
+			List<String> en = new ArrayList<String>();
 			for (String string : description.getEnglishList()) {
-				hints.add(UtilitiesGeneral.showSameCharacters(string, answer));
+				en.add(UtilitiesGeneral.showSameCharacters(string, answer));
 			}
-//			Message.COMMON_EMPTY_1.print(player, ); TODO
+			String[] optsEN = {" [EN] " + UtilitiesGeneral.joinStrings(en, ", ")};
+			Message.COMMON_EMPTY_1.print(player, optsEN);
+			break;
 		default:
 			break;
 		}

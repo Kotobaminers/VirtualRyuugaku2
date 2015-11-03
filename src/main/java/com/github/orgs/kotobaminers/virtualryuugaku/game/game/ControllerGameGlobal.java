@@ -57,6 +57,7 @@ public class ControllerGameGlobal extends Controller {
 			eventWriteCorrect(player);
 		} else {
 			eventWriteWrong(player);
+			game.printHints(player, answer);
 		}
 	}
 
