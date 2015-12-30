@@ -259,7 +259,7 @@ public class StorageConversation implements Storage, YamlController {
 
 	@Override
 	public void importConfiguration() {
-		importMyself();
+//		importMyself(); TODO Since myself's expressions can be wrong, they should be separated from the official conversations.
 		importMulti();
 	}
 }

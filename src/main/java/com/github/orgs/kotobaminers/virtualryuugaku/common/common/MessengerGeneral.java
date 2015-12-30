@@ -289,7 +289,7 @@ public class MessengerGeneral {
 		BOOK_IMPORTED_0,
 		BOOK_NOT_IN_HAND_0,
 		BOOK_GET_0,
-		PUBLIC_GAME_PREPERATION_0,
+		PUBLIC_GAME_FIND_PEOPLE_0,
 
 		;
 	}
@@ -297,7 +297,7 @@ public class MessengerGeneral {
 	public static String getMessage(Message0 key, String[] opts) {
 		String message = MESSENGER_PREFIX;
 		switch(key) {
-		case PUBLIC_GAME_PREPERATION_0: message += "Prepare before starting games."; break;
+		case PUBLIC_GAME_FIND_PEOPLE_0: message += "Starting the minigame [Find People]."; break;
 
 		case COMMON_INVALID_PARAMETER_1: message += "Invalid Parameters: " + opts[0]; break;
 		case COMMON_NOT_AIR_IN_HAND_0: message += "Please hand nothing in your hand"; break;

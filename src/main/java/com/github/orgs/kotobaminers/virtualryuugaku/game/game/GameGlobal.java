@@ -330,12 +330,14 @@ public class GameGlobal implements Storage {
 			listLanguage.add(Language.JP);
 		}
 	}
+
 	public void setLanguageEnglish() {
 		listLanguage = new ArrayList<Language>();
 		for (int i = 0; i < talks.size(); i++) {
 			listLanguage.add(Language.EN);
 		}
 	}
+
 	private Language getLanguageRandom() {
 		Random random = new Random();
 		Language language = Language.JP;

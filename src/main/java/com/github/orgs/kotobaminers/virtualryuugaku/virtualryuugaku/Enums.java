@@ -3,6 +3,7 @@ package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -187,7 +188,12 @@ public class Enums {//public enums
 				"Answering for the conversation question",
 				Arrays.asList("<ANSWER>"),
 				CommandPermission.PLAYERS),
-
+		ANSWER_PUBLIC_GAME(
+				ANSWER,
+				Arrays.asList("p", "pub", "public"),
+				"Answering for the public game",
+				Arrays.asList("<ANSWER>"),
+				CommandPermission.PLAYERS),
 		;
 
 		private Commands parent;
@@ -368,6 +374,18 @@ public class Enums {//public enums
 				UtilitiesProgramming.printDebugMessage(e.toString(), new Exception());
 				return Language.JP;
 			}
+		}
+		public static Language getRandom() {
+			Random random = new Random();
+			Integer value = random.nextInt(Language.values().length);
+			return Language.values()[value];
+		}
+		public Language getOppositeLanguage() {
+			Language language = EN;
+			if (!language.equals(this)) {
+				language = JP;
+			}
+			return language;
 		}
 	}
 	public enum PathConversation {STAGE, EDITOR, EN, KANJI, KANA, KEY, Q, A, COMMENT}

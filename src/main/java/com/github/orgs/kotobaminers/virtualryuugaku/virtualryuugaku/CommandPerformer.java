@@ -24,6 +24,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.ConversationBo
 import com.github.orgs.kotobaminers.virtualryuugaku.myself.myself.StageMyself;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
+import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicGameController;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Commands;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Expression;
@@ -136,13 +137,27 @@ public class CommandPerformer {
 		case ANSWER_CONVERSATION:
 			success = commandAnswerConversation();
 			break;
+		case ANSWER_PUBLIC_GAME:
+			success = commandAnswerPublicGame();
+			break;
 		default:
 			break;
 		}
 		return  success;
 	}
 
-
+	private boolean commandAnswerPublicGame() {
+		if (!hasValidPlayer()) {
+			return true;
+		}
+		String answer = "";
+		if (0 < params.size()) {
+			answer = UtilitiesGeneral.joinStrings(params, " ");
+			PublicGameController.game.validateAnswer(answer);
+			return true;
+		}
+		return false;
+	}
 
 	private boolean commandDictionaryBroadcast() {
 		if (0 < params.size()) {
@@ -211,7 +226,6 @@ public class CommandPerformer {
 				}
 				if (0 < ids.size()) {
 					Collections.sort(ids);
-					System.out.println(ids);
 					Integer id = ids.get(0);
 					NPC npc = NPCHandler.getNPC(id);
 					Location location = npc.getStoredLocation();
