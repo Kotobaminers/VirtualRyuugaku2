@@ -3,25 +3,18 @@ package com.github.orgs.kotobaminers.virtualryuugaku.player.player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMyself;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMulti;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationQuestion;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Expression;
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Language;
 
 public class DataPlayer {
 	public String name = "";
 	public Integer line = lineIni;
-	public Integer select = -1;
-	public Language language = Language.JP;
-	public Conversation conversation = new ConversationMyself();
-	public Set<List<Integer>> questionDone = new HashSet<List<Integer>>();
-	public Set<List<Integer>> conversationDone = new HashSet<List<Integer>>();
+	public Conversation conversation = new ConversationMulti();
 
 	private Map<String, Integer> score = new HashMap<String, Integer>();
 

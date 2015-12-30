@@ -11,12 +11,23 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ControllerConversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation.CheckState;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class Enums {//public enums
 	public enum Commands {
+		VIRTUALRYUUGAKU_DEBUG(
+				null,
+				Arrays.asList("vrgd", "vrgdbg", "vrgdebug"),
+				"Commands for the ops.",
+				new ArrayList<String>(),
+				CommandPermission.OP),
+		DEBUG_MODE(
+				VIRTUALRYUUGAKU_DEBUG,
+				Arrays.asList("mode", "m"),
+				"To toggle the debug mode.",
+				new ArrayList<String>(),
+				CommandPermission.OP),
+
 		VIRTUALRYUUGAKU_OP(
 				null,
 				Arrays.asList("vrgop", "virtualryuugakuop"),
@@ -36,19 +47,6 @@ public class Enums {//public enums
 				new ArrayList<String>(),
 				CommandPermission.OP),
 
-
-		VIRTUALRYUUGAKU_TEACHER(
-				null,
-				Arrays.asList("vrgt", "virtualryuugakuteacher"),
-				"Commands for the teachers.",
-				new ArrayList<String>(),
-				CommandPermission.TEACHER),
-		KEY(
-				VIRTUALRYUUGAKU_TEACHER,
-				Arrays.asList("key", "k"),
-				"Toggle your current sentence as key.",
-				new ArrayList<String>(),
-				CommandPermission.TEACHER),
 
 		VIRTUALRYUUGAKU(
 				null,
@@ -132,12 +130,12 @@ public class Enums {//public enums
 				"Update your own npcs and sentences",
 				new ArrayList<String>(),
 				CommandPermission.PLAYERS),
-		MYSELF_RELOAD(
-				MYSELF,
-				Arrays.asList("reload", "r"),
-				"Reload the npcs",
-				Arrays.asList("<MYSELF STAGE>", "<" + CheckState.KEY.toString() + "|" + CheckState.UNCHECKED.toString() + "|" + CheckState.CHECKED.toString()),
-				CommandPermission.PLAYERS),
+//		MYSELF_RELOAD(
+//				MYSELF,
+//				Arrays.asList("reload", "r"),
+//				"Reload the npcs",
+//				Arrays.asList("<MYSELF STAGE>", "<" + CheckState.KEY.toString() + "|" + CheckState.UNCHECKED.toString() + "|" + CheckState.CHECKED.toString()),
+//				CommandPermission.PLAYERS),
 
 		GAME(
 				VIRTUALRYUUGAKU,
@@ -326,13 +324,6 @@ public class Enums {//public enums
 					return true;
 				}
 				break;
-			case TEACHER:
-				if (sender instanceof Player) {
-					if (ControllerConversation.getTeachers().contains(sender.getName())) {
-					return true;
-					}
-				}
-				break;
 			case CONSOLE:
 				break;
 			default:
@@ -350,7 +341,7 @@ public class Enums {//public enums
 	}
 
 	public enum CommandPermission {
-		PLAYERS, OP, TEACHER, CONSOLE,;
+		PLAYERS, OP, CONSOLE,;
 	}
 
 

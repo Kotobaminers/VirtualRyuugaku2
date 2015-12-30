@@ -73,7 +73,6 @@ public class LibraryHandlerConversation {
 
 					//Comments will be imported from Talker.yml
 					list.add(conversation);
-					UtilitiesProgramming.printDebugConversation(conversation);
 				}
 			}
 		}

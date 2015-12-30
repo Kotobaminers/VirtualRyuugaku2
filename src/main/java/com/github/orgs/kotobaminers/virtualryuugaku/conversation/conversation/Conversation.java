@@ -36,35 +36,6 @@ public abstract class Conversation {
 			ChatColor.GOLD,
 			ChatColor.BLUE);
 
-	public enum CheckState {NOT_EXISTS, UNCHECKED, CHECKED, KEY,;
-		public static CheckState lookup(String name) {
-			try {
-				return valueOf(name.toUpperCase());
-			} catch (IllegalArgumentException e) {
-				return NOT_EXISTS;
-			}
-		}
-	}
-
-	public CheckState getCheckState() {
-		if (!(0 < listTalk.size())) {
-			return CheckState.NOT_EXISTS;
-		} else if (0 < getKeyTalk().size()) {
-			return CheckState.KEY;
-		} else if (0 < getCorrectors().size() || 0 < recommenders.size()) {
-			return CheckState.CHECKED;
-		}
-		return CheckState.UNCHECKED;
-	}
-
-	public List<String> getCorrectors() {
-		List<String> correctors = new ArrayList<String>();
-		for (Talk talk : listTalk) {
-			correctors.addAll(talk.getCorrectors());
-		}
-		return correctors;
-	}
-
 	public void talk(Player player, NPC npc) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
@@ -87,27 +58,27 @@ public abstract class Conversation {
 			effectTalk(player, npc);
 			Effects.playSound(player, Scene.NOTICE);
 
-			if (data.line == listTalk.size() - 1) {
-				if (!data.conversationDone.contains(getIDSorted())) {
-					try {
-						data.conversationDone.add(getIDSorted());
-						Stage stage = Stage.createStage(stageName);
-						String[] opts = {stage.getConversationDoneByMax(data)};
-						Effects.playSound(player, Scene.GOOD);
-						Message.STAGE_INFO_CONVERSATION_1.print(player, opts);
-						if (stage.getConversationMax() <= stage.getConversationDone(data)) {
-							Effects.shootFirework(player);
-							String[] opts2 = {stageName};
-							Message.CONEVRSATION_FINISH_ALL_1.print(player, opts2);
-						} else {
-//							Message.CONVERSATION_FINISH_0.print(player, null); Too much information
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
-						return;
-					}
-				}
-			}
+//			if (data.line == listTalk.size() - 1) {
+//				if (!data.conversationDone.contains(getIDSorted())) {
+//					try {
+//						data.conversationDone.add(getIDSorted());
+//						Stage stage = Stage.createStage(stageName);
+//						String[] opts = {stage.getConversationDoneByMax(data)};
+//						Effects.playSound(player, Scene.GOOD);
+//						Message.STAGE_INFO_CONVERSATION_1.print(player, opts);
+//						if (stage.getConversationMax() <= stage.getConversationDone(data)) {
+//							Effects.shootFirework(player);
+//							String[] opts2 = {stageName};
+//							Message.CONEVRSATION_FINISH_ALL_1.print(player, opts2);
+//						} else {
+////							Message.CONVERSATION_FINISH_0.print(player, null); Too much information
+//						}
+//					} catch (Exception e) {
+//						e.printStackTrace();
+//						return;
+//					}
+//				}
+//			}
 		}
 	}
 
@@ -127,7 +98,7 @@ public abstract class Conversation {
 			Message.TALK_TITLE_1.print(player, opts);
 		}
 		if (expressions.contains(Expression.EN)) {
-			String[] english = {" - " + talk.description.getEnglishJoined()};
+			String[] english = {" - " + UtilitiesGeneral.joinStrings(talk.description.getEnglishList(), ", ")};
 			Message.COMMON_EMPTY_1.print(player, english);
 		}
 		List<String> listJapanese = new ArrayList<String>();
@@ -211,6 +182,7 @@ public abstract class Conversation {
 		String message = "[CONV] STAGE: " + stageName + ", EDITOR: " + edit + "ID:" + getKeyTalk().toString();
 		return message;
 	}
+}
 
 //	public Set<NPC> getNPCs() throws Exception{
 //		Set<Integer> set = new HashSet<Integer>();
@@ -226,6 +198,35 @@ public abstract class Conversation {
 //			throw new Exception("NPC not exists: " + list);
 //		}
 //	}
-}
+//	public enum CheckState {NOT_EXISTS, UNCHECKED, CHECKED, KEY,;
+//	public static CheckState lookup(String name) {
+//		try {
+//			return valueOf(name.toUpperCase());
+//		} catch (IllegalArgumentException e) {
+//			return NOT_EXISTS;
+//		}
+//	}
+//}
+//
+//public CheckState getCheckState() {
+//	if (!(0 < listTalk.size())) {
+//		return CheckState.NOT_EXISTS;
+//	} else if (0 < getKeyTalk().size()) {
+//		return CheckState.KEY;
+//	} else if (0 < getCorrectors().size() || 0 < recommenders.size()) {
+//		return CheckState.CHECKED;
+//	}
+//	return CheckState.UNCHECKED;
+//}
+//
+//public List<String> getCorrectors() {
+//	List<String> correctors = new ArrayList<String>();
+//	for (Talk talk : listTalk) {
+//		correctors.addAll(talk.getCorrectors());
+//	}
+//	return correctors;
+//}
+//
+//}
 
 

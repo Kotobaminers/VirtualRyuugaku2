@@ -30,9 +30,6 @@ public class ConfigHandlerPlayer extends ConfigHandler {
 					DataPlayer data = new DataPlayer();
 					data.name = name;
 					data.line = loadLine(memoryPlayer);
-					data.select = loadSelect(memoryPlayer);
-					data.language = loadLanguage(memoryPlayer);
-					list.add(data);
 				}
 			}
 		}
@@ -70,12 +67,6 @@ public class ConfigHandlerPlayer extends ConfigHandler {
 		String name = data.name;
 		String pathLine = base + "." + name + "." + PathPlayer.LINE;
 		config.set(pathLine, data.line);
-		String pathSelect = base + "." + name + "." + PathPlayer.SELECT;
-		config.set(pathSelect, data.select);
-		String pathDone = base + "." + name + "." + PathPlayer.DONE;
-		config.set(pathDone, data.questionDone);
-		String pathLanguage = base + "." + name + "." + PathPlayer.LANGUAGE.toString();
-		config.set(pathLanguage, data.language.toString());
 	}
 	@Override
 	public File getFile() {

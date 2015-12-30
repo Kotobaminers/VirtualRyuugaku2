@@ -10,7 +10,6 @@ import org.bukkit.event.Listener;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ControllerConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.game.game.ControllerGameGlobal;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
 
 public class Events implements Listener {
@@ -23,9 +22,6 @@ public class Events implements Listener {
 	public void onClickNPCLeft(NPCLeftClickEvent event) {
 		UtilitiesProgramming.printDebugMessage("", new Exception());
 		Player player = event.getClicker();
-		if (ControllerGameGlobal.isValidGame()) {
-			ControllerGameGlobal.checkFindPeople(player, event.getNPC());
-		}
 	}
 
 	@EventHandler
@@ -36,9 +32,6 @@ public class Events implements Listener {
 		try {
 			Conversation conversation = ControllerConversation.getConversation(npc);
 			conversation.talk(event.getClicker(), npc);
-			if (ControllerGameGlobal.isValidGame()) {
-				ControllerGameGlobal.cheat(event.getClicker());
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

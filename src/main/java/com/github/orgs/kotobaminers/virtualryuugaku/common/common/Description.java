@@ -11,7 +11,6 @@ import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPla
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Expression;
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Language;
 
 public class Description {
 	private static final String SPACER = ChatColor.RED + ", " + ChatColor.RESET;
@@ -82,53 +81,5 @@ public class Description {
 		List<String> list = new ArrayList<String>();
 		list.addAll(en);
 		return list;
-	}
-
-	public List<String> getJapaneseListPlayer(Player player) {
-		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-		List<String> japanese = new ArrayList<String>();
-		if(data.expressions.contains(Expression.KANJI)) {
-			japanese.addAll(kanji);
-		}
-		if(data.expressions.contains(Expression.KANA)) {
-			japanese.addAll(kana);
-		}
-		if(data.expressions.contains(Expression.ROMAJI)) {
-			japanese.addAll(romaji);
-		}
-		if(!(0 < japanese.size())) {
-			japanese.addAll(kanji);
-		}
-		return japanese;
-	}
-
-	public String getSentenceLearning(Player player) {
-		String sentence = "";
-		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-		Language language = data.language;
-		switch(language) {
-		case EN:
-			sentence = getEnglishJoined();
-			break;
-		case JP:
-			List<String> japanese = getJapaneseListPlayer(player);
-			sentence = UtilitiesGeneral.joinStrings(japanese, ", ");
-		default:
-			break;}
-		return sentence;
-	}
-	public List<String> getListSentenceNotLearning(Player player) {
-		List<String> sentences = new ArrayList<String>();
-		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-		Language language = data.language;
-		switch(language) {
-		case EN:
-			sentences = getJapaneseList();
-			break;
-		case JP:
-			sentences = getEnglishList();
-		default:
-			break;}
-		return sentences;
 	}
 }
