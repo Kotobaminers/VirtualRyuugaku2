@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
+package com.github.orgs.kotobaminers.virtualryuugaku.common.common;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -18,6 +18,18 @@ public class NPCHandler {
 			return npc;
 		}
 		throw new Exception("NPC not exists: ID" + id.toString());
+	}
+	private static Iterator<NPC> getNPCs() {
+		return CitizensAPI.getNPCRegistry().iterator();
+	}
+
+	private static boolean existsNPC(Integer id) {
+		for (Iterator<NPC> i = getNPCs(); i.hasNext();) {
+			if(id == i.next().getId()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public static void changeNPCAsPlayer(NPC npc, String player) {
@@ -48,18 +60,5 @@ public class NPCHandler {
 			return;
 		}
 		throw new Exception("NOT ALLOWED ENTITY TYPE: " + type.toString());
-	}
-
-	public static Iterator<NPC> getNPCs() {
-		return CitizensAPI.getNPCRegistry().iterator();
-	}
-
-	public static boolean existsNPC(Integer id) {
-		for (Iterator<NPC> i = getNPCs(); i.hasNext();) {
-			if(id == i.next().getId()) {
-				return true;
-			}
-		}
-		return false;
 	}
 }

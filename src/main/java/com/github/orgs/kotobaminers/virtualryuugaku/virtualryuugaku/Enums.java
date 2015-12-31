@@ -11,7 +11,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 
 public class Enums {//public enums
 	public enum Commands {
@@ -359,10 +359,10 @@ public class Enums {//public enums
 	public enum Language {EN, JP;
 		public static Language lookup(String name) {
 			try {
-				UtilitiesProgramming.printDebugMessage("", new Exception());
+				Debug.printDebugMessage("", new Exception());
 				return Language.valueOf(name.toUpperCase());
 			} catch (IllegalArgumentException e) {
-				UtilitiesProgramming.printDebugMessage(e.toString(), new Exception());
+				Debug.printDebugMessage(e.toString(), new Exception());
 				return Language.JP;
 			}
 		}

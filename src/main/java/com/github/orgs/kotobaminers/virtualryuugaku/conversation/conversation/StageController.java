@@ -1,23 +1,20 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
-
-import net.citizensnpcs.api.npc.NPC;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Controller;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Storage;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 
-public class ControllerConversation extends Controller {
-
-	public static StorageConversation storage;
+public class StageController extends Controller {
+	public static StageStorage storage = new StageStorage();
 
 	@Override
-	public void setStorage() {
-		storage = new StorageConversation();
+	public void initializeStorage() {
+		Debug.printDebugMessage("", new Exception());
+		storage.initialize();
 	}
 
 	@Override
@@ -25,47 +22,31 @@ public class ControllerConversation extends Controller {
 		return storage;
 	}
 
-	public static List<Conversation> getConversations(String stage) throws Exception {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		List<Conversation> conversations = new ArrayList<Conversation>();
-		for (Conversation conversation : StorageConversation.conversations) {
-			if (conversation.stageName.equalsIgnoreCase(stage)) {
-				conversations.add(conversation);
-			}
-		}
-		if (conversations.size() == 0){
-			throw new Exception("Invalid Stage: " + stage);
-		}
-		return conversations;
-	}
-
-	public static Set<Conversation> getConversations() {
-		return StorageConversation.conversations;
-	}
-
-	public static Conversation getConversation(NPC npc) throws Exception {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		Integer id = npc.getId();
-		//Multi
-		for (Conversation conversation : StorageConversation.conversations) {
-			if (conversation instanceof ConversationMulti) {
-				if (conversation.getIDSorted().contains(id)) {
-					return conversation;
+	public static Conversation getConversation(Integer id) throws Exception {
+		for (Stage stage : storage.stages) {
+			for (List<Integer> index : stage.conversations.keySet()) {
+				if (index.contains(id)) {
+					return stage.conversations.get(index);
 				}
 			}
 		}
-		throw new Exception("Not valid id for conversation: " + id.toString());
+		throw new Exception();
 	}
 
-	public static List<String> getStages() {
-		Set<String> set = new HashSet<String>();
-		for (Conversation conversation : getConversations()) {
-			set.add(conversation.stageName);
+	public static Stage getStageRandom() {
+		Debug.printDebugMessage("", new Exception());
+		Stage stage = new Stage();
+		List<Stage> list = new ArrayList<Stage>();
+		for (Stage search : StageStorage.stages) {
+			list.add(search);
 		}
-		List<String> stages = new ArrayList<String>();
-		stages.addAll(set);
-		return stages;
+		Collections.shuffle(list);
+		if (0 < list.size()) {
+			stage = list.get(0);
+		}
+		return stage;
 	}
+}
 
 //	private static ConversationMyself getConversationMyself(NPC npc) throws Exception{
 //		Integer id = npc.getId();
@@ -182,9 +163,3 @@ public class ControllerConversation extends Controller {
 //	}
 //	throw new Exception("Not Myself: " + name + ", " + stage);
 //}
-
-
-
-}
-
-

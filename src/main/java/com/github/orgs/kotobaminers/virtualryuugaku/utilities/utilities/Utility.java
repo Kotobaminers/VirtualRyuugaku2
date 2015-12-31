@@ -3,53 +3,9 @@ package com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManagerRomaji;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.DataManagerRomaji.TypeLetters;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Letters;
-
-public class UtilitiesGeneral {
+public class Utility {
 	private static final List<String> SHOWN_CHARACTERS = Arrays.asList(",", " ", ".", "、", "。");
-
-	public static String toRomaji(String kana) {
-		Map<String, List<Letters>> map = DataManagerRomaji.getMapLetters();
-		for(TypeLetters type : TypeLetters.values()) {
-			for(String key : map.keySet()) {
-				if(type.toString().equalsIgnoreCase(key)) {
-					for(Letters letters : map.get(key)) {
-						kana = kana.replace(letters.getHiragana(), letters.getRomaji());
-						kana = kana.replace(letters.getKatakana(), letters.getRomaji());
-					}
-				}
-			}
-		}
-		return kana;
-	}
-	public static List<String> addRomaji(List<String> strings) {
-		List<String> list = new ArrayList<String>();
-		for (String string : strings) {
-			list.add(string);
-			if (!isHalfWidthAlphanumeric(string)) {
-				String romaji = toRomaji(string);
-				if (isHalfWidthAlphanumeric(romaji)) {
-					list.add(romaji);
-				}
-			}
-		}
-		return list;
-	}
-	private static boolean isHalfWidthAlphanumeric(String string) {
-		if ( string == null || string.length() == 0 ) {
-			return false;
-		}
-		int len = string.length();
-		byte[] bytes = string.getBytes();
-		if ( len == bytes.length ) {
-			return true;
-		}
-		return false;
-	}
 
 	public static String joinStrings(List<String> strings, String spacer) {
 		if(strings == null)  return "";

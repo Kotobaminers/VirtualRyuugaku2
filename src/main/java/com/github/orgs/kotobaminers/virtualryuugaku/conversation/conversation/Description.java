@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.common.common;
+package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,9 +7,10 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
-import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Romaji;
+import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
+import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerData;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Expression;
 
 public class Description {
@@ -27,12 +28,12 @@ public class Description {
 		description.kana = Arrays.asList(kana);
 		description.en = Arrays.asList(en);
 		description.tips = tips;
-		description.romaji = Arrays.asList(UtilitiesGeneral.toRomaji(kana));
+		description.romaji = Arrays.asList(Romaji.toRomaji(kana));
 		return description;
 	}
 
 	public String getJapaneseJoined(Player player) {
-		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
+		PlayerData data = PlayerDataStorage.getDataPlayer(player);
 		List<String> japanese = new ArrayList<String>();
 		for(Expression expression : data.expressions) {
 			switch(expression) {
@@ -49,24 +50,24 @@ public class Description {
 				break;
 			}
 		}
-		String message = UtilitiesGeneral.joinStrings(japanese, SPACER);
+		String message = Utility.joinStrings(japanese, SPACER);
 		return message;
 	}
 
 	public String getEnglishJoined() {
-		String message = UtilitiesGeneral.joinStrings(en, SPACER);
+		String message = Utility.joinStrings(en, SPACER);
 		return message;
 	}
 	public String getKanjiJoined() {
-		String message = UtilitiesGeneral.joinStrings(kanji, SPACER);
+		String message = Utility.joinStrings(kanji, SPACER);
 		return message;
 	}
 	public String getKanaJoined() {
-		String message = UtilitiesGeneral.joinStrings(kana, SPACER);
+		String message = Utility.joinStrings(kana, SPACER);
 		return message;
 	}
 	public String getRomajiJoined() {
-		String message = UtilitiesGeneral.joinStrings(romaji, SPACER);
+		String message = Utility.joinStrings(romaji, SPACER);
 		return message;
 	}
 

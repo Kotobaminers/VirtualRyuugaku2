@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message0;
-import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
+import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.SoundMeta.Scene;
 
@@ -32,7 +32,7 @@ public class ConversationQuestion {
 		String[] opts = {question};
 		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.CONVERSATION_QUESTION_1, opts));
 		Effects.playSound(player, Scene.APPEAR);
-		DataManagerPlayer.getDataPlayer(player).question = q;
+		PlayerDataStorage.getDataPlayer(player).question = q;
 	}
 
 	public String getQuestion() {

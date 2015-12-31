@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.common.common;
+package com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities;
 
 import java.util.Random;
 

@@ -4,16 +4,18 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Stage;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.StageController;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 
 public class PublicGameController extends BukkitRunnable {
 	public static JavaPlugin plugin;
-	public static PublicGameStage stage = new PublicGameStage();
-	public static PublicGame game = new PublicEventGame();
+	public static Stage stage = StageController.getStageRandom();
+	public static PublicGame game;
 	public long delay = 20L;
-	private PublicGameMode mode = PublicGameMode.FIND_PEOPLE;
+	public static PublicGameMode mode = PublicGameMode.FIND_PEOPLE;
 
-	enum PublicGameMode {FIND_PEOPLE, ANKI;
+	public enum PublicGameMode {FIND_PEOPLE, ANKI;
 		public static PublicGameMode giveNext(PublicGameMode mode) {
 			Integer position = 0;
 			for (PublicGameMode search : PublicGameMode.values()) {
@@ -32,7 +34,6 @@ public class PublicGameController extends BukkitRunnable {
 
 	public PublicGameController(JavaPlugin plugin) {
 		PublicGameController.plugin = plugin;
-		stage = new PublicGameStage();
 		loadGame();
 	}
 
@@ -43,14 +44,14 @@ public class PublicGameController extends BukkitRunnable {
 	}
 
 	public void loadGame() {
-		UtilitiesProgramming.printDebugMessage(mode.name(), new Exception());
-		game = new PublicEventGame();
+		Debug.printDebugMessage(mode.name(), new Exception());
+		game = new PublicEventGame(stage.getKeySentences(), mode);
 		switch(mode) {
 		case FIND_PEOPLE:
-			game = new PublicEventGame();
+			game = new PublicEventGame(stage.getKeySentences(), mode);
 			break;
 		case ANKI:
-			game = new PublicCommandGame(stage.getKeyTalk(), mode);
+			game = new PublicCommandGame(stage.getKeySentences(), mode);
 			break;
 		default:
 			break;
@@ -58,18 +59,18 @@ public class PublicGameController extends BukkitRunnable {
 	}
 
 	public void runScheduledTask() {
-		UtilitiesProgramming.printDebugMessage("" + game.isFinished() + " " + mode.name(),new Exception());
+		Debug.printDebugMessage("" + game.isFinished() + " " + mode.name(),new Exception());
 		if (game.isFinished()) {
-			UtilitiesProgramming.printDebugMessage("",new Exception());
+			Debug.printDebugMessage("",new Exception());
 			game.finishGame();
 			if (mode.equals(PublicGameMode.values()[PublicGameMode.values().length - 1])) {
-				UtilitiesProgramming.printDebugMessage("",new Exception());
-				stage.setStageRandom();
+				Debug.printDebugMessage("",new Exception());
+				stage = StageController.getStageRandom();
 			}
 			mode = PublicGameMode.giveNext(mode);
 			loadGame();
 		} else {
-			UtilitiesProgramming.printDebugMessage("",new Exception());
+			Debug.printDebugMessage("",new Exception());
 			game.continueGame();
 		}
 	}

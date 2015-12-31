@@ -8,7 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Commands;
 
 public class CommandExecutorPlugin implements CommandExecutor {
@@ -19,27 +19,27 @@ public class CommandExecutorPlugin implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command rawCommand, String label, String[] args) {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
+		Debug.printDebugMessage("", new Exception());
 		List<String> path = new ArrayList<String>();
 		path.add(label);
 		path.addAll(Arrays.asList(args));
 		Commands command = Commands.getCommand(path);
 		performer = new CommandPerformer(sender, command, label, args);
 
-		UtilitiesProgramming.printDebugMessage("", new Exception());
+		Debug.printDebugMessage("", new Exception());
 		if (!performer.canPerform()) {
 			return true;
 		}
 
-		UtilitiesProgramming.printDebugMessage("", new Exception());
+		Debug.printDebugMessage("", new Exception());
 		if (!performer.command.isRunnableChild()) {
 			performer.command.printInfo(sender);
 			return true;
 		}
 
-		UtilitiesProgramming.printDebugMessage("", new Exception());
+		Debug.printDebugMessage("", new Exception());
 		boolean success = performer.performCommand();//The actual line to perform the command.
-		UtilitiesProgramming.printDebugMessage("", new Exception());
+		Debug.printDebugMessage("", new Exception());
 		if (success == false) {
 			performer.printInvalidParams();
 		}

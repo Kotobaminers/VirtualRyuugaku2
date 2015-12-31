@@ -10,14 +10,14 @@ import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message0;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.NPCSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicGameController.PublicGameMode;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Language;
 
 public class PublicCommandGameQuestion {
-	private Talk talk = new Talk();
+	private NPCSentence talk = new NPCSentence();
 	private Language answerLanguage = Language.EN;
 	private PublicGameMode mode = PublicGameMode.ANKI;
 	private List<String> answers = new ArrayList<String>();
@@ -48,7 +48,7 @@ public class PublicCommandGameQuestion {
 		}
 	}
 
-	public PublicCommandGameQuestion(Talk talk, PublicGameMode mode, Language answerLanguage) {
+	public PublicCommandGameQuestion(NPCSentence talk, PublicGameMode mode, Language answerLanguage) {
 		this.talk = talk;
 		this.mode = mode;
 		this.answerLanguage = answerLanguage;
@@ -78,8 +78,8 @@ public class PublicCommandGameQuestion {
 	}
 
 	public void broadcastQuestion() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		String message = UtilitiesGeneral.joinStrings(questions, ", ");
+		Debug.printDebugMessage("", new Exception());
+		String message = Utility.joinStrings(questions, ", ");
 		String[] opts = {message, answerLanguage.toString()};
 		System.out.println(message + " " + talk.description.romaji + " " + answerLanguage.name());
 		for(Player player : Bukkit.getServer().getOnlinePlayers()) {

@@ -1,70 +1,166 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.LibraryManager;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Romaji;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Storage;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.YamlController;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
+import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums;
+import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.PathConversation;
+import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VirtualRyuugakuManager;
 
-public class StorageConversation implements Storage, YamlController {
+public class StageStorage implements Storage {
 
-	public static Set<Conversation> conversations = new HashSet<Conversation>();
-	@Override
-	public void load() {
-		// TODO Auto-generated method stub
-	}
+	public static Set<Stage> stages = new HashSet<Stage>();
+	public static final String CITIZENS_FILE = Bukkit.getPluginManager().getPlugin("Citizens").getDataFolder() + "//saves.yml";
+	private static YamlConfiguration config = YamlConfiguration.loadConfiguration(new File(CITIZENS_FILE));
 
-	@Override
-	public void load(String key) {
+
+	public static Map<String, YamlConfiguration> getListLibraryStage() {
+		Map<String, YamlConfiguration> list = new HashMap<String, YamlConfiguration>();
+		File stage = new File(VirtualRyuugakuManager.plugin.getDataFolder() + "//STAGE");
+		File[] files = stage.listFiles();
+		for(File file : files) {
+			if(file.getAbsolutePath().endsWith(".yml")) {
+				String name = file.getName().substring(0, file.getName().length() - ".yml".length());
+				list.put(name, YamlConfiguration.loadConfiguration(file));
+			}
+		}
+		return list;
 	}
 
 	@Override
 	public void initialize() {
-		conversations = new HashSet<Conversation>();
-//		mapMyselfNPC = new HashMap<String, List<Integer>>();
-//		mapMe = new HashMap<Integer, String>();
-		setConfig();
-		importConfiguration();
+		Debug.printDebugMessage("", new Exception());
+		stages = new HashSet<Stage>();
+		importStages();
 	}
 
 	@Override
 	public void save() {
 	}
 
-	@Override
-	public void setData() {
-	}
+	private void importStages() {
+		Debug.printDebugMessage("", new Exception());
+		stages = new HashSet<Stage>();
+		Map<String, YamlConfiguration> mapConfig = getListLibraryStage();
+		Set<Integer> ids = importCitizensIds();
+		for(Entry<String, YamlConfiguration> entry : mapConfig.entrySet()) {
+			stages.add(importStage(entry.getKey(), entry.getValue()));
+		}
 
-	@Override
-	public void setConfig() {
-//		config = YamlConfiguration.loadConfiguration(new File(FILE));
-	}
-
-	@Override
-	public YamlConfiguration getConfig() {
-		return null;
-//		return config;
-	}
-
-	private void importMulti() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		Map<String, YamlConfiguration> mapConfig = LibraryManager.getListLibraryStage();
-		for(String stage : mapConfig.keySet()) {
-			conversations.addAll(LibraryHandlerConversation.importConversationLibrary(stage, mapConfig.get(stage)));
+		for (Stage stage : stages) {
+			for (List<Integer> index : stage.conversations.keySet()) {
+				for (Integer id : index) {
+					if (!ids.contains(id)) {
+						stage.conversations.remove(index);
+					}
+				}
+			}
 		}
 	}
 
-	@Override
-	public void importConfiguration() {
-//		importMyself(); TODO Since myself's expressions can be wrong, they should be separated from the official conversations.
-		importMulti();
+	private enum PathStage {CONVERSATION, EDITOR}
+
+	public static Stage importStage(String stageName, YamlConfiguration library) {
+		Debug.printDebugMessage("Stage: " + stageName, new Exception());
+		List<String> editorString = library.getStringList(PathConversation.EDITOR.toString());
+		List<UUID> editor = new ArrayList<UUID>();
+		for (String string : editorString) {
+			editor.add(UUID.fromString(string));
+		}
+		Stage stage = new Stage();
+		stage.editor = editor;
+		stage.name = stageName;
+
+		for(String talkerPath : library.getKeys(false)) {
+			if(talkerPath.equalsIgnoreCase(PathStage.CONVERSATION.toString())) {
+				MemorySection memory = (MemorySection) library.get(talkerPath);
+				for(String idString : memory.getKeys(false)) {
+					MemorySection memoryId = (MemorySection) memory.get(idString);
+					List<Integer> index = Utility.toListInteger(idString);
+					ConversationMulti conversation = new ConversationMulti();
+					conversation.stageName = stageName;
+					//Name will be imported from citizens data.
+					if(memoryId.contains(Enums.PathConversation.EN.toString()) && memoryId.contains(Enums.PathConversation.KANJI.toString()) && memoryId.contains(Enums.PathConversation.KANA.toString())) {
+						List<String> kanji = memoryId.getStringList(PathConversation.KANJI.toString());
+						List<String> kana = memoryId.getStringList(PathConversation.KANA.toString());
+						List<String> en = memoryId.getStringList(PathConversation.EN.toString());
+						Integer size = index.size();
+						if(size.equals(kanji.size()) && size.equals(kana.size()) && size.equals(en.size())) {
+							for(int i = 0; i < size; i++) {
+								Debug.printDebugMessage("", new Exception());
+								Integer id = index.get(i);
+								Description description = Description.create(kanji.get(i), kana.get(i), en.get(i), new ArrayList<String>());
+								NPCSentence talk = new NPCSentence().create(id, description);
+								conversation.sentences.add(talk);
+							}
+						} else {
+							break;
+						}
+					}
+
+					String path = Enums.PathConversation.KEY.toString();
+					if(memoryId.contains(path)) {
+						List<Integer> key = memoryId.getIntegerList(path);
+						for (int i = 0; i < conversation.sentences.size(); i++) {
+							if(key.contains(i + 1)) {
+								conversation.sentences.get(i).key = true;
+							}
+						}
+					}
+
+					if(memoryId.contains(PathConversation.Q.toString()) && memoryId.contains(PathConversation.A.toString())) {
+						String q = memoryId.getString(PathConversation.Q.toString());
+						List<String> a = Romaji.addRomaji(memoryId.getStringList(PathConversation.A.toString()));
+						conversation.question = ConversationQuestion.create(q, a, index, stageName);
+					}
+					conversation.index = index;
+					stage.conversations.put(index, conversation);
+				}
+			}
+		}
+		return stage;
 	}
+
+	private static Set<Integer> importCitizensIds() {
+		Debug.printDebugMessage("", new Exception());
+		Set<Integer> ids = new HashSet<Integer>();
+		MemorySection memory = (MemorySection) config.get("npc");
+		for(String key : memory.getKeys(false)) {
+			try {
+				Integer id = Integer.parseInt(key);
+				ids.add(id);
+			} catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		return ids;
+	}
+
+	public static void printDebugMessage() {
+		for (Stage stage : stages) {
+			stage.printDebugMessage();
+		}
+	}
+
+
+
 }
+
 //	public static Map<String, List<Integer>> mapMyselfNPC = new HashMap<String, List<Integer>>();
 //	public static HashMap<Integer, String> mapMe = new HashMap<Integer, String>();
 //	public static List<String> teachers = new ArrayList<String>();

@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Talk;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.NPCSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicGameController.PublicGameMode;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Language;
 
 
@@ -18,8 +18,8 @@ public class PublicCommandGame extends PublicGame {
 	private Integer count = -1;
 
 
-	public PublicCommandGame(List<Talk> talks, PublicGameMode mode) {
-		for (Talk talk : talks) {
+	public PublicCommandGame(List<NPCSentence> talks, PublicGameMode mode) {
+		for (NPCSentence talk : talks) {
 			questions.add(new PublicCommandGameQuestion(talk, mode, Language.getRandom()));
 		}
 	}
@@ -31,7 +31,7 @@ public class PublicCommandGame extends PublicGame {
 
 	@Override
 	public boolean isFinished() {
-		UtilitiesProgramming.printDebugMessage("" + count + " " + questions.size(), new Exception());
+		Debug.printDebugMessage("" + count + " " + questions.size(), new Exception());
 		if (questions.size() <= count + 1) {
 			return true;
 		}
@@ -66,12 +66,12 @@ public class PublicCommandGame extends PublicGame {
 
 	@Override
 	public void eventCorrect() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
+		Debug.printDebugMessage("", new Exception());
 	}
 
 	@Override
 	public void eventWrong() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
+		Debug.printDebugMessage("", new Exception());
 	}
 
 	@Override

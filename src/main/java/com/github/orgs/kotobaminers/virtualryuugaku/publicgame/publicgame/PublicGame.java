@@ -2,20 +2,22 @@ package com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame;
 
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
+import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicGameController.PublicGameMode;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 
 public abstract class PublicGame {
-	public static PublicGameScore score = new PublicGameScore();
+	public PublicGameScore score = new PublicGameScore();
+	public PublicGameMode mode = PublicGameMode.FIND_PEOPLE;
 
 	public abstract void continueGame();
 	public void finishGame() {
-		UtilitiesProgramming.printDebugMessage("",new Exception());
+		Debug.printDebugMessage("",new Exception());
 		broadcastResult();
 		score.broadcastScore();
 	}
 
 	private void broadcastResult() {
-		UtilitiesProgramming.printDebugMessage("",new Exception());
+		Debug.printDebugMessage("",new Exception());
 	}
 
 	public abstract boolean isFinished();

@@ -10,10 +10,9 @@ public class ConversationMulti extends Conversation {
 	@Override
 	public List<Integer> getIDSorted() {
 		List<Integer> order = new ArrayList<Integer>();
-		for(Talk talk : listTalk) {
+		for(NPCSentence talk : sentences) {
 			order.add(talk.id);
 		}
 		return order;
 	}
-
 }

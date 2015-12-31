@@ -11,10 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.DataManagerPlugin;
+import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VirtualRyuugakuManager;
 
-public class DataManagerRomaji implements DataManager {
+public class Romaji {
 	public enum TypeLetters {
 		TTSULARGESMALL,
 		LARGESMALL,
@@ -24,14 +23,50 @@ public class DataManagerRomaji implements DataManager {
 		SIGNS,
 		}
 	private static Map<String, List<Letters>> mapLetters = new HashMap<String, List<Letters>>();
-
-	private static final String NAME_DIRECTORY = "LIBRARY//ROMAJI";
-	private static final String NAME_FILE = "ROMAJI_TABLE.txt";
 	private static final String DELIMITTER = "[Type]";
+	private static final String PATH = VirtualRyuugakuManager.plugin.getDataFolder() + "//ROMAJI//ROMAJI_TABLE.txt";
+
+	public static String toRomaji(String kana) {
+		Map<String, List<Letters>> map = Romaji.getMapLetters();
+		for(TypeLetters type : TypeLetters.values()) {
+			for(String key : map.keySet()) {
+				if(type.toString().equalsIgnoreCase(key)) {
+					for(Letters letters : map.get(key)) {
+						kana = kana.replace(letters.getHiragana(), letters.getRomaji());
+						kana = kana.replace(letters.getKatakana(), letters.getRomaji());
+					}
+				}
+			}
+		}
+		return kana;
+	}
+	public static List<String> addRomaji(List<String> strings) {
+		List<String> list = new ArrayList<String>();
+		for (String string : strings) {
+			list.add(string);
+			if (!isHalfWidthAlphanumeric(string)) {
+				String romaji = toRomaji(string);
+				if (isHalfWidthAlphanumeric(romaji)) {
+					list.add(romaji);
+				}
+			}
+		}
+		return list;
+	}
+	private static boolean isHalfWidthAlphanumeric(String string) {
+		if ( string == null || string.length() == 0 ) {
+			return false;
+		}
+		int len = string.length();
+		byte[] bytes = string.getBytes();
+		if ( len == bytes.length ) {
+			return true;
+		}
+		return false;
+	}
+
 	private static void importRomaji() throws IOException {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		String path = DataManagerPlugin.plugin.getDataFolder() + "//" + NAME_DIRECTORY + "//" + NAME_FILE;
-		File file = new File(path);
+		File file = new File(PATH);
 		String lineJoined = "";
 		InputStream str = new FileInputStream(file);
 		InputStreamReader reader = new InputStreamReader(str);
@@ -62,13 +97,10 @@ public class DataManagerRomaji implements DataManager {
 		str.close();
 		setMapLetters(map);
 	}
-	@Override
 	public void initialize() {
 		setMapLetters(new HashMap<String, List<Letters>>());
 	}
-	@Override
 	public void load() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
 		initialize();
 		try {
 			importRomaji();
@@ -76,13 +108,10 @@ public class DataManagerRomaji implements DataManager {
 			e.printStackTrace();
 		}
 	}
-	@Override
-	public void save() {
-	}
 	public static Map<String, List<Letters>> getMapLetters() {
 		return mapLetters;
 	}
 	public static void setMapLetters(Map<String, List<Letters>> mapLetters) {
-		DataManagerRomaji.mapLetters = mapLetters;
+		Romaji.mapLetters = mapLetters;
 	}
 }

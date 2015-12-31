@@ -6,7 +6,7 @@ import org.bukkit.ChatColor;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Settings;
 
 
-public class UtilitiesProgramming {
+public class Debug {
 	public static void printDebugMessage(String message, Exception exception) {
 		if(!Settings.debugMessage) return;
 		StackTraceElement element = exception.getStackTrace()[0];
@@ -17,10 +17,10 @@ public class UtilitiesProgramming {
 		String line = String.valueOf(element.getLineNumber());
 		if(Settings.debugMessageBroadcast) {
 			String[] broadcast = {ChatColor.RED.toString(), message, ChatColor.GRAY.toString(), nameClass, nameMethod, ChatColor.WHITE.toString(), line};
-			Bukkit.broadcastMessage(UtilitiesGeneral.joinStrings(broadcast, " "));
+			Bukkit.broadcastMessage(Utility.joinStrings(broadcast, " "));
 		} else {
 			String[] broadcast = {message, nameClass, nameMethod, line};
-			Bukkit.getLogger().info(UtilitiesGeneral.joinStrings(broadcast, " "));
+			Bukkit.getLogger().info(Utility.joinStrings(broadcast, " "));
 		}
 	}
 

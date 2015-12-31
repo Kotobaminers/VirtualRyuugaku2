@@ -6,21 +6,20 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.citizensnpcs.api.npc.NPC;
-
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ControllerConversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
-import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCHandler;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Stage;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.StageStorage;
+import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerData;
+import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicGameController;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Commands;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Expression;
 
@@ -143,15 +142,15 @@ public class CommandPerformer {
 	private boolean commandDebugMode() {
 		if(!Settings.debugMessage) {
 			Settings.debugMessage = true;
-			UtilitiesProgramming.printDebugMessage("[VRG Debug] Message = " + Settings.debugMessage + ", BC = " + Settings.debugMessageBroadcast, new Exception());
+			Debug.printDebugMessage("[VRG Debug] Message = " + Settings.debugMessage + ", BC = " + Settings.debugMessageBroadcast, new Exception());
 		} else {
 			if(!Settings.debugMessageBroadcast) {
 				Settings.debugMessageBroadcast = true;
-				UtilitiesProgramming.printDebugMessage("[VRG Debug] Message = " + Settings.debugMessage + ", BC = " + Settings.debugMessageBroadcast, new Exception());
+				Debug.printDebugMessage("[VRG Debug] Message = " + Settings.debugMessage + ", BC = " + Settings.debugMessageBroadcast, new Exception());
 			} else {
 				Settings.debugMessage = false;
 				Settings.debugMessageBroadcast = false;
-				UtilitiesProgramming.printDebugMessage("[VRG Debug] Message = " + Settings.debugMessage + ", BC = " + Settings.debugMessageBroadcast, new Exception());
+				Debug.printDebugMessage("[VRG Debug] Message = " + Settings.debugMessage + ", BC = " + Settings.debugMessageBroadcast, new Exception());
 			}
 		}
 		return false;
@@ -163,7 +162,7 @@ public class CommandPerformer {
 		}
 		String answer = "";
 		if (0 < params.size()) {
-			answer = UtilitiesGeneral.joinStrings(params, " ");
+			answer = Utility.joinStrings(params, " ");
 			PublicGameController.game.validateAnswer(answer);
 			return true;
 		}
@@ -172,7 +171,7 @@ public class CommandPerformer {
 
 	private boolean commandDictionaryBroadcast() {
 		if (0 < params.size()) {
-			String[] opts = {UtilitiesGeneral.joinStrings(params, "+")};
+			String[] opts = {Utility.joinStrings(params, "+")};
 			Message.COMMAND_DICTIONARY_1.broadcast(opts);
 		} else {
 			Message.COMMAND_DICTIONARY_0.broadcast(null);
@@ -182,8 +181,8 @@ public class CommandPerformer {
 
 	private boolean commandDictionary() {
 		if (0 < params.size()) {
-			String jisho = UtilitiesGeneral.joinStrings(params, "%20");
-			String weblio = UtilitiesGeneral.joinStrings(params, "+");
+			String jisho = Utility.joinStrings(params, "%20");
+			String weblio = Utility.joinStrings(params, "+");
 			String alc = weblio;
 			String[] opts = {jisho, weblio, alc};
 			Message.COMMAND_DICTIONARY_1.print(sender, opts);
@@ -216,7 +215,7 @@ public class CommandPerformer {
 	}
 
 	public void printInvalidParams() {
-		String[] opts = {UtilitiesGeneral.joinStrings(params, ", ")};
+		String[] opts = {Utility.joinStrings(params, ", ")};
 		Message.COMMAND_INVALID_PARAMS_1.print(sender, opts);
 		command.printUsage(player);
 	}
@@ -226,27 +225,21 @@ public class CommandPerformer {
 			return true;
 		}
 		if(0 < params.size()) {
-			String stage = params.get(0).toUpperCase();
-			try {
-				List<Conversation> conversations = ControllerConversation.getConversations(stage);
-				List<Integer> ids = new ArrayList<Integer>();
-				for (Conversation conversation : conversations) {
-					if (0 < conversation.listTalk.size()) {
-						ids.addAll(conversation.getIDSorted());
+			String name = params.get(0).toUpperCase();
+			for (Stage stage  : StageStorage.stages) {
+				for (List<Integer> index : stage.conversations.keySet()) {
+					if (0 < index.size()) {
+						try {
+							Location location = NPCHandler.getNPC(index.get(0)).getStoredLocation();
+							player.teleport(location);
+							String[] opts = {name};
+							Message.STAGE_TP_1.print(player, opts);
+							return true;
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
 				}
-				if (0 < ids.size()) {
-					Collections.sort(ids);
-					Integer id = ids.get(0);
-					NPC npc = NPCHandler.getNPC(id);
-					Location location = npc.getStoredLocation();
-					player.teleport(location);
-					String[] opts = {stage};
-					Message.STAGE_TP_1.print(player, opts);
-					return true;
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		}
 		return false;
@@ -258,8 +251,8 @@ public class CommandPerformer {
 		}
 		String answer = "";
 		if (0 < params.size()) {
-			answer = UtilitiesGeneral.joinStrings(params, " ");
-			DataManagerPlayer.getDataPlayer(player).question.validateQuestion(player, answer);
+			answer = Utility.joinStrings(params, " ");
+			PlayerDataStorage.getDataPlayer(player).question.validateQuestion(player, answer);
 			return true;
 		}
 		return false;
@@ -283,8 +276,8 @@ public class CommandPerformer {
 			return true;
 		}
 
-		DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-		DataManagerPlayer.toggleExpression(data, expression);
+		PlayerData data = PlayerDataStorage.getDataPlayer(player);
+		PlayerDataStorage.toggleExpression(data, expression);
 		List<String> expressions = new ArrayList<String>();
 		for(Expression search : data.expressions) {
 			expressions.add(search.toString());
@@ -292,7 +285,7 @@ public class CommandPerformer {
 		Collections.sort(expressions);
 
 		if(0 < expressions.size()) {
-			String[] opts = {UtilitiesGeneral.joinStrings(expressions, ", ")};
+			String[] opts = {Utility.joinStrings(expressions, ", ")};
 			Message.EXPRESSIONS_1.print(sender, opts);
 		} else {
 			Message.EXPRESSIONS_OFF_0.print(sender, null);
@@ -302,13 +295,13 @@ public class CommandPerformer {
 
 	private boolean commandSave() {
 		Message.OP_SAVE_.print(sender, null);
-		DataManagerPlugin.savePlugin();
+		VirtualRyuugakuManager.savePlugin();
 		return true;
 	}
 
 	private boolean commandReload() {
 		Message.OP_RELOAD_.print(sender, null);
-		DataManagerPlugin.loadPlugin();
+		VirtualRyuugakuManager.loadPlugin();
 		return true;
 	}
 

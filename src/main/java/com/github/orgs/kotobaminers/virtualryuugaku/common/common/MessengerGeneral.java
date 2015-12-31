@@ -8,7 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 
 public class MessengerGeneral {
 	public static final String MARK_KEY = ChatColor.YELLOW +"*KEY* " + ChatColor.RESET;
@@ -385,13 +385,13 @@ public class MessengerGeneral {
 	}
 
 	public static void print(List<Player> listPlayer, String message) {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
+		Debug.printDebugMessage("", new Exception());
 		for(Player player : listPlayer) {
 			print(player, message);
 		}
 	}
 	public static void print(Player player, String message) {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
+		Debug.printDebugMessage("", new Exception());
 		if(player.isOnline()) {
 			player.sendMessage(message);
 		}

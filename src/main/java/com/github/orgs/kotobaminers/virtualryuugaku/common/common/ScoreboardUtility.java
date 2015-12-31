@@ -10,28 +10,28 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.DataManagerPlugin;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
+import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VirtualRyuugakuManager;
 
 public abstract class ScoreboardUtility {
 	public void updateScoreboard(Player player, String name, LinkedHashMap<String, Integer> scores) {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
+		Debug.printDebugMessage("", new Exception());
 		setupScoreboard(player);
 		Objective objective = getObjective(player.getName());
 		objective.setDisplayName(name);
-		UtilitiesProgramming.printDebugMessage("", new Exception());
+		Debug.printDebugMessage("", new Exception());
 		for (String label : scores.keySet()) {
-			UtilitiesProgramming.printDebugMessage("" + label + " " + scores.get(label), new Exception());
+			Debug.printDebugMessage("" + label + " " + scores.get(label), new Exception());
 			Score score = objective.getScore(label);
 			score.setScore(scores.get(label).intValue());
 		}
 		player.setScoreboard(getScoreboard(player.getName()));
 		SchedulerScoreboardHide scheduler = new SchedulerScoreboardHide();
 		scheduler.setPlayer(player);
-		scheduler.runTaskLater(DataManagerPlugin.plugin, 20*4);
+		scheduler.runTaskLater(VirtualRyuugakuManager.plugin, 20*4);
 	}
 	private void setupScoreboard(Player player) {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
+		Debug.printDebugMessage("", new Exception());
 		ScoreboardManager manager = Bukkit.getScoreboardManager();
 		Scoreboard board = manager.getNewScoreboard();
 		Objective objective = board.registerNewObjective("Board", "dummy");
