@@ -95,7 +95,6 @@ public class StageStorage implements Storage {
 			editor.add(UUID.fromString(string));
 		}
 		List<Integer> learnerNPC = library.getIntegerList(PathStage.LEARNER_NPC.toString());
-//		List<String> strList = new ArrayList<String>();
 
 		Stage stage = new Stage();
 		stage.editor = editor;
