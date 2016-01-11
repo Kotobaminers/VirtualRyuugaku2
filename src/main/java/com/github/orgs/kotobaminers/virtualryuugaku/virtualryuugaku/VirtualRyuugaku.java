@@ -30,6 +30,7 @@ public class VirtualRyuugaku extends JavaPlugin {
 		scheduler.scheduleSyncDelayedTask(this, new PublicGameController(this), 80L);
 
 //		DataManagerPlugin.savePlugin();
+
 	}
 
 	@Override

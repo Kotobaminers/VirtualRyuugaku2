@@ -10,7 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 
 public class Enums {//public enums
@@ -25,6 +25,18 @@ public class Enums {//public enums
 				VIRTUALRYUUGAKU_DEBUG,
 				Arrays.asList("mode", "m"),
 				"To toggle the debug mode.",
+				new ArrayList<String>(),
+				CommandPermission.OP),
+		DEBUG_INTERVAL(
+				VIRTUALRYUUGAKU_DEBUG,
+				Arrays.asList("interval", "i"),
+				"To set the public game interval for debugging.",
+				new ArrayList<String>(),
+				CommandPermission.OP),
+		DEBUG_HOLOGRAM(
+				VIRTUALRYUUGAKU_DEBUG,
+				Arrays.asList("hologram", "h"),
+				"",
 				new ArrayList<String>(),
 				CommandPermission.OP),
 
@@ -146,7 +158,7 @@ public class Enums {//public enums
 		GAME_START(
 				GAME,
 				Arrays.asList("start", "s"),
-				"Start a minigame",
+				"To start a minigame",
 				Arrays.asList("<STAGE>"),
 				CommandPermission.PLAYERS),
 		GAME_FINISH(
@@ -167,6 +179,50 @@ public class Enums {//public enums
 				"Rules of a minigame",
 				new ArrayList<String>(),
 				CommandPermission.PLAYERS),
+		GAME_JOIN(
+				GAME,
+				Arrays.asList("join", "j"),
+				"To join the minigame.",
+				new ArrayList<String>(),
+				CommandPermission.PLAYERS),
+		GAME_REPEAT(
+				GAME,
+				Arrays.asList("repeat"),
+				"To repeat the last game.",
+				new ArrayList<String>(),
+				CommandPermission.PLAYERS),
+
+		TOUR(
+				VIRTUALRYUUGAKU,
+				Arrays.asList("tour", "t"),
+				"Commands for a tour.",
+				new ArrayList<String>(),
+				CommandPermission.PLAYERS),
+		TOUR_START(
+				TOUR,
+				Arrays.asList("start", "s"),
+				"To start a tour.",
+				Arrays.asList("<STAGE>"),
+				CommandPermission.PLAYERS),
+		TOUR_JOIN(
+				TOUR,
+				Arrays.asList("join", "j"),
+				"To join the tour.",
+				new ArrayList<String>(),
+				CommandPermission.PLAYERS),
+		TOUR_NEXT(
+				TOUR,
+				Arrays.asList("next", "n"),
+				"To continue to the next conversation.",
+				new ArrayList<String>(),
+				CommandPermission.PLAYERS),
+		TOUR_PREVIOUS(
+				TOUR,
+				Arrays.asList("previous", "p"),
+				"To return to the previous conversation.",
+				new ArrayList<String>(),
+				CommandPermission.PLAYERS),
+
 
 		ANSWER(
 				null,

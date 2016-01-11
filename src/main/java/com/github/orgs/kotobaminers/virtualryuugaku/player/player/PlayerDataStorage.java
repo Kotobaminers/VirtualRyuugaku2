@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Storage;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.NPCSentence;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.VRGSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Expression;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VirtualRyuugakuManager;
 
@@ -44,7 +44,7 @@ public class PlayerDataStorage implements Storage {
 		}
 	}
 
-	public static NPCSentence getTalk(PlayerData data) throws Exception{
+	public static VRGSentence getTalk(PlayerData data) throws Exception{
 		if (data.line < data.conversation.sentences.size()) {
 			return data.conversation.sentences.get(data.line);
 		}

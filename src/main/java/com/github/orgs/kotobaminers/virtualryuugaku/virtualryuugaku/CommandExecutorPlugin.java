@@ -26,18 +26,14 @@ public class CommandExecutorPlugin implements CommandExecutor {
 		Commands command = Commands.getCommand(path);
 		performer = new CommandPerformer(sender, command, label, args);
 
-		Debug.printDebugMessage("", new Exception());
 		if (!performer.canPerform()) {
 			return true;
 		}
-
-		Debug.printDebugMessage("", new Exception());
 		if (!performer.command.isRunnableChild()) {
 			performer.command.printInfo(sender);
 			return true;
 		}
 
-		Debug.printDebugMessage("", new Exception());
 		boolean success = performer.performCommand();//The actual line to perform the command.
 		Debug.printDebugMessage("", new Exception());
 		if (success == false) {

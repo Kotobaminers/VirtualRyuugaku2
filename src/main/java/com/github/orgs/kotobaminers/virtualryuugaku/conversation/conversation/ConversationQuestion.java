@@ -5,8 +5,7 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message0;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.SoundMeta.Scene;
@@ -28,9 +27,8 @@ public class ConversationQuestion {
 	}
 
 	public void giveQuestion(Player player, ConversationQuestion q) {
-		MessengerGeneral.print(player, MessengerGeneral.getPartitionPurple());
 		String[] opts = {question};
-		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.CONVERSATION_QUESTION_1, opts));
+		Message.CONVERSATION_QUESTION_1.print(player, opts);
 		Effects.playSound(player, Scene.APPEAR);
 		PlayerDataStorage.getDataPlayer(player).question = q;
 	}

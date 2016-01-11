@@ -5,19 +5,16 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message0;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.NPCSentence;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.VRGSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicGameController.PublicGameMode;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Language;
 
 public class PublicCommandGameQuestion {
-	private NPCSentence talk = new NPCSentence();
+	private VRGSentence talk = new VRGSentence();
 	private Language answerLanguage = Language.EN;
 	private PublicGameMode mode = PublicGameMode.ANKI;
 	private List<String> answers = new ArrayList<String>();
@@ -48,7 +45,7 @@ public class PublicCommandGameQuestion {
 		}
 	}
 
-	public PublicCommandGameQuestion(NPCSentence talk, PublicGameMode mode, Language answerLanguage) {
+	public PublicCommandGameQuestion(VRGSentence talk, PublicGameMode mode, Language answerLanguage) {
 		this.talk = talk;
 		this.mode = mode;
 		this.answerLanguage = answerLanguage;
@@ -78,14 +75,29 @@ public class PublicCommandGameQuestion {
 	}
 
 	public void broadcastQuestion() {
-		Debug.printDebugMessage("", new Exception());
-		String message = Utility.joinStrings(questions, ", ");
-		String[] opts = {message, answerLanguage.toString()};
-		System.out.println(message + " " + talk.description.romaji + " " + answerLanguage.name());
+		Debug.printDebugMessage(talk.description.getEnglishJoined(), new Exception());
 		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
-			player.playSound(player.getLocation(), Sound.CHICKEN_EGG_POP, 1, 1);
-			MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.STAGE_QUESTION_2, opts));
+			printQuestion(player);
 		}
+	}
+	public void printQuestion(Player player) {
+		String[] opts = {getQuestionExpression(player), answerLanguage.toString()};
+		Message.GAME_QUESTION_2.print(player, opts);
+	}
+
+	private String getQuestionExpression(Player player) {
+		String expression = "";
+		switch(answerLanguage) {
+		case EN:
+			expression = talk.description.getJapaneseJoined(player);
+			break;
+		case JP:
+			expression = talk.description.getEnglishJoined();
+			break;
+		default:
+			break;
+		}
+		return expression;
 	}
 
 	public Integer getScore() {

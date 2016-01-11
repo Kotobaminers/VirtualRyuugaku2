@@ -22,15 +22,18 @@ public class StageController extends Controller {
 		return storage;
 	}
 
-	public static Conversation getConversation(Integer id) throws Exception {
-		for (Stage stage : storage.stages) {
-			for (List<Integer> index : stage.conversations.keySet()) {
+	public static Conversation getConversation(Integer id) {
+		for (Stage stage : StageStorage.stages) {
+			if (stage.displayNPC.containsKey(id)) {
+				return stage.displayNPC.get(id);
+			}
+			for (List<Integer> index : stage.npcConversations.keySet()) {
 				if (index.contains(id)) {
-					return stage.conversations.get(index);
+					return stage.npcConversations.get(index);
 				}
 			}
 		}
-		throw new Exception();
+		return new NPCConversation();
 	}
 
 	public static Stage getStageRandom() {
@@ -46,7 +49,19 @@ public class StageController extends Controller {
 		}
 		return stage;
 	}
+
+	public static Stage getStage(String name) {
+		Debug.printDebugMessage("",new Exception());
+		for (Stage search : StageStorage.stages) {
+			if (search.name.equalsIgnoreCase(name)) {
+				return search;
+			}
+		}
+		return new Stage();
+	}
 }
+
+
 
 //	private static ConversationMyself getConversationMyself(NPC npc) throws Exception{
 //		Integer id = npc.getId();

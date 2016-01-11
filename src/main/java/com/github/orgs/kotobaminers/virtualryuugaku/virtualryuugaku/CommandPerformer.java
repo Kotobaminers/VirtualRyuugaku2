@@ -11,13 +11,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCHandler;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Stage;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.StageStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerData;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
+import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicCommandGame;
+import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicEmptyGame;
+import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicEventGame;
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicGameController;
+import com.github.orgs.kotobaminers.virtualryuugaku.publictour.publictour.PublicTourController;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Commands;
@@ -57,7 +61,6 @@ public class CommandPerformer {
 		switch (command) {
 		case VIRTUALRYUUGAKU_DEBUG:
 		case VIRTUALRYUUGAKU_OP:
-		case GAME:
 		case VIRTUALRYUUGAKU:
 		case ANSWER:
 		case MYSELF:
@@ -65,6 +68,13 @@ public class CommandPerformer {
 		case DEBUG_MODE:
 			success = commandDebugMode();
 			break;
+		case DEBUG_INTERVAL:
+			success = commandDebugInterval();
+			break;
+		case DEBUG_HOLOGRAM:
+			success = commandDebugHologram();
+			break;
+
 		case SAVE:
 			success = commandSave();
 			break;
@@ -101,6 +111,8 @@ public class CommandPerformer {
 			success = commandList();
 			break;
 
+		case GAME:
+			break;
 		case GAME_START:
 			success = commandGameStart();
 			break;
@@ -113,16 +125,25 @@ public class CommandPerformer {
 		case GAME_RULE:
 			success = commandGameRule();
 			break;
+		case GAME_JOIN:
+			success = commandGameJoin();
+			break;
+		case GAME_REPEAT:
+			success = commandGameRepeat();
+			break;
 
-		case MYSELF_BOOK:
-			success = commandMyselfBook();
+		case TOUR_JOIN:
+			success = commandTourJoin();
 			break;
-		case MYSELF_UPDATE:
-			success = commandMyselfUpdate();
+		case TOUR_START:
+			success = commandTourStart();
 			break;
-//		case MYSELF_RELOAD:
-//			success = commandMyselfReload();
-//			break;
+		case TOUR_NEXT:
+			success = commandTourNext();
+			break;
+		case TOUR_PREVIOUS:
+			success = commandTourPrevious();
+			break;
 
 		case ANSWER_GAME:
 			success = commandAnswerGame();
@@ -133,11 +154,138 @@ public class CommandPerformer {
 		case ANSWER_PUBLIC_GAME:
 			success = commandAnswerPublicGame();
 			break;
+
+		case MYSELF_BOOK:
+//			success = commandMyselfBook();
+			break;
+		case MYSELF_UPDATE:
+//			success = commandMyselfUpdate();
+			break;
+//		case MYSELF_RELOAD:
+//			success = commandMyselfReload();
+//			break;
+
 		default:
 			break;
 		}
 		return  success;
 	}
+
+	private boolean commandTourJoin() {
+		if (!hasValidPlayer()) {
+			return true;
+		}
+		PublicTourController.join(player);
+		return true;
+	}
+
+	private boolean commandTourStart() {
+		if (!hasValidPlayer()) {
+			return true;
+		}
+		if (0 < params.size()) {
+			for (String stageName : StageStorage.getStageNames()) {
+				if (params.get(0).equalsIgnoreCase(stageName)) {
+					PublicTourController.loadTour(params.get(0));
+					PublicTourController.join(player);
+					return true;
+				}
+			}
+		} else {
+			commandList();
+		}
+		return false;
+	}
+
+	private boolean commandTourNext() {
+		if (!hasValidPlayer()) {
+			return true;
+		}
+		PublicTourController.continueToNext(player);
+		return true;
+	}
+	private boolean commandTourPrevious() {
+		if (!hasValidPlayer()) {
+			return true;
+		}
+		PublicTourController.returnToPrevious(player);
+		return true;
+	}
+
+	private boolean commandDebugHologram() {
+		return true;
+	}
+
+	private boolean commandGameRepeat() {
+		if (0 < PublicGameController.join.size()) {
+			Message.GAME_STARTED_0.print(sender, null);
+		} else {
+			PublicGameController.loadLastStage();
+			String[] opts = {PublicGameController.lastStage};
+			Message.GAME_REPEATED_1.print(sender, opts);
+			commandGameJoin();
+		}
+		return true;
+	}
+
+	private boolean commandDebugInterval() {
+		if (0 < params.size()) {
+			try {
+				Integer interval = Integer.parseInt(params.get(0));
+				PublicCommandGame.interval = 20L * interval;
+				PublicEventGame.interval = 20L * interval;
+				PublicEmptyGame.interval = 20L * interval;
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			PublicCommandGame.interval = 20L * 30;
+			PublicEventGame.interval = 20L * 20;
+			PublicEmptyGame.interval = 20L * 30;
+		}
+		return true;
+	}
+
+	private boolean commandGameJoin() {
+		if (!hasValidPlayer()) {
+			return true;
+		}
+		for (List<Integer> index : PublicGameController.stage.npcConversations.keySet()) {
+			if (0 < index.size()) {
+				try {
+					Location location = NPCHandler.getNPC(index.get(0)).getStoredLocation();
+					player.teleport(location.add(0, 1, 0));
+					PublicGameController.joinPlayer(player);
+					String[] opts = {player.getName(), PublicGameController.stage.name};
+					Message.GAME_JOIN_TP_2.broadcast(opts);
+					PublicGameController.game.giveCurrentQuestion(player);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return true;
+			}
+		}
+		return true;
+	}
+
+	private boolean commandGameStart() {
+		if (!hasValidPlayer()) {
+			return true;
+		}
+		if (0 < params.size()) {
+			for (String name : StageStorage.getStageNames()) {
+				if (name.equalsIgnoreCase(params.get(0))) {
+					PublicGameController.loadStage(name);
+					PublicGameController.joinPlayer(player);
+					return true;
+				}
+			}
+		}
+		commandList();
+		return false;
+	}
+
+
 
 	private boolean commandDebugMode() {
 		if(!Settings.debugMessage) {
@@ -153,7 +301,7 @@ public class CommandPerformer {
 				Debug.printDebugMessage("[VRG Debug] Message = " + Settings.debugMessage + ", BC = " + Settings.debugMessageBroadcast, new Exception());
 			}
 		}
-		return false;
+		return true;
 	}
 
 	private boolean commandAnswerPublicGame() {
@@ -163,7 +311,7 @@ public class CommandPerformer {
 		String answer = "";
 		if (0 < params.size()) {
 			answer = Utility.joinStrings(params, " ");
-			PublicGameController.game.validateAnswer(answer);
+			PublicGameController.game.validateAnswer(player, answer);
 			return true;
 		}
 		return false;
@@ -226,14 +374,14 @@ public class CommandPerformer {
 		}
 		if(0 < params.size()) {
 			String name = params.get(0).toUpperCase();
-			for (Stage stage  : StageStorage.stages) {
-				for (List<Integer> index : stage.conversations.keySet()) {
+			for (Stage stage  : StageStorage.getStages()) {
+				for (List<Integer> index : stage.npcConversations.keySet()) {
 					if (0 < index.size()) {
 						try {
 							Location location = NPCHandler.getNPC(index.get(0)).getStoredLocation();
 							player.teleport(location);
 							String[] opts = {name};
-							Message.STAGE_TP_1.print(player, opts);
+							Message.COMMON_TP_1.print(player, opts);
 							return true;
 						} catch (Exception e) {
 							e.printStackTrace();
@@ -305,18 +453,14 @@ public class CommandPerformer {
 		return true;
 	}
 
-	private boolean commandGameStart() {
-//		if (0 < params.size()) {
-//			String stage = params.get(0);
-//			ControllerGameGlobal.loadGame(stage);
-//			if (ControllerGameGlobal.isValidGame()) {
-//				String[] opts = {stage};
-//				Message.GAME_JOIN_TP_1.broadcast(opts);
-//				ControllerGameGlobal.giveNextQuestion(sender);
-//				return true;
-//			}
-//		}
-		return false;
+	private boolean commandList() {
+		List<String> names = new ArrayList<String>();
+		for (Stage stage : StageStorage.getStages()) {
+			names.add(stage.name);
+		}
+		String[] opts = {Utility.joinStrings(names, ", ")};
+		Message.STAGE_LIST_1.print(sender, opts);
+		return true;
 	}
 
 	private boolean commandGameFinish() {
@@ -430,14 +574,6 @@ public class CommandPerformer {
 //			}
 //		}
 		return false;
-	}
-
-	private boolean commandList() {
-//		String course = UtilitiesGeneral.joinStrings(ControllerConversation.getStagesCourse(), ", ");
-//		String myself = UtilitiesGeneral.joinStrings(ControllerConversation.getStagesMyself(), ", ");
-//		String[] opts = {course, myself};
-//		Message.STAGE_LIST_2.print(sender, opts);
-		return true;
 	}
 
 	private boolean commandMyselfUpdate() {

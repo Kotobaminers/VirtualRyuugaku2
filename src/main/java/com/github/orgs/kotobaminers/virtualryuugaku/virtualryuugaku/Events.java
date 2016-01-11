@@ -16,11 +16,6 @@ import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.Public
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 
 public class Events implements Listener {
-	public static EventCreate flagEventCreate = EventCreate.NONE;
-	public static EventSelect flagEventSelect = EventSelect.NONE;
-	public enum EventCreate {NONE, REGISTER_EMPTY}
-	public enum EventSelect {NONE}
-
 	@EventHandler
 	public void onClickNPCLeft(NPCLeftClickEvent event) {
 		Debug.printDebugMessage("", new Exception());
@@ -36,16 +31,9 @@ public class Events implements Listener {
 	public void onClickNPCRight(NPCRightClickEvent event) {
 		Debug.printDebugMessage("", new Exception());
 		NPC npc = event.getNPC();
-		try {
-			Conversation conversation = StageController.getConversation(npc.getId());
+		Conversation conversation = StageController.getConversation(npc.getId());
+		if (0 < conversation.sentences.size()) {
 			conversation.talk(event.getClicker(), npc);
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
-
-//	@EventHandler
-//	public void onJoin(PlayerJoinEvent event) {
-//		UtilitiesProgramming.printDebugMessage("", new Exception());
-//	}
 }

@@ -5,12 +5,12 @@ import java.util.List;
 
 
 
-public class ConversationMulti extends Conversation {
+public class NPCConversation extends Conversation {
 
 	@Override
 	public List<Integer> getIDSorted() {
 		List<Integer> order = new ArrayList<Integer>();
-		for(NPCSentence talk : sentences) {
+		for(VRGSentence talk : sentences) {
 			order.add(talk.id);
 		}
 		return order;

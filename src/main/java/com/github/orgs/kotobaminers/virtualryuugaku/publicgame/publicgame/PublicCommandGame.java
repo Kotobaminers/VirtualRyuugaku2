@@ -1,36 +1,51 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.NPCSentence;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.VRGSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicGameController.PublicGameMode;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.SoundMeta.Scene;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Language;
-
 
 public class PublicCommandGame extends PublicGame {
 	public List<PublicCommandGameQuestion> questions = new ArrayList<PublicCommandGameQuestion>();
-
-	public static long interval = 200L;
+	private Set<UUID> cantAnswer = new HashSet<UUID>();
+	public static long interval = 20L * 30;
 	private Integer count = -1;
 
-
-	public PublicCommandGame(List<NPCSentence> talks, PublicGameMode mode) {
-		for (NPCSentence talk : talks) {
+	public PublicCommandGame(List<VRGSentence> talks, PublicGameMode mode) {
+		for (VRGSentence talk : talks) {
 			questions.add(new PublicCommandGameQuestion(talk, mode, Language.getRandom()));
 		}
+		this.mode = mode;
+		this.score.refreshScore();
 	}
 
 	@Override
 	public void continueGame() {
-		giveQuestion();
+		cantAnswer = new HashSet<UUID>();
+		count++;
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			if (PublicGameController.join.contains(player.getUniqueId())) {
+				giveCurrentQuestion(player);
+				Effects.playSound(player, Scene.APPEAR);
+			}
+		}
 	}
 
 	@Override
-	public boolean isFinished() {
+	public boolean hasQuestedAll() {
 		Debug.printDebugMessage("" + count + " " + questions.size(), new Exception());
 		if (questions.size() <= count + 1) {
 			return true;
@@ -43,20 +58,25 @@ public class PublicCommandGame extends PublicGame {
 		return interval;
 	}
 
-	private void giveQuestion() {
-		count++;
+	@Override
+	public void giveCurrentQuestion(Player player) {
 		PublicCommandGameQuestion question = getCurrentQuestion();
-		question.broadcastQuestion();
+		question.printQuestion(player);
 	}
 
 	@Override
-	public void validateAnswer(String answer) {
+	public void validateAnswer(Player player, String answer) {
+		if (cantAnswer.contains(player.getUniqueId())) {
+			return;
+		}
 		if (0 <= count) {
 			if (getCurrentQuestion().validateAnswer(answer)) {
-				eventCorrect();
+				eventCorrect(player);
+				cantAnswer.add(player.getUniqueId());
 			} else {
-				eventWrong();
+				eventWrong(player);
 			}
+			score.updateScoreboard(player);
 		}
 	}
 
@@ -65,16 +85,25 @@ public class PublicCommandGame extends PublicGame {
 	}
 
 	@Override
-	public void eventCorrect() {
+	public void eventCorrect(Player player) {
 		Debug.printDebugMessage("", new Exception());
+		player.playSound(player.getLocation(), Sound.LEVEL_UP, 1, 1);
+		Message.COMMON_CORRECT_0.print(player, null);
+		cantAnswer.add(player.getUniqueId());
+		score.addScore(player.getName(), PublicGame.EventScore.WRITE_CORRECTLY);
 	}
 
 	@Override
-	public void eventWrong() {
+	public void eventWrong(Player player) {
 		Debug.printDebugMessage("", new Exception());
+		player.playSound(player.getLocation(), Sound.ITEM_BREAK, 1, 1);
+		Message.COMMON_WRONG_0.print(player, null);
+		score.addScore(player.getName(), PublicGame.EventScore.WRUTE_WRONGLY);
 	}
 
 	@Override
-	public void validateEvent(Player player) {
+	protected void printStart(Player player) {
+		Message.GAME_ANSWER_PUBLIC_0.print(player, null);
 	}
+
 }

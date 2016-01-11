@@ -1,12 +1,21 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Settings;
 
 
 public class Debug {
+	private static final List<UUID> DEBUGGER = Arrays.asList(
+		UUID.fromString("de7bd32b-48a9-4aae-9afa-ef1de55f5bad"),
+		UUID.fromString("ae6898a3-63f9-45b0-ac17-c8be45210d18"));
+
 	public static void printDebugMessage(String message, Exception exception) {
 		if(!Settings.debugMessage) return;
 		StackTraceElement element = exception.getStackTrace()[0];
@@ -19,8 +28,13 @@ public class Debug {
 			String[] broadcast = {ChatColor.RED.toString(), message, ChatColor.GRAY.toString(), nameClass, nameMethod, ChatColor.WHITE.toString(), line};
 			Bukkit.broadcastMessage(Utility.joinStrings(broadcast, " "));
 		} else {
-			String[] broadcast = {message, nameClass, nameMethod, line};
+			String[] broadcast = {ChatColor.RED + " *" + ChatColor.RESET, message, nameClass, nameMethod, line};
 			Bukkit.getLogger().info(Utility.joinStrings(broadcast, " "));
+			for (Player online : Bukkit.getOnlinePlayers()) {
+				if (DEBUGGER.contains(online.getUniqueId())) {
+					online.sendMessage(Utility.joinStrings(broadcast, " "));
+				}
+			}
 		}
 	}
 

@@ -9,7 +9,7 @@ import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerData;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
@@ -20,7 +20,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Expres
 
 public abstract class Conversation {
 	public String stageName = "";
-	public List<NPCSentence> sentences = new ArrayList<NPCSentence>();
+	public List<VRGSentence> sentences = new ArrayList<VRGSentence>();
 	public List<Integer> index = new ArrayList<Integer>();
 	public ConversationQuestion question = new ConversationQuestion();
 	private static final List<ChatColor> talkerColor = Arrays.asList(
@@ -50,7 +50,7 @@ public abstract class Conversation {
 				}
 			}
 			data.conversation = this;
-			NPCSentence sentence = sentences.get(data.line);
+			VRGSentence sentence = sentences.get(data.line);
 			printTalk(sentence, player, data.line);
 			Effects.effectTalk(player, sentence.id);
 			Effects.playSound(player, Scene.NOTICE);
@@ -79,7 +79,7 @@ public abstract class Conversation {
 		}
 	}
 
-	private void printTalk(NPCSentence sentence, Player player, Integer line) {
+	private void printTalk(VRGSentence sentence, Player player, Integer line) {
 		List<Expression> expressions = PlayerDataStorage.getDataPlayer(player).expressions;
 		if(0 < expressions.size()) {
 			String title = "";
@@ -94,7 +94,7 @@ public abstract class Conversation {
 		}
 		if (expressions.contains(Expression.EN)) {
 			String[] english = {" - " + Utility.joinStrings(sentence.description.getEnglishList(), ", ")};
-			Message.COMMON_EMPTY_1.print(player, english);
+			Message.EMPTY_1.print(player, english);
 		}
 		List<String> listJapanese = new ArrayList<String>();
 		if(expressions.contains(Expression.KANJI)) {
@@ -108,7 +108,7 @@ public abstract class Conversation {
 		}
 		if (0 < listJapanese.size()) {
 			String[] japanese = {" - " + Utility.joinStrings(listJapanese, " " + ChatColor.GRAY + ChatColor.BOLD + " / " + ChatColor.RESET)};
-			Message.COMMON_EMPTY_1.print(player, japanese);
+			Message.EMPTY_1.print(player, japanese);
 		}
 	}
 
@@ -119,9 +119,9 @@ public abstract class Conversation {
 		return true;
 	}
 
-	public List<NPCSentence> getKeyTalk() {
-		List<NPCSentence> talks = new ArrayList<NPCSentence>();
-		for (NPCSentence talk : sentences) {
+	public List<VRGSentence> getKeyTalk() {
+		List<VRGSentence> talks = new ArrayList<VRGSentence>();
+		for (VRGSentence talk : sentences) {
 			if (talk.key) {
 				talks.add(talk);
 			}
@@ -154,7 +154,7 @@ public abstract class Conversation {
 
 	public void printDebugMessage() {
 		List<String> en = new ArrayList<String>();
-		for (NPCSentence sentence : sentences) {
+		for (VRGSentence sentence : sentences) {
 			en.addAll(sentence.description.en);
 		}
 		Debug.printDebugMessage("" + index + " " + Utility.joinStrings(en, ", "), new Exception());

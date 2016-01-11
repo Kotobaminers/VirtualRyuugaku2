@@ -24,7 +24,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VirtualRyuug
 
 public class StageStorage implements Storage {
 
-	public static Set<Stage> stages = new HashSet<Stage>();
+	static Set<Stage> stages = new HashSet<Stage>();
 	public static final String CITIZENS_FILE = Bukkit.getPluginManager().getPlugin("Citizens").getDataFolder() + "//saves.yml";
 	private static YamlConfiguration config = YamlConfiguration.loadConfiguration(new File(CITIZENS_FILE));
 
@@ -40,6 +40,18 @@ public class StageStorage implements Storage {
 			}
 		}
 		return list;
+	}
+
+	public  static Set<Stage> getStages() {
+		return stages;
+	}
+
+	public static Set<String> getStageNames() {
+		Set<String> names = new HashSet<String>();
+		for (Stage stage: stages) {
+			names.add(stage.name);
+		}
+		return names;
 	}
 
 	@Override
@@ -63,28 +75,35 @@ public class StageStorage implements Storage {
 		}
 
 		for (Stage stage : stages) {
-			for (List<Integer> index : stage.conversations.keySet()) {
+			for (List<Integer> index : stage.npcConversations.keySet()) {
 				for (Integer id : index) {
 					if (!ids.contains(id)) {
-						stage.conversations.remove(index);
+						stage.npcConversations.remove(index);
 					}
 				}
 			}
 		}
 	}
 
-	private enum PathStage {CONVERSATION, EDITOR}
+	private enum PathStage {CONVERSATION, EDITOR, LEARNER_NPC, LEARNER_QUESTION}
 
 	public static Stage importStage(String stageName, YamlConfiguration library) {
 		Debug.printDebugMessage("Stage: " + stageName, new Exception());
-		List<String> editorString = library.getStringList(PathConversation.EDITOR.toString());
+		List<String> editorString = library.getStringList(PathStage.EDITOR.toString());
 		List<UUID> editor = new ArrayList<UUID>();
 		for (String string : editorString) {
 			editor.add(UUID.fromString(string));
 		}
+		List<Integer> learnerNPC = library.getIntegerList(PathStage.LEARNER_NPC.toString());
+//		List<String> strList = new ArrayList<String>();
+
 		Stage stage = new Stage();
 		stage.editor = editor;
 		stage.name = stageName;
+		for (Integer id : learnerNPC) {
+			stage.displayNPC.put(id, new LearnerConversation());
+		}
+		stage.learnerQuestions = library.getStringList(PathStage.LEARNER_QUESTION.toString());
 
 		for(String talkerPath : library.getKeys(false)) {
 			if(talkerPath.equalsIgnoreCase(PathStage.CONVERSATION.toString())) {
@@ -92,7 +111,7 @@ public class StageStorage implements Storage {
 				for(String idString : memory.getKeys(false)) {
 					MemorySection memoryId = (MemorySection) memory.get(idString);
 					List<Integer> index = Utility.toListInteger(idString);
-					ConversationMulti conversation = new ConversationMulti();
+					NPCConversation conversation = new NPCConversation();
 					conversation.stageName = stageName;
 					//Name will be imported from citizens data.
 					if(memoryId.contains(Enums.PathConversation.EN.toString()) && memoryId.contains(Enums.PathConversation.KANJI.toString()) && memoryId.contains(Enums.PathConversation.KANA.toString())) {
@@ -102,10 +121,9 @@ public class StageStorage implements Storage {
 						Integer size = index.size();
 						if(size.equals(kanji.size()) && size.equals(kana.size()) && size.equals(en.size())) {
 							for(int i = 0; i < size; i++) {
-								Debug.printDebugMessage("", new Exception());
 								Integer id = index.get(i);
 								Description description = Description.create(kanji.get(i), kana.get(i), en.get(i), new ArrayList<String>());
-								NPCSentence talk = new NPCSentence().create(id, description);
+								VRGSentence talk = new VRGSentence().create(id, description);
 								conversation.sentences.add(talk);
 							}
 						} else {
@@ -129,7 +147,7 @@ public class StageStorage implements Storage {
 						conversation.question = ConversationQuestion.create(q, a, index, stageName);
 					}
 					conversation.index = index;
-					stage.conversations.put(index, conversation);
+					stage.npcConversations.put(index, conversation);
 				}
 			}
 		}

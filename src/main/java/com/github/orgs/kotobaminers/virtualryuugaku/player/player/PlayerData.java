@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationMulti;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.NPCConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.ConversationQuestion;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Expression;
 
@@ -17,7 +17,7 @@ public class PlayerData {
 	public UUID uuid = null;
 	public Integer line = lineIni;
 	private static final Integer lineIni = -1;
-	public Conversation conversation = new ConversationMulti();
+	public Conversation conversation = new NPCConversation();
 
 	private Map<String, Integer> score = new HashMap<String, Integer>();
 

@@ -1,9 +1,16 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation;
 
+import java.util.List;
 
 
 
-public class ConversationMyself /*extends Conversation*/ {
+
+public class LearnerConversation extends Conversation {
+	@Override
+	public List<Integer> getIDSorted() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 //	@Override
 //	public List<Integer> getIDSorted() {
