@@ -33,9 +33,9 @@ public class Enums {//public enums
 				"To set the public game interval for debugging.",
 				new ArrayList<String>(),
 				CommandPermission.OP),
-		DEBUG_HOLOGRAM(
+		DEBUG_DEBUG(
 				VIRTUALRYUUGAKU_DEBUG,
-				Arrays.asList("hologram", "h"),
+				Arrays.asList("debug", "d"),
 				"",
 				new ArrayList<String>(),
 				CommandPermission.OP),

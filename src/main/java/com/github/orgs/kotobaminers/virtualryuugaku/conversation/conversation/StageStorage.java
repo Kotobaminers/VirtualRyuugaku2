@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -42,8 +43,14 @@ public class StageStorage implements Storage {
 		return list;
 	}
 
-	public  static Set<Stage> getStages() {
+	public static Set<Stage> getStages() {
 		return stages;
+	}
+
+	public static Optional<Stage> findStage(final String name) {
+		return getStages().stream()
+			.filter(stage -> stage.name.equalsIgnoreCase(name))
+			.findFirst();
 	}
 
 	public static Set<String> getStageNames() {
@@ -56,7 +63,6 @@ public class StageStorage implements Storage {
 
 	@Override
 	public void initialize() {
-		Debug.printDebugMessage("", new Exception());
 		stages = new HashSet<Stage>();
 		importStages();
 	}
@@ -66,7 +72,6 @@ public class StageStorage implements Storage {
 	}
 
 	private void importStages() {
-		Debug.printDebugMessage("", new Exception());
 		stages = new HashSet<Stage>();
 		Map<String, YamlConfiguration> mapConfig = getListLibraryStage();
 		Set<Integer> ids = importCitizensIds();
@@ -88,20 +93,13 @@ public class StageStorage implements Storage {
 	private enum PathStage {CONVERSATION, EDITOR, LEARNER_NPC, LEARNER_QUESTION}
 
 	public static Stage importStage(String stageName, YamlConfiguration library) {
-		Debug.printDebugMessage("Stage: " + stageName, new Exception());
-		List<String> editorString = library.getStringList(PathStage.EDITOR.toString());
-		List<UUID> editor = new ArrayList<UUID>();
-		for (String string : editorString) {
-			editor.add(UUID.fromString(string));
-		}
-		List<Integer> learnerNPC = library.getIntegerList(PathStage.LEARNER_NPC.toString());
-
 		Stage stage = new Stage();
-		stage.editor = editor;
+
 		stage.name = stageName;
-		for (Integer id : learnerNPC) {
-			stage.displayNPC.put(id, new LearnerConversation());
-		}
+		library.getStringList(PathStage.EDITOR.toString())
+			.forEach(editor -> stage.editor.add(UUID.fromString(editor)));
+		library.getIntegerList(PathStage.LEARNER_NPC.toString())
+			.forEach(id -> stage.displayNPC.put(id, new LearnerConversation()));
 		stage.learnerQuestions = library.getStringList(PathStage.LEARNER_QUESTION.toString());
 
 		for(String talkerPath : library.getKeys(false)) {
@@ -122,7 +120,7 @@ public class StageStorage implements Storage {
 							for(int i = 0; i < size; i++) {
 								Integer id = index.get(i);
 								Description description = Description.create(kanji.get(i), kana.get(i), en.get(i), new ArrayList<String>());
-								VRGSentence talk = new VRGSentence().create(id, description);
+								VRGSentence talk = VRGSentence.create(id, description);
 								conversation.sentences.add(talk);
 							}
 						} else {

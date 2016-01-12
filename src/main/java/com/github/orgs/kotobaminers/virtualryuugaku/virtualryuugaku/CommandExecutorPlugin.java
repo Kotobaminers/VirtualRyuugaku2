@@ -8,7 +8,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Commands;
 
 public class CommandExecutorPlugin implements CommandExecutor {
@@ -19,7 +18,6 @@ public class CommandExecutorPlugin implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command rawCommand, String label, String[] args) {
-		Debug.printDebugMessage("", new Exception());
 		List<String> path = new ArrayList<String>();
 		path.add(label);
 		path.addAll(Arrays.asList(args));
@@ -35,7 +33,6 @@ public class CommandExecutorPlugin implements CommandExecutor {
 		}
 
 		boolean success = performer.performCommand();//The actual line to perform the command.
-		Debug.printDebugMessage("", new Exception());
 		if (success == false) {
 			performer.printInvalidParams();
 		}

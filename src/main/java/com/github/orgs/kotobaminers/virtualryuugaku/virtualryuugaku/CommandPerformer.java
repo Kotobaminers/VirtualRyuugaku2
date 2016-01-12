@@ -5,16 +5,24 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCHandler;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Description;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.LearnerNPCBook;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Stage;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.StageStorage;
+import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.VRGSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerData;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicCommandGame;
@@ -71,8 +79,8 @@ public class CommandPerformer {
 		case DEBUG_INTERVAL:
 			success = commandDebugInterval();
 			break;
-		case DEBUG_HOLOGRAM:
-			success = commandDebugHologram();
+		case DEBUG_DEBUG:
+			success = commandDebugDebug();
 			break;
 
 		case SAVE:
@@ -156,7 +164,7 @@ public class CommandPerformer {
 			break;
 
 		case MYSELF_BOOK:
-//			success = commandMyselfBook();
+			success = commandMyselfBook();
 			break;
 		case MYSELF_UPDATE:
 //			success = commandMyselfUpdate();
@@ -209,10 +217,6 @@ public class CommandPerformer {
 			return true;
 		}
 		PublicTourController.returnToPrevious(player);
-		return true;
-	}
-
-	private boolean commandDebugHologram() {
 		return true;
 	}
 
@@ -463,6 +467,53 @@ public class CommandPerformer {
 		return true;
 	}
 
+	private boolean commandMyselfBook() {
+		if (!hasValidPlayer()) {
+			return true;
+		}
+		if (0 < params.size()) {
+			LearnerNPCBook.giveBlankBookItem(player, params.get(0));
+			return true;
+		}
+		return false;
+	}
+
+	private boolean commandDebugDebug() {
+		if (!hasValidPlayer()) {
+			return true;
+		}
+		ItemMeta item = player.getItemInHand().getItemMeta();
+		BookMeta book = (BookMeta) item;
+		List<String> pages = book.getPages();
+		Stream<Optional<VRGSentence>> sentences = 	pages.stream().map(translatePageToSentence);
+//		sentences.
+//		if(sentences.anyMatch(a -> a.isPresent() == false)) {
+//			return true;
+//		} else {
+//
+//		}
+
+//		LearnerNPCBook.createConversation(player.getItemInHand());
+
+
+		return true;
+	}
+
+	public static Function<String, Optional<VRGSentence>> translatePageToSentence =
+		(page) -> {
+			List<String> lines = Arrays.asList(page.replaceAll("§0", "").split("\\n"));
+			VRGSentence sentence = null;
+			if (2 < lines.size()) {
+				String kanji = "";
+				if (3 < lines.size()) {
+					kanji = lines.get(3);
+				}
+				sentence = new VRGSentence();
+				sentence.description = Description.create(kanji, lines.get(2), lines.get(1), new ArrayList<String>());
+			}
+			return Optional.ofNullable(sentence);
+		};
+
 	private boolean commandGameFinish() {
 //		if(ControllerGameGlobal.isValidGame()) {
 //			ControllerGameGlobal.finishGame();
@@ -511,7 +562,8 @@ public class CommandPerformer {
 //				String[] opts = {name};
 //				Message.STAGE_INFO_TITLE_1.print(sender, opts);
 //				String[] opts2 = {npcs};
-//				Message.STAGE_INFO_NPC_1.print(sender, opts2);
+
+		//				Message.STAGE_INFO_NPC_1.print(sender, opts2);
 //				String[] opts3 = {conversation};
 //				Message.STAGE_INFO_CONVERSATION_1.print(sender, opts3);
 //				String[] opts4 = {question};
@@ -562,20 +614,6 @@ public class CommandPerformer {
 		return false;
 	}
 
-	private boolean commandMyselfBook() {
-//		if (!hasValidPlayer()) {
-//			return true;
-//		}
-//		if (0 < params.size()) {
-//			String stage = params.get(0);
-//			if (ControllerConversation.existsMyselfStage(stage)) {
-//				ConversationBook.giveConversationBookEmpty(player, stage);
-//				return true;
-//			}
-//		}
-		return false;
-	}
-
 	private boolean commandMyselfUpdate() {
 //		if (!hasValidPlayer()) {
 //			return true;
@@ -583,8 +621,6 @@ public class CommandPerformer {
 //		ControllerConversation.importBook(player);
 		return true;
 	}
-
-
 
 }
 

@@ -7,7 +7,7 @@ public class VRGSentence {
 	public Description description;
 	public boolean key = false;
 
-	public VRGSentence create(Integer id, Description description) {
+	public static VRGSentence create(Integer id, Description description) {
 		VRGSentence talk = new VRGSentence();
 		talk.id = id;
 		talk.description = description;

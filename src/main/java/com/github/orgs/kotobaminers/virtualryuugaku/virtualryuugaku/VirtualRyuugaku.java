@@ -1,10 +1,7 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 
-import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitScheduler;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicGameController;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Commands;
 
@@ -26,10 +23,8 @@ public class VirtualRyuugaku extends JavaPlugin {
 		}
 
 		Debug.printDebugMessage("", new Exception());
-		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-		scheduler.scheduleSyncDelayedTask(this, new PublicGameController(this), 80L);
-
-//		DataManagerPlugin.savePlugin();
+//		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+//		scheduler.scheduleSyncDelayedTask(this, new PublicGameController(this), 80L);
 
 	}
 
