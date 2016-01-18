@@ -1,8 +1,7 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Romaji;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.StageController;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.StageStorage;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataController;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 
@@ -15,9 +14,9 @@ public final class VirtualRyuugakuManager {
 		Debug.printDebugMessage("[VirtualRyuugaku] Loading Player Data", new Exception());
 		new PlayerDataController().initializeStorage();
 
-		Debug.printDebugMessage("[VirtualRyuugaku] Initializing Conversation", new Exception());
-		new StageController().initializeStorage();
-		StageStorage.printDebugMessage();
+		SentenceStorage.importSentences();
+
+
 
 	}
 

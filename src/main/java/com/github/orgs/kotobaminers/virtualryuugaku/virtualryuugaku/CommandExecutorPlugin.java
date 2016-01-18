@@ -8,7 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Commands;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Commands;
 
 public class CommandExecutorPlugin implements CommandExecutor {
 	private CommandPerformer performer;

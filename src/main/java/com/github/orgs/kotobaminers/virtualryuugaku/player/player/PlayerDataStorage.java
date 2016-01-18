@@ -10,33 +10,28 @@ import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.SpellType;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Storage;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.VRGSentence;
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Expression;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VirtualRyuugakuManager;
 
 public class PlayerDataStorage implements Storage {
-	public static Map<UUID, PlayerData> playerStorage = new HashMap<UUID, PlayerData>();
-	public static final Integer lineInitial = 0;
-	public static final String base = "PLAYER";
+	private static Map<UUID, PlayerData> playerStorage = new HashMap<UUID, PlayerData>();
+	private static final String base = "PLAYER";
 
 	public static PlayerData getDataPlayer(Player player) {
-		return getDataPlayer(player.getUniqueId());
-	}
-	public static PlayerData getDataPlayer(UUID uuid) {
-		PlayerData data = new PlayerData();
-		if(playerStorage.containsKey(uuid)) {
-			data = playerStorage.get(uuid);
-		} else {
-			data.uuid = uuid;
-			playerStorage.put(data.uuid, data);
-		}
-		return data;
+		playerStorage.computeIfAbsent(player.getUniqueId(), key -> playerStorage.put(key, new PlayerData(player)));
+		return playerStorage.get(player.getUniqueId());
 	}
 
-	public static void toggleExpression(PlayerData data, Expression expression) {
-		List<Expression> expressions = data.expressions;
+	public static void addLine(Player player) {
+		getDataPlayer(player).line += 1;
+	}
+
+
+	public static void toggleExpression(PlayerData data, SpellType expression) {
+		List<SpellType> expressions = data.expressions;
 		if(expressions.contains(expression)) {
 			while(expressions.remove(expression)) {};
 		} else {

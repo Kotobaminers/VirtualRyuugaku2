@@ -15,12 +15,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.PathConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Romaji;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Storage;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums;
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.PathConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VirtualRyuugakuManager;
 
 public class StageStorage implements Storage {
@@ -28,7 +28,6 @@ public class StageStorage implements Storage {
 	static Set<Stage> stages = new HashSet<Stage>();
 	public static final String CITIZENS_FILE = Bukkit.getPluginManager().getPlugin("Citizens").getDataFolder() + "//saves.yml";
 	private static YamlConfiguration config = YamlConfiguration.loadConfiguration(new File(CITIZENS_FILE));
-
 
 	public static Map<String, YamlConfiguration> getListLibraryStage() {
 		Map<String, YamlConfiguration> list = new HashMap<String, YamlConfiguration>();

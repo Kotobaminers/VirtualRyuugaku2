@@ -8,10 +8,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Romaji;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.SpellType;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerData;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Expression;
 
 public class Description {
 	private static final String SPACER = ChatColor.RED + ", " + ChatColor.RESET;
@@ -35,7 +35,7 @@ public class Description {
 	public String getJapaneseJoined(Player player) {
 		PlayerData data = PlayerDataStorage.getDataPlayer(player);
 		List<String> japanese = new ArrayList<String>();
-		for(Expression expression : data.expressions) {
+		for(SpellType expression : data.expressions) {
 			switch(expression) {
 			case ROMAJI:
 				japanese.addAll(romaji);

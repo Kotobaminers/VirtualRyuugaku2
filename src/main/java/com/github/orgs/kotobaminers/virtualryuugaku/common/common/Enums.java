@@ -1,4 +1,4 @@
-package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
+package com.github.orgs.kotobaminers.virtualryuugaku.common.common;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +11,6 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 
 public class Enums {//public enums
 	public enum Commands {
@@ -36,6 +35,12 @@ public class Enums {//public enums
 		DEBUG_DEBUG(
 				VIRTUALRYUUGAKU_DEBUG,
 				Arrays.asList("debug", "d"),
+				"",
+				new ArrayList<String>(),
+				CommandPermission.OP),
+		DEBUG_EFFECT(
+				VIRTUALRYUUGAKU_DEBUG,
+				Arrays.asList("effect", "e"),
 				"",
 				new ArrayList<String>(),
 				CommandPermission.OP),
@@ -403,25 +408,9 @@ public class Enums {//public enums
 
 
 
-	public enum Expression {EN, KANJI, KANA, ROMAJI;
-		public static Expression lookup(String name) {
-			try {
-				return Expression.valueOf(name.toUpperCase());
-			} catch (IllegalArgumentException e) {
-				return Expression.EN;
-			}
-		}
-	}
+	public enum SpellType {EN, KANJI, KANA, ROMAJI}
+
 	public enum Language {EN, JP;
-		public static Language lookup(String name) {
-			try {
-				Debug.printDebugMessage("", new Exception());
-				return Language.valueOf(name.toUpperCase());
-			} catch (IllegalArgumentException e) {
-				Debug.printDebugMessage(e.toString(), new Exception());
-				return Language.JP;
-			}
-		}
 		public static Language getRandom() {
 			Random random = new Random();
 			Integer value = random.nextInt(Language.values().length);

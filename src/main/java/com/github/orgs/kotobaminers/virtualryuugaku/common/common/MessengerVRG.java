@@ -1,5 +1,6 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.common.common;
 
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -165,6 +166,9 @@ public class MessengerVRG {
 			if(sender != null) {
 				sender.sendMessage(prefix.getPrefix() + getMessage(opts));
 			}
+		}
+		public void print(List<String> opts, CommandSender sender) {
+			print(sender, (String[]) opts.toArray());
 		}
 		public void print(CommandSender[] senders, String[] opts) {
 			if (senders != null) {

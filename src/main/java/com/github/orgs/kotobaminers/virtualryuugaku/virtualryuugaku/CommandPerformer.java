@@ -7,15 +7,17 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
+import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Commands;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.SpellType;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCHandler;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Description;
@@ -30,10 +32,9 @@ import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.Public
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicEventGame;
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicGameController;
 import com.github.orgs.kotobaminers.virtualryuugaku.publictour.publictour.PublicTourController;
+import com.github.orgs.kotobaminers.virtualryuugaku.publictour.publictour.PublicTourController0;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Commands;
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Expression;
 
 public class CommandPerformer {
 	public CommandSender sender;
@@ -81,6 +82,9 @@ public class CommandPerformer {
 			break;
 		case DEBUG_DEBUG:
 			success = commandDebugDebug();
+			break;
+		case DEBUG_EFFECT:
+			success = commandDebugEffect();
 			break;
 
 		case SAVE:
@@ -141,10 +145,10 @@ public class CommandPerformer {
 			break;
 
 		case TOUR_JOIN:
-			success = commandTourJoin();
+//			success = commandTourJoin();
 			break;
 		case TOUR_START:
-			success = commandTourStart();
+//			success = commandTourStart();
 			break;
 		case TOUR_NEXT:
 			success = commandTourNext();
@@ -179,44 +183,40 @@ public class CommandPerformer {
 		return  success;
 	}
 
-	private boolean commandTourJoin() {
-		if (!hasValidPlayer()) {
-			return true;
-		}
-		PublicTourController.join(player);
-		return true;
-	}
+//	private boolean commandTourJoin() {
+//		if (!hasValidPlayer()) {
+//			return true;
+//		}
+//		PublicTourController.join(player);
+//		return true;
+//	}
 
-	private boolean commandTourStart() {
-		if (!hasValidPlayer()) {
-			return true;
-		}
-		if (0 < params.size()) {
-			for (String stageName : StageStorage.getStageNames()) {
-				if (params.get(0).equalsIgnoreCase(stageName)) {
-					PublicTourController.loadTour(params.get(0));
-					PublicTourController.join(player);
-					return true;
-				}
-			}
-		} else {
-			commandList();
-		}
-		return false;
-	}
+//	private boolean commandTourStart() {
+//		if (!hasValidPlayer()) {
+//			return true;
+//		}
+//		if (0 < params.size()) {
+//			PublicTourController.loadTour(params.get(0));
+//			PublicTourController.join(player);
+//			return true;
+//		} else {
+//			commandList();
+//		}
+//		return false;
+//	}
 
 	private boolean commandTourNext() {
 		if (!hasValidPlayer()) {
 			return true;
 		}
-		PublicTourController.continueToNext(player);
+		PublicTourController.continueNext(player);
 		return true;
 	}
 	private boolean commandTourPrevious() {
 		if (!hasValidPlayer()) {
 			return true;
 		}
-		PublicTourController.returnToPrevious(player);
+		PublicTourController0.returnToPrevious(player);
 		return true;
 	}
 
@@ -352,7 +352,7 @@ public class CommandPerformer {
 		if (command.canPerform(sender)) {
 			return true;
 		}
-		String[] opts = {command.permission.toString()};
+		String[] opts = {""};
 		Message.COMMAND_NO_PERMISSION_1.print(sender, opts);
 		return false;
 	}
@@ -411,19 +411,19 @@ public class CommandPerformer {
 	}
 
 	private boolean commandEN() {
-		return commandToggleExpression(Expression.EN);
+		return commandToggleExpression(SpellType.EN);
 	}
 	private boolean commandRomaji() {
-		return commandToggleExpression(Expression.ROMAJI);
+		return commandToggleExpression(SpellType.ROMAJI);
 	}
 	private boolean commandKana() {
-		return commandToggleExpression(Expression.KANA);
+		return commandToggleExpression(SpellType.KANA);
 	}
 	private boolean commandKanji() {
-		return commandToggleExpression(Expression.KANJI);
+		return commandToggleExpression(SpellType.KANJI);
 	}
 
-	private boolean commandToggleExpression(Expression expression) {
+	private boolean commandToggleExpression(SpellType expression) {
 		if (!hasValidPlayer()) {
 			return true;
 		}
@@ -431,7 +431,7 @@ public class CommandPerformer {
 		PlayerData data = PlayerDataStorage.getDataPlayer(player);
 		PlayerDataStorage.toggleExpression(data, expression);
 		List<String> expressions = new ArrayList<String>();
-		for(Expression search : data.expressions) {
+		for(SpellType search : data.expressions) {
 			expressions.add(search.toString());
 		}
 		Collections.sort(expressions);
@@ -478,24 +478,22 @@ public class CommandPerformer {
 		return false;
 	}
 
+	private boolean commandDebugEffect() {
+		List<Effect> effects = Arrays.asList(Effect.values()).stream().sorted().collect(Collectors.toList());
+		Integer id = Integer.valueOf(params.get(0));
+		Effect playing = effects.get(id);
+		Location location = NPCHandler.findNPC(10001).get().getStoredLocation();
+		Utility.lookAt(player, location);
+		player.getWorld().spigot().playEffect(location.add(0, 2, 0), playing, id, 10, 0, 0, 0, 0, 1, 10);
+		player.playSound(player.getLocation(), Sound.NOTE_PIANO, 1, 1);
+
+//		player.getWorld().spigot().playEffect(location, effect, id, data, offsetX, offsetY, offsetZ, speed, particleCount, radius););
+		player.sendMessage(playing.name());
+		return true;
+	}
+
 	private boolean commandDebugDebug() {
-		if (!hasValidPlayer()) {
-			return true;
-		}
-		ItemMeta item = player.getItemInHand().getItemMeta();
-		BookMeta book = (BookMeta) item;
-		List<String> pages = book.getPages();
-		Stream<Optional<VRGSentence>> sentences = 	pages.stream().map(translatePageToSentence);
-//		sentences.
-//		if(sentences.anyMatch(a -> a.isPresent() == false)) {
-//			return true;
-//		} else {
-//
-//		}
-
-//		LearnerNPCBook.createConversation(player.getItemInHand());
-
-
+		Utility.sendTitle(player, "Stage TMP", "aaa");
 		return true;
 	}
 

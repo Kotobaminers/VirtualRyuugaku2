@@ -10,13 +10,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Language;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.VRGSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicGameController.PublicGameMode;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.SoundMeta.Scene;
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Language;
 
 public class PublicCommandGame extends PublicGame {
 	public List<PublicCommandGameQuestion> questions = new ArrayList<PublicCommandGameQuestion>();

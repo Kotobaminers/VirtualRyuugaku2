@@ -2,6 +2,8 @@ package com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities;
 
 import org.bukkit.Effect;
 import org.bukkit.FireworkEffect.Type;
+import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCHandler;
@@ -13,13 +15,14 @@ public class Effects {
 		SoundMeta meta = new SoundMeta(scene);
 		player.playSound(player.getLocation(), meta.sound, meta.volume, meta.pitch);
 	}
+	@Deprecated
 	public static void effectTalk(Player player, Integer id) {
-		try {
-			player.getWorld().playEffect(NPCHandler.getNPC(id).getStoredLocation().add(0, 2, 0), Effect.SMOKE, 22);//data is 22(No direction value).
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		NPCHandler.findNPC(id).ifPresent(n -> {
+			Location location = n.getStoredLocation();
+			Utility.lookAt(player, location);
+			player.getWorld().spigot().playEffect(location.add(0, 2, 0), Effect.NOTE, 25, 10, 0, 0, 0, 0, 1, 10);
+			player.playSound(player.getLocation(), Sound.NOTE_PIANO, 1, 1);}
+		);
 	}
 
 	public static void shootFirework(Player player) {

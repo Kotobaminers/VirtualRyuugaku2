@@ -9,6 +9,7 @@ import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.SpellType;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerData;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
@@ -16,7 +17,6 @@ import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.SoundMeta.Scene;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Expression;
 
 public abstract class Conversation {
 	public String stageName = "";
@@ -80,7 +80,7 @@ public abstract class Conversation {
 	}
 
 	private void printTalk(VRGSentence sentence, Player player, Integer line) {
-		List<Expression> expressions = PlayerDataStorage.getDataPlayer(player).expressions;
+		List<SpellType> expressions = PlayerDataStorage.getDataPlayer(player).expressions;
 		if(0 < expressions.size()) {
 			String title = "";
 			title += "" + getTalkerColor(sentence.id);
@@ -92,18 +92,18 @@ public abstract class Conversation {
 			String[] opts = {title};
 			Message.TALK_TITLE_1.print(player, opts);
 		}
-		if (expressions.contains(Expression.EN)) {
+		if (expressions.contains(SpellType.EN)) {
 			String[] english = {" - " + Utility.joinStrings(sentence.description.getEnglishList(), ", ")};
 			Message.EMPTY_1.print(player, english);
 		}
 		List<String> listJapanese = new ArrayList<String>();
-		if(expressions.contains(Expression.KANJI)) {
+		if(expressions.contains(SpellType.KANJI)) {
 			listJapanese.add(sentence.description.getKanjiJoined());
 		}
-		if(expressions.contains(Expression.KANA)) {
+		if(expressions.contains(SpellType.KANA)) {
 			listJapanese.add(sentence.description.getKanaJoined());
 		}
-		if(expressions.contains(Expression.ROMAJI)) {
+		if(expressions.contains(SpellType.ROMAJI)) {
 			listJapanese.add(sentence.description.getRomajiJoined());
 		}
 		if (0 < listJapanese.size()) {

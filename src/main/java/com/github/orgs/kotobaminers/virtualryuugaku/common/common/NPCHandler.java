@@ -3,11 +3,12 @@ package com.github.orgs.kotobaminers.virtualryuugaku.common.common;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
+
+import org.bukkit.entity.EntityType;
 
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
-
-import org.bukkit.entity.EntityType;
 
 public class NPCHandler {
 	public static final List<EntityType> ALLOWED_ENTITY_TYPE = Arrays.asList(EntityType.PLAYER, EntityType.CREEPER);
@@ -19,6 +20,15 @@ public class NPCHandler {
 		}
 		throw new Exception("NPC not exists: ID" + id.toString());
 	}
+
+	public static Optional<NPC> findNPC(Integer id) {
+		if (existsNPC(id)) {
+			NPC npc = CitizensAPI.getNPCRegistry().getById(id);
+			return Optional.of(npc);
+		}
+		return Optional.empty();
+	}
+
 	private static Iterator<NPC> getNPCs() {
 		return CitizensAPI.getNPCRegistry().iterator();
 	}
