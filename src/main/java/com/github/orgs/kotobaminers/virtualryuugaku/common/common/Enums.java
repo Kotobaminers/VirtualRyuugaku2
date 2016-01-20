@@ -3,12 +3,15 @@ package com.github.orgs.kotobaminers.virtualryuugaku.common.common;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
 
@@ -71,6 +74,13 @@ public class Enums {//public enums
 				"Learning languages and Minigames.",
 				new ArrayList<String>(),
 				CommandPermission.PLAYERS),
+		EDIT(
+				VIRTUALRYUUGAKU,
+				Arrays.asList("edit", "e"),
+				"To edit a selected sentence.",
+				Arrays.asList("<SENTENCE>"),
+				CommandPermission.PLAYERS
+				),
 		DICTIONARY(
 				VIRTUALRYUUGAKU,
 				Arrays.asList("d", "dic", "dictionary"),
@@ -405,10 +415,28 @@ public class Enums {//public enums
 		PLAYERS, OP, CONSOLE,;
 	}
 
-
-
-
-	public enum SpellType {EN, KANJI, KANA, ROMAJI}
+	public enum SpellType {EN(3), KANJI(14), KANA(1), ROMAJI(2);
+		private int data;
+		private SpellType(int i) {
+			this.data = i;
+		}
+		public short getData() {
+			return (short) data;
+		}
+		public ItemStack getIconItem() {
+			return new ItemStack(Material.WOOL, 1, getData());
+		}
+		public static Optional<SpellType> createSpellType(ItemStack item) {
+			if (item.getType() == Material.WOOL) {
+				for (SpellType spell : SpellType.values()) {
+					if (spell.getData() == item.getDurability()) {
+						return Optional.of(spell);
+					}
+				}
+			}
+			return Optional.empty();
+		}
+	}
 
 	public enum Language {EN, JP;
 		public static Language getRandom() {

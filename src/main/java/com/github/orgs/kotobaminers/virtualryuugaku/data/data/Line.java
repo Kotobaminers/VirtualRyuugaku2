@@ -8,4 +8,5 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.SpellTyp
 public abstract class Line {
 	public abstract Optional<List<String>> getLine(List<SpellType> spell);
 	public abstract List<String> getLine();
+	public abstract void update(String line, SpellType spell);
 }

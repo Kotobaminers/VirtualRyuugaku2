@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.SpellType;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCHandler;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
 
@@ -23,8 +24,37 @@ public class TalkSentence extends Sentence {;
 		this.id = id;
 	}
 
-	public static Optional<List<Sentence>> createSentenceList(List<String> kanji, List<String> kana, List<String> en, List<Integer> ids) {
-		List<Sentence> sentences = new ArrayList<Sentence>();
+	public Optional<List<String>> getLine(SpellType spell) {
+		switch(spell) {
+		case EN:
+			return Optional.ofNullable(getEnglish().getLine());
+		case KANA:
+		case KANJI:
+		case ROMAJI:
+			return getJapanese().getLine(Arrays.asList(spell));
+		default:
+			return Optional.empty();
+		}
+	}
+
+	@Override
+	public void update(String line, SpellType spell) {
+		switch(spell) {
+		case EN:
+			english.update(line, spell);
+			return;
+		case KANA:
+		case KANJI:
+		case ROMAJI:
+			japanese.update(line, spell);
+			return;
+		default:
+			return;
+		}
+	}
+
+	public static Optional<List<TalkSentence>> createTalkSentences(List<String> kanji, List<String> kana, List<String> en, List<Integer> ids) {
+		List<TalkSentence> sentences = new ArrayList<TalkSentence>();
 		if(kanji.size() == kana.size() && kanji.size() == en.size() && kanji.size() == ids.size()) {
 			for (Integer i = 0; i < kanji.size(); i++) {
 				sentences.add(new TalkSentence(Arrays.asList(kanji.get(i)), Arrays.asList(kana.get(i)), Arrays.asList(en.get(i)), ids.get(i)));

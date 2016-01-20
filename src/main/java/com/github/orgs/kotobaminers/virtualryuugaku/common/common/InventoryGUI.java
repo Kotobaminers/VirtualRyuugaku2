@@ -18,7 +18,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.SpellType;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.Sentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceStorage;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.TalkSentence;
 
 import net.citizensnpcs.api.npc.NPC;
 import net.md_5.bungee.api.ChatColor;
@@ -27,6 +30,7 @@ public class InventoryGUI {
 	public static final String SELECTOR_NPC = "" + ChatColor.GREEN + ChatColor.BOLD +  "Select NPC!";
 	public static final String SELECTOR_MODE = "" + ChatColor.AQUA + ChatColor.BOLD + "Select Game Mode!";
 	public static final String SELECTOR_STAGE = "" + ChatColor.RED + ChatColor.BOLD + "Select Stage!";
+	public static final String SELECTOR_SENTENCE = "" + ChatColor.RED + ChatColor.BOLD + "Select Sentence!";
 	public static final String MODE_FREE = "Free";
 	public static final List<String> LORE_FREE = Arrays.asList("To look around", "(No Games)");
 	public static final String MODE_TOUR = "Tour";
@@ -70,6 +74,35 @@ public class InventoryGUI {
 
 		return inventory;
 	}
+
+	public static Inventory createSentenceSelector(List<Sentence> sentences) {
+		Inventory inventory = Bukkit.createInventory(null, 36, SELECTOR_SENTENCE);
+		List<List<ItemStack>> items = sentences.stream().filter(sentence -> sentence instanceof TalkSentence)
+			.map(sentence -> (TalkSentence) sentence)
+			.map(getSentenceItems)
+			.collect(Collectors.toList());
+		Integer low = 0;
+		for (List<ItemStack> list : items) {
+			Integer column = 0;
+			for (ItemStack item : list) {
+				item.setAmount(low + 1);
+				inventory.setItem(low + column++ * 9, item);
+			}
+			low++;
+		}
+		return inventory;
+	}
+
+	private static final Function<TalkSentence, List<ItemStack>> getSentenceItems = (sentence) ->
+		Arrays.asList(SpellType.EN, SpellType.KANJI, SpellType.KANA, SpellType.ROMAJI)
+			.stream().map(spell -> {
+				ItemStack item = spell.getIconItem();
+				ItemMeta itemMeta = item.getItemMeta();
+				sentence.getLine(spell).ifPresent(line -> itemMeta.setDisplayName(line.get(0)));
+				item.setItemMeta(itemMeta);
+				return item;
+				})
+			.collect(Collectors.toList());
 
 	public Inventory createSelectNPCGUI(String stage) {
 		Set<Integer> ids = new HashSet<Integer>();

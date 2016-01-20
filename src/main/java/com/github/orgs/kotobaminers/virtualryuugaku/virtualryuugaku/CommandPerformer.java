@@ -25,6 +25,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Le
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Stage;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.StageStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.VRGSentence;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerData;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicCommandGame;
@@ -113,6 +114,9 @@ public class CommandPerformer {
 			success = commandDictionaryBroadcast();
 			break;
 
+		case EDIT:
+			success = commandEdit();
+			break;
 		case TP:
 			success = commandTP();
 			break;
@@ -492,8 +496,15 @@ public class CommandPerformer {
 		return true;
 	}
 
+	private boolean commandEdit() {
+		if (0 < params.size()) {
+			PlayerDataStorage.getDataPlayer(player).editor.ifPresent(e -> e.editSentence(String.join(" ", params), player));
+		}
+		return true;
+	}
+
 	private boolean commandDebugDebug() {
-		Utility.sendTitle(player, "Stage TMP", "aaa");
+		SentenceStorage.test();
 		return true;
 	}
 

@@ -23,6 +23,13 @@ public class Japanese extends Line {
 				collect(Collectors.toList()));
 	}
 
+	public void updateRomaji() {
+		Optional.ofNullable(lines.getOrDefault(SpellType.KANA, null))
+			.ifPresent(line ->
+				this.lines.put(SpellType.ROMAJI, line.stream().map(s -> Romaji.toRomaji(s)).collect(Collectors.toList()))
+			);
+	}
+
 	@Override
 	public Optional<List<String>> getLine(List<SpellType> spells) {
 		List<String> expressions = new ArrayList<String>();
@@ -42,4 +49,11 @@ public class Japanese extends Line {
 		return all;
 	}
 
+	@Override
+	public void update(String line, SpellType spell) {
+		lines.computeIfPresent(spell, (key, value) -> Arrays.asList(line));
+		if (spell.equals(SpellType.KANA)) {
+			lines.put(SpellType.ROMAJI, Arrays.asList(Romaji.toRomaji(line)));
+		}
+	}
 }

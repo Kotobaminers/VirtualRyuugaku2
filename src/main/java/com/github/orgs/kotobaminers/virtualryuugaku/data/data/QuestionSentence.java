@@ -7,6 +7,7 @@ import java.util.function.Function;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.SpellType;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceStorage.PathStage;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.SoundMeta;
@@ -41,5 +42,10 @@ public class QuestionSentence extends Sentence{
 
 	public String getQuestion() {
 		return question;
+	}
+
+	@Override
+	public void update(String line, SpellType spell) {
+		this.question = line;
 	}
 }

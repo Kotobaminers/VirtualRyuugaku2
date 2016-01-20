@@ -1,5 +1,6 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.data.data;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,5 +24,10 @@ public class English extends Line {
 			return Optional.ofNullable(en);
 		}
 		return Optional.empty();
+	}
+
+	@Override
+	public void update(String line, SpellType spell) {
+		this.en = Arrays.asList(line);
 	}
 }

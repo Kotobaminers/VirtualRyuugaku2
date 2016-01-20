@@ -25,6 +25,11 @@ public class PlayerDataStorage implements Storage {
 		return playerStorage.get(player.getUniqueId());
 	}
 
+	public static PlayerData getDataPlayer(UUID uuid) {
+		playerStorage.computeIfAbsent(uuid, key -> playerStorage.put(key, new PlayerData(uuid)));
+		return playerStorage.get(uuid);
+	}
+
 	public static void addLine(Player player) {
 		getDataPlayer(player).line += 1;
 	}
@@ -43,7 +48,7 @@ public class PlayerDataStorage implements Storage {
 		if (data.line < data.conversation.sentences.size()) {
 			return data.conversation.sentences.get(data.line);
 		}
-		throw new Exception("Invalid talk: Name" + data.name);
+		throw new Exception();
 	}
 
 	public void importPlayerData() {
@@ -63,7 +68,6 @@ public class PlayerDataStorage implements Storage {
 	private PlayerData createPlayerData(MemorySection memory, String key) {
 		PlayerData data = new PlayerData();
 		data.uuid = UUID.fromString(key);
-		data.name = memory.getString("NAME");
 		data.line = memory.getInt("LINE");
 		return data;
 	}
