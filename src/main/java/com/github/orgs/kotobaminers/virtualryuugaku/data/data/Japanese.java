@@ -56,4 +56,8 @@ public class Japanese extends Line {
 			lines.put(SpellType.ROMAJI, Arrays.asList(Romaji.toRomaji(line)));
 		}
 	}
+
+	public void setRomaji(String romaji) {
+		this.lines.put(SpellType.ROMAJI, Arrays.asList(romaji));
+	}
 }

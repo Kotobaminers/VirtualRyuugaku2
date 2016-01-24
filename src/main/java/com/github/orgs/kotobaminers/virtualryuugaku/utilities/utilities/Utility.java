@@ -5,7 +5,9 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
+import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -147,10 +149,13 @@ public class Utility {
 	}
 
 	public static final void teleportToNPC(Player player, NPC npc) {
-		Location location = npc.getStoredLocation().add(0, 1, -0.5);
+		Location location = npc.getStoredLocation().clone();
+		location.add(0, 1, -0.5);
 		location.setPitch(50);
 		location.setYaw(0);
 		player.teleport(location);
+		player.getWorld().spigot().playEffect(player.getLocation(), Effect.ENDER_SIGNAL);
+		player.playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, 1F);
 	}
 
 	public static final void sendTitle(Player player, String title, String subtitle){
@@ -166,8 +171,6 @@ public class Utility {
 		connection.sendPacket(titlePacket);
 		connection.sendPacket(subTitlePacket);
 	}
-
-
 }
 
 

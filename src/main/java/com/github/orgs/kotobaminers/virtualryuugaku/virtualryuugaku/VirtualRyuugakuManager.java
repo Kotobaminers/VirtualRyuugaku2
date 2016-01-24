@@ -2,7 +2,7 @@ package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Romaji;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceStorage;
-import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataController;
+import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 
 public final class VirtualRyuugakuManager {
@@ -12,9 +12,10 @@ public final class VirtualRyuugakuManager {
 		new Romaji().load();
 
 		Debug.printDebugMessage("[VirtualRyuugaku] Loading Player Data", new Exception());
-		new PlayerDataController().initializeStorage();
+		new PlayerDataStorage().initialize();
 
 		SentenceStorage.importSentences();
+		SentenceStorage.importLearnerSentences();
 
 
 

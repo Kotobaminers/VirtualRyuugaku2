@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.bukkit.Effect;
@@ -20,12 +18,9 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Commands
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.SpellType;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCHandler;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Description;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.LearnerNPCBook;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Stage;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.StageStorage;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.VRGSentence;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerData;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicCommandGame;
@@ -86,6 +81,9 @@ public class CommandPerformer {
 			break;
 		case DEBUG_EFFECT:
 			success = commandDebugEffect();
+			break;
+		case DEBUG_SOUND:
+			success = commandDebugSound();
 			break;
 
 		case SAVE:
@@ -486,43 +484,32 @@ public class CommandPerformer {
 		List<Effect> effects = Arrays.asList(Effect.values()).stream().sorted().collect(Collectors.toList());
 		Integer id = Integer.valueOf(params.get(0));
 		Effect playing = effects.get(id);
-		Location location = NPCHandler.findNPC(10001).get().getStoredLocation();
-		Utility.lookAt(player, location);
-		player.getWorld().spigot().playEffect(location.add(0, 2, 0), playing, id, 10, 0, 0, 0, 0, 1, 10);
-		player.playSound(player.getLocation(), Sound.NOTE_PIANO, 1, 1);
+		player.getWorld().spigot().playEffect(player.getLocation(), playing, id, 10, 0, 0, 0, 0, 1, 10);
+		player.sendMessage(playing.name());
+		return true;
+	}
 
-//		player.getWorld().spigot().playEffect(location, effect, id, data, offsetX, offsetY, offsetZ, speed, particleCount, radius););
+	private boolean commandDebugSound() {
+		List<Sound> sounds = Arrays.asList(Sound.values()).stream().sorted().collect(Collectors.toList());
+		Integer id = Integer.valueOf(params.get(0));
+		Sound playing = sounds.get(id);
+		player.playSound(player.getLocation(), playing, 1f, 1f);
 		player.sendMessage(playing.name());
 		return true;
 	}
 
 	private boolean commandEdit() {
 		if (0 < params.size()) {
-			PlayerDataStorage.getDataPlayer(player).editor.ifPresent(e -> e.editSentence(String.join(" ", params), player));
-		}
+			PlayerDataStorage.getDataPlayer(player).editor
+				.ifPresent(e -> e.edit(String.join(" ", params)));		}
 		return true;
 	}
 
 	private boolean commandDebugDebug() {
-		SentenceStorage.test();
+		NPCHandler.changeNPCAsEmpty(NPCHandler.findNPC(10025).get());
+//		NPCHandler.ownNPC(NPCHandler.findNPC(10025).get(), player);
 		return true;
 	}
-
-	public static Function<String, Optional<VRGSentence>> translatePageToSentence =
-		(page) -> {
-			List<String> lines = Arrays.asList(page.replaceAll("§0", "").split("\\n"));
-			VRGSentence sentence = null;
-			if (2 < lines.size()) {
-				String kanji = "";
-				if (3 < lines.size()) {
-					kanji = lines.get(3);
-				}
-				sentence = new VRGSentence();
-				sentence.description = Description.create(kanji, lines.get(2), lines.get(1), new ArrayList<String>());
-			}
-			return Optional.ofNullable(sentence);
-		};
-
 	private boolean commandGameFinish() {
 //		if(ControllerGameGlobal.isValidGame()) {
 //			ControllerGameGlobal.finishGame();

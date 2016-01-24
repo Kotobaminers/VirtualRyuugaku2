@@ -11,6 +11,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Firework
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.SoundMeta.Scene;
 
 public class Effects {
+	@Deprecated
 	public static void playSound(Player player, Scene scene) {
 		SoundMeta meta = new SoundMeta(scene);
 		player.playSound(player.getLocation(), meta.sound, meta.volume, meta.pitch);

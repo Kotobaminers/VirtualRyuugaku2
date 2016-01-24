@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCHandler;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.Sentence;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HolographicSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
@@ -22,8 +22,8 @@ import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
 import net.citizensnpcs.api.npc.NPC;
 
 public class PublicTourController {
-	public static Iterator<List<Sentence>> sentences;
-	private static List<Sentence> current;
+	public static Iterator<List<HolographicSentence>> sentences;
+	private static List<HolographicSentence> current;
 	private static Set<UUID> member = new HashSet<>();
 	private static String stage = "";
 

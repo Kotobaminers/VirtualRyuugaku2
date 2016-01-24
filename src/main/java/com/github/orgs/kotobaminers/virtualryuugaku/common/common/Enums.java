@@ -12,6 +12,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
 
@@ -44,6 +46,12 @@ public class Enums {//public enums
 		DEBUG_EFFECT(
 				VIRTUALRYUUGAKU_DEBUG,
 				Arrays.asList("effect", "e"),
+				"",
+				new ArrayList<String>(),
+				CommandPermission.OP),
+		DEBUG_SOUND(
+				VIRTUALRYUUGAKU_DEBUG,
+				Arrays.asList("sound", "s"),
 				"",
 				new ArrayList<String>(),
 				CommandPermission.OP),
@@ -453,4 +461,55 @@ public class Enums {//public enums
 		}
 	}
 	public enum PathConversation {STAGE, EDITOR, EN, KANJI, KANA, KEY, Q, A, COMMENT}
+
+	public enum GameMode {
+		FREE("Free", Material.FEATHER, Arrays.asList("To Look Around")),
+		TOUR("Tour", Material.COMPASS, Arrays.asList("To Join A Tour")),
+		TRAINING("Training", Material.IRON_SPADE, Arrays.asList("To Start Training")),
+		ANKI("Anki", Material.BOOK_AND_QUILL, Arrays.asList("To Memorize Sentences")),
+		MY_NPC("Your NPC", Material.SKULL_ITEM, Arrays.asList("To Create Your NPC")),
+		;
+
+		private GameMode(String mode, Material material, List<String> lore) {
+			this.mode = mode;
+			this.material = material;
+			this.lore = lore;
+		}
+		public String mode;
+		public Material material;
+		public List<String> lore;
+
+		public static GameMode create(Material material) {
+			for (GameMode gameMode : GameMode.values()) {
+				if (gameMode.material.equals(material)) {
+					return gameMode;
+				}
+			}
+			return GameMode.FREE;
+		}
+
+		public ItemStack createIcon(String stage) {
+			ItemStack item = new ItemStack(material);
+			ItemMeta meta = item.getItemMeta();
+			meta.setDisplayName(mode);
+			List<String> lore = new ArrayList<String>();
+			lore.add(stage);
+			lore.addAll(this.lore);
+			meta.setLore(lore);
+			if (this.equals(MY_NPC)) {
+				SkullMeta skull = (SkullMeta) meta;
+				skull.setOwner("kai_f");
+			}
+			item.setItemMeta(meta);
+			return item;
+		}
+
+		public String getSubtitle() {
+			return "~ " + this.mode + " Mode ~";
+		}
+	}
+
+
+
+
 }
