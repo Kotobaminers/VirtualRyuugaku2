@@ -9,7 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class MessengerVRG {
+public class VRGMessenger {
 	public static final String MARK_KEY = ChatColor.YELLOW +"*KEY* " + ChatColor.RESET;
 	private static final String getPartition(String mark1, String mark2, ChatColor color1, ChatColor color2) {
 		String partition = "  ";
@@ -45,7 +45,10 @@ public class MessengerVRG {
 		VRG("" + ChatColor.GOLD + ChatColor.BOLD +"[" + ChatColor.YELLOW + "VRG" + ChatColor.GOLD + ChatColor.BOLD + "] " + ChatColor.RESET),
 		NONE(""),
 		MINI_GAME("" + ChatColor.GOLD + ChatColor.BOLD +"[" + ChatColor.YELLOW + "MiniGame" + ChatColor.GOLD + ChatColor.BOLD + "] " + ChatColor.RESET),
-		;
+		ERROR("" + ChatColor.DARK_RED + ChatColor.BOLD + "[VRG Error] " + ChatColor.RESET),
+		INVALID("" + ChatColor.RED + ChatColor.BOLD + "[VRG Invalid] " + ChatColor.RESET),
+		EDITOR("" + ChatColor.DARK_GREEN + ChatColor.BOLD +"[" + ChatColor.GREEN + "VRG Editor" + ChatColor.DARK_GREEN + ChatColor.BOLD + "] " + ChatColor.RESET),
+			;
 
 		private String prefix = "";
 		private Prefix(String prefix) {
@@ -67,8 +70,13 @@ public class MessengerVRG {
 		COMMON_WRONG_0(Arrays.asList(ChatColor.RED + "Wrong!"), Prefix.VRG),
 		COMMON_CORRECT_0(Arrays.asList(ChatColor.GREEN + "Correct!"), Prefix.VRG),
 		COMMON_NOT_SELECT_CONVERSATION_0(Arrays.asList("You haven't select any NPCs."), Prefix.VRG),
-		EMPTY_1(Arrays.asList(""), Prefix.NONE),
+
+		VRG_1(Arrays.asList(""), Prefix.VRG),
+		ERROR_1(Arrays.asList(""), Prefix.ERROR),
+		INVALID_1(Arrays.asList(""), Prefix.INVALID),
+		EDITOR_1(Arrays.asList(""), Prefix.EDITOR),
 		COMMON_TP_1(Arrays.asList("Teleporting to " + ChatColor.AQUA), Prefix.VRG),
+
 
 		CONVERSATION_QUESTION_1(Arrays.asList("" + ChatColor.GOLD + "[Question] "), Prefix.NONE),
 		CONVERSATION_FINISH_0(Arrays.asList(ChatColor.GREEN + "You have finished the new conversation."), Prefix.VRG),
@@ -149,27 +157,38 @@ public class MessengerVRG {
 			this.prefix = prefix;
 		}
 
-		private String getMessage(String[] opts) {
+		private String getMessage(List<String> opts) {
 			String message = "";
 			for (int i = 0; i < messages.size(); i++) {
 				message += messages.get(i);
 				if(opts == null) {
 					return message;
-				} else if (i < opts.length) {
-					message += opts[i];
+				} else if (i < opts.size()) {
+					message += opts.get(i);
 				}
 			}
 			return message;
 		}
 
-		public void print(CommandSender sender, String[] opts) {
+		public void print(List<String> opts, CommandSender sender) {
 			if(sender != null) {
 				sender.sendMessage(prefix.getPrefix() + getMessage(opts));
 			}
 		}
-		public void print(List<String> opts, CommandSender sender) {
-			print(sender, (String[]) opts.toArray());
+		public void print(List<String> opts, CommandSender[] senders) {
+			if(senders != null) {
+				for (CommandSender sender : senders) {
+					print(opts, sender);
+				}
+			}
 		}
+		public void broadcast(List<String> opts) {
+			for(Player player: Bukkit.getServer().getOnlinePlayers()) {
+				print(opts, player);
+			}
+		}
+
+		@Deprecated
 		public void print(CommandSender[] senders, String[] opts) {
 			if (senders != null) {
 				for (CommandSender sender : senders) {
@@ -177,10 +196,18 @@ public class MessengerVRG {
 				}
 			}
 		}
-		public void broadcast(String[] opts) {
-			for(Player player: Bukkit.getServer().getOnlinePlayers()) {
-				print(player, opts);
+		@Deprecated
+		public void print(CommandSender sender, String[] opts) {
+			if(sender != null) {
+				sender.sendMessage(prefix.getPrefix() + getMessage(opts));
 			}
+		}
+		@Deprecated
+		private String getMessage(String[] opts) {
+			if (opts == null) {
+				return "";
+			}
+			return getMessage(Arrays.asList(opts));
 		}
 	}
 }

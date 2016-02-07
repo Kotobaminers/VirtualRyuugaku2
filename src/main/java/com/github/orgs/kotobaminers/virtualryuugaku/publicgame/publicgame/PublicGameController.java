@@ -1,5 +1,6 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -9,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.VRGMessenger.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Stage;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.StageController;
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicGame.EventScore;
@@ -97,8 +98,7 @@ public class PublicGameController extends BukkitRunnable {
 			saveLastGame();
 			stage = StageController.getStageRandom();
 			join = new HashSet<UUID>();
-			String[] opts = {stage.name};
-			Message.GAME_NEW_STAGE_1.broadcast(opts);
+			Message.GAME_NEW_STAGE_1.broadcast(Arrays.asList(stage.name));
 			break;
 
 		case TO_NEXT_GAME:

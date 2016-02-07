@@ -10,23 +10,36 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.SpellType;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HelperSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HolographicSentence;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.LearnerSentence;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.OwnerSentence;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.PlayerSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.QuestionSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceEditor;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
+
+import net.citizensnpcs.api.npc.NPC;
 
 public abstract class SentenceSelector extends VRGGUI {
 	public abstract List<List<ItemStack>> getIcons();
+	public abstract List<ItemStack> getOptionIcons();
 
-	public static Optional<SentenceSelector> create(List<HolographicSentence> sentences) {
-		if (0 < sentences.size()) {
-			if(sentences.stream().allMatch(sentence -> sentence instanceof LearnerSentence)) {
-				return Optional.of(new LearnerSentenceSelector(sentences));
-			}
-			if(sentences.stream().allMatch(sentence -> sentence instanceof OwnerSentence || sentence instanceof QuestionSentence)) {
-				return Optional.of(new OwnerSentenceSelector(sentences));
+	public static Optional<SentenceSelector> create(NPC npc) {
+		Optional<String> stageOptional = SentenceStorage.findUnitName(npc.getId());
+		if (!stageOptional.isPresent()) {
+			return Optional.empty();
+		}
+
+		Optional<List<HolographicSentence>> optional = SentenceStorage.findHolographicSentences.apply(npc);
+		if(optional.isPresent()) {
+			List<HolographicSentence> sentences = optional.get();
+			if (0 < sentences.size()) {
+				if(sentences.stream().allMatch(sentence -> sentence instanceof PlayerSentence)) {
+					return Optional.of(new LearnerSentenceSelector(sentences));
+				}
+				if(sentences.stream().allMatch(sentence -> sentence instanceof HelperSentence || sentence instanceof QuestionSentence)) {
+					return Optional.of(new OwnerSentenceSelector(sentences));
+				}
 			}
 		}
 		return Optional.empty();
@@ -34,7 +47,7 @@ public abstract class SentenceSelector extends VRGGUI {
 
 	@Override
 	public Inventory createInventory() {
-		Inventory inventory = Bukkit.createInventory(null, 54, getTitle());
+		Inventory inventory = Bukkit.createInventory(null, size, getTitle());
 		Integer low = 0;
 		for (List<ItemStack> list : getIcons()) {
 			Integer column = 0;
@@ -44,23 +57,41 @@ public abstract class SentenceSelector extends VRGGUI {
 			}
 			low++;
 		}
+
+
+		Integer position = new Integer(size - 1);
+		for (ItemStack item : getOptionIcons()) {
+			inventory.setItem(position--, item);
+		}
 		return inventory;
 	}
 
-	@Override
-	public void eventInventoryClick(InventoryClickEvent event) {
-		Player player = (Player) event.getWhoClicked();
-		Optional<SpellType> spell = SpellType.createSpellType(event.getCurrentItem());
-		selectSentence(event)
-			.ifPresent(s ->
-				spell.ifPresent(sp ->
-					PlayerDataStorage.getDataPlayer(player).editor = Optional.of(new SentenceEditor(s, sp))));
-		event.setCancelled(true);
-		player.closeInventory();
+	public static Optional<SentenceSelector> create(InventoryClickEvent event) {
+		switch(event.getInventory().getTitle()) {
+		case LearnerSentenceSelector.TITLE:
+			return Optional.of(new LearnerSentenceSelector());
+		case OwnerSentenceSelector.TITLE:
+			return Optional.of(new OwnerSentenceSelector());
+		}
+		return Optional.empty();
 	}
 
-	public abstract Optional<HolographicSentence> selectSentence(InventoryClickEvent event);
+	public Optional<SentenceEditor> createEditor(InventoryClickEvent event, GUIIcon icon) {
+		int id = PlayerDataStorage.getPlayerData((Player) event.getWhoClicked()).getSelectId();
+		int index = event.getRawSlot() % 9;
+		switch (icon) {
+			case EN:
+				return Optional.of(SentenceEditor.create(id, index, Optional.of(SpellType.EN)));
+			case KANJI:
+				return Optional.of(SentenceEditor.create(id, index, Optional.of(SpellType.KANJI)));
+			case KANA:
+				return Optional.of(SentenceEditor.create(id, index, Optional.of(SpellType.KANA)));
+			case QUESTION:
+				return Optional.of(SentenceEditor.create(id, index, Optional.empty()));
+		default:
+			return Optional.empty();
+		}
+	}
+
 }
-
-
 

@@ -1,12 +1,10 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.gui.gui;
 
-import java.util.Optional;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -17,29 +15,24 @@ public class StageSelector extends VRGGUI {
 	public static final String TITLE = "Select Stage!";
 
 	@Override
-	public void eventInventoryClick(InventoryClickEvent event) {
-		Player player = (Player) event.getWhoClicked();
-		String stage = event.getCurrentItem().getItemMeta().getDisplayName();
-		event.setCancelled(true);
-		Optional<GameModeSelector> selector = GameModeSelector.create(stage);
-		selector.ifPresent(s -> {
-			player.openInventory(s.createInventory());
-			playSoundClick(player);
-		});
-	}
-
-	@Override
 	public Inventory createInventory() {
-		Inventory inventory = Bukkit.createInventory(null, 54, getTitle());
-		SentenceStorage.ownerSentences.keySet().stream()
+		Inventory inventory = Bukkit.createInventory(null, size, getTitle());
+		SentenceStorage.helperSentences.keySet().stream()
 			.map(stage -> {
-				ItemStack item = new ItemStack(Material.WOOL);
+				ItemStack item = GUIIcon.UNIT.createItem();
 				ItemMeta meta = item.getItemMeta();
 				meta.setDisplayName(stage);
 				item.setItemMeta(meta);
 				return item;})
 			.collect(Collectors.toList())
 			.forEach(item -> inventory.addItem(item));
+		Integer position = new Integer(size - 1);
+		List<ItemStack> items = Arrays.asList(GUIIcon.OPTION).stream()
+			.map(icon -> icon.createItem())
+			.collect(Collectors.toList());
+		for (ItemStack item : items) {
+			inventory.setItem(position--, item);
+		}
 		return inventory;
 	}
 

@@ -33,7 +33,7 @@ public class Description {
 	}
 
 	public String getJapaneseJoined(Player player) {
-		PlayerData data = PlayerDataStorage.getDataPlayer(player);
+		PlayerData data = PlayerDataStorage.getPlayerData(player);
 		List<String> japanese = new ArrayList<String>();
 		for(SpellType expression : data.expressions) {
 			switch(expression) {

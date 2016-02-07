@@ -2,10 +2,11 @@ package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -15,13 +16,15 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Commands;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.SpellType;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCHandler;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCUtility;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.VRGMessenger.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.LearnerNPCBook;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Stage;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.StageStorage;
-import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerData;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HolographicSentence;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.QuestionSentence;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceEditor;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicCommandGame;
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicEmptyGame;
@@ -68,8 +71,6 @@ public class CommandPerformer {
 		case VIRTUALRYUUGAKU_OP:
 		case VIRTUALRYUUGAKU:
 		case ANSWER:
-		case MYSELF:
-			break;
 		case DEBUG_MODE:
 			success = commandDebugMode();
 			break;
@@ -87,24 +88,23 @@ public class CommandPerformer {
 			break;
 
 		case SAVE:
-			success = commandSave();
+			success = commandOpSave();
 			break;
 		case RELOAD:
-			success = commandReload();
+			success = commandOpReload();
+			break;
+		case EMPTY:
+			success = commandOpEmpty();
+			break;
+		case UNIT:
+			break;
+		case UNIT_CREATE:
+			success = commandUnitCreate();
+			break;
+		case UNIT_ADD_HELPER:
+			success = commandUnitAddHelper();
 			break;
 
-		case EN:
-			success = commandEN();
-			break;
-		case ROMAJI:
-			success = commandRomaji();
-			break;
-		case KANA:
-			success = commandKana();
-			break;
-		case KANJI:
-			success = commandKanji();
-			break;
 		case DICTIONARY:
 			success = commandDictionary();
 			break;
@@ -115,9 +115,16 @@ public class CommandPerformer {
 		case EDIT:
 			success = commandEdit();
 			break;
-		case TP:
-			success = commandTP();
+		case ADD_ANSWER:
+			success = commandAddAnswer();
 			break;
+		case REMOVE_ANSWER:
+			success = commandRemoveAnswer();
+			break;
+		case DELETE_QUESTION:
+			success = commandDeleteQuestion();
+			break;
+
 		case INFO:
 			success = commandInfo();
 			break;
@@ -125,59 +132,16 @@ public class CommandPerformer {
 			success = commandList();
 			break;
 
-		case GAME:
-			break;
-		case GAME_START:
-			success = commandGameStart();
-			break;
-		case GAME_FINISH:
-			success = commandGameFinish();
-			break;
-		case GAME_NEXT:
-			success = commandGameNext();
-			break;
-		case GAME_RULE:
-			success = commandGameRule();
-			break;
-		case GAME_JOIN:
-			success = commandGameJoin();
-			break;
-		case GAME_REPEAT:
-			success = commandGameRepeat();
-			break;
-
-		case TOUR_JOIN:
-//			success = commandTourJoin();
-			break;
-		case TOUR_START:
-//			success = commandTourStart();
-			break;
-		case TOUR_NEXT:
-			success = commandTourNext();
-			break;
-		case TOUR_PREVIOUS:
-			success = commandTourPrevious();
-			break;
-
 		case ANSWER_GAME:
 			success = commandAnswerGame();
 			break;
 		case ANSWER_CONVERSATION:
-			success = commandAnswerConversation();
+			success = commandAnswerHelper();
 			break;
 		case ANSWER_PUBLIC_GAME:
 			success = commandAnswerPublicGame();
 			break;
 
-		case MYSELF_BOOK:
-			success = commandMyselfBook();
-			break;
-		case MYSELF_UPDATE:
-//			success = commandMyselfUpdate();
-			break;
-//		case MYSELF_RELOAD:
-//			success = commandMyselfReload();
-//			break;
 
 		default:
 			break;
@@ -206,6 +170,94 @@ public class CommandPerformer {
 //		}
 //		return false;
 //	}
+
+	private boolean commandDeleteQuestion() {
+		if (!hasValidPlayer()) {
+			return true;
+		}
+		Optional<SentenceEditor> editor = PlayerDataStorage.getPlayerData(player).editor;
+		if (editor.isPresent()) {
+			editor.get().deleteQuestion(player);
+		} else {
+			Message.INVALID_1.print(Arrays.asList("Please select an ediable question"), player);
+		}
+		PlayerDataStorage.closeEditor(player);
+		return true;
+	}
+
+	private boolean commandRemoveAnswer() {
+		if (params.size() < 1) {
+			return false;
+		}
+		if (!hasValidPlayer()) {
+			return true;
+		}
+		String answer = String.join(" ", params);
+		Optional<SentenceEditor> editor = PlayerDataStorage.getPlayerData(player).editor;
+		if (editor.isPresent()) {
+			editor.get().removeAnswer(answer, player);
+		} else {
+			Message.INVALID_1.print(Arrays.asList("Please select an ediable question"), player);
+		}
+		PlayerDataStorage.closeEditor(player);
+		return true;
+	}
+
+	private boolean commandAddAnswer() {
+		if (params.size() < 1) {
+			return false;
+		}
+		if (!hasValidPlayer()) {
+			return true;
+		}
+		String answer = String.join(" ", params);
+		Optional<SentenceEditor> editor = PlayerDataStorage.getPlayerData(player).editor;
+		if (editor.isPresent()) {
+			editor.get().addAnswer(answer, player);
+		} else {
+			Message.INVALID_1.print(Arrays.asList("Please select an ediable question"), player);
+		}
+		PlayerDataStorage.closeEditor(player);
+		return true;
+	}
+
+	private boolean commandUnitAddHelper() {
+		if(params.size() < 2) {
+			return false;
+		}
+		String unit = params.get(0).toUpperCase();
+		Integer id = 0;
+		try {
+			id =  Integer.parseInt(params.get(1));
+		} catch(NumberFormatException e) {
+			e.printStackTrace();
+			return false;
+		}
+		SentenceStorage.addHelperNPC(unit, id, sender);
+		return true;
+	}
+
+	private boolean commandUnitCreate() {
+		if(params.size() < 2) {
+			return false;
+		}
+		String unit = params.get(0).toUpperCase();
+		Integer id = 0;
+		try {
+			id =  Integer.parseInt(params.get(1));
+		} catch(NumberFormatException e) {
+			e.printStackTrace();
+			return false;
+		}
+		SentenceStorage.addHelperUnit(unit, id, sender);
+		return true;
+	}
+
+	private boolean commandOpEmpty() {
+		int id = Integer.parseInt(params.get(0));
+		NPCUtility.findNPC(id).ifPresent(npc -> NPCUtility.changeNPCAsEmpty(npc));
+		return true;
+	}
 
 	private boolean commandTourNext() {
 		if (!hasValidPlayer()) {
@@ -259,11 +311,10 @@ public class CommandPerformer {
 		for (List<Integer> index : PublicGameController.stage.npcConversations.keySet()) {
 			if (0 < index.size()) {
 				try {
-					Location location = NPCHandler.getNPC(index.get(0)).getStoredLocation();
+					Location location = NPCUtility.getNPC(index.get(0)).getStoredLocation();
 					player.teleport(location.add(0, 1, 0));
 					PublicGameController.joinPlayer(player);
-					String[] opts = {player.getName(), PublicGameController.stage.name};
-					Message.GAME_JOIN_TP_2.broadcast(opts);
+					Message.GAME_JOIN_TP_2.broadcast(Arrays.asList(player.getName(), PublicGameController.stage.name));
 					PublicGameController.game.giveCurrentQuestion(player);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -325,8 +376,7 @@ public class CommandPerformer {
 
 	private boolean commandDictionaryBroadcast() {
 		if (0 < params.size()) {
-			String[] opts = {Utility.joinStrings(params, "+")};
-			Message.COMMAND_DICTIONARY_1.broadcast(opts);
+			Message.COMMAND_DICTIONARY_1.broadcast(Arrays.asList(String.join("+", params)));
 		} else {
 			Message.COMMAND_DICTIONARY_0.broadcast(null);
 		}
@@ -369,93 +419,37 @@ public class CommandPerformer {
 	}
 
 	public void printInvalidParams() {
-		String[] opts = {Utility.joinStrings(params, ", ")};
-		Message.COMMAND_INVALID_PARAMS_1.print(sender, opts);
+		Message.COMMAND_INVALID_PARAMS_1.print(Arrays.asList(String.join(", ", params)), sender);
 		command.printUsage(player);
 	}
 
-	private boolean commandTP() {
+	private boolean commandAnswerHelper() {
 		if (!hasValidPlayer()) {
 			return true;
 		}
-		if(0 < params.size()) {
-			String name = params.get(0).toUpperCase();
-			for (Stage stage  : StageStorage.getStages()) {
-				for (List<Integer> index : stage.npcConversations.keySet()) {
-					if (0 < index.size()) {
-						try {
-							Location location = NPCHandler.getNPC(index.get(0)).getStoredLocation();
-							player.teleport(location);
-							String[] opts = {name};
-							Message.COMMON_TP_1.print(player, opts);
-							return true;
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-		}
-		return false;
-	}
-
-	private boolean commandAnswerConversation() {
-		if (!hasValidPlayer()) {
-			return true;
-		}
-		String answer = "";
 		if (0 < params.size()) {
-			answer = Utility.joinStrings(params, " ");
-			PlayerDataStorage.getDataPlayer(player).question.validateQuestion(player, answer);
+			Integer select = PlayerDataStorage.getPlayerData(player).getSelectId();
+			Optional<List<HolographicSentence>> sentences = NPCUtility.findNPC(select).flatMap(npc -> SentenceStorage.findHolographicSentences.apply(npc));
+			if (sentences.isPresent()) {
+				sentences.flatMap(ls -> ls.stream().filter(s -> s instanceof QuestionSentence).findFirst())
+					.map(s -> (QuestionSentence) s)
+					.ifPresent(q-> q.validate(String.join(" ", params), player));
+				return true;
+			}
 			return true;
 		}
 		return false;
 	}
 
-	private boolean commandEN() {
-		return commandToggleExpression(SpellType.EN);
-	}
-	private boolean commandRomaji() {
-		return commandToggleExpression(SpellType.ROMAJI);
-	}
-	private boolean commandKana() {
-		return commandToggleExpression(SpellType.KANA);
-	}
-	private boolean commandKanji() {
-		return commandToggleExpression(SpellType.KANJI);
-	}
-
-	private boolean commandToggleExpression(SpellType expression) {
-		if (!hasValidPlayer()) {
-			return true;
-		}
-
-		PlayerData data = PlayerDataStorage.getDataPlayer(player);
-		PlayerDataStorage.toggleExpression(data, expression);
-		List<String> expressions = new ArrayList<String>();
-		for(SpellType search : data.expressions) {
-			expressions.add(search.toString());
-		}
-		Collections.sort(expressions);
-
-		if(0 < expressions.size()) {
-			String[] opts = {Utility.joinStrings(expressions, ", ")};
-			Message.EXPRESSIONS_1.print(sender, opts);
-		} else {
-			Message.EXPRESSIONS_OFF_0.print(sender, null);
-		}
+	private boolean commandOpSave() {
+		Message.OP_SAVE_.print(null, sender);
+		VRGManager.savePlugin();
 		return true;
 	}
 
-	private boolean commandSave() {
-		Message.OP_SAVE_.print(sender, null);
-		VirtualRyuugakuManager.savePlugin();
-		return true;
-	}
-
-	private boolean commandReload() {
-		Message.OP_RELOAD_.print(sender, null);
-		VirtualRyuugakuManager.loadPlugin();
+	private boolean commandOpReload() {
+		Message.OP_RELOAD_.print(null, sender);
+		VRGManager.loadPlugin();
 		return true;
 	}
 
@@ -481,33 +475,68 @@ public class CommandPerformer {
 	}
 
 	private boolean commandDebugEffect() {
-		List<Effect> effects = Arrays.asList(Effect.values()).stream().sorted().collect(Collectors.toList());
-		Integer id = Integer.valueOf(params.get(0));
-		Effect playing = effects.get(id);
-		player.getWorld().spigot().playEffect(player.getLocation(), playing, id, 10, 0, 0, 0, 0, 1, 10);
-		player.sendMessage(playing.name());
+		Optional<Effect> effect = Stream.of(Effect.values())
+			.filter(e -> e.name().equalsIgnoreCase(params.get(0)))
+			.findFirst();
+		int data = 0;
+		float offsetX = 0;
+		float offsetY = 0;
+		float offsetZ = 0;
+		float speed = 0;
+		int count = 1;
+		if (6< params.size()) {
+			data = Integer.parseInt(params.get(1));
+			offsetX = Float.valueOf(params.get(2));
+			offsetY = Float.valueOf(params.get(3));
+			offsetZ = Float.valueOf(params.get(4));
+			speed = Float.valueOf(params.get(5));
+			count = Integer.parseInt(params.get(6));
+		}
+		if(effect.isPresent()) {
+			Integer id = Arrays.asList(Effect.values()).indexOf(effect.get());
+			player.getWorld().spigot().playEffect(player.getLocation().clone().add(2,0,0), effect.get(), id, data, offsetX, offsetY, offsetZ, speed, count, 10);
+			player.sendMessage(effect.get().name() + " data" + data + " X" + offsetX + " Y" + offsetY + " Z" + offsetZ + " speed" + speed + " count" + count);
+		} else {
+			List<Effect> effects = Arrays.asList(Effect.values()).stream().sorted().collect(Collectors.toList());
+			Integer id = Integer.parseInt(params.get(0));
+			Effect playing = effects.get(id);
+			player.getWorld().spigot().playEffect(player.getLocation().clone().add(2,0,0), effect.get(), id, data, offsetX, offsetY, offsetZ, speed, count, 10);
+			player.sendMessage(playing.name());
+		}
 		return true;
 	}
 
 	private boolean commandDebugSound() {
-		List<Sound> sounds = Arrays.asList(Sound.values()).stream().sorted().collect(Collectors.toList());
-		Integer id = Integer.valueOf(params.get(0));
-		Sound playing = sounds.get(id);
-		player.playSound(player.getLocation(), playing, 1f, 1f);
-		player.sendMessage(playing.name());
+		Optional<Sound> sound = Stream.of(Sound.values())
+			.filter(s -> s.name().equalsIgnoreCase(params.get(0)))
+			.findFirst();
+		if (sound.isPresent()) {
+			player.playSound(player.getLocation(), sound.get(), 1f, 1f);
+		} else {
+			List<Sound> sounds = Arrays.asList(Sound.values()).stream().sorted().collect(Collectors.toList());
+			Integer id = Integer.valueOf(params.get(0));
+			Sound playing = sounds.get(id);
+			player.playSound(player.getLocation(), playing, 1f, 1f);
+			player.sendMessage(playing.name());
+		}
 		return true;
 	}
 
 	private boolean commandEdit() {
 		if (0 < params.size()) {
-			PlayerDataStorage.getDataPlayer(player).editor
-				.ifPresent(e -> e.edit(String.join(" ", params)));		}
+			Optional<SentenceEditor> optional = PlayerDataStorage.getPlayerData(player).editor;
+			if (optional.isPresent()) {
+				optional.get().edit(String.join(" ", params), player);
+				PlayerDataStorage.closeEditor(player);
+			} else {
+				Message.INVALID_1.print(Arrays.asList("Please select an editable sentence"), player);
+				player.playSound(player.getLocation(), Sound.ITEM_BREAK, 1f, 1f);
+			}
+		}
 		return true;
 	}
 
 	private boolean commandDebugDebug() {
-		NPCHandler.changeNPCAsEmpty(NPCHandler.findNPC(10025).get());
-//		NPCHandler.ownNPC(NPCHandler.findNPC(10025).get(), player);
 		return true;
 	}
 	private boolean commandGameFinish() {
@@ -518,7 +547,6 @@ public class CommandPerformer {
 //		}
 		return true;
 	}
-
 	private boolean commandGameNext() {
 //		if(ControllerGameGlobal.isValidGame()) {
 //			ControllerGameGlobal.giveNextQuestion(player);
@@ -527,13 +555,11 @@ public class CommandPerformer {
 //		}
 		return true;
 	}
-
 	private boolean commandGameRule() {
-//		ControllerGameGlobal.printRule(sender);
+//		CoQntrollerGameGlobal.printRule(sender);
 //		Commands.ANSWER_GAME.printUsage(sender);
 		return true;
 	}
-
 	private boolean commandInfo() {
 //		if (!hasValidPlayer()) {
 //			return true;
@@ -573,7 +599,6 @@ public class CommandPerformer {
 //		}
 		return false;
 	}
-
 	private boolean commandAnswerGame() {
 //		if (!hasValidPlayer()) {
 //			return true;
@@ -609,7 +634,6 @@ public class CommandPerformer {
 //		}
 		return false;
 	}
-
 	private boolean commandMyselfUpdate() {
 //		if (!hasValidPlayer()) {
 //			return true;
@@ -617,7 +641,6 @@ public class CommandPerformer {
 //		ControllerConversation.importBook(player);
 		return true;
 	}
-
 }
 
 

@@ -21,7 +21,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Romaji;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Storage;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VirtualRyuugakuManager;
+import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VRGManager;
 
 public class StageStorage implements Storage {
 
@@ -31,7 +31,7 @@ public class StageStorage implements Storage {
 
 	public static Map<String, YamlConfiguration> getListLibraryStage() {
 		Map<String, YamlConfiguration> list = new HashMap<String, YamlConfiguration>();
-		File stage = new File(VirtualRyuugakuManager.plugin.getDataFolder() + "//STAGE");
+		File stage = new File(VRGManager.plugin.getDataFolder() + "//STAGE");
 		File[] files = stage.listFiles();
 		for(File file : files) {
 			if(file.getAbsolutePath().endsWith(".yml")) {
@@ -88,7 +88,6 @@ public class StageStorage implements Storage {
 			}
 		}
 	}
-
 	private enum PathStage {CONVERSATION, EDITOR, LEARNER_NPC, LEARNER_QUESTION}
 
 	public static Stage importStage(String stageName, YamlConfiguration library) {

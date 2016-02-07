@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,50 +15,41 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.SpellTyp
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.SentenceHologram;
 
 import net.citizensnpcs.api.npc.NPC;
+import net.md_5.bungee.api.ChatColor;
 
-public class LearnerSentence extends TalkSentence {
+public class PlayerSentence extends TalkSentence {
 	private static final Integer DEFAULT_ID= -1;
 
-	public LearnerSentence(List<String> kanji, List<String> kana, List<String> en, String stage, String question) {
-		super(kanji, kana, en, DEFAULT_ID);
-		this.stage = stage;
-		this.question = question;
-	}
-	private String stage = "";
+	private UUID uuid = null;
 	private String question = "";
+	private String displayName = "";
 
-	public String getStage() {
-		return stage;
-	}
-	public String getQuestion() {
-		return question;
-	}
-
-	public static Optional<List<LearnerSentence>> create(List<String> kanji, List<String> kana, List<String> en, String stage, String question) {
-		List<LearnerSentence> sentences = new ArrayList<LearnerSentence>();
-		if(kanji.size() == kana.size() && kanji.size() == en.size() && 0 < stage.length()) {
-			for (Integer i = 0; i < kanji.size(); i++) {
-				LearnerSentence sentence = new LearnerSentence(Arrays.asList(kanji.get(i)), Arrays.asList(kana.get(i)), Arrays.asList(en.get(i)), stage, question);
-				sentences.add(sentence);
-			}
-		}
-		if (0 < sentences.size()) {
-			return Optional.ofNullable(sentences);
-		}
-		return Optional.empty();
+	public PlayerSentence(List<String> kanji, List<String> kana, List<String> en, UUID uuid, String question, String name) {
+		super(kanji, kana, en, DEFAULT_ID);
+		this.uuid = uuid;
+		this.question = question;
+		this.displayName = name;
 	}
 
-	public static LearnerSentence createEmpty(String stage, String question) {
-		LearnerSentence sentence = new LearnerSentence(Arrays.asList("Enter kanji"), Arrays.asList("Enter kana"), Arrays.asList("Enter English"), stage, question);
-		sentence.getJapanese().setRomaji("Enter romaji");
+	public static PlayerSentence createEmpty(UUID uuid, String name, String question) {
+		PlayerSentence sentence = new PlayerSentence(Arrays.asList(EMPTY_KANJI), Arrays.asList(EMPTY_KANA), Arrays.asList(EMPTY_EN), uuid, question, name);
+		sentence.getJapanese().setRomaji(EMPTY_ROMAJI);
 		return sentence;
+	}
+
+	public boolean isEmpty() {
+		if (getJapanese().getLine().equals(Arrays.asList(EMPTY_KANJI, EMPTY_KANA, EMPTY_ROMAJI))
+				&& getEnglish().getLine().equals(Arrays.asList(EMPTY_EN))) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
 	public List<String> getHolographicLines(List<SpellType> spells) {
 		ArrayList<String> lines = new ArrayList<String>();
-		lines.add(question);
-		spells.stream().forEach(spell -> lines.addAll(this.getLines(spell).get()));
+		lines.add("" + ChatColor.GREEN + ChatColor.BOLD + question);
+		spells.stream().forEach(spell -> this.getLines(spell).get().forEach(line -> lines.add(ChatColor.BOLD + line)));
 		return lines;
 	}
 
@@ -84,5 +76,15 @@ public class LearnerSentence extends TalkSentence {
 	@Override
 	public void registerHologram(SentenceHologram hologram, NPC npc, List<HolographicSentence> sentences) {
 		HologramStorage.holograms.put(Arrays.asList(npc.getId()), hologram);
+	}
+
+	public UUID getUniqueId() {
+		return uuid;
+	}
+	public String getQuestion() {
+		return question;
+	}
+	public String getDisplayName() {
+		return displayName;
 	}
 }

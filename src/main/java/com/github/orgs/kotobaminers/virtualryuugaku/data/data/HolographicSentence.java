@@ -21,7 +21,6 @@ public abstract class HolographicSentence {
 	public abstract Optional<List<ItemStack>> giveSentenceIcons();
 	public abstract Optional<List<ItemStack>> giveEmptyIcons();
 
-
 	protected Integer id = 0;
 
 	public Integer getId() {

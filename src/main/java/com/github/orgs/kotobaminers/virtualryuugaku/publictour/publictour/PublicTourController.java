@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCHandler;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.VRGMessenger.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCUtility;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HolographicSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
@@ -51,19 +51,19 @@ public class PublicTourController {
 		} else if(name.equalsIgnoreCase(stage)) {
 			join(player);
 		} else {
-			Message.EMPTY_1.print(Arrays.asList("A tour has already started."), player);
+			Message.VRG_1.print(Arrays.asList("A tour has already started."), player);
 		}
 	}
 
 	public static void join(Player player) {
 		removeOfflineMember();
 		if (sentences == null) {
-			Message.EMPTY_1.print(Arrays.asList("Invalid Name"), player);
+			Message.VRG_1.print(Arrays.asList("Invalid Name"), player);
 			return;
 		}
 		if(member.contains(player.getUniqueId())) {
 			String[] opts = {"You have already joined the tour."};
-			Message.EMPTY_1.print(player, opts);
+			Message.VRG_1.print(player, opts);
 			return;
 		}
 		member.add(player.getUniqueId());
@@ -76,7 +76,7 @@ public class PublicTourController {
 	public static void continueNext(Player player) {
 		if (!member.contains(player.getUniqueId())) {
 			String[] opts = {"Please join the tour at first. [/vrg]"};
-			Message.EMPTY_1.print(player, opts);
+			Message.VRG_1.print(player, opts);
 			return;
 		}
 		if (!sentences.hasNext()) {
@@ -94,7 +94,7 @@ public class PublicTourController {
 
 	private static Optional<NPC> findCurrentNPC() {
 		if (0 < current.size()) {
-			return NPCHandler.findNPC(current.get(0).getId());
+			return NPCUtility.findNPC(current.get(0).getId());
 		}
 		 return Optional.empty();
 	}
@@ -108,12 +108,11 @@ public class PublicTourController {
 		Bukkit.getOnlinePlayers().stream()
 			.filter(p -> member.contains(p.getUniqueId()))
 			.forEach(p -> {
-				Message.EMPTY_1.print(p, opts);
+				Message.VRG_1.print(p, opts);
 				Effects.shootFirework(p);}
 			);
 		broadcastJoining();
-		String[] opts2 = {stage};
-		Message.TOUR_TRY_MINIGAME_1.broadcast(opts2);
+		Message.TOUR_TRY_MINIGAME_1.broadcast(Arrays.asList(stage));
 		initialize();
 	}
 
@@ -124,8 +123,7 @@ public class PublicTourController {
 				.map(p -> p.getName())
 				.collect(Collectors.toList())
 		);
-		String[] opts = {"Members: " + name};
-		Message.EMPTY_1.broadcast(opts);
+		Message.VRG_1.broadcast(Arrays.asList("Members: " + name));
 	}
 
 	public static void removeOfflineMember() {

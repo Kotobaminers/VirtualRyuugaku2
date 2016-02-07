@@ -10,7 +10,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.scheduler.BukkitTask;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VirtualRyuugakuManager;
+import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VRGManager;
 
 public class SentenceHologram {
 	double height = 1.4;
@@ -31,23 +31,23 @@ public class SentenceHologram {
 		if(0 < lines.size()){
 			cancelOldTask();
 			this.loc.setY((this.loc.getY() + this.height) - 1.25);
-			int longest = lines.stream().reduce((line1, line2) -> line1.length() >= line2.length() ? line1 : line2).get().getBytes().length;
+//			int longest = lines.stream().reduce((line1, line2) -> line1.length() >= line2.length() ? line1 : line2).get().getBytes().length;
 			for(int i = lines.size(); 0 < i; i--) {
-				StringBuilder s = new StringBuilder();
-				s.append(lines.get(i - 1));
-				for(int j = 0; j < longest - lines.get(i - 1).getBytes().length; j++) {
-					s.append(" ");
-				}
+//				StringBuilder s = new StringBuilder();
+//				s.append(lines.get(i - 1));
+//				for(int j = 0; j < longest - lines.get(i - 1).getBytes().length; j++) {
+//					s.append(" ");
+//				}
 				final ArmorStand hologram =
 						(ArmorStand) this.loc.getWorld().spawnEntity(this.loc, EntityType.ARMOR_STAND);
 				holos.add(hologram);
-				hologram.setCustomName(new String(s));
+				hologram.setCustomName(new String(lines.get(i-1)));
 				hologram.setCustomNameVisible(true);
 				hologram.setGravity(false);
 				hologram.setVisible(false);
 				this.loc.setY(this.loc.getY() + 0.25);
 			}
-			task = Bukkit.getScheduler().runTaskLater(VirtualRyuugakuManager.plugin, new Runnable() {
+			task = Bukkit.getScheduler().runTaskLater(VRGManager.plugin, new Runnable() {
 				@Override
 				public void run() {
 					remove();

@@ -1,14 +1,14 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.data.data;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -16,30 +16,54 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.SpellType;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCHandler;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCUtility;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.SentenceHologram;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceStorage.PathStage;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.VRGMessenger.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceYamlConverter.PathStage;
+import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.GUIIcon;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
 
 import net.citizensnpcs.api.npc.NPC;
+import net.md_5.bungee.api.ChatColor;
 
 public class QuestionSentence extends HolographicSentence{
+	public static final String NOT_REGISTERED = "" + ChatColor.RED + ChatColor.BOLD + "No question is registered";
+	private static final String EMPTY = "Enter question";
+
 	private String question = "";
-	private List<String> answers;
+	private List<String> answers = new ArrayList<String>();
+	private UUID owner = null;
+
+	private QuestionSentence() {
+	}
 
 	public static Optional<QuestionSentence> create(ConfigurationSection section, List<Integer> index) {
-		if(section.isString(PathStage.Q.toString()) && section.isList(PathStage.A.toString())) {
+		if(section.isList(PathStage.Q.toString()) && section.isList(PathStage.A.toString())) {
 			QuestionSentence instance = new QuestionSentence();
-			instance.question = section.getString(PathStage.Q.name());
-			instance.answers = section.getStringList(PathStage.A.name());
+			Optional.ofNullable(section.getStringList(PathStage.Q.name()))
+				.filter(q -> 0 < q.size())
+				.ifPresent(q -> instance.question = q.get(0));
+			Optional.ofNullable(section.getStringList(PathStage.A.name()))
+				.ifPresent(a -> instance.answers = a);
 			instance.id = index.get(index.size() - 1);
 			return Optional.of(instance);
 		}
 		return Optional.empty();
 	}
+	public static QuestionSentence createEmpty(Integer id) {
+		QuestionSentence question = new QuestionSentence();
+		question.question = EMPTY;
+		question.setId(id);
+		return question;
+	}
 
-	public Function<String, Boolean> validate = (answer) ->
-		answers.stream().anyMatch(a -> a.equalsIgnoreCase(answer));
+	public void validate(String answer, Player player) {
+		if (answers.stream().anyMatch(a -> a.equalsIgnoreCase(answer))) {
+			Message.COMMON_CORRECT_0.print(null, player);
+		} else {
+			Message.COMMON_WRONG_0.print(null, player);
+		}
+	}
 
 	@Override
 	public void playEffect(Player player, Location location) {
@@ -51,6 +75,9 @@ public class QuestionSentence extends HolographicSentence{
 	public String getQuestion() {
 		return question;
 	}
+	public List<String> getAnswers() {
+		return answers;
+	}
 
 	@Override
 	public void update(String line, SpellType spell) {
@@ -59,17 +86,17 @@ public class QuestionSentence extends HolographicSentence{
 
 	@Override
 	public List<String> getHolographicLines(List<SpellType> spells) {
-		return Arrays.asList(getQuestion());
+		return Arrays.asList("" + ChatColor.GREEN + ChatColor.BOLD + "[Question]", ChatColor.BOLD + getQuestion());
 	}
 
 	@Override
 	public Optional<List<ItemStack>> giveIcons() {
-		ItemStack item = new ItemStack(Material.WOOL, 1, (short) 5);
+		ItemStack item = GUIIcon.QUESTION.createItem();
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(getQuestion());
-		meta.setLore(Arrays.asList("Question"));
+		meta.setLore(Arrays.asList(answers.size() + " answers"));
 		item.setItemMeta(meta);
-		return Optional.ofNullable(Arrays.asList(item));
+		return Optional.of(Arrays.asList(item));
 	}
 
 	@Override
@@ -79,7 +106,12 @@ public class QuestionSentence extends HolographicSentence{
 
 	@Override
 	public Optional<List<ItemStack>> giveEmptyIcons() {
-		return Optional.empty();
+		ItemStack item = GUIIcon.QUESTION.createItem();
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(NOT_REGISTERED);
+		meta.setLore(Arrays.asList(answers.size() + " answers"));
+		item.setItemMeta(meta);
+		return Optional.of(Arrays.asList(item));
 	}
 
 	@Override
@@ -89,7 +121,12 @@ public class QuestionSentence extends HolographicSentence{
 
 	@Override
 	public Location getHologramLocation(NPC npc) {
-		return NPCHandler.findNPC(id).get().getStoredLocation();
+		return NPCUtility.findNPC(id).get().getStoredLocation();
 	}
+
+	public UUID getOwner() {
+		return owner;
+	}
+
 }
 

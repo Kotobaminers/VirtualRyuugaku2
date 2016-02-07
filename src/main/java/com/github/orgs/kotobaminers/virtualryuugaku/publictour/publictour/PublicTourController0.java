@@ -1,6 +1,7 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.publictour.publictour;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,14 +11,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCHandler;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.VRGMessenger.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCUtility;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Stage;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.StageController;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
 
 import net.citizensnpcs.api.npc.NPC;
 
@@ -33,14 +33,13 @@ public class PublicTourController0 {
 		}
 		if(hasJoined(player)) {
 			String[] opts = {"You have already joined the tour."};
-			Message.EMPTY_1.print(player, opts);
+			Message.VRG_1.print(player, opts);
 			return;
 		}
 		try {
 			goToCurrent(player, getCurrentConversation(), getCurrentNPC());
 			join.add(player.getUniqueId());
-			String[] opts = {player.getName(), stage.name};
-			Message.TOUR_JOIN_TP_2.broadcast(opts);
+			Message.TOUR_JOIN_TP_2.broadcast(Arrays.asList(player.getName(), stage.name));
 			broadcastJoining();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -58,7 +57,7 @@ public class PublicTourController0 {
 			return true;
 		}
 		String[] opts = {"No stage has been loaded. [/vrg tour start <STAGE>]"};
-		Message.EMPTY_1.print(player, opts);
+		Message.VRG_1.print(player, opts);
 		return false;
 	}
 
@@ -83,7 +82,7 @@ public class PublicTourController0 {
 		}
 		if (!hasJoined(sender)) {
 			String[] opts = {"Please join the tour at first. [/vrg]"};
-			Message.EMPTY_1.print(sender, opts);
+			Message.VRG_1.print(sender, opts);
 			return;
 		}
 		index++;
@@ -112,7 +111,7 @@ public class PublicTourController0 {
 		}
 		if (!hasJoined(sender)) {
 			String[] opts = {"Please join the tour at first. [/vrg tour join]"};
-			Message.EMPTY_1.print(sender, opts);
+			Message.VRG_1.print(sender, opts);
 			return;
 		}
 		if (0 < index) {
@@ -131,7 +130,7 @@ public class PublicTourController0 {
 			return;
 		} else {
 			String[] opts = {"No previous conversation."};
-			Message.EMPTY_1.print(sender, opts);
+			Message.VRG_1.print(sender, opts);
 		}
 	}
 
@@ -155,13 +154,12 @@ public class PublicTourController0 {
 		String[] opts = {"Finished the tour! (" + stage.name + ")"};
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (join.contains(player.getUniqueId())) {
-				Message.EMPTY_1.print(player, opts);
+				Message.VRG_1.print(player, opts);
 				Effects.shootFirework(player);
 			}
 		}
 		broadcastJoining();
-		String[] opts2 = {stage.name};
-		Message.TOUR_TRY_MINIGAME_1.broadcast(opts2);
+		Message.TOUR_TRY_MINIGAME_1.broadcast(Arrays.asList(stage.name));
 		initialize();
 	}
 
@@ -179,7 +177,7 @@ public class PublicTourController0 {
 		Debug.printDebugMessage("",  new Exception());
 		Conversation conversation = getCurrentConversation();
 		if (0 < conversation.sentences.size()) {
-			NPC npc = NPCHandler.getNPC(conversation.sentences.get(0).id);
+			NPC npc = NPCUtility.getNPC(conversation.sentences.get(0).id);
 			return npc;
 		}
 		throw new Exception();
@@ -192,7 +190,6 @@ public class PublicTourController0 {
 				names.add(online.getName());
 			}
 		}
-		String[] opts = {"Members: " + Utility.joinStrings(names, ", ")};
-		Message.EMPTY_1.broadcast(opts);
+		Message.VRG_1.broadcast(Arrays.asList("Members: " + String.join(", ", names)));
 	}
 }

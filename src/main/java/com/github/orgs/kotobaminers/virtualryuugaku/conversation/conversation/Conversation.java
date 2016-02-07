@@ -10,7 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.SpellType;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.VRGMessenger.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerData;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
@@ -34,7 +34,7 @@ public abstract class Conversation {
 
 	public void talk(Player player, NPC npc) {
 		Debug.printDebugMessage("", new Exception());
-		PlayerData data = PlayerDataStorage.getDataPlayer(player);
+		PlayerData data = PlayerDataStorage.getPlayerData(player);
 		if(0 < sentences.size()) {
 			data.line++;
 			if (sentences.size() < data.line || !data.conversation.equals(this)) {
@@ -80,7 +80,7 @@ public abstract class Conversation {
 	}
 
 	private void printTalk(VRGSentence sentence, Player player, Integer line) {
-		List<SpellType> expressions = PlayerDataStorage.getDataPlayer(player).expressions;
+		List<SpellType> expressions = PlayerDataStorage.getPlayerData(player).expressions;
 		if(0 < expressions.size()) {
 			String title = "";
 			title += "" + getTalkerColor(sentence.id);
@@ -94,7 +94,7 @@ public abstract class Conversation {
 		}
 		if (expressions.contains(SpellType.EN)) {
 			String[] english = {" - " + Utility.joinStrings(sentence.description.getEnglishList(), ", ")};
-			Message.EMPTY_1.print(player, english);
+			Message.VRG_1.print(player, english);
 		}
 		List<String> listJapanese = new ArrayList<String>();
 		if(expressions.contains(SpellType.KANJI)) {
@@ -108,7 +108,7 @@ public abstract class Conversation {
 		}
 		if (0 < listJapanese.size()) {
 			String[] japanese = {" - " + Utility.joinStrings(listJapanese, " " + ChatColor.GRAY + ChatColor.BOLD + " / " + ChatColor.RESET)};
-			Message.EMPTY_1.print(player, japanese);
+			Message.VRG_1.print(player, japanese);
 		}
 	}
 

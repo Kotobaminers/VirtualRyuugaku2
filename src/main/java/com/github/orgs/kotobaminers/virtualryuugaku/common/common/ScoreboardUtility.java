@@ -14,7 +14,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VirtualRyuugakuManager;
+import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VRGManager;
 
 public abstract class ScoreboardUtility extends BukkitRunnable {
 	private Scoreboard board;
@@ -49,7 +49,7 @@ public abstract class ScoreboardUtility extends BukkitRunnable {
 	public void hideScoreboard(Player player) {
 		this.player = player;
 		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-		scheduler.runTaskLater(VirtualRyuugakuManager.plugin, this, 100L);
+		scheduler.runTaskLater(VRGManager.plugin, this, 100L);
 	}
 
 	@Override

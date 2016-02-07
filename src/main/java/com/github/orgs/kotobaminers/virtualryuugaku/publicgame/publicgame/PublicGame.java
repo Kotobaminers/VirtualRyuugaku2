@@ -1,5 +1,6 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -7,7 +8,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.VRGMessenger.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicGameController.PublicGameMode;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 
@@ -46,8 +47,7 @@ public abstract class PublicGame {
 		Debug.printDebugMessage("",new Exception());
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			if (PublicGameController.join.contains(player.getUniqueId())) {
-				String [] opts = {mode.toString()};
-				Message.GAME_STARTING_1.broadcast(opts);
+				Message.GAME_STARTING_1.broadcast(Arrays.asList(mode.toString()));
 				printStart(player);
 			}
 		}

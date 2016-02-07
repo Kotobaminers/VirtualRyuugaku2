@@ -10,10 +10,10 @@ import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 public class VirtualRyuugaku extends JavaPlugin {
 	@Override
 	public void onEnable() {
-		VirtualRyuugakuManager.plugin = this;
+		VRGManager.plugin = this;
 
 		Debug.printDebugMessage("[VirtualRyuugaku] Loading Plugin Data", new Exception());
-		VirtualRyuugakuManager.loadPlugin();
+		VRGManager.loadPlugin();
 
 		getServer().getPluginManager().registerEvents(new Events(), this);
 
@@ -35,6 +35,6 @@ public class VirtualRyuugaku extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		VirtualRyuugakuManager.savePlugin();
+		VRGManager.savePlugin();
 	}
 }

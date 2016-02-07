@@ -7,10 +7,14 @@ import java.util.List;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import net.citizensnpcs.api.npc.NPC;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
@@ -21,6 +25,7 @@ import net.minecraft.server.v1_8_R3.PlayerConnection;
 public class Utility {
 	private static final List<String> SHOWN_CHARACTERS = Arrays.asList(",", " ", ".", "、", "。");
 
+	@Deprecated
 	public static String joinStrings(List<String> strings, String spacer) {
 		if(strings == null)  return "";
 		String string = "";
@@ -34,6 +39,7 @@ public class Utility {
 		}
 		return string;
 	}
+	@Deprecated
 	public static String joinStrings(String[] strings, String spacer) {
 		if(strings == null)  return "";
 		String string = "";
@@ -46,26 +52,16 @@ public class Utility {
 		return string;
 	}
 
-	public static Integer getTotalLengthStrings(List<String> strings) {
-		String total = "";
-		for(String string : strings) {
-			total += string;
-		}
-		return total.length();
-	}
-	public static Integer getTotalLengthStrings(String[] strings) {
-		List<String> list = Arrays.asList(strings);
-		return getTotalLengthStrings(list);
-	}
-
 	public static List<Integer> toListInteger(String string) {
 		List<Integer> list = new ArrayList<Integer>();
 		String tmp = "";
 		if(string.startsWith("[") && string.endsWith("]")) {
 			tmp = string.substring(1, string.length()-1);
-			String[] tmps = tmp.split(", ");
-			for(String str : tmps) {
-				list.add(Integer.parseInt(str));
+			if (0 < tmp.length()) {
+				String[] tmps = tmp.split(", ");
+				for(String str : tmps) {
+					list.add(Integer.parseInt(str));
+				}
 			}
 		}
 		return list;
@@ -171,6 +167,24 @@ public class Utility {
 		connection.sendPacket(titlePacket);
 		connection.sendPacket(subTitlePacket);
 	}
+
+	public static final ItemStack setSkullOwner(ItemStack itemStack, String owner) {
+		if (itemStack.getType().equals(Material.SKULL_ITEM)) {
+			SkullMeta itemMeta = (SkullMeta) itemStack.getItemMeta();
+			itemMeta.setOwner(owner);
+			itemStack.setItemMeta(itemMeta);
+		}
+		return itemStack;
+	}
+
+	public static final ItemStack setItemDisplayName(ItemStack itemStack, String name) {
+		ItemMeta itemMeta = itemStack.getItemMeta();
+		itemMeta.setDisplayName(name);
+		itemStack.setItemMeta(itemMeta);
+		return itemStack;
+	}
+
+
 }
 
 

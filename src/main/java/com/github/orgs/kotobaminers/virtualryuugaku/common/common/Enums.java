@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Stream;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -15,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.VRGMessenger.Message;
 
 public class Enums {//public enums
 	public enum Commands {
@@ -55,7 +56,6 @@ public class Enums {//public enums
 				"",
 				new ArrayList<String>(),
 				CommandPermission.OP),
-
 		VIRTUALRYUUGAKU_OP(
 				null,
 				Arrays.asList("vrgop", "virtualryuugakuop"),
@@ -74,7 +74,30 @@ public class Enums {//public enums
 				"To load Virtual Ryuugaku.",
 				new ArrayList<String>(),
 				CommandPermission.OP),
-
+		EMPTY(
+				VIRTUALRYUUGAKU_OP,
+				Arrays.asList("empty"),
+				"",
+				new ArrayList<String>(),
+				CommandPermission.OP),
+		UNIT(
+				VIRTUALRYUUGAKU_OP,
+				Arrays.asList("unit", "u"),
+				"To manage vrg units",
+				new ArrayList<String>(),
+				CommandPermission.OP),
+		UNIT_CREATE(
+				UNIT,
+				Arrays.asList("create", "c"),
+				"To create a vrg unit",
+				Arrays.asList("<UNIT_NAME>", "NPC_ID"),
+				CommandPermission.OP),
+		UNIT_ADD_HELPER(
+				UNIT,
+				Arrays.asList("addhelper", "ah"),
+				"To add an npc to the unit",
+				Arrays.asList("<UNIT_NAME>", "NPC_ID"),
+				CommandPermission.OP),
 
 		VIRTUALRYUUGAKU(
 				null,
@@ -87,8 +110,27 @@ public class Enums {//public enums
 				Arrays.asList("edit", "e"),
 				"To edit a selected sentence.",
 				Arrays.asList("<SENTENCE>"),
+				CommandPermission.PLAYERS),
+		ADD_ANSWER(
+				VIRTUALRYUUGAKU,
+				Arrays.asList("aa", "addanswer", "addans"),
+				"To add an answer from the selected question",
+				Arrays.asList("<ANSWER>"),
+				CommandPermission.PLAYERS),
+		REMOVE_ANSWER(
+				VIRTUALRYUUGAKU,
+				Arrays.asList("ra", "remans", "removeanswer", "removeans"),
+				"To remove an answer from the selected question",
+				Arrays.asList("<ANSWER>"),
+				CommandPermission.PLAYERS),
+		DELETE_QUESTION(
+				VIRTUALRYUUGAKU,
+				Arrays.asList("dq", "deletequestion", "delq"),
+				"To unregister the question and it's answers",
+				new ArrayList<String>(),
 				CommandPermission.PLAYERS
 				),
+
 		DICTIONARY(
 				VIRTUALRYUUGAKU,
 				Arrays.asList("d", "dic", "dictionary"),
@@ -102,37 +144,6 @@ public class Enums {//public enums
 				Arrays.asList("<WORD|SENTENCE>"),
 				CommandPermission.PLAYERS),
 
-		EN(
-				VIRTUALRYUUGAKU,
-				Arrays.asList("en"),
-				"Toggle the EN description mode.",
-				new ArrayList<String>(),
-				CommandPermission.PLAYERS),
-		ROMAJI(
-				VIRTUALRYUUGAKU,
-				Arrays.asList("romaji", "r"),
-				"Toggle the ROMAJI description mode.",
-				new ArrayList<String>(),
-				CommandPermission.PLAYERS),
-		KANA(
-				VIRTUALRYUUGAKU,
-				Arrays.asList("kana"),
-				"Toggle the KANA description mode.",
-				new ArrayList<String>(),
-				CommandPermission.PLAYERS),
-		KANJI(
-				VIRTUALRYUUGAKU,
-				Arrays.asList("kanji"),
-				"Toggle the KANJI description mode.",
-				new ArrayList<String>(),
-				CommandPermission.PLAYERS),
-
-		TP(
-				VIRTUALRYUUGAKU,
-				Arrays.asList("tp"),
-				"Teleport to the stage",
-				Arrays.asList("<STAGE>"),
-				CommandPermission.PLAYERS),
 		INFO(
 				VIRTUALRYUUGAKU,
 				Arrays.asList("info", "infomation", "i"),
@@ -145,106 +156,79 @@ public class Enums {//public enums
 				"Names of the all stages",
 				new ArrayList<String>(),
 				CommandPermission.PLAYERS),
-
-		MYSELF(
-				VIRTUALRYUUGAKU,
-				Arrays.asList("myself", "m"),
-				"Edit your own npcs and sentences",
-				new ArrayList<String>(),
-				CommandPermission.PLAYERS),
-
-		MYSELF_BOOK(
-				MYSELF,
-				Arrays.asList("book", "b"),
-				"Get a new empty book",
-				Arrays.asList("<MYSELF STAGE>"),
-				CommandPermission.PLAYERS),
-		MYSELF_UPDATE(
-				MYSELF,
-				Arrays.asList("update", "u"),
-				"Update your own npcs and sentences",
-				new ArrayList<String>(),
-				CommandPermission.PLAYERS),
-//		MYSELF_RELOAD(
-//				MYSELF,
-//				Arrays.asList("reload", "r"),
-//				"Reload the npcs",
-//				Arrays.asList("<MYSELF STAGE>", "<" + CheckState.KEY.toString() + "|" + CheckState.UNCHECKED.toString() + "|" + CheckState.CHECKED.toString()),
+//		GAME(
+//				VIRTUALRYUUGAKU,
+//				Arrays.asList("game", "g"),
+//				"Minigames",
+//				new ArrayList<String>(),
 //				CommandPermission.PLAYERS),
-
-		GAME(
-				VIRTUALRYUUGAKU,
-				Arrays.asList("game", "g"),
-				"Minigames",
-				new ArrayList<String>(),
-				CommandPermission.PLAYERS),
-		GAME_START(
-				GAME,
-				Arrays.asList("start", "s"),
-				"To start a minigame",
-				Arrays.asList("<STAGE>"),
-				CommandPermission.PLAYERS),
-		GAME_FINISH(
-				GAME,
-				Arrays.asList("finish", "f"),
-				"Finish a minigame",
-				new ArrayList<String>(),
-				CommandPermission.PLAYERS),
-		GAME_NEXT(
-				GAME,
-				Arrays.asList("next", "n"),
-				"Continue to the next question",
-				new ArrayList<String>(),
-				CommandPermission.PLAYERS),
-		GAME_RULE(
-				GAME,
-				Arrays.asList("rule", "r"),
-				"Rules of a minigame",
-				new ArrayList<String>(),
-				CommandPermission.PLAYERS),
-		GAME_JOIN(
-				GAME,
-				Arrays.asList("join", "j"),
-				"To join the minigame.",
-				new ArrayList<String>(),
-				CommandPermission.PLAYERS),
-		GAME_REPEAT(
-				GAME,
-				Arrays.asList("repeat"),
-				"To repeat the last game.",
-				new ArrayList<String>(),
-				CommandPermission.PLAYERS),
-
-		TOUR(
-				VIRTUALRYUUGAKU,
-				Arrays.asList("tour", "t"),
-				"Commands for a tour.",
-				new ArrayList<String>(),
-				CommandPermission.PLAYERS),
-		TOUR_START(
-				TOUR,
-				Arrays.asList("start", "s"),
-				"To start a tour.",
-				Arrays.asList("<STAGE>"),
-				CommandPermission.PLAYERS),
-		TOUR_JOIN(
-				TOUR,
-				Arrays.asList("join", "j"),
-				"To join the tour.",
-				new ArrayList<String>(),
-				CommandPermission.PLAYERS),
-		TOUR_NEXT(
-				TOUR,
-				Arrays.asList("next", "n"),
-				"To continue to the next conversation.",
-				new ArrayList<String>(),
-				CommandPermission.PLAYERS),
-		TOUR_PREVIOUS(
-				TOUR,
-				Arrays.asList("previous", "p"),
-				"To return to the previous conversation.",
-				new ArrayList<String>(),
-				CommandPermission.PLAYERS),
+//		GAME_START(
+//				GAME,
+//				Arrays.asList("start", "s"),
+//				"To start a minigame",
+//				Arrays.asList("<STAGE>"),
+//				CommandPermission.PLAYERS),
+//		GAME_FINISH(
+//				GAME,
+//				Arrays.asList("finish", "f"),
+//				"Finish a minigame",
+//				new ArrayList<String>(),
+//				CommandPermission.PLAYERS),
+//		GAME_NEXT(
+//				GAME,
+//				Arrays.asList("next", "n"),
+//				"Continue to the next question",
+//				new ArrayList<String>(),
+//				CommandPermission.PLAYERS),
+//		GAME_RULE(
+//				GAME,
+//				Arrays.asList("rule", "r"),
+//				"Rules of a minigame",
+//				new ArrayList<String>(),
+//				CommandPermission.PLAYERS),
+//		GAME_JOIN(
+//				GAME,
+//				Arrays.asList("join", "j"),
+//				"To join the minigame.",
+//				new ArrayList<String>(),
+//				CommandPermission.PLAYERS),
+//		GAME_REPEAT(
+//				GAME,
+//				Arrays.asList("repeat"),
+//				"To repeat the last game.",
+//				new ArrayList<String>(),
+//				CommandPermission.PLAYERS),
+//
+//		TOUR(
+//				VIRTUALRYUUGAKU,
+//				Arrays.asList("tour", "t"),
+//				"Commands for a tour.",
+//				new ArrayList<String>(),
+//				CommandPermission.PLAYERS),
+//		TOUR_START(
+//				TOUR,
+//				Arrays.asList("start", "s"),
+//				"To start a tour.",
+//				Arrays.asList("<STAGE>"),
+//				CommandPermission.PLAYERS),
+//		TOUR_JOIN(
+//				TOUR,
+//				Arrays.asList("join", "j"),
+//				"To join the tour.",
+//				new ArrayList<String>(),
+//				CommandPermission.PLAYERS),
+//		TOUR_NEXT(
+//				TOUR,
+//				Arrays.asList("next", "n"),
+//				"To continue to the next conversation.",
+//				new ArrayList<String>(),
+//				CommandPermission.PLAYERS),
+//		TOUR_PREVIOUS(
+//				TOUR,
+//				Arrays.asList("previous", "p"),
+//				"To return to the previous conversation.",
+//				new ArrayList<String>(),
+//				CommandPermission.PLAYERS),
 
 
 		ANSWER(
@@ -467,49 +451,40 @@ public class Enums {//public enums
 		TOUR("Tour", Material.COMPASS, Arrays.asList("To Join A Tour")),
 		TRAINING("Training", Material.IRON_SPADE, Arrays.asList("To Start Training")),
 		ANKI("Anki", Material.BOOK_AND_QUILL, Arrays.asList("To Memorize Sentences")),
-		MY_NPC("Your NPC", Material.SKULL_ITEM, Arrays.asList("To Create Your NPC")),
+		YOUR_NPC("Your NPC", Material.SKULL_ITEM, Arrays.asList("To Create Your NPC")),
 		;
 
 		private GameMode(String mode, Material material, List<String> lore) {
-			this.mode = mode;
+			this.displayName = mode;
 			this.material = material;
 			this.lore = lore;
 		}
-		public String mode;
+		public String displayName;
 		public Material material;
 		public List<String> lore;
 
-		public static GameMode create(Material material) {
-			for (GameMode gameMode : GameMode.values()) {
-				if (gameMode.material.equals(material)) {
-					return gameMode;
-				}
-			}
-			return GameMode.FREE;
+		public static Optional<GameMode> create(Material material) {
+			return Stream.of(GameMode.values())
+					.filter(mode -> mode.material.equals(material))
+					.findFirst();
 		}
 
 		public ItemStack createIcon(String stage) {
 			ItemStack item = new ItemStack(material);
 			ItemMeta meta = item.getItemMeta();
-			meta.setDisplayName(mode);
+			meta.setDisplayName(displayName);
 			List<String> lore = new ArrayList<String>();
 			lore.add(stage);
 			lore.addAll(this.lore);
 			meta.setLore(lore);
-			if (this.equals(MY_NPC)) {
+			if (this.equals(YOUR_NPC)) {
 				SkullMeta skull = (SkullMeta) meta;
 				skull.setOwner("kai_f");
 			}
 			item.setItemMeta(meta);
 			return item;
 		}
-
-		public String getSubtitle() {
-			return "~ " + this.mode + " Mode ~";
-		}
 	}
-
-
 
 
 }

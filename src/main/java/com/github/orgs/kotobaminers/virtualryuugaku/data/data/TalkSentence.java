@@ -18,6 +18,10 @@ import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
 public abstract class TalkSentence extends HolographicSentence {
 	private Japanese japanese;
 	private English english;
+	protected static final String EMPTY_KANJI = "Enter kanji";
+	protected static final String EMPTY_KANA = "Enter kana";
+	protected static final String EMPTY_ROMAJI = "Enter romaji";
+	protected static final String EMPTY_EN = "Enter English";
 
 	public TalkSentence(List<String> kanji, List<String> kana, List<String> en, Integer id) {
 		this.japanese = new Japanese(kanji, kana);

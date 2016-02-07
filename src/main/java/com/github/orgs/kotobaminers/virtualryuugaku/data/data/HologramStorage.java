@@ -11,7 +11,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCHandler;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCUtility;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.SentenceHologram;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
@@ -40,7 +40,7 @@ public class HologramStorage {
 
 		hologram.cancelOldTask();
 		hologram.remove();
-		hologram.setLines(sentence.getHolographicLines(PlayerDataStorage.getDataPlayer(player).getSpellTypes()));
+		hologram.setLines(sentence.getHolographicLines(PlayerDataStorage.getPlayerData(player).getSpellTypes()));
 		hologram.setLocation(sentence.getHologramLocation(npc));
 		hologram.spawnTemp(DURATION);
 		sentence.registerHologram(hologram, npc, sentences);
@@ -49,7 +49,7 @@ public class HologramStorage {
 
 	public static void initialize() {
 		SentenceStorage.getAllIds().stream().forEach(id ->
-			NPCHandler.findNPC(id).ifPresent(npc ->
+			NPCUtility.findNPC(id).ifPresent(npc ->
 				Stream.of(Utility.getNearbyEntities(npc.getStoredLocation().add(0, 1, 0), 1))
 					.filter(e -> e.getType().equals(EntityType.ARMOR_STAND))
 					.filter(e -> {ArmorStand armor = (ArmorStand) e;

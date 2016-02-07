@@ -1,17 +1,16 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.gui.gui;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.GameMode;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCHandler;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceStorage;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
 
 public class GameModeSelector extends VRGGUI {
 	public static final String TITLE = "Select Game Mode!";
@@ -22,7 +21,7 @@ public class GameModeSelector extends VRGGUI {
 	}
 
 	public static Optional<GameModeSelector> create(String stage) {
-		if (SentenceStorage.ownerSentences.containsKey(stage)) {
+		if (SentenceStorage.helperSentences.containsKey(stage)) {
 			GameModeSelector selector = new GameModeSelector(stage);
 			return Optional.of(selector);
 		}
@@ -38,30 +37,21 @@ public class GameModeSelector extends VRGGUI {
 	}
 
 	@Override
-	public void eventInventoryClick(InventoryClickEvent event) {
-		event.getWhoClicked().closeInventory();
-		SentenceStorage.findStage.apply(stage)
-			.ifPresent(lls -> lls.stream()
-				.findFirst().ifPresent(ls -> ls.stream()
-					.findFirst().ifPresent(s ->
-						NPCHandler.findNPC(s.getId())
-							.ifPresent(npc -> {
-								Utility.teleportToNPC((Player) event.getWhoClicked(), npc);
-								Utility.sendTitle(
-										(Player) event.getWhoClicked(),
-										stage,
-										GameMode.create(event.getCurrentItem().getType()).getSubtitle());
-							})
-		)));
-		event.setCancelled(true);
-	}
-
-	@Override
 	public Inventory createInventory() {
 		Inventory inventory = Bukkit.createInventory(null, 54, getTitle());
-		Stream.of(GameMode.values())
-			.map(mode -> mode.createIcon(stage))
-			.forEach(icon -> inventory.addItem(icon));
+		Stream.of(GUIIcon.YOUR_NPC, GUIIcon.FREE, GUIIcon.TOUR, GUIIcon.TRAINING, GUIIcon.ANKI)
+			.map(mode -> {
+				ItemStack item = mode.createItem();
+				ItemMeta meta = item.getItemMeta();
+				List<String> lore = new ArrayList<String>();
+				lore.add(stage);
+				lore.addAll(meta.getLore());
+				meta.setLore(lore);
+				item.setItemMeta(meta);
+				return item;
+				})
+			.forEach(item -> inventory.addItem(item));
 		return inventory;
 	}
 }
+

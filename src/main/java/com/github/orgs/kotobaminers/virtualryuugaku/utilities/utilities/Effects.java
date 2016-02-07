@@ -6,7 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCHandler;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCUtility;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.FireworkUtility.FireworkColor;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.SoundMeta.Scene;
 
@@ -18,7 +18,7 @@ public class Effects {
 	}
 	@Deprecated
 	public static void effectTalk(Player player, Integer id) {
-		NPCHandler.findNPC(id).ifPresent(n -> {
+		NPCUtility.findNPC(id).ifPresent(n -> {
 			Location location = n.getStoredLocation();
 			Utility.lookAt(player, location);
 			player.getWorld().spigot().playEffect(location.add(0, 2, 0), Effect.NOTE, 25, 10, 0, 0, 0, 0, 1, 10);

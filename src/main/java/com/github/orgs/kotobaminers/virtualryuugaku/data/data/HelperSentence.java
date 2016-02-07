@@ -4,29 +4,33 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.bukkit.Location;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.SpellType;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCHandler;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCUtility;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.SentenceHologram;
+import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.GUIIcon;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
 
 import net.citizensnpcs.api.npc.NPC;
 import net.md_5.bungee.api.ChatColor;
 
-public class OwnerSentence extends TalkSentence {
+public class HelperSentence extends TalkSentence {
+	private Optional<UUID> owner = Optional.empty();
 
-	public OwnerSentence(List<String> kanji, List<String> kana, List<String> en, Integer id) {
+	public HelperSentence(List<String> kanji, List<String> kana, List<String> en, Integer id) {
 		super(kanji, kana, en, id);
 	}
 
-	public static Optional<List<OwnerSentence>> create(List<String> kanji, List<String> kana, List<String> en, List<Integer> ids) {
-		List<OwnerSentence> sentences = new ArrayList<OwnerSentence>();
+	public static Optional<List<HelperSentence>> create(List<String> kanji, List<String> kana, List<String> en, List<Integer> ids) {
+		List<HelperSentence> sentences = new ArrayList<HelperSentence>();
 		if(kanji.size() == kana.size() && kanji.size() == en.size() && kanji.size() == ids.size()) {
 			for (int i = 0; i < kanji.size(); i++) {
-				sentences.add(new OwnerSentence(
+				sentences.add(new HelperSentence(
 						Arrays.asList(kanji.get(i)),
 						Arrays.asList(kana.get(i)),
 						Arrays.asList(en.get(i)),
@@ -38,6 +42,12 @@ public class OwnerSentence extends TalkSentence {
 			}
 		}
 		return Optional.empty();
+	}
+
+	public static HelperSentence createEmpty(Integer id) {
+		HelperSentence sentence = new HelperSentence(Arrays.asList(EMPTY_KANJI), Arrays.asList(EMPTY_KANA), Arrays.asList(EMPTY_EN), id);
+		sentence.getJapanese().setRomaji(EMPTY_ROMAJI);
+		return sentence;
 	}
 
 	@Override
@@ -52,7 +62,21 @@ public class OwnerSentence extends TalkSentence {
 
 	@Override
 	public Optional<List<ItemStack>> giveIcons() {
-		return giveSentenceIcons();
+		Optional<List<ItemStack>> icons = giveSentenceIcons();
+		ItemStack skull = GUIIcon.SPEAKER.createItem();
+		Optional<NPC> npc = NPCUtility.findNPC(getId());
+		Optional<String> skin = npc.map(n -> NPCUtility.findSkinName(n))
+			.filter(name -> name.isPresent())
+			.map(name -> name.get());
+		if (skin.isPresent()) {
+			skull = Utility.setSkullOwner(skull, skin.get());
+		}
+		skull = Utility.setItemDisplayName(skull, npc.get().getName());
+		if (icons.isPresent()) {
+			icons.get().add(0, skull);
+			return icons;
+		}
+		return Optional.empty();
 	}
 
 	@Override
@@ -67,6 +91,10 @@ public class OwnerSentence extends TalkSentence {
 
 	@Override
 	public Location getHologramLocation(NPC npc) {
-		return NPCHandler.findNPC(id).get().getStoredLocation();
+		return NPCUtility.findNPC(id).get().getStoredLocation();
+	}
+
+	public Optional<UUID> getOwner() {
+		return owner;
 	}
 }

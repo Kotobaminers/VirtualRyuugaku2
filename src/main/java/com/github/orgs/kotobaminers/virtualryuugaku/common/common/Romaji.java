@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VirtualRyuugakuManager;
+import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VRGManager;
 
 public class Romaji {
 	public enum TypeLetters {
@@ -24,7 +24,7 @@ public class Romaji {
 		}
 	private static Map<String, List<Letters>> mapLetters = new HashMap<String, List<Letters>>();
 	private static final String DELIMITTER = "[Type]";
-	private static final String PATH = VirtualRyuugakuManager.plugin.getDataFolder() + "//ROMAJI//ROMAJI_TABLE.txt";
+	private static final String PATH = VRGManager.plugin.getDataFolder() + "//ROMAJI//ROMAJI_TABLE.txt";
 
 	public static String toRomaji(String kana) {
 		Map<String, List<Letters>> map = Romaji.getMapLetters();

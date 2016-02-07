@@ -4,26 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HolographicSentence;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.OwnerSentence;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HelperSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.QuestionSentence;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceStorage;
-import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
 
 public class OwnerSentenceSelector extends SentenceSelector {
 	public static final String TITLE = "Example Sentences";
-	private List<OwnerSentence> ownerSentences = new ArrayList<>();
+	private List<HelperSentence> ownerSentences = new ArrayList<>();
 	private Optional<QuestionSentence> question = Optional.empty();
+
 
 	public OwnerSentenceSelector(List<HolographicSentence> sentences) {
 		for (HolographicSentence sentence : sentences) {
-			if (sentence instanceof OwnerSentence) {
-				ownerSentences.add((OwnerSentence) sentence);
+			if (sentence instanceof HelperSentence) {
+				ownerSentences.add((HelperSentence) sentence);
 			} else if(sentence instanceof QuestionSentence) {
 				question = Optional.of((QuestionSentence) sentence);
 			}
@@ -40,7 +38,12 @@ public class OwnerSentenceSelector extends SentenceSelector {
 			.filter(icons -> icons.isPresent())
 			.map(icons -> icons.get())
 			.collect(Collectors.toList());
-		question.ifPresent(q -> q.giveIcons().ifPresent(icons -> listIcons.add(icons)));
+		if(question.isPresent()) {
+			question.get().giveIcons().ifPresent(icons -> listIcons.add(icons));
+		} else {
+			QuestionSentence.createEmpty(0).giveEmptyIcons()
+				.ifPresent(empty -> listIcons.add(empty));
+		}
 		return listIcons;
 	}
 
@@ -50,16 +53,25 @@ public class OwnerSentenceSelector extends SentenceSelector {
 	}
 
 	@Override
-	public Optional<HolographicSentence> selectSentence(InventoryClickEvent event) {
-		int index = event.getRawSlot() % 9;
-		Integer selectId = PlayerDataStorage.getDataPlayer((Player) event.getWhoClicked()).getSelectId();
-		Optional<List<HolographicSentence>> sentences = SentenceStorage.findOwnerSentences(selectId);
-		if (sentences.isPresent()) {
-			if (index < sentences.get().size()) {
-				return Optional.of(sentences.get().get(index));
-			}
-		}
-		return Optional.empty();
+	public List<ItemStack> getOptionIcons() {
+		return Stream.of(GUIIcon.RESPAWN)
+				.map(option ->option.createItem())
+				.collect(Collectors.toList());
 	}
+
+//	@Override
+//	public Optional<HolographicSentence> selectSentence(InventoryClickEvent event) {
+//		int index = event.getRawSlot() % 9;
+//		Integer selectId = PlayerDataStorage.getDataPlayer((Player) event.getWhoClicked()).getSelectId();
+//		Optional<List<HolographicSentence>> sentences = SentenceStorage.findOwnerSentences(selectId);
+//		if (sentences.isPresent()) {
+//			if (index < sentences.get().size()) {
+//				return Optional.of(sentences.get().get(index));
+//			}
+//		}
+//		return Optional.empty();
+//	}
+
+
 }
 

@@ -1,6 +1,7 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -11,12 +12,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerVRG.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.VRGMessenger.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.ScoreboardUtility;
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicGame.EventScore;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
 
 public class PublicGameScore extends ScoreboardUtility {
 
@@ -26,8 +26,7 @@ public class PublicGameScore extends ScoreboardUtility {
 			result.add(entry.getKey() + ": " + entry.getValue().toString());
 		}
 		if (0 < result.size()) {
-			String[] opts = {Utility.joinStrings(result, ", ")};
-			Message.NONE_1.broadcast(opts);
+			Message.NONE_1.broadcast(Arrays.asList(String.join(", ", result)));
 		}
 	}
 
