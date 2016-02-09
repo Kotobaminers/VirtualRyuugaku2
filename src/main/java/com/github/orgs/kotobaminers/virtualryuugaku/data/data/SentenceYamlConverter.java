@@ -26,35 +26,32 @@ public class SentenceYamlConverter {
 	enum LearnerSentencePath {LEARNER_SENTENCE, STAGE, NAME}
 	enum SentencePath {KANJI, KANA, EN}
 
-	private static final File BASE = new File(VRGManager.plugin.getDataFolder() + "//STAGE");
+	private static final File UNIT_DIR = new File(VRGManager.plugin.getDataFolder() + "//STAGE");
 	private static final File CONFIG_FILE = new File(VRGManager.plugin.getDataFolder() + "//CONFIG//CONFIG.yml");
 	private static final YamlConfiguration config = YamlConfiguration.loadConfiguration(CONFIG_FILE);
 
 	//Imporer
 	public static final void importOwnerSentences() {
-		Arrays.asList(BASE.listFiles()).stream()
+		Arrays.asList(UNIT_DIR.listFiles()).stream()
 			.filter(file -> file.getAbsolutePath().endsWith(".yml"))
-			.forEach(file -> importStage(YamlConfiguration.loadConfiguration(file), extractName(file)));
+			.forEach(file -> importUnit(YamlConfiguration.loadConfiguration(file), extractName(file)));
 	}
 
-	private static void importStage(YamlConfiguration config, String name) {
+	private static void importUnit(YamlConfiguration config, String name) {
+		Unit unit = new Unit();
 		name = name.toUpperCase();
 		Optional<ConfigurationSection> conversationSection = Stream.of(config)
 			.filter(config2 -> config2.isConfigurationSection(PathStage.CONVERSATION.toString()))
 			.map(config2 -> (ConfigurationSection) config2.get(PathStage.CONVERSATION.toString()))
 			.findFirst();
 
-		Optional<List<String>> learnerQuestion = Stream.of(config).filter(c -> c.isList(PathStage.LEARNER_QUESTION.name()))
-			.findFirst().map(c -> c.getStringList(PathStage.LEARNER_QUESTION.name()));
-		if (learnerQuestion.isPresent()) {
-			SentenceStorage.playerQuestions.put(name, learnerQuestion.get());
-		}
+		Stream.of(config).filter(c -> c.isList(PathStage.LEARNER_QUESTION.name()))
+			.findFirst().map(c -> c.getStringList(PathStage.LEARNER_QUESTION.name()))
+			.ifPresent(qs -> unit.setPlayerQuestions(qs));
 
-		Optional<List<Integer>> ids = Stream.of(config).filter(c -> c.isList(PathStage.LEARNER_NPC.name()))
-			.findFirst().map(c -> Utility.toListInteger(c.getString(PathStage.LEARNER_NPC.name())));
-		if (ids.isPresent()) {
-			SentenceStorage.playerIds.put(name, ids.get());
-		}
+		Stream.of(config).filter(c -> c.isList(PathStage.LEARNER_NPC.name()))
+			.findFirst().map(c -> Utility.toListInteger(c.getString(PathStage.LEARNER_NPC.name())))
+			.ifPresent(ids -> unit.setPlayerNPCIds(ids));
 
 		List<List<HolographicSentence>> listlist = new ArrayList<>();
 		conversationSection.ifPresent(section ->
@@ -74,7 +71,7 @@ public class SentenceYamlConverter {
 				}
 			})
 		);
-		SentenceStorage.helperSentences.put(name, listlist);
+		unit.setHelperSentences(listlist);
 		return;
 	}
 
@@ -94,10 +91,11 @@ public class SentenceYamlConverter {
 				MemorySection stageSection = (MemorySection) uuidSection.get(uuidString + "." + LearnerSentencePath.STAGE.name());
 				String name = uuidSection.getString(uuidString + "." + LearnerSentencePath.NAME.name());
 				stageSection.getKeys(false).stream()
-					.forEach(stage -> {
-						SentenceStorage.findPlayerQuestions(stage).ifPresent(questions -> {
-							List<PlayerSentence> list = new ArrayList<>();
-							MemorySection sentencesSection = (MemorySection) stageSection.get(stage);
+					.forEach(unitName -> {
+						Unit unit = SentenceStorage.units.getOrDefault(unitName, new Unit());
+						Optional.of(unit.getPlayerQuestions()).ifPresent(questions -> {
+							List<HolographicSentence> list = new ArrayList<>();
+							MemorySection sentencesSection = (MemorySection) stageSection.get(unitName);
 							List<String> kanji = sentencesSection.getStringList(SentencePath.KANJI.name());
 							List<String> kana = sentencesSection.getStringList(SentencePath.KANA.name());
 							List<String> en = sentencesSection.getStringList(SentencePath.EN.name());
@@ -115,11 +113,7 @@ public class SentenceYamlConverter {
 								}
 							}
 							if (0 < list.size()) {
-								if (!SentenceStorage.playerSentences.containsKey(stage)) {
-									List<List<PlayerSentence>> empty = new ArrayList<List<PlayerSentence>>();
-									SentenceStorage.playerSentences.put(stage, empty);
-								}
-								SentenceStorage.playerSentences.get(stage).add(list);
+								unit.getPlayerSentences().add(list);
 							}
 						});
 					});
@@ -136,25 +130,33 @@ public class SentenceYamlConverter {
 	}
 
 	public static void save() {
-		SentenceStorage.helperSentences.entrySet()
-			.forEach(entry -> saveStage(entry.getKey(), entry.getValue()));
-		saveLearnerSentences();
+		SentenceStorage.units.entrySet()
+			.forEach(entry -> saveUnit(entry.getKey(), entry.getValue()));
+//		savePlayerSentences();
+//		disableNotExistingUnits();
 	}
 
-	private static void saveStage(String stage, List<List<HolographicSentence>> lls) {
-		File file = new File(BASE + "//" + stage + ".yml");
+
+//	private static void disableNotExistingUnits() {
+//		SentenceStorage.helperSentences.keySet().stream().forEach(System.out::println);
+//		Stream.of(UNIT_DIR.listFiles())
+//			.filter(file -> file.getName().endsWith(".yml"))
+//			.filter(file ->
+//				!SentenceStorage.helperSentences.keySet().contains(file.getName().substring(0,  file.getName().length() - ".yml".length()).toUpperCase()))
+//			.forEach(file -> file.renameTo(new File(file.getAbsolutePath() + "_disabled")));
+//	}
+
+	private static void saveUnit(String stage, Unit unit) {
+		File file = new File(UNIT_DIR + "//" + stage + ".yml");
 		YamlConfiguration yaml = new YamlConfiguration();
 		Map<List<String>, Map<String, List<String>>> map2 = new HashMap<>();
-		lls.stream().forEach(ls -> {
-			if (SentenceStorage.playerIds.containsKey(stage)) {
-				yaml.set(PathStage.LEARNER_NPC.name(), SentenceStorage.playerIds.get(stage));
-			}
-			if (SentenceStorage.playerQuestions.containsKey(stage)) {
-				yaml.set(PathStage.LEARNER_QUESTION.name(), SentenceStorage.playerQuestions.get(stage));
-			}
 
-				List<HelperSentence> lo = ls.stream().filter(s -> s instanceof HelperSentence)
-				.map(s -> (HelperSentence) s).collect(Collectors.toList());
+		unit.getPlayerSentences().stream().forEach(ls -> {
+		yaml.set(PathStage.LEARNER_NPC.name(), unit.getPlayerNPCIds());
+		yaml.set(PathStage.LEARNER_QUESTION.name(), unit.getPlayerQuestions());
+
+		List<HelperSentence> lo = ls.stream().filter(s -> s instanceof HelperSentence)
+			.map(s -> (HelperSentence) s).collect(Collectors.toList());
 
 			Map<String, List<String>> map = new HashMap<String, List<String>>();
 			map.put(PathConversation.EN.name(), lo.stream().map(o -> o.getLines(SpellType.EN).get().get(0)).collect(Collectors.toList()));
@@ -179,51 +181,52 @@ public class SentenceYamlConverter {
 		}
 	}
 
-	private static void saveLearnerSentences() {
-		Map<String, Map<String, Map<String, Map<String, List<String>>>>> uuids = new HashMap<>();
-		Map<String, String> names = new HashMap<String,String>();
-
-		SentenceStorage.playerSentences.entrySet().stream()
-			.forEach(entry -> {
-				List<String> uuid = new ArrayList<>();
-				List<String> name = new ArrayList<>();
-				String stage = entry.getKey();
-				entry.getValue().forEach(ls -> {
-					List<String> kanji = new ArrayList<String>();
-					List<String> kana = new ArrayList<String>();
-					List<String> en = new ArrayList<String>();
-					ls.forEach(s -> {
-						kanji.add(s.getJapanese().getLine(Arrays.asList(SpellType.KANJI)).get().get(0));
-						kana.add(s.getJapanese().getLine(Arrays.asList(SpellType.KANA)).get().get(0));
-						en.add(s.getEnglish().getLine().get(0));
-						if (!uuid.contains(s.getUniqueId())) {
-							uuid.add(s.getUniqueId().toString());
-						}
-						if (!name.contains(s.getDisplayName())) {
-							name.add(s.getDisplayName());
-						}
-					});
-					uuids.computeIfAbsent(uuid.get(0), initial -> new HashMap<String, Map<String, Map<String, List<String>>>>());
-					uuids.get(uuid.get(0)).computeIfAbsent(LearnerSentencePath.STAGE.name(), initial -> new HashMap<String, Map<String, List<String>>>());
-					uuids.get(uuid.get(0)).get(LearnerSentencePath.STAGE.name()).computeIfAbsent(stage, initial -> new HashMap<String, List<String>>());
-
-					uuids.get(uuid.get(0)).get(LearnerSentencePath.STAGE.name()).get(stage).put(SentencePath.KANJI.name(), kanji);
-					uuids.get(uuid.get(0)).get(LearnerSentencePath.STAGE.name()).get(stage).put(SentencePath.KANA.name(), kana);
-					uuids.get(uuid.get(0)).get(LearnerSentencePath.STAGE.name()).get(stage).put(SentencePath.EN.name(), en);
-
-					names.put(uuid.get(0), name.get(0));
-					uuid.clear();
-					name.clear();
-				});
-			});
-		YamlConfiguration yaml = new YamlConfiguration();
-		yaml.createSection(LearnerSentencePath.LEARNER_SENTENCE.name(), uuids);
-		names.entrySet().forEach(entry -> yaml.set(LearnerSentencePath.LEARNER_SENTENCE + "." + entry.getKey() + "." + LearnerSentencePath.NAME.name(), entry.getValue()));
-		try {
-			yaml.save(CONFIG_FILE);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	private static void savePlayerSentences() {
+//		Map<String, Map<String, Map<String, Map<String, List<String>>>>> uuids = new HashMap<>();
+//		Map<String, String> names = new HashMap<String,String>();
+//
+//		SentenceStorage.playerSentences.entrySet().stream()
+//			.forEach(entry -> {
+//				List<String> uuid = new ArrayList<>();
+//				List<String> name = new ArrayList<>();
+//				String stage = entry.getKey();
+//				List<List<PlayerSentence>> sentence = entry.getValue().stream().map(ls -> ls.stream().map(s -> (PlayerSentence) s).collect(Collectors.toList())).collect(Collectors.toList());
+//				sentence.forEach(ls -> {
+//					List<String> kanji = new ArrayList<String>();
+//					List<String> kana = new ArrayList<String>();
+//					List<String> en = new ArrayList<String>();
+//					ls.forEach(s -> {
+//						kanji.add(s.getJapanese().getLine(Arrays.asList(SpellType.KANJI)).get().get(0));
+//						kana.add(s.getJapanese().getLine(Arrays.asList(SpellType.KANA)).get().get(0));
+//						en.add(s.getEnglish().getLine().get(0));
+//						if (!uuid.contains(s.getUniqueId())) {
+//							uuid.add(s.getUniqueId().toString());
+//						}
+//						if (!name.contains(s.getDisplayName())) {
+//							name.add(s.getDisplayName());
+//						}
+//					});
+//					uuids.computeIfAbsent(uuid.get(0), initial -> new HashMap<String, Map<String, Map<String, List<String>>>>());
+//					uuids.get(uuid.get(0)).computeIfAbsent(LearnerSentencePath.STAGE.name(), initial -> new HashMap<String, Map<String, List<String>>>());
+//					uuids.get(uuid.get(0)).get(LearnerSentencePath.STAGE.name()).computeIfAbsent(stage, initial -> new HashMap<String, List<String>>());
+//
+//					uuids.get(uuid.get(0)).get(LearnerSentencePath.STAGE.name()).get(stage).put(SentencePath.KANJI.name(), kanji);
+//					uuids.get(uuid.get(0)).get(LearnerSentencePath.STAGE.name()).get(stage).put(SentencePath.KANA.name(), kana);
+//					uuids.get(uuid.get(0)).get(LearnerSentencePath.STAGE.name()).get(stage).put(SentencePath.EN.name(), en);
+//
+//					names.put(uuid.get(0), name.get(0));
+//					uuid.clear();
+//					name.clear();
+//				});
+//			});
+//		YamlConfiguration yaml = new YamlConfiguration();
+//		yaml.createSection(LearnerSentencePath.LEARNER_SENTENCE.name(), uuids);
+//		names.entrySet().forEach(entry -> yaml.set(LearnerSentencePath.LEARNER_SENTENCE + "." + entry.getKey() + "." + LearnerSentencePath.NAME.name(), entry.getValue()));
+//		try {
+//			yaml.save(CONFIG_FILE);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 }
 

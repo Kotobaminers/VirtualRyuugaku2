@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.bukkit.Effect;
-import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -18,9 +17,9 @@ import org.bukkit.entity.Player;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Commands;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCUtility;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.VRGMessenger.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.LearnerNPCBook;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Stage;
 import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.StageStorage;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HologramStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HolographicSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.QuestionSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceEditor;
@@ -29,11 +28,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStor
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicCommandGame;
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicEmptyGame;
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicEventGame;
-import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicGameController;
-import com.github.orgs.kotobaminers.virtualryuugaku.publictour.publictour.PublicTourController;
-import com.github.orgs.kotobaminers.virtualryuugaku.publictour.publictour.PublicTourController0;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
 
 public class CommandPerformer {
 	public CommandSender sender;
@@ -138,38 +133,11 @@ public class CommandPerformer {
 		case ANSWER_CONVERSATION:
 			success = commandAnswerHelper();
 			break;
-		case ANSWER_PUBLIC_GAME:
-			success = commandAnswerPublicGame();
-			break;
-
-
 		default:
 			break;
 		}
 		return  success;
 	}
-
-//	private boolean commandTourJoin() {
-//		if (!hasValidPlayer()) {
-//			return true;
-//		}
-//		PublicTourController.join(player);
-//		return true;
-//	}
-
-//	private boolean commandTourStart() {
-//		if (!hasValidPlayer()) {
-//			return true;
-//		}
-//		if (0 < params.size()) {
-//			PublicTourController.loadTour(params.get(0));
-//			PublicTourController.join(player);
-//			return true;
-//		} else {
-//			commandList();
-//		}
-//		return false;
-//	}
 
 	private boolean commandDeleteQuestion() {
 		if (!hasValidPlayer()) {
@@ -259,33 +227,6 @@ public class CommandPerformer {
 		return true;
 	}
 
-	private boolean commandTourNext() {
-		if (!hasValidPlayer()) {
-			return true;
-		}
-		PublicTourController.continueNext(player);
-		return true;
-	}
-	private boolean commandTourPrevious() {
-		if (!hasValidPlayer()) {
-			return true;
-		}
-		PublicTourController0.returnToPrevious(player);
-		return true;
-	}
-
-	private boolean commandGameRepeat() {
-		if (0 < PublicGameController.join.size()) {
-			Message.GAME_STARTED_0.print(sender, null);
-		} else {
-			PublicGameController.loadLastStage();
-			String[] opts = {PublicGameController.lastStage};
-			Message.GAME_REPEATED_1.print(sender, opts);
-			commandGameJoin();
-		}
-		return true;
-	}
-
 	private boolean commandDebugInterval() {
 		if (0 < params.size()) {
 			try {
@@ -304,46 +245,6 @@ public class CommandPerformer {
 		return true;
 	}
 
-	private boolean commandGameJoin() {
-		if (!hasValidPlayer()) {
-			return true;
-		}
-		for (List<Integer> index : PublicGameController.stage.npcConversations.keySet()) {
-			if (0 < index.size()) {
-				try {
-					Location location = NPCUtility.getNPC(index.get(0)).getStoredLocation();
-					player.teleport(location.add(0, 1, 0));
-					PublicGameController.joinPlayer(player);
-					Message.GAME_JOIN_TP_2.broadcast(Arrays.asList(player.getName(), PublicGameController.stage.name));
-					PublicGameController.game.giveCurrentQuestion(player);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				return true;
-			}
-		}
-		return true;
-	}
-
-	private boolean commandGameStart() {
-		if (!hasValidPlayer()) {
-			return true;
-		}
-		if (0 < params.size()) {
-			for (String name : StageStorage.getStageNames()) {
-				if (name.equalsIgnoreCase(params.get(0))) {
-					PublicGameController.loadStage(name);
-					PublicGameController.joinPlayer(player);
-					return true;
-				}
-			}
-		}
-		commandList();
-		return false;
-	}
-
-
-
 	private boolean commandDebugMode() {
 		if(!Settings.debugMessage) {
 			Settings.debugMessage = true;
@@ -361,19 +262,6 @@ public class CommandPerformer {
 		return true;
 	}
 
-	private boolean commandAnswerPublicGame() {
-		if (!hasValidPlayer()) {
-			return true;
-		}
-		String answer = "";
-		if (0 < params.size()) {
-			answer = Utility.joinStrings(params, " ");
-			PublicGameController.game.validateAnswer(player, answer);
-			return true;
-		}
-		return false;
-	}
-
 	private boolean commandDictionaryBroadcast() {
 		if (0 < params.size()) {
 			Message.COMMAND_DICTIONARY_1.broadcast(Arrays.asList(String.join("+", params)));
@@ -385,13 +273,12 @@ public class CommandPerformer {
 
 	private boolean commandDictionary() {
 		if (0 < params.size()) {
-			String jisho = Utility.joinStrings(params, "%20");
-			String weblio = Utility.joinStrings(params, "+");
+			String jisho = String.join("%20", params);
+			String weblio = String.join("+", params);
 			String alc = weblio;
-			String[] opts = {jisho, weblio, alc};
-			Message.COMMAND_DICTIONARY_1.print(sender, opts);
+			Message.COMMAND_DICTIONARY_1.print(Arrays.asList(jisho, weblio, alc), sender);
 		} else {
-			Message.COMMAND_DICTIONARY_0.print(sender, null);
+			Message.COMMAND_DICTIONARY_0.print(null, sender);
 		}
 		return true;
 	}
@@ -428,8 +315,7 @@ public class CommandPerformer {
 			return true;
 		}
 		if (0 < params.size()) {
-			Integer select = PlayerDataStorage.getPlayerData(player).getSelectId();
-			Optional<List<HolographicSentence>> sentences = NPCUtility.findNPC(select).flatMap(npc -> SentenceStorage.findHolographicSentences.apply(npc));
+			Optional<List<HolographicSentence>> sentences = SentenceStorage.findLS(PlayerDataStorage.getPlayerData(player).getSelectId());
 			if (sentences.isPresent()) {
 				sentences.flatMap(ls -> ls.stream().filter(s -> s instanceof QuestionSentence).findFirst())
 					.map(s -> (QuestionSentence) s)
@@ -458,20 +344,8 @@ public class CommandPerformer {
 		for (Stage stage : StageStorage.getStages()) {
 			names.add(stage.name);
 		}
-		String[] opts = {Utility.joinStrings(names, ", ")};
-		Message.STAGE_LIST_1.print(sender, opts);
+		Message.STAGE_LIST_1.print(Arrays.asList(String.join(" ", names)), sender);
 		return true;
-	}
-
-	private boolean commandMyselfBook() {
-		if (!hasValidPlayer()) {
-			return true;
-		}
-		if (0 < params.size()) {
-			LearnerNPCBook.giveBlankBookItem(player, params.get(0));
-			return true;
-		}
-		return false;
 	}
 
 	private boolean commandDebugEffect() {
@@ -537,29 +411,10 @@ public class CommandPerformer {
 	}
 
 	private boolean commandDebugDebug() {
+		HologramStorage.updateHologram(NPCUtility.findNPC(Integer.parseInt(params.get(0))).get(), SentenceStorage.findHelperLS(Integer.parseInt(params.get(0))).get(), player);
 		return true;
 	}
-	private boolean commandGameFinish() {
-//		if(ControllerGameGlobal.isValidGame()) {
-//			ControllerGameGlobal.finishGame();
-//		} else {
-//			Message.GAME_PLEASE_LOAD_0.print(sender, null);;
-//		}
-		return true;
-	}
-	private boolean commandGameNext() {
-//		if(ControllerGameGlobal.isValidGame()) {
-//			ControllerGameGlobal.giveNextQuestion(player);
-//		} else {
-//			Message.GAME_PLEASE_LOAD_0.print(sender, null);;
-//		}
-		return true;
-	}
-	private boolean commandGameRule() {
-//		CoQntrollerGameGlobal.printRule(sender);
-//		Commands.ANSWER_GAME.printUsage(sender);
-		return true;
-	}
+
 	private boolean commandInfo() {
 //		if (!hasValidPlayer()) {
 //			return true;
@@ -615,31 +470,6 @@ public class CommandPerformer {
 //			return true;
 //		}
 		return false;
-	}
-	private boolean commandMyselfReload() {
-//		if (1 < params.size()) {
-//			String stageName = params.get(0).toUpperCase();
-//			CheckState check = CheckState.lookup(params.get(1));
-//			if (!check.equals(CheckState.NOT_EXISTS)) {
-//				try {
-//					StageMyself myself = Stage.createStageMyself(stageName);
-//					myself.changeNPCs(check);
-//					String[] opts = {stageName};
-//					Message.NPC_CHANGE_1.print(sender, opts);
-//					return true;
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		}
-		return false;
-	}
-	private boolean commandMyselfUpdate() {
-//		if (!hasValidPlayer()) {
-//			return true;
-//		}
-//		ControllerConversation.importBook(player);
-		return true;
 	}
 }
 

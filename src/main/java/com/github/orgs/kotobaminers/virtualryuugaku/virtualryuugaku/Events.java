@@ -1,5 +1,6 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.bukkit.entity.Player;
@@ -10,6 +11,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCUtility;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HologramStorage;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HolographicSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceEditor.EditMode;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.GUIIcon;
@@ -43,16 +46,17 @@ public class Events implements Listener {
 		}
 
 		playerData.selectNPC(npc);
-		Optional<String> stage = SentenceStorage.findUnitName(event.getNPC().getId());
-		if (!stage.isPresent()) {
+
+		NPCUtility.updateLearnerNPC(npc, player);
+
+		Optional<List<HolographicSentence>> sentences = SentenceStorage.findLS(npc.getId());
+		if (!sentences.isPresent()) {
 			return;
 		}
 
-		if (NPCUtility.isEmptyLearnerNPC(npc)) {
-			NPCUtility.updateEmptyLearnerNPC(npc, player);
-			return;
-		}
-		SentenceSelector.create(event.getNPC()).ifPresent(ss -> player.openInventory(ss.createInventory()));
+
+		sentences.ifPresent(s -> SentenceSelector.create(s).ifPresent(ss -> player.openInventory(ss.createInventory())));
+
 
 //		if(PublicGameController.game instanceof PublicEventGame &&
 //				PublicGameController.mode.equals(PublicGameMode.FIND_PEOPLE)) {
@@ -64,7 +68,8 @@ public class Events implements Listener {
 	@EventHandler
 	public void onClickNPCRight(NPCRightClickEvent event) {
 		PlayerDataStorage.getPlayerData(event.getClicker()).selectNPC(event.getNPC());
-		SentenceStorage.showHolograms(event.getClicker(), event.getNPC());
+		SentenceStorage.findLS(event.getNPC().getId()).ifPresent(ls ->
+			HologramStorage.updateHologram(event.getNPC(), ls, event.getClicker()));
 	}
 
 	@EventHandler

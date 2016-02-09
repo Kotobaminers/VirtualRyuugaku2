@@ -46,7 +46,7 @@ public class SentenceEditor {
 	}
 
 	public Optional<List<HolographicSentence>> findSentences() {
-		return NPCUtility.findNPC(id).flatMap(SentenceStorage.findHolographicSentences);
+		return SentenceStorage.findLS(id);
 	}
 	public Optional<HolographicSentence> findSentence() {
 		return findSentence(findSentences());

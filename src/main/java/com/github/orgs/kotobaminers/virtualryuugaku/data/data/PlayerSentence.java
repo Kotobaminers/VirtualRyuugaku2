@@ -18,7 +18,7 @@ import net.citizensnpcs.api.npc.NPC;
 import net.md_5.bungee.api.ChatColor;
 
 public class PlayerSentence extends TalkSentence {
-	private static final Integer DEFAULT_ID= -1;
+	public static final Integer DEFAULT_ID= -1;
 
 	private UUID uuid = null;
 	private String question = "";

@@ -15,31 +15,19 @@ import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HolographicSentenc
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.PlayerSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.QuestionSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceEditor;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
-
-import net.citizensnpcs.api.npc.NPC;
 
 public abstract class SentenceSelector extends VRGGUI {
 	public abstract List<List<ItemStack>> getIcons();
 	public abstract List<ItemStack> getOptionIcons();
 
-	public static Optional<SentenceSelector> create(NPC npc) {
-		Optional<String> stageOptional = SentenceStorage.findUnitName(npc.getId());
-		if (!stageOptional.isPresent()) {
-			return Optional.empty();
-		}
-
-		Optional<List<HolographicSentence>> optional = SentenceStorage.findHolographicSentences.apply(npc);
-		if(optional.isPresent()) {
-			List<HolographicSentence> sentences = optional.get();
-			if (0 < sentences.size()) {
-				if(sentences.stream().allMatch(sentence -> sentence instanceof PlayerSentence)) {
-					return Optional.of(new LearnerSentenceSelector(sentences));
-				}
-				if(sentences.stream().allMatch(sentence -> sentence instanceof HelperSentence || sentence instanceof QuestionSentence)) {
-					return Optional.of(new OwnerSentenceSelector(sentences));
-				}
+	public static Optional<SentenceSelector> create(List<HolographicSentence> sentences) {
+		if (0 < sentences.size()) {
+			if(sentences.stream().allMatch(sentence -> sentence instanceof PlayerSentence)) {
+				return Optional.of(new LearnerSentenceSelector(sentences));
+			}
+			if(sentences.stream().allMatch(sentence -> sentence instanceof HelperSentence || sentence instanceof QuestionSentence)) {
+				return Optional.of(new OwnerSentenceSelector(sentences));
 			}
 		}
 		return Optional.empty();

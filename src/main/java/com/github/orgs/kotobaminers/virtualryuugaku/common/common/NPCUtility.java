@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.bukkit.Effect;
 import org.bukkit.Sound;
@@ -15,11 +16,11 @@ import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.PlayerSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceStorage;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.Unit;
 
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.MetadataStore;
 import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.trait.trait.MobType;
 import net.md_5.bungee.api.ChatColor;
 
 public class NPCUtility {
@@ -51,6 +52,13 @@ public class NPCUtility {
 		npc.setName(EMPTY);
 	}
 
+	public static boolean isEmptyPlayerNPC(NPC npc) {
+		if (npc.getEntity().getType().equals(EntityType.CREEPER) && npc.getName().equals(EMPTY)) {
+			return true;
+		}
+		return false;
+	}
+
 	private static void changeType(NPC npc, EntityType type) throws Exception {
 		if (ALLOWED_ENTITY_TYPE.contains(type)) {
 			npc.setBukkitEntityType(type);
@@ -59,22 +67,6 @@ public class NPCUtility {
 		throw new Exception("NOT ALLOWED ENTITY TYPE: " + type.toString());
 	}
 
-	public static boolean isEmptyLearnerNPC(NPC npc) {
-		if (npc.getName().equalsIgnoreCase(EMPTY) && npc.getTrait(MobType.class).getType().equals(EntityType.CREEPER)) {
-				if(SentenceStorage.playerIds.values().stream()
-					.map(ids -> ids.contains(npc.getId()))
-					.anyMatch(bool -> bool==true)) {
-					return true;
-				}
-		}
-		return false;
-	}
-
-	public static void ownEmptyNPC(NPC npc, String name, UUID uuid) {
-		if (isEmptyLearnerNPC(npc)) {
-			renameNPCAsPlayer(npc, name, uuid);
-		}
-	}
 	public static void renameNPCAsPlayer(NPC npc, String name, UUID uuid) {
 		MetadataStore data = npc.data();
 		skinMeta.stream().filter(meta -> data.has(meta)).forEach(data::remove);
@@ -86,46 +78,42 @@ public class NPCUtility {
 		npc.spawn(npc.getStoredLocation());
 	}
 
-	public static void updateEmptyLearnerNPC(NPC npc, Player player) {
-		Optional<String> stage = SentenceStorage.findUnitName(npc.getId());
-		if (!stage.isPresent()) {
-			return;
-		}
-		if (SentenceStorage.playerIds.containsKey(stage.get())) {
-			List<UUID> displayUuids = SentenceStorage.playerIds.get(stage.get()).stream()
-					.map(id -> NPCUtility.findNPC(id)
-						.map(npc2 -> NPCUtility.findSkinUUID(npc2)))
-						.filter(name -> name.isPresent())
-						.filter(name2 -> name2.get().isPresent())
-						.map(name3 -> name3.get().get())
-						.collect(Collectors.toList());
-			if (!displayUuids.contains(player.getUniqueId())) {
-				ownEmptyNPC(npc, player.getName(), player.getUniqueId());
-				player.getWorld().spigot().playEffect(npc.getStoredLocation().clone().add(0,1,0), Effect.EXPLOSION, 22, 22, (float) 0.5, (float) 0.5, (float) 0.5, (float) 0, 20, 10);
-				player.playSound(player.getLocation(), Sound.CHICKEN_EGG_POP, 1f, 1f);
-				return;
-			}
-			List<PlayerSentence> sentences =
-				SentenceStorage.playerSentences.get(stage.get()).stream()
-					.filter(ls -> 0 < ls.size())
-					.filter(ls -> !ls.get(0).getUniqueId().equals(player.getUniqueId()))
-					.map(ls -> ls.get(0))
-					.collect(Collectors.toList());
-			Collections.shuffle(sentences);
+	public static void updateLearnerNPC(NPC npc, Player player) {
+		Optional<Unit> unit = SentenceStorage.findUnit(npc.getId());
+		if (!unit.isPresent()) return;
+		if (!unit.get().getPlayerNPCIds().contains(npc.getId())) return;
 
-			Optional<PlayerSentence> sentence = sentences.stream()
-				.filter(s -> !displayUuids.contains(s.getUniqueId()))
-				.findFirst();
-			if (sentence.isPresent()) {
-				ownEmptyNPC(npc, sentence.get().getDisplayName(), sentence.get().getUniqueId());
+		Stream<PlayerSentence> sentences = unit.get().getPlayerSentences().stream()
+			.filter(ls -> 0 < ls.size())
+			.map(ls -> ((PlayerSentence) ls.get(0)));
+		List<UUID> displayUUIDs = sentences
+			.filter(s -> !s.getId().equals(PlayerSentence.DEFAULT_ID))
+			.collect(Collectors.toList())
+			.stream().map(s -> s.getUniqueId()).collect(Collectors.toList());
+		if (isEmptyPlayerNPC(npc)) {
+			if (displayUUIDs.contains(player.getUniqueId())) {
+				List<PlayerSentence> hiddens = sentences
+						.filter(s -> s.getId().equals(PlayerSentence.DEFAULT_ID))
+						.collect(Collectors.toList());
+				if (0 < hiddens.size()) {
+					Collections.shuffle(hiddens);
+					renameNPCAsPlayer(npc, hiddens.get(0).getDisplayName(), hiddens.get(0).getUniqueId());
+					player.getWorld().spigot().playEffect(npc.getStoredLocation().clone().add(0,1,0), Effect.EXPLOSION, 22, 22, (float) 0.5, (float) 0.5, (float) 0.5, (float) 0, 20, 10);
+					player.playSound(player.getLocation(), Sound.CHICKEN_EGG_POP, 1f, 1f);
+				}
+			} else {
+				renameNPCAsPlayer(npc, player.getName(), player.getUniqueId());
 				player.getWorld().spigot().playEffect(npc.getStoredLocation().clone().add(0,1,0), Effect.EXPLOSION, 22, 22, (float) 0.5, (float) 0.5, (float) 0.5, (float) 0, 20, 10);
 				player.playSound(player.getLocation(), Sound.CHICKEN_EGG_POP, 1f, 1f);
-				return;
 			}
-			ownEmptyNPC(npc, player.getName(), player.getUniqueId());
-			player.getWorld().spigot().playEffect(npc.getStoredLocation().clone().add(0,1,0), Effect.EXPLOSION, 22, 22, (float) 0.5, (float) 0.5, (float) 0.5, (float) 0, 20, 10);
-			player.playSound(player.getLocation(), Sound.CHICKEN_EGG_POP, 1f, 1f);
-			return;
+		} else {
+			findSkinUUID(npc).ifPresent(skin -> {
+				if(!displayUUIDs.contains(skin)) {
+					changeNPCAsEmpty(npc);
+					player.getWorld().spigot().playEffect(npc.getStoredLocation().clone().add(0,1,0), Effect.EXPLOSION, 22, 22, (float) 0.5, (float) 0.5, (float) 0.5, (float) 0, 20, 10);
+					player.playSound(player.getLocation(), Sound.CHICKEN_EGG_POP, 1f, 1f);
+				}
+			});
 		}
 	}
 

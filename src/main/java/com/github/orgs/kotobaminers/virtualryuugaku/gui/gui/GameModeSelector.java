@@ -21,7 +21,7 @@ public class GameModeSelector extends VRGGUI {
 	}
 
 	public static Optional<GameModeSelector> create(String stage) {
-		if (SentenceStorage.helperSentences.containsKey(stage)) {
+		if (SentenceStorage.units.containsKey(stage)) {
 			GameModeSelector selector = new GameModeSelector(stage);
 			return Optional.of(selector);
 		}

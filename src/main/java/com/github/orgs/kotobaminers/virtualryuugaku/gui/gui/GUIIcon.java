@@ -178,8 +178,8 @@ public enum GUIIcon {
 			Optional<Inventory> inventory = Optional.empty();
 			switch(title) {
 				case SentenceOptionSelector.TITLE:
-					inventory = NPCUtility.findNPC(PlayerDataStorage.getPlayerData(player).getSelectId())
-						.flatMap(npc -> SentenceSelector.create(npc)
+					inventory = SentenceStorage.findLS(PlayerDataStorage.getPlayerData(player).getSelectId())
+						.flatMap(sentences-> SentenceSelector.create(sentences)
 							.flatMap(selector -> Optional.ofNullable(selector.createInventory())));
 					break;
 				case OptionSelector.TITLE:
@@ -225,8 +225,8 @@ public enum GUIIcon {
 		case FREE:
 		case TOUR:
 		case TRAINING:
-			SentenceStorage.findStage.apply(event.getCurrentItem().getItemMeta().getLore().get(0))
-			.ifPresent(lls -> lls.stream()
+			Optional.ofNullable(SentenceStorage.units.getOrDefault(event.getCurrentItem().getItemMeta().getLore().get(0), null))
+			.ifPresent(u -> u.getHelperSentences().stream()
 				.findFirst().ifPresent(ls -> ls.stream()
 					.findFirst().ifPresent(s ->
 						NPCUtility.findNPC(s.getId())
@@ -239,17 +239,20 @@ public enum GUIIcon {
 							}))));
 			return;
 		case YOUR_NPC:
-			if(SentenceStorage.playerIds.containsKey(event.getCurrentItem().getItemMeta().getLore().get(0))) {
-				SentenceStorage.playerIds.get(event.getCurrentItem().getItemMeta().getLore().get(0)).stream()
-					.findFirst().ifPresent(id -> NPCUtility.findNPC(id)
-						.ifPresent(npc -> {
+			SentenceStorage.findUnit(PlayerDataStorage.getPlayerData(player).getSelectId())
+				.ifPresent(unit -> {
+					List<Integer> ids = unit.getPlayerNPCIds();
+					if (0< ids.size()) {
+						NPCUtility.findNPC(ids.get(0)).ifPresent(npc -> {
 							Utility.teleportToNPC((Player) event.getWhoClicked(), npc);
 							Utility.sendTitle(
-									(Player) event.getWhoClicked(),
-									event.getCurrentItem().getItemMeta().getLore().get(0),
-									this.lore.get().get(0));
-						}));
-			}
+								(Player) event.getWhoClicked(),
+								event.getCurrentItem().getItemMeta().getLore().get(0),
+								this.lore.get().get(0));
+						});
+					}
+				})
+			;
 			return;
 		case UNIT:
 			GameModeSelector.create(event.getCurrentItem().getItemMeta().getDisplayName())

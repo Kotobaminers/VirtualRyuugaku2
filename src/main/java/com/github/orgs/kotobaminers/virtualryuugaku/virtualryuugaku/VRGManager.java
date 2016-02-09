@@ -2,7 +2,6 @@ package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Romaji;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceStorage;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceYamlConverter;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;

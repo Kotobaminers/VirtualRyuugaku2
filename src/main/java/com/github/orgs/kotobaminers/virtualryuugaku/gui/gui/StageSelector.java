@@ -17,7 +17,7 @@ public class StageSelector extends VRGGUI {
 	@Override
 	public Inventory createInventory() {
 		Inventory inventory = Bukkit.createInventory(null, size, getTitle());
-		SentenceStorage.helperSentences.keySet().stream()
+		SentenceStorage.units.keySet().stream()
 			.map(stage -> {
 				ItemStack item = GUIIcon.UNIT.createItem();
 				ItemMeta meta = item.getItemMeta();
