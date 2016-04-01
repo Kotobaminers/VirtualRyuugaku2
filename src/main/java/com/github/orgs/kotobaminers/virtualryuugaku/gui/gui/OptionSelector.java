@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -19,13 +21,12 @@ import net.md_5.bungee.api.ChatColor;
 public class OptionSelector extends VRGGUI {
 	public static final String TITLE = "Select Options!";
 	private PlayerData data = null;
-	private static final List<GUIIcon> LANGUAGES = Arrays.asList(GUIIcon.DISPLAY_EN, GUIIcon.DISPLAY_KANJI, GUIIcon.DISPLAY_KANA, GUIIcon.DISPLAY_ROMAJI);
 	private static final List<GUIIcon> OPTIONS = Arrays.asList(GUIIcon.BACK);
 	private static final List<SpellType> SPELLS = Arrays.asList(SpellType.EN, SpellType.KANJI, SpellType.KANA, SpellType.ROMAJI);
 	private static final String ON = "" + ChatColor.GREEN + ChatColor.BOLD + "ON";
 	private static final String OFF = "" + ChatColor.RED + ChatColor.BOLD + "OFF";
 
-	private OptionSelector() {};
+	OptionSelector() {};
 
 	public static OptionSelector create(Player player) {
 		OptionSelector selector = new OptionSelector();
@@ -41,7 +42,7 @@ public class OptionSelector extends VRGGUI {
 	public Inventory createInventory() {
 		Inventory inventory = Bukkit.createInventory(null, 54, getTitle());
 
-		List<ItemStack> items = LANGUAGES.stream()
+		List<ItemStack> items = getGUIIcons().stream()
 			.map(icon -> icon.createItem())
 			.collect(Collectors.toList());
 		List<String> lores = SPELLS.stream()
@@ -62,6 +63,43 @@ public class OptionSelector extends VRGGUI {
 		}
 		OPTIONS.stream().forEach(opt -> inventory.addItem(opt.createItem()));
 		return inventory;
+	}
+
+	public List<GUIIcon> getGUIIcons() {
+		return Arrays.asList(GUIIcon.DISPLAY_EN, GUIIcon.DISPLAY_KANJI, GUIIcon.DISPLAY_KANA, GUIIcon.DISPLAY_ROMAJI);
+	}
+
+	@Override
+	public void executeClickedEvent(InventoryClickEvent event) {
+		if(event.getWhoClicked() instanceof Player) {
+			Player player = (Player) event.getWhoClicked();
+			GUIIcon.create(event).ifPresent(icon -> {
+				switch (icon) {
+				case DISPLAY_EN:
+					PlayerDataStorage.getPlayerData(player).toggleSpellType(SpellType.EN);
+					player.playSound(player.getLocation(), Sound.CLICK, 1F, 1F);
+					return;
+				case DISPLAY_KANJI:
+					PlayerDataStorage.getPlayerData(player).toggleSpellType(SpellType.KANJI);
+					player.playSound(player.getLocation(), Sound.CLICK, 1F, 1F);
+					return;
+				case DISPLAY_KANA:
+					PlayerDataStorage.getPlayerData(player).toggleSpellType(SpellType.KANA);
+					player.playSound(player.getLocation(), Sound.CLICK, 1F, 1F);
+					return;
+				case DISPLAY_ROMAJI:
+					PlayerDataStorage.getPlayerData(player).toggleSpellType(SpellType.ROMAJI);
+					player.playSound(player.getLocation(), Sound.CLICK, 1F, 1F);
+					return;
+				case BACK:
+					player.openInventory(new UnitSelector(player).createInventory());
+					player.playSound(player.getLocation(), Sound.CLICK, 1F, 1F);
+					return;
+				default:
+					break;
+				}
+			});
+		}
 	}
 }
 

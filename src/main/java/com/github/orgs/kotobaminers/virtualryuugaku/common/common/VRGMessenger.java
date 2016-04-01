@@ -48,6 +48,7 @@ public class VRGMessenger {
 		ERROR("" + ChatColor.DARK_RED + ChatColor.BOLD + "[VRG Error] " + ChatColor.RESET),
 		INVALID("" + ChatColor.RED + ChatColor.BOLD + "[VRG Invalid] " + ChatColor.RESET),
 		EDITOR("" + ChatColor.DARK_GREEN + ChatColor.BOLD +"[" + ChatColor.GREEN + "VRG Editor" + ChatColor.DARK_GREEN + ChatColor.BOLD + "] " + ChatColor.RESET),
+		REQUEST("" + ChatColor.DARK_GREEN + ChatColor.BOLD +"[" + ChatColor.GREEN + "VRG Request" + ChatColor.DARK_GREEN + ChatColor.BOLD + "] " + ChatColor.RESET),
 			;
 
 		private String prefix = "";
@@ -76,6 +77,7 @@ public class VRGMessenger {
 		INVALID_1(Arrays.asList(""), Prefix.INVALID),
 		EDITOR_1(Arrays.asList(""), Prefix.EDITOR),
 		COMMON_TP_1(Arrays.asList("Teleporting to " + ChatColor.AQUA), Prefix.VRG),
+		REQUEST_1(Arrays.asList(""), Prefix.REQUEST),
 
 
 		CONVERSATION_QUESTION_1(Arrays.asList("" + ChatColor.GOLD + "[Question] "), Prefix.NONE),

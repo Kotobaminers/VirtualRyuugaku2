@@ -15,7 +15,7 @@ import net.citizensnpcs.api.npc.NPC;
 public abstract class HolographicSentence {
 
 	protected Integer id = 0;
-	private String stage ="";
+	private String unit ="";
 
 	public abstract void playEffect(Player player, Location location);
 	public abstract void update(String line, SpellType spell);
@@ -27,11 +27,11 @@ public abstract class HolographicSentence {
 	public abstract void registerHologram(SentenceHologram hologram, NPC npc, List<HolographicSentence> sentences);
 	public abstract Location getHologramLocation(NPC npc);
 
-	public String getStage() {
-		return stage;
+	public String getUnitName() {
+		return unit;
 	}
-	public void setStage(String stage) {
-		this.stage = stage;
+	public void setUnitName(String unit) {
+		this.unit = unit;
 	}
 	public Integer getId() {
 		return id;

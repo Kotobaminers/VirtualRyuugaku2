@@ -19,8 +19,9 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.SpellTyp
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCUtility;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.SentenceHologram;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.VRGMessenger.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceYamlConverter.PathStage;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.UnitYamlConverter.UnitPath;
 import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.GUIIcon;
+import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
 
 import net.citizensnpcs.api.npc.NPC;
@@ -38,12 +39,12 @@ public class QuestionSentence extends HolographicSentence{
 	}
 
 	public static Optional<QuestionSentence> create(ConfigurationSection section, List<Integer> index) {
-		if(section.isList(PathStage.Q.toString()) && section.isList(PathStage.A.toString())) {
+		if(section.isList(UnitPath.Q.toString()) && section.isList(UnitPath.A.toString())) {
 			QuestionSentence instance = new QuestionSentence();
-			Optional.ofNullable(section.getStringList(PathStage.Q.name()))
+			Optional.ofNullable(section.getStringList(UnitPath.Q.name()))
 				.filter(q -> 0 < q.size())
 				.ifPresent(q -> instance.question = q.get(0));
-			Optional.ofNullable(section.getStringList(PathStage.A.name()))
+			Optional.ofNullable(section.getStringList(UnitPath.A.name()))
 				.ifPresent(a -> instance.answers = a);
 			instance.id = index.get(index.size() - 1);
 			return Optional.of(instance);
@@ -60,8 +61,11 @@ public class QuestionSentence extends HolographicSentence{
 	public void validate(String answer, Player player) {
 		if (answers.stream().anyMatch(a -> a.equalsIgnoreCase(answer))) {
 			Message.COMMON_CORRECT_0.print(null, player);
+			player.playSound(player.getLocation(), Sound.LEVEL_UP, 1F, 1F);
+			PlayerDataStorage.getPlayerData(player).addHelperQuestionDone(getUnitName(), id);
 		} else {
 			Message.COMMON_WRONG_0.print(null, player);
+			player.playSound(player.getLocation(), Sound.ITEM_BREAK, 1F, 1F);
 		}
 	}
 
@@ -91,7 +95,7 @@ public class QuestionSentence extends HolographicSentence{
 
 	@Override
 	public Optional<List<ItemStack>> giveIcons() {
-		ItemStack item = GUIIcon.QUESTION.createItem();
+		ItemStack item = GUIIcon.HELPER_QUESTION.createItem();
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(getQuestion());
 		meta.setLore(Arrays.asList(answers.size() + " answers"));
@@ -106,7 +110,7 @@ public class QuestionSentence extends HolographicSentence{
 
 	@Override
 	public Optional<List<ItemStack>> giveEmptyIcons() {
-		ItemStack item = GUIIcon.QUESTION.createItem();
+		ItemStack item = GUIIcon.HELPER_QUESTION.createItem();
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(NOT_REGISTERED);
 		meta.setLore(Arrays.asList(answers.size() + " answers"));

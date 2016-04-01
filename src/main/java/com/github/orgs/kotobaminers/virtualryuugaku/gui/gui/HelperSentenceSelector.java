@@ -8,17 +8,17 @@ import java.util.stream.Stream;
 
 import org.bukkit.inventory.ItemStack;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HolographicSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HelperSentence;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HolographicSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.QuestionSentence;
 
-public class OwnerSentenceSelector extends SentenceSelector {
+public class HelperSentenceSelector extends SentenceSelector {
 	public static final String TITLE = "Example Sentences";
 	private List<HelperSentence> ownerSentences = new ArrayList<>();
 	private Optional<QuestionSentence> question = Optional.empty();
 
 
-	public OwnerSentenceSelector(List<HolographicSentence> sentences) {
+	public HelperSentenceSelector(List<HolographicSentence> sentences) {
 		for (HolographicSentence sentence : sentences) {
 			if (sentence instanceof HelperSentence) {
 				ownerSentences.add((HelperSentence) sentence);
@@ -28,7 +28,7 @@ public class OwnerSentenceSelector extends SentenceSelector {
 		}
 	}
 
-	public OwnerSentenceSelector() {
+	public HelperSentenceSelector() {
 	}
 
 	@Override
@@ -54,24 +54,9 @@ public class OwnerSentenceSelector extends SentenceSelector {
 
 	@Override
 	public List<ItemStack> getOptionIcons() {
-		return Stream.of(GUIIcon.RESPAWN)
+		return Stream.of(GUIIcon.RESPAWN, GUIIcon.ROLE_PLAY)
 				.map(option ->option.createItem())
 				.collect(Collectors.toList());
 	}
-
-//	@Override
-//	public Optional<HolographicSentence> selectSentence(InventoryClickEvent event) {
-//		int index = event.getRawSlot() % 9;
-//		Integer selectId = PlayerDataStorage.getDataPlayer((Player) event.getWhoClicked()).getSelectId();
-//		Optional<List<HolographicSentence>> sentences = SentenceStorage.findOwnerSentences(selectId);
-//		if (sentences.isPresent()) {
-//			if (index < sentences.get().size()) {
-//				return Optional.of(sentences.get().get(index));
-//			}
-//		}
-//		return Optional.empty();
-//	}
-
-
 }
 

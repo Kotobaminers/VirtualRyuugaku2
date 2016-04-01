@@ -63,7 +63,7 @@ public class HelperSentence extends TalkSentence {
 	@Override
 	public Optional<List<ItemStack>> giveIcons() {
 		Optional<List<ItemStack>> icons = giveSentenceIcons();
-		ItemStack skull = GUIIcon.SPEAKER.createItem();
+		ItemStack skull = GUIIcon.PLAYER_SKULL.createItem();
 		Optional<NPC> npc = NPCUtility.findNPC(getId());
 		Optional<String> skin = npc.map(n -> NPCUtility.findSkinName(n))
 			.filter(name -> name.isPresent())

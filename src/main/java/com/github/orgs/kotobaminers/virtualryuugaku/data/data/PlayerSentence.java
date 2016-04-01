@@ -7,9 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.SpellType;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.SentenceHologram;
@@ -21,18 +19,16 @@ public class PlayerSentence extends TalkSentence {
 	public static final Integer DEFAULT_ID= -1;
 
 	private UUID uuid = null;
-	private String question = "";
 	private String displayName = "";
 
-	public PlayerSentence(List<String> kanji, List<String> kana, List<String> en, UUID uuid, String question, String name) {
+	public PlayerSentence(List<String> kanji, List<String> kana, List<String> en, UUID uuid, String name) {
 		super(kanji, kana, en, DEFAULT_ID);
 		this.uuid = uuid;
-		this.question = question;
 		this.displayName = name;
 	}
 
-	public static PlayerSentence createEmpty(UUID uuid, String name, String question) {
-		PlayerSentence sentence = new PlayerSentence(Arrays.asList(EMPTY_KANJI), Arrays.asList(EMPTY_KANA), Arrays.asList(EMPTY_EN), uuid, question, name);
+	public static PlayerSentence createEmpty(UUID uuid, String name) {
+		PlayerSentence sentence = new PlayerSentence(Arrays.asList(EMPTY_KANJI), Arrays.asList(EMPTY_KANA), Arrays.asList(EMPTY_EN), uuid, name);
 		sentence.getJapanese().setRomaji(EMPTY_ROMAJI);
 		return sentence;
 	}
@@ -48,21 +44,13 @@ public class PlayerSentence extends TalkSentence {
 	@Override
 	public List<String> getHolographicLines(List<SpellType> spells) {
 		ArrayList<String> lines = new ArrayList<String>();
-		lines.add("" + ChatColor.GREEN + ChatColor.BOLD + question);
 		spells.stream().forEach(spell -> this.getLines(spell).get().forEach(line -> lines.add(ChatColor.BOLD + line)));
 		return lines;
 	}
 
 	@Override
 	public Optional<List<ItemStack>> giveIcons() {
-		List<ItemStack> icons = new ArrayList<ItemStack>();
-		ItemStack info = new ItemStack(Material.WOOL);
-		ItemMeta meta = info.getItemMeta();
-		meta.setDisplayName(question);
-		info.setItemMeta(meta);
-		icons.add(info);
-		icons.addAll(giveSentenceIcons().get());
-		return Optional.of(icons);
+		return giveSentenceIcons();
 	}
 
 	@Override
@@ -80,9 +68,6 @@ public class PlayerSentence extends TalkSentence {
 
 	public UUID getUniqueId() {
 		return uuid;
-	}
-	public String getQuestion() {
-		return question;
 	}
 	public String getDisplayName() {
 		return displayName;

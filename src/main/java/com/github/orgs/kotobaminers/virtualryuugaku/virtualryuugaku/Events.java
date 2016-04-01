@@ -1,28 +1,27 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 
-import java.util.List;
-import java.util.Optional;
-
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCUtility;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HologramStorage;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HolographicSentence;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.OnlinePlayerNPCs;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceEditor.EditMode;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceStorage;
-import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.GUIIcon;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.UnitStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.GameModeSelector;
-import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.LearnerSentenceSelector;
+import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.HelperSentenceSelector;
 import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.OptionSelector;
-import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.OwnerSentenceSelector;
+import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.PlayerSentenceSelector;
 import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.SentenceOptionSelector;
 import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.SentenceSelector;
-import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.StageSelector;
+import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.SpawnNPCSelector;
+import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.UnitSelector;
 import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.VRGGUI;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerData;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
@@ -47,29 +46,17 @@ public class Events implements Listener {
 
 		playerData.selectNPC(npc);
 
-		NPCUtility.updateLearnerNPC(npc, player);
-
-		Optional<List<HolographicSentence>> sentences = SentenceStorage.findLS(npc.getId());
-		if (!sentences.isPresent()) {
+		if(UnitStorage.eventLeftClickPlayerNPC(npc, player)) {
 			return;
 		}
-
-
-		sentences.ifPresent(s -> SentenceSelector.create(s).ifPresent(ss -> player.openInventory(ss.createInventory())));
-
-
-//		if(PublicGameController.game instanceof PublicEventGame &&
-//				PublicGameController.mode.equals(PublicGameMode.FIND_PEOPLE)) {
-//			PublicEventGame eventGame = (PublicEventGame) PublicGameController.game;
-//			eventGame.eventTouchNPC(event.getNPC(), player);
-//		}
+		SentenceSelector.create(event.getNPC()).ifPresent(selector -> player.openInventory(selector.createInventory()));
 	}
 
 	@EventHandler
 	public void onClickNPCRight(NPCRightClickEvent event) {
 		PlayerDataStorage.getPlayerData(event.getClicker()).selectNPC(event.getNPC());
-		SentenceStorage.findLS(event.getNPC().getId()).ifPresent(ls ->
-			HologramStorage.updateHologram(event.getNPC(), ls, event.getClicker()));
+		UnitStorage.findDisplayedUnit(event.getNPC()).ifPresent(unit ->
+			HologramStorage.updateHologram(event.getNPC(), unit, event.getClicker()));
 	}
 
 	@EventHandler
@@ -89,20 +76,35 @@ public class Events implements Listener {
 		event.setCancelled(true);
 		event.getWhoClicked().closeInventory();
 		if (VRGGUI.hasValidItem(event.getCurrentItem()) && VRGGUI.isValidSlot(event)) {
-			GUIIcon.create(event).ifPresent(icon -> icon.eventClicked(event));
+			VRGGUI.eventClicked(event);
 		}
 	}
 
 	private boolean isVRGGUI(Inventory inventory) {
 		String title = inventory.getTitle();
-		if (title.equalsIgnoreCase(StageSelector.TITLE) ||
+		if (title.equalsIgnoreCase(UnitSelector.TITLE) ||
 				title.equalsIgnoreCase(GameModeSelector.TITLE) ||
-				title.equalsIgnoreCase(LearnerSentenceSelector.TITLE) ||
-				title.equalsIgnoreCase(OwnerSentenceSelector.TITLE) ||
+				title.equalsIgnoreCase(PlayerSentenceSelector.TITLE) ||
+				title.equalsIgnoreCase(HelperSentenceSelector.TITLE) ||
 				title.equalsIgnoreCase(SentenceOptionSelector.TITLE) ||
-				title.equalsIgnoreCase(OptionSelector.TITLE)) {
+				title.equalsIgnoreCase(OptionSelector.TITLE) ||
+				title.equalsIgnoreCase(SpawnNPCSelector.TITLE))
+		{
 			return true;
 		}
 		return false;
+	}
+
+	@EventHandler
+	public void onPlayerQuit(PlayerQuitEvent event) {
+		Bukkit.getScheduler().scheduleSyncDelayedTask(VRGManager.plugin, new Runnable() {
+			public void run() {
+				OnlinePlayerNPCs.updateOnlineNPCs();
+			}
+		}, 20L);
+	}
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		OnlinePlayerNPCs.updateOnlineNPCs();
 	}
 }

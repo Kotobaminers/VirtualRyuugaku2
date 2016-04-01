@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
@@ -16,14 +17,14 @@ import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Commands;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCUtility;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.PlayerRequest;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.VRGMessenger.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Stage;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.StageStorage;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HologramStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HolographicSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.QuestionSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceEditor;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceStorage;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.Unit;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.UnitStorage;
+import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.UnitSelector;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicCommandGame;
 import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicEmptyGame;
@@ -96,8 +97,28 @@ public class CommandPerformer {
 		case UNIT_CREATE:
 			success = commandUnitCreate();
 			break;
+		case UNIT_DELETE:
+			success = commandUnitDelete();
+			break;
 		case UNIT_ADD_HELPER:
 			success = commandUnitAddHelper();
+			break;
+		case UNIT_ADD_PLAYER:
+			success = commandUnitAddPlayer();
+			break;
+		case UNIT_ADD_PLAYER_QUESTION:
+		case UNIT_EDIT_PLAYER_QUESTION:
+		case UNIT_REMOVE_PLAYER_QUESTION:
+			success = commandUnitUpdatePlayerQuestion(command);
+			break;
+		case REQUEST_TELEPORT_NPC:
+			success = commandRequestTeleportNPC();
+			break;
+		case REQUEST_TELEPORT_PLAYER:
+			success = commandRequestTeleportPlayer();
+			break;
+		case REQUEST_ACCEPT:
+			success = commandAcceptRequest();
 			break;
 
 		case DICTIONARY:
@@ -120,23 +141,123 @@ public class CommandPerformer {
 			success = commandDeleteQuestion();
 			break;
 
-		case INFO:
-			success = commandInfo();
-			break;
 		case LIST:
 			success = commandList();
 			break;
 
-		case ANSWER_GAME:
-			success = commandAnswerGame();
-			break;
-		case ANSWER_CONVERSATION:
+		case ANSWER_HELPER:
 			success = commandAnswerHelper();
 			break;
 		default:
 			break;
 		}
 		return  success;
+	}
+
+	private boolean commandAcceptRequest() {
+		if (!hasValidPlayer()) return true;
+		PlayerDataStorage.getPlayerData(player).request.ifPresent(r -> r.execute());
+		return true;
+	}
+
+	private boolean commandRequestTeleportPlayer() {
+		if(!hasValidPlayer()) return true;
+		if (params.size() < 1) return false;
+		Bukkit.getOnlinePlayers().stream()
+			.filter(p -> p.getName().equalsIgnoreCase(params.get(0)))
+			.findFirst()
+			.ifPresent(p -> PlayerRequest.createTeleportToPlayerRequest(player).sendRequest(p));
+		return true;
+	}
+
+	private boolean commandRequestTeleportNPC() {
+		if(!hasValidPlayer()) return true;
+		if (params.size() < 2) return false;
+		try {
+			Bukkit.getOnlinePlayers().stream()
+				.filter(p -> p.getName().equalsIgnoreCase(params.get(0)))
+				.findFirst()
+				.ifPresent(p -> PlayerRequest.createTeleportToNPCRequest(player, Integer.parseInt(params.get(1))).sendRequest(p));
+		} catch(NumberFormatException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	private boolean commandUnitUpdatePlayerQuestion(Commands command) {
+		if (!hasValidPlayer()) return true;
+		if (params.size() < 2) return false;
+		Optional<Unit> unit = UnitStorage.findUnit(params.get(0).toUpperCase());
+		if (!unit.isPresent()) return false;
+		Integer position = 0;
+		switch(command) {
+		case UNIT_ADD_PLAYER_QUESTION:
+			try {
+				position = Integer.parseInt(params.get(1));
+			} catch(NumberFormatException e) {
+				e.printStackTrace();
+				Message.ERROR_1.print(Arrays.asList(""), sender);
+			}
+			if (params.size() < 3) return false;
+			List<String> list = new ArrayList<String>();
+			for(int i = 2; i < params.size(); i++) {
+				list.add(params.get(i));
+			}
+			unit.get().addPlayerQuestion(position, String.join(" ", list), player);
+			break;
+		case UNIT_EDIT_PLAYER_QUESTION:
+			try {
+				position = Integer.parseInt(params.get(1));
+			} catch(NumberFormatException e) {
+				e.printStackTrace();
+				Message.ERROR_1.print(Arrays.asList(""), sender);
+			}
+			if (params.size() < 3) return false;
+			List<String> list2 = new ArrayList<String>();
+			for(int i = 2; i < params.size(); i++) {
+				list2.add(params.get(i));
+			}
+			unit.get().editPlayerQuestion(position, String.join(" ", list2), player);
+			break;
+		case UNIT_REMOVE_PLAYER_QUESTION:
+			try {
+				position = Integer.parseInt(params.get(1));
+			} catch(NumberFormatException e) {
+				e.printStackTrace();
+				Message.ERROR_1.print(Arrays.asList(""), sender);
+			}
+			unit.get().removePlayerQuestion(position, player);
+			break;
+		default:
+			break;
+		}
+
+		Message.EDITOR_1.print(Arrays.asList(String.join(", ", unit.get().getPlayerQuestions())), player);
+		return true;
+	}
+
+	private boolean commandUnitAddPlayer() {
+		if(params.size() < 2) {
+			return false;
+		}
+		String name = params.get(0).toUpperCase();
+		try {
+			Integer id = Integer.parseInt(params.get(1));
+			UnitStorage.findUnit(name).ifPresent(unit -> unit.addPlayerNPC(id, sender));
+		} catch(NumberFormatException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	private boolean commandUnitDelete() {
+		if (0 < params.size()) {
+			UnitStorage.unregisterUnit(params.get(0), sender);
+			return true;
+		}
+		return false;
 	}
 
 	private boolean commandDeleteQuestion() {
@@ -149,7 +270,6 @@ public class CommandPerformer {
 		} else {
 			Message.INVALID_1.print(Arrays.asList("Please select an ediable question"), player);
 		}
-		PlayerDataStorage.closeEditor(player);
 		return true;
 	}
 
@@ -193,15 +313,14 @@ public class CommandPerformer {
 		if(params.size() < 2) {
 			return false;
 		}
-		String unit = params.get(0).toUpperCase();
-		Integer id = 0;
+		String name = params.get(0).toUpperCase();
 		try {
-			id =  Integer.parseInt(params.get(1));
+			Integer id = Integer.parseInt(params.get(1));
+			UnitStorage.findUnit(name).ifPresent(unit -> unit.addHelperNPC(id, sender));
 		} catch(NumberFormatException e) {
 			e.printStackTrace();
 			return false;
 		}
-		SentenceStorage.addHelperNPC(unit, id, sender);
 		return true;
 	}
 
@@ -217,7 +336,7 @@ public class CommandPerformer {
 			e.printStackTrace();
 			return false;
 		}
-		SentenceStorage.addHelperUnit(unit, id, sender);
+		UnitStorage.addUnit(unit, id, sender);
 		return true;
 	}
 
@@ -291,15 +410,12 @@ public class CommandPerformer {
 		if (command.canPerform(sender)) {
 			return true;
 		}
-		String[] opts = {""};
-		Message.COMMAND_NO_PERMISSION_1.print(sender, opts);
+		Message.COMMAND_NO_PERMISSION_1.print(Arrays.asList(""), sender);
 		return false;
 	}
 
 	private boolean hasValidPlayer() {
 		if (player == null) {
-			String[] opts = {"Player == null"};
-			Message.COMMON_INVALID_1.print(sender, opts);
 			return false;
 		}
 		return true;
@@ -315,11 +431,14 @@ public class CommandPerformer {
 			return true;
 		}
 		if (0 < params.size()) {
-			Optional<List<HolographicSentence>> sentences = SentenceStorage.findLS(PlayerDataStorage.getPlayerData(player).getSelectId());
+			Integer select = PlayerDataStorage.getPlayerData(player).getSelectId();
+			Optional<Unit> unit = UnitStorage.findUnit(select);
+			Optional<List<HolographicSentence>> sentences = unit.flatMap(u -> u.findHelperLS(select));
 			if (sentences.isPresent()) {
 				sentences.flatMap(ls -> ls.stream().filter(s -> s instanceof QuestionSentence).findFirst())
 					.map(s -> (QuestionSentence) s)
 					.ifPresent(q-> q.validate(String.join(" ", params), player));
+				unit.ifPresent(u -> u.printAchievementRate(player));
 				return true;
 			}
 			return true;
@@ -340,11 +459,10 @@ public class CommandPerformer {
 	}
 
 	private boolean commandList() {
-		List<String> names = new ArrayList<String>();
-		for (Stage stage : StageStorage.getStages()) {
-			names.add(stage.name);
+		if (!hasValidPlayer()) {
+			return true;
 		}
-		Message.STAGE_LIST_1.print(Arrays.asList(String.join(" ", names)), sender);
+		player.openInventory(new UnitSelector(player).createInventory());
 		return true;
 	}
 
@@ -374,7 +492,7 @@ public class CommandPerformer {
 			List<Effect> effects = Arrays.asList(Effect.values()).stream().sorted().collect(Collectors.toList());
 			Integer id = Integer.parseInt(params.get(0));
 			Effect playing = effects.get(id);
-			player.getWorld().spigot().playEffect(player.getLocation().clone().add(2,0,0), effect.get(), id, data, offsetX, offsetY, offsetZ, speed, count, 10);
+			player.getWorld().spigot().playEffect(player.getLocation().clone().add(2,0,0), playing, id, data, offsetX, offsetY, offsetZ, speed, count, 10);
 			player.sendMessage(playing.name());
 		}
 		return true;
@@ -385,12 +503,12 @@ public class CommandPerformer {
 			.filter(s -> s.name().equalsIgnoreCase(params.get(0)))
 			.findFirst();
 		if (sound.isPresent()) {
-			player.playSound(player.getLocation(), sound.get(), 1f, 1f);
+			player.playSound(player.getLocation(), sound.get(), Float.valueOf(params.get(1)), Float.valueOf(params.get(2)));
 		} else {
 			List<Sound> sounds = Arrays.asList(Sound.values()).stream().sorted().collect(Collectors.toList());
 			Integer id = Integer.valueOf(params.get(0));
 			Sound playing = sounds.get(id);
-			player.playSound(player.getLocation(), playing, 1f, 1f);
+			player.playSound(player.getLocation(), playing, Float.valueOf(params.get(1)), Float.valueOf(params.get(2)));
 			player.sendMessage(playing.name());
 		}
 		return true;
@@ -411,66 +529,9 @@ public class CommandPerformer {
 	}
 
 	private boolean commandDebugDebug() {
-		HologramStorage.updateHologram(NPCUtility.findNPC(Integer.parseInt(params.get(0))).get(), SentenceStorage.findHelperLS(Integer.parseInt(params.get(0))).get(), player);
 		return true;
 	}
 
-	private boolean commandInfo() {
-//		if (!hasValidPlayer()) {
-//			return true;
-//		}
-//		if(0 < params.size()) {
-//			String name = params.get(0).toUpperCase();
-//			Stage stage;
-//			try {
-//				stage = Stage.createStage(name);
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//				return false;
-//			}
-//			if (0 < stage.getConversations().size()) {
-//				DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-//
-//				String npcs = stage.getNPCsTotal().toString();
-//				String question = stage.getQuestionDoneByMax(data);
-//				String conversation = stage.getConversationDoneByMax(data);
-//				String keySentence = stage.getKeySentenceTotal().toString();
-//				String score = stage.getScoreDoneByMax(data);
-//				String[] opts = {name};
-//				Message.STAGE_INFO_TITLE_1.print(sender, opts);
-//				String[] opts2 = {npcs};
-
-		//				Message.STAGE_INFO_NPC_1.print(sender, opts2);
-//				String[] opts3 = {conversation};
-//				Message.STAGE_INFO_CONVERSATION_1.print(sender, opts3);
-//				String[] opts4 = {question};
-//				Message.STAGE_INFO_QUESTION_1.print(sender, opts4);
-//				String[] opts5 = {keySentence};
-//				Message.STAGE_INFO_KEY_SENTENCE_1.print(sender, opts5);
-//				String[] opts6 = {score};
-//				Message.STAGE_INFO_SCORE_1.print(sender, opts6);
-//				return true;
-//			}
-//		}
-		return false;
-	}
-	private boolean commandAnswerGame() {
-//		if (!hasValidPlayer()) {
-//			return true;
-//		}
-//		String answer = "";
-//		if (0 < params.size()) {
-//			answer = UtilitiesGeneral.joinStrings(params, " ");
-//			if(ControllerGameGlobal.isValidGame()) {
-//				ControllerGameGlobal.validataAnswer(player, answer);
-//				ControllerGameGlobal.updataScoreboard(player);
-//			} else {
-//				Message.GAME_PLEASE_LOAD_0.print(sender, null);
-//			}
-//			return true;
-//		}
-		return false;
-	}
 }
 
 

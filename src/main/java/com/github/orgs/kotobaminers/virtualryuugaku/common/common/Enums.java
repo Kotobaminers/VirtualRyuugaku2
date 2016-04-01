@@ -90,14 +90,49 @@ public class Enums {//public enums
 				UNIT,
 				Arrays.asList("create", "c"),
 				"To create a vrg unit",
-				Arrays.asList("<UNIT_NAME>", "NPC_ID"),
+				Arrays.asList("<UNIT NAME>", "<NPC ID>"),
 				CommandPermission.OP),
+		UNIT_DELETE(
+				UNIT,
+				Arrays.asList("delete", "d"),
+				"To delete a vrg unit",
+				Arrays.asList("<UNIT NAME>"),
+				CommandPermission.OP
+				),
 		UNIT_ADD_HELPER(
 				UNIT,
 				Arrays.asList("addhelper", "ah"),
 				"To add an npc to the unit",
 				Arrays.asList("<UNIT_NAME>", "NPC_ID"),
 				CommandPermission.OP),
+		UNIT_ADD_PLAYER(
+				UNIT,
+				Arrays.asList("ap", "addp", "addplayer"),
+				"To add a player NPC",
+				Arrays.asList("<UNIT NAME>", "<NPC ID>"),
+				CommandPermission.OP
+				),
+		UNIT_ADD_PLAYER_QUESTION(
+				UNIT,
+				Arrays.asList("apq", "addpq", "addplayerquestion"),
+				"To add a player question",
+				Arrays.asList("<UNIT NAME>", "<POSITION>", "<QUESTION>"),
+				CommandPermission.OP
+				),
+		UNIT_EDIT_PLAYER_QUESTION(
+				UNIT,
+				Arrays.asList("epq", "editpq", "editplayerquestion"),
+				"To edit a player question",
+				Arrays.asList("<UNIT NAME>", "<POSITION>", "<QUESTION>"),
+				CommandPermission.OP
+				),
+		UNIT_REMOVE_PLAYER_QUESTION(
+				UNIT,
+				Arrays.asList("rpq", "removepq", "removeplayerquestion"),
+				"To remove a player question",
+				Arrays.asList("<UNIT NAME>", "<POSITION>"),
+				CommandPermission.OP
+				),
 
 		VIRTUALRYUUGAKU(
 				null,
@@ -128,8 +163,32 @@ public class Enums {//public enums
 				Arrays.asList("dq", "deletequestion", "delq"),
 				"To unregister the question and it's answers",
 				new ArrayList<String>(),
-				CommandPermission.PLAYERS
-				),
+				CommandPermission.PLAYERS),
+
+		REQUEST(
+				VIRTUALRYUUGAKU,
+				Arrays.asList("r", "req", "request"),
+				"",
+				new ArrayList<String>(),
+				CommandPermission.PLAYERS),
+		REQUEST_TELEPORT_PLAYER(
+				REQUEST,
+				Arrays.asList("tp", "teleport"),
+				"",
+				new ArrayList<String>(),
+				CommandPermission.PLAYERS),
+		REQUEST_TELEPORT_NPC(
+				REQUEST,
+				Arrays.asList("tpn", "teleportnpc"),
+				"",
+				new ArrayList<String>(),
+				CommandPermission.PLAYERS),
+		REQUEST_ACCEPT(
+				REQUEST,
+				Arrays.asList("a", "accept"),
+				"",
+				new ArrayList<String>(),
+				CommandPermission.PLAYERS),
 
 		DICTIONARY(
 				VIRTUALRYUUGAKU,
@@ -153,83 +212,9 @@ public class Enums {//public enums
 		LIST(
 				VIRTUALRYUUGAKU,
 				Arrays.asList("list", "l"),
-				"Names of the all stages",
+				"Display the list of the units",
 				new ArrayList<String>(),
 				CommandPermission.PLAYERS),
-//		GAME(
-//				VIRTUALRYUUGAKU,
-//				Arrays.asList("game", "g"),
-//				"Minigames",
-//				new ArrayList<String>(),
-//				CommandPermission.PLAYERS),
-//		GAME_START(
-//				GAME,
-//				Arrays.asList("start", "s"),
-//				"To start a minigame",
-//				Arrays.asList("<STAGE>"),
-//				CommandPermission.PLAYERS),
-//		GAME_FINISH(
-//				GAME,
-//				Arrays.asList("finish", "f"),
-//				"Finish a minigame",
-//				new ArrayList<String>(),
-//				CommandPermission.PLAYERS),
-//		GAME_NEXT(
-//				GAME,
-//				Arrays.asList("next", "n"),
-//				"Continue to the next question",
-//				new ArrayList<String>(),
-//				CommandPermission.PLAYERS),
-//		GAME_RULE(
-//				GAME,
-//				Arrays.asList("rule", "r"),
-//				"Rules of a minigame",
-//				new ArrayList<String>(),
-//				CommandPermission.PLAYERS),
-//		GAME_JOIN(
-//				GAME,
-//				Arrays.asList("join", "j"),
-//				"To join the minigame.",
-//				new ArrayList<String>(),
-//				CommandPermission.PLAYERS),
-//		GAME_REPEAT(
-//				GAME,
-//				Arrays.asList("repeat"),
-//				"To repeat the last game.",
-//				new ArrayList<String>(),
-//				CommandPermission.PLAYERS),
-//
-//		TOUR(
-//				VIRTUALRYUUGAKU,
-//				Arrays.asList("tour", "t"),
-//				"Commands for a tour.",
-//				new ArrayList<String>(),
-//				CommandPermission.PLAYERS),
-//		TOUR_START(
-//				TOUR,
-//				Arrays.asList("start", "s"),
-//				"To start a tour.",
-//				Arrays.asList("<STAGE>"),
-//				CommandPermission.PLAYERS),
-//		TOUR_JOIN(
-//				TOUR,
-//				Arrays.asList("join", "j"),
-//				"To join the tour.",
-//				new ArrayList<String>(),
-//				CommandPermission.PLAYERS),
-//		TOUR_NEXT(
-//				TOUR,
-//				Arrays.asList("next", "n"),
-//				"To continue to the next conversation.",
-//				new ArrayList<String>(),
-//				CommandPermission.PLAYERS),
-//		TOUR_PREVIOUS(
-//				TOUR,
-//				Arrays.asList("previous", "p"),
-//				"To return to the previous conversation.",
-//				new ArrayList<String>(),
-//				CommandPermission.PLAYERS),
-
 
 		ANSWER(
 				null,
@@ -237,22 +222,10 @@ public class Enums {//public enums
 				"Commands for answering",
 				new ArrayList<String>(),
 				CommandPermission.PLAYERS),
-		ANSWER_GAME(
+		ANSWER_HELPER(
 				ANSWER,
-				Arrays.asList("g", "game"),
-				"Answering for the global game",
-				Arrays.asList("<ANSWER>"),
-				CommandPermission.PLAYERS),
-		ANSWER_CONVERSATION(
-				ANSWER,
-				Arrays.asList("c", "conv", "conversation"),
-				"Answering for the conversation question",
-				Arrays.asList("<ANSWER>"),
-				CommandPermission.PLAYERS),
-		ANSWER_PUBLIC_GAME(
-				ANSWER,
-				Arrays.asList("p", "pub", "public"),
-				"Answering for the public game",
+				Arrays.asList("h", "helper"),
+				"Answering for the helper NPC's question",
 				Arrays.asList("<ANSWER>"),
 				CommandPermission.PLAYERS),
 		;
@@ -320,7 +293,7 @@ public class Enums {//public enums
 		public void printInfo(CommandSender sender) {
 			List<Commands> children = getChildren();
 			if (0 < children.size()) {
-				Message.COMMAND_HELP_TITLE_0.print(sender, null);
+				Message.COMMAND_HELP_TITLE_0.print(Arrays.asList(""), sender);
 				for (Commands child : children) {
 					child.printHelp(sender);
 				}
@@ -350,8 +323,7 @@ public class Enums {//public enums
 				command += usage.get(i) + " ";
 			}
 			command = command.substring(0, command.length() - 1);
-			String[] opts = {command, this.description};
-			Message.COMMAND_HELP_2.print(sender, opts);
+			Message.COMMAND_HELP_2.print(Arrays.asList(command, this.description), sender);
 		}
 
 		private List<Commands> getChildren() {
@@ -430,7 +402,7 @@ public class Enums {//public enums
 		}
 	}
 
-	public enum Language {EN, JP;
+	public enum Language {EN, JP, NONE;
 		public static Language getRandom() {
 			Random random = new Random();
 			Integer value = random.nextInt(Language.values().length);

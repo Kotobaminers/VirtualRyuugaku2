@@ -22,11 +22,21 @@ public abstract class TalkSentence extends HolographicSentence {
 	protected static final String EMPTY_KANA = "Enter kana";
 	protected static final String EMPTY_ROMAJI = "Enter romaji";
 	protected static final String EMPTY_EN = "Enter English";
+	private boolean key = false;
 
 	public TalkSentence(List<String> kanji, List<String> kana, List<String> en, Integer id) {
 		this.japanese = new Japanese(kanji, kana);
 		this.english = new English(en);
 		this.id = id;
+	}
+
+	public static boolean isEmpty(TalkSentence sentence) {
+		List<String> empties = Arrays.asList(EMPTY_EN, EMPTY_KANA, EMPTY_KANJI, EMPTY_ROMAJI);
+		if(sentence.japanese.getLine().stream().allMatch(s -> empties.contains(s))
+			&& sentence.english.getLine().stream().allMatch(s -> empties.contains(s))) {
+			return true;
+		}
+		return false;
 	}
 
 	public Optional<List<String>> getLines(SpellType spell) {
@@ -86,5 +96,10 @@ public abstract class TalkSentence extends HolographicSentence {
 	public English getEnglish() {
 		return english;
 	}
-
+	public boolean isKey() {
+		return key;
+	}
+	public void setKey(boolean key) {
+		this.key = key;
+	}
 }

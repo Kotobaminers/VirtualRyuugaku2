@@ -86,6 +86,7 @@ public class PlayerDataStorage {
 		if (editor.isPresent()) {
 			getPlayerData(player).editor = editor;
 			Message.EDITOR_1.print(Arrays.asList("Opening a VRG editor"), player);
+			editor.get().printEditorHelp(player);
 		}
 	}
 	public static void closeEditor(Player player) {

@@ -67,19 +67,6 @@ public class Utility {
 		return list;
 	}
 
-	public static String toYamlStringFromListInteger(List<Integer> list) {
-		List<String> strings = new ArrayList<String>();
-		for(Integer i : list) {
-			strings.add(i.toString());
-		}
-		String string = toYamlStringFromListString(strings);
-		return string;
-	}
-	public static String toYamlStringFromListString(List<String> strings) {
-		String string = "[" + joinStrings(strings, ", ") + "]";
-		return string;
-	}
-
 	public static String showSameCharacters(String answer, String suggestion) {
 		String show = "";
 		for (int i = 0; i < answer.length(); i++) {
@@ -157,7 +144,7 @@ public class Utility {
 	public static final void sendTitle(Player player, String title, String subtitle){
 		PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(
 				EnumTitleAction.TITLE,
-				ChatSerializer.a("{\"text\":\"" + title + "\",\"color\":\"gold\",\"bold\":true,\"obfuscated\":true}"),
+				ChatSerializer.a("{\"text\":\"" + title + "\",\"color\":\"gold\",\"bold\":true,\"obfuscated\":false}"),
 				20,40,30);
 		PacketPlayOutTitle subTitlePacket = new PacketPlayOutTitle(
 				EnumTitleAction.SUBTITLE,
@@ -171,6 +158,7 @@ public class Utility {
 	public static final ItemStack setSkullOwner(ItemStack itemStack, String owner) {
 		if (itemStack.getType().equals(Material.SKULL_ITEM)) {
 			SkullMeta itemMeta = (SkullMeta) itemStack.getItemMeta();
+			itemMeta.setDisplayName(owner);
 			itemMeta.setOwner(owner);
 			itemStack.setItemMeta(itemMeta);
 		}
