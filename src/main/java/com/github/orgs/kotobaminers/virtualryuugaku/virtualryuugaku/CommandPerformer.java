@@ -19,10 +19,10 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Commands
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCUtility;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.PlayerRequest;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.VRGMessenger.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.Unit;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HolographicSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.QuestionSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceEditor;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.Unit;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.UnitStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.UnitSelector;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;

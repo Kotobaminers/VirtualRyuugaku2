@@ -1,7 +1,6 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.gui.gui;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,25 +8,30 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HolographicSentence;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.OnlinePlayerNPCs;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.PlayerSentence;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.Unit;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.Unit.UnitType;
 
 public class PlayerSentenceSelector extends SentenceSelector {
 	public static final String TITLE = "Player's Sentences";
 	public List<PlayerSentence> sentences = new ArrayList<>();
 	private List<String> questions = new ArrayList<>();
-	private boolean spawnNPC = false;
+	private UnitType type = UnitType.NORMAL;
 
-	public PlayerSentenceSelector(List<HolographicSentence> sentences, List<String> questions, int id) {
-		this.sentences = sentences.stream()
+	public static PlayerSentenceSelector create(Unit unit, List<HolographicSentence> sentences) {
+		PlayerSentenceSelector selector = new PlayerSentenceSelector();
+		selector.sentences = sentences.stream()
+			.filter(sentence -> sentence instanceof PlayerSentence)
 			.map(sentence -> (PlayerSentence) sentence)
 			.collect(Collectors.toList());
-		this.questions = questions;
-		if (OnlinePlayerNPCs.getOnlineIds().contains(id)) {
-			spawnNPC = true;
-		}
+		selector.questions = unit.getPlayerQuestions();
+		selector.type = unit.getType();
+		return selector;
 	}
-	public PlayerSentenceSelector() {
+	public static PlayerSentenceSelector create() {
+		return new PlayerSentenceSelector();
+	}
+	private PlayerSentenceSelector() {
 	}
 
 	@Override
@@ -56,13 +60,7 @@ public class PlayerSentenceSelector extends SentenceSelector {
 	}
 	@Override
 	public List<ItemStack> getOptionIcons() {
-		List<GUIIcon> icons = null;
-		if (spawnNPC) {
-			icons = Arrays.asList(GUIIcon.RESPAWN, GUIIcon.SPAWN_NPC);
-		} else {
-			icons = Arrays.asList(GUIIcon.FREE_UP, GUIIcon.RESPAWN);
-		}
-		return icons.stream()
+		return type.getOptions().stream()
 			.map(option ->option.createItem())
 			.collect(Collectors.toList());
 	}

@@ -18,11 +18,12 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.PathConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.SpellType;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.Unit.UnitType;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VRGManager;
 
 public class UnitYamlConverter {
-	enum UnitPath {CONVERSATION, EDITOR, LEARNER_NPC, LEARNER_QUESTION, KEY, Q, A}
+	enum UnitPath {CONVERSATION, EDITOR, LEARNER_NPC, LEARNER_QUESTION, KEY, Q, A, TYPE}
 	enum LearnerSentencePath {LEARNER_SENTENCE, STAGE, NAME}
 	enum SentencePath {KANJI, KANA, EN}
 	enum ConfigPath {ONLINE_NPCS}
@@ -35,21 +36,32 @@ public class UnitYamlConverter {
 	public static void importAll() {
 		importUnits();
 		importPlayerSentences();
-		importOnlineNPCs();
+		loadOnlineNPCID();
 	}
 
-	private static void importOnlineNPCs() {
-		OnlinePlayerNPCs.setOnlineIds(config.getIntegerList(ConfigPath.ONLINE_NPCS.name()));
+	private static void loadOnlineNPCID() {
+		UnitStorage.units.values().stream()
+			.filter(unit -> unit.getType().equals(UnitType.ONLINE_PLAYER))
+			.findFirst()
+			.ifPresent(unit -> OnlinePlayerNPCs.setOnlineIds(unit.getPlayerNPCIds()));
 	}
 	private static final void importUnits() {
-		Arrays.asList(UNIT_DIR.listFiles()).stream()
+		Stream.of(UNIT_DIR.listFiles())
 			.filter(file -> file.getAbsolutePath().endsWith(".yml"))
 			.forEach(file -> importUnit(YamlConfiguration.loadConfiguration(file), extractName(file)));
 	}
 
 	private static void importUnit(YamlConfiguration config, String name) {
 		name = name.toUpperCase();
-		Unit unit = UnitStorage.units.getOrDefault(name, new Unit(name));
+
+		Optional<UnitType> unitType = Stream.of(config)
+			.filter(c -> c.isString(UnitPath.TYPE.toString()))
+			.map(c -> c.getString(UnitPath.TYPE.toString()))
+			.filter(type -> Stream.of(UnitType.values()).anyMatch(t -> t.toString().equalsIgnoreCase(type)))
+			.findFirst()
+			.map(type -> UnitType.valueOf(type));
+		Unit unit = Unit.create(name, unitType.orElse(UnitType.NORMAL));
+
 		Optional<ConfigurationSection> conversationSection = Stream.of(config)
 			.filter(config2 -> config2.isConfigurationSection(UnitPath.CONVERSATION.toString()))
 			.map(config2 -> (ConfigurationSection) config2.get(UnitPath.CONVERSATION.toString()))
@@ -117,7 +129,7 @@ public class UnitYamlConverter {
 				String name = uuidSection.getString(uuidString + "." + LearnerSentencePath.NAME.name());
 				unitSection.getKeys(false).stream()
 					.forEach(unitName -> {
-						Unit unit = UnitStorage.units.getOrDefault(unitName, new Unit(unitName));
+						Unit unit = UnitStorage.units.getOrDefault(unitName, Unit.create(unitName, UnitType.NORMAL));
 						Optional.of(unit.getPlayerQuestions()).ifPresent(questions -> {
 							List<HolographicSentence> list = new ArrayList<>();
 							MemorySection sentencesSection = (MemorySection) unitSection.get(unitName);
@@ -142,8 +154,6 @@ public class UnitYamlConverter {
 						});
 					});
 			});
-//		SentenceStorage.learnerSentences.values().stream()
-//			.forEach(lls -> lls.forEach(ls -> ls.stream().forEach(s -> System.out.println(s.getHolographicLines(Arrays.asList(SpellType.KANJI, SpellType.KANA, SpellType.ROMAJI, SpellType.EN))))));
 	}
 
 	private static boolean isValidConfig() {
@@ -154,8 +164,7 @@ public class UnitYamlConverter {
 	}
 
 	public static void save() {
-		UnitStorage.units.values()
-			.forEach(unit -> saveUnit(unit));
+		UnitStorage.units.values().forEach(unit -> saveUnit(unit));
 		savePlayerSentences();
 	}
 
@@ -170,7 +179,7 @@ public class UnitYamlConverter {
 
 	private static void saveUnit(Unit unit) {
 		File file = new File(UNIT_DIR + "//" + unit.getName() + ".yml");
-		YamlConfiguration yaml = new YamlConfiguration();
+		YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
 		Map<List<String>, Map<String, List<String>>> conversations = new HashMap<>();
 
 		unit.getHelperSentences().stream().forEach(ls -> {

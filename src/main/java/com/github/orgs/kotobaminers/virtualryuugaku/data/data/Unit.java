@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCUtility;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.VRGMessenger.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.GUIIcon;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerData;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
@@ -24,16 +25,37 @@ import net.md_5.bungee.api.ChatColor;
 
 public class Unit {
 	public static final int MAX_SENTENCE = 8;
-	private String name = "";
-	private List<List<HolographicSentence>> helperSentences = new ArrayList<List<HolographicSentence>>();
-	private List<List<HolographicSentence>> playerSentences = new ArrayList<List<HolographicSentence>>();
-	private List<Integer> playerNPCIds = new ArrayList<Integer>();
-	private List<String> playerQuestions = new ArrayList<String>();
+	protected String name = "";
 	public static final String TALK_FREELY = "Talk freely";
+	protected List<List<HolographicSentence>> helperSentences = new ArrayList<List<HolographicSentence>>();
+	protected List<List<HolographicSentence>> playerSentences = new ArrayList<List<HolographicSentence>>();
+	protected List<Integer> playerNPCIds = new ArrayList<Integer>();
+	protected List<String> playerQuestions = new ArrayList<String>();
 
-	public Unit(String name) {
-		this.name = name;
+	public enum UnitType {
+		NORMAL(Arrays.asList(GUIIcon.FREE_UP, GUIIcon.RESPAWN)),
+		ONLINE_PLAYER(Arrays.asList(GUIIcon.RESPAWN)),;
+		private List<GUIIcon> options = new ArrayList<>();
+		private UnitType(List<GUIIcon> options) {
+			this.options = options;
+		}
+		public List<GUIIcon> getOptions() {
+			return options;
+		}
 	}
+
+	private UnitType type = UnitType.NORMAL;
+
+	private Unit() {
+	}
+
+	public static Unit create(String name, UnitType type) {
+		Unit unit = new Unit();
+		unit.name = name;
+		unit.type = type;
+		return unit;
+	}
+
 	public List<List<HolographicSentence>> getHelperSentences() {
 		return helperSentences;
 	}
@@ -61,18 +83,6 @@ public class Unit {
 	public void setPlayerQuestions(List<String> playerQuestions) {
 		this.playerQuestions = playerQuestions;
 	}
-
-	public void addEmptyPlayerSentencesIfAbsent(Player player) {
-		Stream<PlayerSentence> sentences = playerSentences.stream().flatMap(ls -> ls.stream().map(s -> (PlayerSentence) s));
-		if (!sentences.anyMatch(s -> s.getUniqueId().equals(player.getUniqueId()))) {
-			List<HolographicSentence> list = new ArrayList<>();
-			for (int i = 0; i < MAX_SENTENCE; i++) {
-				list.add(PlayerSentence.createEmpty(player.getUniqueId(), player.getName()));
-			}
-			playerSentences.add(list);
-		}
-	}
-
 	public Optional<List<HolographicSentence>> findDisplayedLS(NPC npc) {
 		Optional<List<HolographicSentence>> helpers = findHelperLS(npc.getId());
 		if (helpers.isPresent()) {
@@ -206,15 +216,34 @@ public class Unit {
 		Message.VRG_1.print(Arrays.asList(indicator), player);
 	}
 
+	public BiPredicate<List<HolographicSentence>, Integer> predicateLS = (ls, id) ->
+	ls.stream().anyMatch(s -> s.getId().equals(id));
+	public BiPredicate<List<List<HolographicSentence>>, Integer> predicateLLS = (lls, id) ->
+	lls.stream().anyMatch(ls -> ls.stream().map(s -> s.getId().equals(id)).anyMatch(b -> b == true));
+
 	public String getName() {
 		return name;
 	}
-	public BiPredicate<List<HolographicSentence>, Integer> predicateLS = (ls, id) ->
-		ls.stream().anyMatch(s -> s.getId().equals(id));
-	public BiPredicate<List<List<HolographicSentence>>, Integer> predicateLLS = (lls, id) ->
-		lls.stream().anyMatch(ls -> ls.stream().map(s -> s.getId().equals(id)).anyMatch(b -> b == true));
+	public UnitType getType() {
+		return type;
+	}
+
+	public void addEmptyPlayerSentencesIfAbsent(Player player) {
+		addEmptyPlayerSentencesIfAbsent(player.getName(), player.getUniqueId());
+	}
+	public void addEmptyPlayerSentencesIfAbsent(NPC npc) {
+		NPCUtility.findSkinName(npc).ifPresent(name -> NPCUtility.findSkinUUID(npc)
+			.ifPresent(uuid -> addEmptyPlayerSentencesIfAbsent(name, uuid)));
+	}
+
+	private void addEmptyPlayerSentencesIfAbsent(String name, UUID uuid) {
+		Stream<PlayerSentence> sentences = playerSentences.stream().flatMap(ls -> ls.stream().map(s -> (PlayerSentence) s));
+		if (!sentences.anyMatch(s -> s.getUniqueId().equals(uuid))) {
+			List<HolographicSentence> list = new ArrayList<>();
+			for (int i = 0; i < MAX_SENTENCE; i++) {
+				list.add(PlayerSentence.createEmpty(uuid, name));
+			}
+			playerSentences.add(list);
+		}
+	}
 }
-
-
-
-

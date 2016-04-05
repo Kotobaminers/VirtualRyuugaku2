@@ -19,6 +19,7 @@ import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCUtility;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.VRGMessenger.Message;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.Unit.UnitType;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
 
 import net.citizensnpcs.api.npc.NPC;
@@ -48,7 +49,7 @@ public class UnitStorage {
 			return;
 		}
 
-		Unit unit = new Unit(name);
+		Unit unit = Unit.create(name, UnitType.NORMAL);
 		List<HolographicSentence> ls = new ArrayList<>();
 		ls.add((HolographicSentence) HelperSentence.createEmpty(id));
 		unit.getHelperSentences().add(ls);
@@ -81,10 +82,6 @@ public class UnitStorage {
 	}
 
 	public static Optional<Unit> findDisplayedUnit(NPC npc) {
-		if (OnlinePlayerNPCs.getOnlineIds().contains(npc.getId())) {
-			return OnlinePlayerNPCs.findUnit(npc);
-		}
-
 		return units.values().stream().filter(unit -> {
 				if(unit.getHelperSentences().stream()
 						.anyMatch(ls -> ls.stream()
@@ -117,21 +114,23 @@ public class UnitStorage {
 		return ids;
 	}
 
-	public static boolean eventLeftClickPlayerNPC(NPC npc, Player player) {
-		Optional<Unit> unit = UnitStorage.findUnitByPlayerNPCId(npc.getId());
-		if (!unit.isPresent()) return false;
+	public static boolean updatePlayerNPCSkin(NPC npc, Player player) {
+		Unit unit = UnitStorage.findUnitByPlayerNPCId(npc.getId()).orElse(null);
+		if (unit == null) return false;
 
-		List<PlayerSentence> sentences = unit.get().getPlayerSentences().stream()
+		unit.addEmptyPlayerSentencesIfAbsent(npc);
+
+		List<PlayerSentence> sentences = unit.getPlayerSentences().stream()
 			.filter(ls -> 0 < ls.size())
 			.map(ls -> ((PlayerSentence) ls.get(0)))
 			.collect(Collectors.toList());
 		List<UUID> uuids = sentences.stream().map(s -> s.getUniqueId()).collect(Collectors.toList());
-		List<UUID> displayUUIDs = unit.get().getPlayerNPCIds().stream()
-			.map(id -> NPCUtility.findNPC(id).flatMap(n -> NPCUtility.findSkinUUID(n)))
-			.filter(uuid -> uuid.isPresent())
-			.map(uuid -> uuid.get())
+		List<UUID> displayUUIDs = unit.getPlayerNPCIds().stream()
+			.map(id -> NPCUtility.findNPC(id).flatMap(n -> NPCUtility.findSkinUUID(n)).orElse(null))
+			.filter(uuid -> !(uuid == null))
 			.filter(uuid -> uuids.contains(uuid))
 			.collect(Collectors.toList());
+
 		if (NPCUtility.isEmptyPlayerNPC(npc)) {
 			if (displayUUIDs.contains(player.getUniqueId())) {
 				List<PlayerSentence> hiddens = sentences.stream()
@@ -146,7 +145,6 @@ public class UnitStorage {
 				}
 			} else {
 				NPCUtility.renameNPCAsPlayer(npc, player.getName(), player.getUniqueId());
-				unit.ifPresent(u -> u.addEmptyPlayerSentencesIfAbsent(player));
 				player.getWorld().spigot().playEffect(npc.getStoredLocation().clone().add(0,1,0), Effect.EXPLOSION, 22, 22, (float) 0.5, (float) 0.5, (float) 0.5, (float) 0, 20, 10);
 				player.playSound(player.getLocation(), Sound.CHICKEN_EGG_POP, 1f, 1f);
 				return true;

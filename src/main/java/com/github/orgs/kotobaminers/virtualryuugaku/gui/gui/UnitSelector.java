@@ -14,8 +14,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCUtility;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.QuestionSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.Unit;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.QuestionSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.UnitScore;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.UnitStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerData;

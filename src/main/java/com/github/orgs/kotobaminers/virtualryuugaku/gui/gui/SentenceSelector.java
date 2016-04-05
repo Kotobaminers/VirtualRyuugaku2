@@ -18,7 +18,6 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.NPCUtility;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.VRGMessenger.Message;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HelperSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HolographicSentence;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.OnlinePlayerNPCs;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.PlayerSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.QuestionSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceEditor;
@@ -35,15 +34,15 @@ public abstract class SentenceSelector extends VRGGUI {
 	public abstract List<ItemStack> getOptionIcons();
 
 	public static Optional<SentenceSelector> create(NPC npc) {
-		Optional<Unit> optUnit = UnitStorage.findDisplayedUnit(npc);
-		Optional<List<HolographicSentence>> optLS = optUnit.flatMap(unit -> unit.findDisplayedLS(npc));
-		List<HolographicSentence> sentences = optLS.orElse(new ArrayList<>());
-		if (OnlinePlayerNPCs.getOnlineIds().contains(npc.getId())) {
-			return Optional.of(new PlayerSentenceSelector(sentences, optUnit.get().getPlayerQuestions(), npc.getId()));
-		}
+		Unit unit = UnitStorage.findDisplayedUnit(npc).orElse(null);
+		if (unit == null) return Optional.empty();
+
+		unit.addEmptyPlayerSentencesIfAbsent(npc);
+
+		List<HolographicSentence> sentences = unit.findDisplayedLS(npc).orElse(new ArrayList<>());
 		if (0 < sentences.size()) {
 			if(sentences.stream().allMatch(sentence -> sentence instanceof PlayerSentence)) {
-				return Optional.of(new PlayerSentenceSelector(sentences, optUnit.get().getPlayerQuestions(), npc.getId()));
+				return Optional.of(PlayerSentenceSelector.create(unit, sentences));
 			}
 			if(sentences.stream().allMatch(sentence -> sentence instanceof HelperSentence || sentence instanceof QuestionSentence)) {
 				return Optional.of(new HelperSentenceSelector(sentences));
@@ -75,7 +74,7 @@ public abstract class SentenceSelector extends VRGGUI {
 	public static Optional<SentenceSelector> create(InventoryClickEvent event) {
 		switch(event.getInventory().getTitle()) {
 		case PlayerSentenceSelector.TITLE:
-			return Optional.of(new PlayerSentenceSelector());
+			return Optional.of(PlayerSentenceSelector.create());
 		case HelperSentenceSelector.TITLE:
 			return Optional.of(new HelperSentenceSelector());
 		}
@@ -173,10 +172,10 @@ public abstract class SentenceSelector extends VRGGUI {
 							npc.spawn(npc.getStoredLocation());
 						});
 					return;
-				case SPAWN_NPC:
-					player.openInventory(new SpawnNPCSelector().createInventory());
-					player.playSound(player.getLocation(), Sound.CLICK, 1F, 1F);
-					return;
+//				case SPAWN_NPC:
+//					player.openInventory(new SpawnNPCSelector().createInventory());
+//					player.playSound(player.getLocation(), Sound.CLICK, 1F, 1F);
+//					return;
 				case ROLE_PLAY:
 					player.openInventory(new RolePlaySelector().createInventory());
 					return;

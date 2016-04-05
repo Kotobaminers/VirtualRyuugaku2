@@ -20,7 +20,6 @@ import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.OptionSelector;
 import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.PlayerSentenceSelector;
 import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.SentenceOptionSelector;
 import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.SentenceSelector;
-import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.SpawnNPCSelector;
 import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.UnitSelector;
 import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.VRGGUI;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerData;
@@ -46,9 +45,8 @@ public class Events implements Listener {
 
 		playerData.selectNPC(npc);
 
-		if(UnitStorage.eventLeftClickPlayerNPC(npc, player)) {
-			return;
-		}
+		if(UnitStorage.updatePlayerNPCSkin(npc, player))  return;
+
 		SentenceSelector.create(event.getNPC()).ifPresent(selector -> player.openInventory(selector.createInventory()));
 	}
 
@@ -87,8 +85,7 @@ public class Events implements Listener {
 				title.equalsIgnoreCase(PlayerSentenceSelector.TITLE) ||
 				title.equalsIgnoreCase(HelperSentenceSelector.TITLE) ||
 				title.equalsIgnoreCase(SentenceOptionSelector.TITLE) ||
-				title.equalsIgnoreCase(OptionSelector.TITLE) ||
-				title.equalsIgnoreCase(SpawnNPCSelector.TITLE))
+				title.equalsIgnoreCase(OptionSelector.TITLE))
 		{
 			return true;
 		}

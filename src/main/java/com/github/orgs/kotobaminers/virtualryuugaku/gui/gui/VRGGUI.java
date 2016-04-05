@@ -34,13 +34,10 @@ public abstract class VRGGUI {
 			new HelperSentenceSelector().executeClickedEvent(event);
 			break;
 		case PlayerSentenceSelector.TITLE:
-			new PlayerSentenceSelector().executeClickedEvent(event);
+			PlayerSentenceSelector.create().executeClickedEvent(event);
 			break;
 		case GameModeSelector.TITLE:
 			new GameModeSelector().executeClickedEvent(event);
-			break;
-		case SpawnNPCSelector.TITLE:
-			new SpawnNPCSelector().executeClickedEvent(event);
 			break;
 		case RolePlaySelector.TITLE:
 			new RolePlaySelector().executeClickedEvent(event);

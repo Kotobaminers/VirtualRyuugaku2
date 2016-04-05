@@ -15,8 +15,12 @@ import net.md_5.bungee.api.ChatColor;
 
 public class NPCUtility {
 	private static final String EMPTY = ChatColor.GREEN + "*EMPTY*";
-	private static final List<String> skinMeta = Arrays.asList("cached-skin-uuid-name", "player-skin-textures",
-			"cached-skin-uuid", "player-skin-name", "player-skin-signature");
+	private static final List<String> skinMeta = Arrays.asList(
+			"cached-skin-uuid-name",
+			"player-skin-textures",
+			"cached-skin-uuid",
+			"player-skin-name",
+			"player-skin-signature");
 
 	public static Optional<NPC> findNPC(Integer id) {
 		if (id < 0) {

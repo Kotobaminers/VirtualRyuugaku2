@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -20,39 +19,25 @@ public class OnlinePlayerNPCs {
 	public static Map<UUID, String> unitNames = new HashMap<>();
 
 	public static void updateOnlineNPCs() {
+		List<Player> online = Bukkit.getOnlinePlayers().stream().collect(Collectors.toList());
 		List<NPC> npcs = ids.stream().map(id ->NPCUtility.findNPC(id))
 			.filter(opt -> opt.isPresent())
 			.map(opt -> opt.get())
 			.collect(Collectors.toList());
-		List<Player> players = Bukkit.getOnlinePlayers().stream().collect(Collectors.toList());
-		for (int i = 0; i < npcs.size(); i++) {
-			if (i < players.size()) {
-				Player player = players.get(i);
-				NPCUtility.renameNPCAsPlayer(npcs.get(i), player.getName(), player.getUniqueId());
-				if (!unitNames.containsKey(player.getUniqueId())) {
-					UnitStorage.units.keySet().stream().sorted().findFirst()
-						.ifPresent(key -> {
-							unitNames.put(player.getUniqueId(), key);
-							UnitStorage.units.get(key).addEmptyPlayerSentencesIfAbsent(player);
-						});
-				}
-			} else {
-				npcs.get(i).despawn();
-			}
-		}
+		List<NPC> despawns = npcs.stream().filter(NPC::isSpawned)
+			.filter(npc -> !online.stream().map(Player::getName).anyMatch(name -> name.equalsIgnoreCase(npc.getName())))
+			.collect(Collectors.toList());
+		List<Player> spawns = online.stream().filter(player -> !npcs.stream().map(npc -> npc.getName()).anyMatch(name -> player.getName().equalsIgnoreCase(name)))
+			.collect(Collectors.toList());
+		despawns.forEach(NPCUtility::changeNPCAsEmpty);
+		despawns.forEach(NPC::despawn);
+		spawns.forEach(player ->
+			npcs.stream().filter(npc -> !npc.isSpawned()).findFirst()
+				.ifPresent(n -> NPCUtility.renameNPCAsPlayer(n, player.getName(), player.getUniqueId()))
+			);
 	}
-
-	public static Optional<Unit> findUnit(NPC npc) {
-		if (!ids.contains(npc.getId())) return Optional.empty();
-		return NPCUtility.findSkinUUID(npc).map(u -> unitNames.getOrDefault(u, null))
-			.flatMap(name -> UnitStorage.findUnit(name));
-	}
-
 	static void setOnlineIds(List<Integer> ids) {
 		OnlinePlayerNPCs.ids = ids;
-	}
-	public static List<Integer> getOnlineIds() {
-		return ids;
 	}
 }
 
