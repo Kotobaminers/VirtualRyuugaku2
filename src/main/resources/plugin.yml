@@ -6,10 +6,10 @@ commands:
     usage: /vrg
     description: For more infomation /vrg
     aliases: [vrg, virtualryuugaku]
-  VIRTUALRYUUGAKU_TEACHER:
-    usage: /vrgt
-    description: For more infomation /vrgt
-    aliases: [vrgt, virtualryuugakuteacher]
+  VIRTUALRYUUGAKU_DEBUG:
+    usage: /vrgd
+    description: For more infomation /vrgd
+    aliases: [vrgd]
   ANSWER:
     usage: /ans
     description: For more infomation /ans

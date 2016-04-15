@@ -5,14 +5,6 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.common.common.MessengerGeneral.Message0;
-import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataManagerPlayer;
-import com.github.orgs.kotobaminers.virtualryuugaku.player.player.DataPlayer;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Effects;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.SoundMeta.Scene;
-
 
 public class ConversationQuestion {
 	private String question = "";
@@ -30,41 +22,6 @@ public class ConversationQuestion {
 	}
 
 	public void giveQuestion(Player player, ConversationQuestion q) {
-		MessengerGeneral.print(player, MessengerGeneral.getPartitionPurple());
-		String[] opts = {question};
-		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.CONVERSATION_QUESTION_1, opts));
-		Effects.playSound(player, Scene.APPEAR);
-		DataManagerPlayer.getDataPlayer(player).question = q;
-	}
-
-	public void validateQuestion(Player player, String answer) {
-		for (String search : answers) {
-			if (search.equalsIgnoreCase(answer)) {
-				MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.CORRECT_0, null));
-				Effects.playSound(player, Scene.GOOD);
-				DataPlayer data = DataManagerPlayer.getDataPlayer(player);
-				data.questionDone.add(key);
-
-				Stage stage;
-				try {
-					stage = Stage.createStage(stageName);
-					Integer max = stage.getQuestionMax();
-					Integer done = stage.getQuestionDone(data);
-					String[] opts = {stage.getQuestionDoneByMax(data)};
-					Message.STAGE_INFO_QUESTION_1.print(player, opts);
-					if (max <= done) {
-						String[] opts2 = {stageName};
-						Effects.shootFirework(player);
-						MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.CONVERSATION_QUESTION_COMPLITE_1, opts2));
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				return;
-			}
-		}
-		MessengerGeneral.print(player, MessengerGeneral.getMessage(Message0.WRONG_0, null));
-		Effects.playSound(player, Scene.BAD);
 	}
 
 	public String getQuestion() {

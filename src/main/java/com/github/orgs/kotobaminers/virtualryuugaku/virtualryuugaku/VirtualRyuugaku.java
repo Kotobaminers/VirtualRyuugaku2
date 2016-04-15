@@ -1,31 +1,40 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.UtilitiesProgramming;
-import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.Enums.Commands;
+import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Commands;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.HologramStorage;
+import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 
 public class VirtualRyuugaku extends JavaPlugin {
 	@Override
 	public void onEnable() {
-		UtilitiesProgramming.printDebugMessage("", new Exception());
-		DataManagerPlugin.initializeLoader(this);
+		VRGManager.plugin = this;
 
-		UtilitiesProgramming.printDebugMessage("[VirtualRyuugaku] Loading Plugin Data", new Exception());
-		DataManagerPlugin.loadPlugin();
+		Debug.printDebugMessage("[VirtualRyuugaku] Loading Plugin Data", new Exception());
+		VRGManager.loadPlugin();
 
 		getServer().getPluginManager().registerEvents(new Events(), this);
+
 		for(Commands command : Commands.getRoot()) {
 			this.getCommand(command.toString()).setExecutor(new CommandExecutorPlugin(this));
 		}
 
-		UtilitiesProgramming.printDebugMessage("", new Exception());
+		Bukkit.getServer().getScheduler().runTaskLater(this, new Runnable() {
+			@Override
+			public void run() {
+				HologramStorage.initialize();
+					}
+		}, 20L);
 
-//		DataManagerPlugin.savePlugin();
+
+//		BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
+//		scheduler.scheduleSyncDelayedTask(this, new PublicGameController(this), 80L);
 	}
 
 	@Override
 	public void onDisable() {
-		DataManagerPlugin.savePlugin();
+		VRGManager.savePlugin();
 	}
 }
