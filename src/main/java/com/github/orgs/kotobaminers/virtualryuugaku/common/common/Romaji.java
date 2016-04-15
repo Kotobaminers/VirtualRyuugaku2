@@ -97,10 +97,10 @@ public class Romaji {
 		str.close();
 		setMapLetters(map);
 	}
-	public void initialize() {
+	public static void initialize() {
 		setMapLetters(new HashMap<String, List<Letters>>());
 	}
-	public void load() {
+	public static void load() {
 		initialize();
 		try {
 			importRomaji();

@@ -10,9 +10,7 @@ public final class VRGManager {
 	public static VirtualRyuugaku plugin;
 	public static void loadPlugin() {
 		Debug.printDebugMessage("[VirtualRyuugaku] Loading Library Data", new Exception());
-		new Romaji().load();
-
-		Debug.printDebugMessage("[VirtualRyuugaku] Loading Player Data", new Exception());
+		Romaji.load();
 		PlayerDataStorage.initialize();
 
 		UnitStorage.initialize();
