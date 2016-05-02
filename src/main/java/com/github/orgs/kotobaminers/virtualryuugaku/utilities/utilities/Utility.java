@@ -26,7 +26,7 @@ public class Utility {
 	private static final List<String> SHOWN_CHARACTERS = Arrays.asList(",", " ", ".", "、", "。");
 
 	@Deprecated
-	public static String joinStrings(List<String> strings, String spacer) {
+	public static String joinStrings(List<String> strings, String spacer) {//TODO
 		if(strings == null)  return "";
 		String string = "";
 		for(String part : strings) {
