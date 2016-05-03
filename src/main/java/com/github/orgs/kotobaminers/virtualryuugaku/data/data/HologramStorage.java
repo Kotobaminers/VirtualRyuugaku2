@@ -64,8 +64,6 @@ public class HologramStorage {
 			} else {
 				hologram.count = 0;
 			}
-		} else {
-			String a = "";
 		}
 		sentence = sentences.get(hologram.count);
 

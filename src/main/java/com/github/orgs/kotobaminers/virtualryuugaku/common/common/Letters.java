@@ -1,17 +1,10 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.common.common;
 
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
-import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
-
 public class Letters {
 	private String hiragana = "";
 	private String katakana = "";
 	private String romaji = "";
 	private String type = "";
-	public void printDebug() {
-		String[] debug = {hiragana, katakana, romaji, type};
-		Debug.printDebugMessage(Utility.joinStrings(debug, " "), new Exception());
-	}
 	public String getHiragana() {
 		return hiragana;
 	}
