@@ -9,11 +9,10 @@ import java.util.UUID;
 
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.conversations.Conversation;
 import org.bukkit.entity.Player;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.VRGMessenger.Message;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.VRGSentence;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceEditor;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VRGManager;
 
@@ -38,13 +37,6 @@ public class PlayerDataStorage {
 		getPlayerData(player).line += 1;
 	}
 
-	public static VRGSentence getTalk(PlayerData data) throws Exception{
-		if (data.line < data.conversation.sentences.size()) {
-			return data.conversation.sentences.get(data.line);
-		}
-		throw new Exception();
-	}
-
 	public static void importPlayerData() {
 		File file = new File(VRGManager.plugin.getDataFolder() + "//CONFIG//CONFIG.yml");
 		YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
@@ -63,12 +55,6 @@ public class PlayerDataStorage {
 		PlayerData data = new PlayerData(UUID.fromString(key));
 		data.line = memory.getInt("LINE");
 		return data;
-	}
-
-	public Conversation loadCurrentConversation(Player player) {
-		PlayerData data = getPlayerData(player);
-		Conversation conversation = data.conversation;
-		return conversation;
 	}
 
 	public static void initialize() {

@@ -26,9 +26,6 @@ import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceEditor;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.UnitStorage;
 import com.github.orgs.kotobaminers.virtualryuugaku.gui.gui.UnitSelector;
 import com.github.orgs.kotobaminers.virtualryuugaku.player.player.PlayerDataStorage;
-import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicCommandGame;
-import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicEmptyGame;
-import com.github.orgs.kotobaminers.virtualryuugaku.publicgame.publicgame.PublicEventGame;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Debug;
 
 public class CommandPerformer {
@@ -69,9 +66,6 @@ public class CommandPerformer {
 		case ANSWER:
 		case DEBUG_MODE:
 			success = commandDebugMode();
-			break;
-		case DEBUG_INTERVAL:
-			success = commandDebugInterval();
 			break;
 		case DEBUG_DEBUG:
 			success = commandDebugDebug();
@@ -343,24 +337,6 @@ public class CommandPerformer {
 	private boolean commandOpEmpty() {
 		int id = Integer.parseInt(params.get(0));
 		NPCUtility.findNPC(id).ifPresent(npc -> NPCUtility.changeNPCAsEmpty(npc));
-		return true;
-	}
-
-	private boolean commandDebugInterval() {
-		if (0 < params.size()) {
-			try {
-				Integer interval = Integer.parseInt(params.get(0));
-				PublicCommandGame.interval = 20L * interval;
-				PublicEventGame.interval = 20L * interval;
-				PublicEmptyGame.interval = 20L * interval;
-			} catch(Exception e) {
-				e.printStackTrace();
-			}
-		} else {
-			PublicCommandGame.interval = 20L * 30;
-			PublicEventGame.interval = 20L * 20;
-			PublicEmptyGame.interval = 20L * 30;
-		}
 		return true;
 	}
 

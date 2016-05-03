@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.Language;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.SpellType;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.PlayerRequest;
-import com.github.orgs.kotobaminers.virtualryuugaku.conversation.conversation.Conversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.SentenceEditor;
 import com.github.orgs.kotobaminers.virtualryuugaku.data.data.UnitScore;
 
@@ -30,9 +29,6 @@ public class PlayerData {
 	public Optional<PlayerRequest> request = Optional.empty();
 	public List<SpellType> expressions = new ArrayList<SpellType>(Arrays.asList(SpellType.EN, SpellType.KANJI, SpellType.KANA, SpellType.ROMAJI));
 	public Language learn = Language.NONE;
-
-	@Deprecated
-	public Conversation conversation = null;
 
 	public void addHelperQuestionDone(String unit, Integer id) {
 		scores.computeIfAbsent(unit.toUpperCase(), key -> new UnitScore(key));
