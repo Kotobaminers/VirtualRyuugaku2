@@ -18,9 +18,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.PathConversation;
 import com.github.orgs.kotobaminers.virtualryuugaku.common.common.Enums.SpellType;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.UnitYamlConverter.LearnerSentencePath;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.UnitYamlConverter.SentencePath;
-import com.github.orgs.kotobaminers.virtualryuugaku.data.data.UnitYamlConverter.UnitPath;
+import com.github.orgs.kotobaminers.virtualryuugaku.data.data.Unit.UnitType;
 import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VRGManager;
 
