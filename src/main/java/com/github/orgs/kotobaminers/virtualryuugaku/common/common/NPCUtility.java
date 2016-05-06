@@ -30,8 +30,7 @@ public class NPCUtility {
 	}
 
 	public static void changeNPCAsEmpty(NPC npc) {
-		MetadataStore data = npc.data();
-		skinMeta.stream().filter(meta -> data.has(meta)).forEach(data::remove);
+		refreshSkinMeta(npc);
 		npc.setBukkitEntityType(EntityType.CREEPER);
 		npc.setName(EMPTY);
 	}
@@ -44,8 +43,8 @@ public class NPCUtility {
 	}
 
 	public static void renameNPCAsPlayer(NPC npc, String name, UUID uuid) {
+		refreshSkinMeta(npc);
 		MetadataStore data = npc.data();
-		skinMeta.stream().filter(meta -> data.has(meta)).forEach(data::remove);
 		data.set("cached-skin-uuid-name", name);
 		data.set("cached-skin-uuid", uuid.toString());
 		npc.despawn();
@@ -72,30 +71,5 @@ public class NPCUtility {
 	public static void refreshSkinMeta(NPC npc) {
 		MetadataStore data = npc.data();
 		skinMeta.stream().filter(meta -> data.has(meta)).forEach(data::remove);
-	}
-
-
-	@Deprecated
-	public static NPC getNPC(Integer id) throws Exception {
-		if (existsNPC(id)) {
-			NPC npc = CitizensAPI.getNPCRegistry().getById(id);
-			return npc;
-		}
-		throw new Exception("NPC not exists: ID" + id.toString());
-	}
-
-	@Deprecated
-	private static Iterator<NPC> getNPCs() {
-		return CitizensAPI.getNPCRegistry().iterator();
-	}
-
-	@Deprecated
-	private static boolean existsNPC(Integer id) {
-		for (Iterator<NPC> i = getNPCs(); i.hasNext();) {
-			if (id.equals(i.next().getId())) {
-				return true;
-			}
-		}
-		return false;
 	}
 }

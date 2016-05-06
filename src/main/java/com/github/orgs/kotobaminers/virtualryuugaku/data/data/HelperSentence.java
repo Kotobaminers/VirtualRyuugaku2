@@ -83,18 +83,17 @@ public class HelperSentence extends TalkSentence {
 	public Optional<List<ItemStack>> giveEmptyIcons() {
 		return Optional.empty();
 	}
-
 	@Override
 	public void registerHologram(SentenceHologram hologram, NPC npc, List<HolographicSentence> sentences) {
 		HologramStorage.holograms.put(sentences.stream().map(s -> s.getId()).collect(Collectors.toList()), hologram);
 	}
-
 	@Override
-	public Location getHologramLocation(NPC npc) {
+	public Location getTalkerLocation(NPC npc) {
 		return NPCUtility.findNPC(id).get().getStoredLocation();
 	}
 
 	public Optional<UUID> getOwner() {
 		return owner;
 	}
+
 }

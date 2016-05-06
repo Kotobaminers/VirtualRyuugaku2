@@ -32,25 +32,17 @@ public class UnitYamlConverter {
 	private static final File CONFIG_FILE = new File(VRGManager.plugin.getDataFolder() + "//CONFIG//CONFIG.yml");
 	private static final YamlConfiguration config = YamlConfiguration.loadConfiguration(CONFIG_FILE);
 
-	//Imporer
 	public static void importAll() {
 		importUnits();
 		importPlayerSentences();
 		loadOnlineNPCID();
 	}
 
-	private static void loadOnlineNPCID() {
-		UnitStorage.units.values().stream()
-			.filter(unit -> unit.getType().equals(UnitType.ONLINE_PLAYER))
-			.findFirst()
-			.ifPresent(unit -> OnlinePlayerNPCs.setOnlineIds(unit.getPlayerNPCIds()));
-	}
 	private static final void importUnits() {
 		Stream.of(UNIT_DIR.listFiles())
 			.filter(file -> file.getAbsolutePath().endsWith(".yml"))
 			.forEach(file -> importUnit(YamlConfiguration.loadConfiguration(file), extractName(file)));
 	}
-
 	private static void importUnit(YamlConfiguration config, String name) {
 		name = name.toUpperCase();
 
@@ -111,7 +103,6 @@ public class UnitYamlConverter {
 		UnitStorage.units.put(name, unit);
 		return;
 	}
-
 	private static final String extractName(File file) {
 		return file.getName().substring(0,  file.getName().length() - ".yml".length());
 	}
@@ -154,6 +145,12 @@ public class UnitYamlConverter {
 						});
 					});
 			});
+	}
+	private static void loadOnlineNPCID() {
+		UnitStorage.units.values().stream()
+			.filter(unit -> unit.getType().equals(UnitType.ONLINE_PLAYER))
+			.findFirst()
+			.ifPresent(unit -> OnlinePlayerNPCs.setOnlineIds(unit.getPlayerNPCIds()));
 	}
 
 	private static boolean isValidConfig() {

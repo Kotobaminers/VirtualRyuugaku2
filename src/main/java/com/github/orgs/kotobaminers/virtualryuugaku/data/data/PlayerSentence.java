@@ -58,7 +58,7 @@ public class PlayerSentence extends TalkSentence {
 		return Optional.empty();
 	}
 	@Override
-	public Location getHologramLocation(NPC npc) {
+	public Location getTalkerLocation(NPC npc) {
 		return npc.getStoredLocation();
 	}
 	@Override

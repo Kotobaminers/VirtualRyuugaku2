@@ -74,12 +74,13 @@ public class HologramStorage {
 		findPrefix(unit, sentence, hologram.count).ifPresent(prefix -> holographicLines.add(prefix));
 		holographicLines.addAll(sentence.getHolographicLines(PlayerDataStorage.getPlayerData(player).getSpellTypes()));
 		hologram.setLines(holographicLines);
-		hologram.setLocation(sentence.getHologramLocation(npc));
+		hologram.setLocation(sentence.getTalkerLocation(npc));
 		hologram.spawnTemp(DURATION);
 		sentence.registerHologram(hologram, npc, sentences);
-		sentence.playEffect(player, sentence.getHologramLocation(npc));
+		sentence.playEffect(player, sentence.getTalkerLocation(npc));
 	}
 
+	//TODO
 	private static Optional<String> findPrefix(Unit unit, HolographicSentence sentence, Integer count) {
 		if (sentence instanceof PlayerSentence) {
 			if (count < unit.getPlayerQuestions().size()) {
@@ -90,7 +91,7 @@ public class HologramStorage {
 			if(((HelperSentence) sentence).isKey()) {
 				prefix += KEY_MARK;
 			}
-			prefix += "" + ChatColor.GREEN + ChatColor.BOLD + "Conversation(" + (count + 1) + ")";
+			prefix += "" + ChatColor.GREEN + ChatColor.BOLD + "( " + (count + 1) + " )";
 			return Optional.of(prefix);
 		}
 		return Optional.empty();

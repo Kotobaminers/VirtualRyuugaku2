@@ -45,10 +45,8 @@ public class Unit {
 	}
 
 	private UnitType type = UnitType.NORMAL;
-
 	private Unit() {
 	}
-
 	public static Unit create(String name, UnitType type) {
 		Unit unit = new Unit();
 		unit.name = name;

@@ -23,35 +23,6 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
 
 public class Utility {
-	private static final List<String> SHOWN_CHARACTERS = Arrays.asList(",", " ", ".", "、", "。");
-
-	@Deprecated
-	public static String joinStrings(List<String> strings, String spacer) {//TODO
-		if(strings == null)  return "";
-		String string = "";
-		for(String part : strings) {
-			if(0 < part.length()) {
-				string += spacer + part;
-			}
-		}
-		if(0 < string.length()) {
-			string = string.substring(spacer.length(), string.length());
-		}
-		return string;
-	}
-	@Deprecated
-	public static String joinStrings(String[] strings, String spacer) {
-		if(strings == null)  return "";
-		String string = "";
-		for(String part : strings) {
-			string += spacer + part;
-		}
-		if(0 < string.length()) {
-			string = string.substring(spacer.length(), string.length());
-		}
-		return string;
-	}
-
 	public static List<Integer> toListInteger(String string) {
 		List<Integer> list = new ArrayList<Integer>();
 		String tmp = "";
@@ -65,23 +36,6 @@ public class Utility {
 			}
 		}
 		return list;
-	}
-
-	public static String showSameCharacters(String answer, String suggestion) {
-		String show = "";
-		for (int i = 0; i < answer.length(); i++) {
-			String target = answer.substring(i, i+1);
-			if (SHOWN_CHARACTERS.contains(target)) {
-				show += target;
-			} else if (suggestion.length() < i + 1) {
-				show += "*";
-			} else if (target.equalsIgnoreCase(suggestion.substring(i, i+1))) {
-				show += target;
-			} else {
-				show += "*";
-			}
-		}
-		return show;
 	}
 
 	public static void lookAt(Player player, Location lookat) {

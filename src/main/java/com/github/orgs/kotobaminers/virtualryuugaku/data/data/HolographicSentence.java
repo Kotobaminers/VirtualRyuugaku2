@@ -13,7 +13,6 @@ import com.github.orgs.kotobaminers.virtualryuugaku.common.common.SentenceHologr
 import net.citizensnpcs.api.npc.NPC;
 
 public abstract class HolographicSentence {
-
 	protected Integer id = 0;
 	private String unit ="";
 
@@ -25,7 +24,7 @@ public abstract class HolographicSentence {
 	public abstract Optional<List<ItemStack>> giveEmptyIcons();
 
 	public abstract void registerHologram(SentenceHologram hologram, NPC npc, List<HolographicSentence> sentences);
-	public abstract Location getHologramLocation(NPC npc);
+	public abstract Location getTalkerLocation(NPC npc);
 
 	public String getUnitName() {
 		return unit;

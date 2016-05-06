@@ -124,13 +124,12 @@ public class QuestionSentence extends HolographicSentence{
 	}
 
 	@Override
-	public Location getHologramLocation(NPC npc) {
+	public Location getTalkerLocation(NPC npc) {
 		return NPCUtility.findNPC(id).get().getStoredLocation();
 	}
 
 	public UUID getOwner() {
 		return owner;
 	}
-
 }
 

@@ -26,13 +26,13 @@ public class Debug {
 		String line = String.valueOf(element.getLineNumber());
 		if(Settings.debugMessageBroadcast) {
 			String[] broadcast = {ChatColor.RED.toString(), message, ChatColor.GRAY.toString(), nameClass, nameMethod, ChatColor.WHITE.toString(), line};
-			Bukkit.broadcastMessage(Utility.joinStrings(broadcast, " "));
+			Bukkit.broadcastMessage(String.join(" ", broadcast));
 		} else {
 			String[] broadcast = {ChatColor.RED + " *" + ChatColor.RESET, message, nameClass, nameMethod, line};
-			Bukkit.getLogger().info(Utility.joinStrings(broadcast, " "));
+			Bukkit.broadcastMessage(String.join(" ", broadcast));
 			for (Player online : Bukkit.getOnlinePlayers()) {
 				if (DEBUGGER.contains(online.getUniqueId())) {
-					online.sendMessage(Utility.joinStrings(broadcast, " "));
+					Bukkit.broadcastMessage(String.join(" ", broadcast));
 				}
 			}
 		}

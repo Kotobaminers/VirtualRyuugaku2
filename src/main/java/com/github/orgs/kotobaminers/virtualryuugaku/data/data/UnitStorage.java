@@ -71,38 +71,48 @@ public class UnitStorage {
 	}
 
 	public static Optional<Unit> findUnit(Integer id) {
-		return units.values().stream().filter(unit -> {
-			if(unit.getHelperSentences().stream().anyMatch(ls -> ls.stream().anyMatch(s -> s.getId().equals(id)))) return true;
-			if(unit.getPlayerNPCIds().contains(id)) return true;
-			return false;
-		}).findFirst();
+		return Optional.ofNullable(
+			findUnitByPlayerNPCId(id).orElse(findUnitByHelperNPCId(id).orElse(null))
+		);
 	}
 	public static Optional<Unit> findUnit(String name) {
 		return Optional.ofNullable(units.getOrDefault(name.toUpperCase(), null));
 	}
-
-	public static Optional<Unit> findDisplayedUnit(NPC npc) {
-		return units.values().stream().filter(unit -> {
-				if(unit.getHelperSentences().stream()
-						.anyMatch(ls -> ls.stream()
-								.anyMatch(s -> s.getId().equals(npc.getId()))))
-					return true;
-				if(unit.getPlayerNPCIds().contains(npc.getId())) {
-					Optional<UUID> optional = NPCUtility.findSkinUUID(npc);
-					if (optional.isPresent()) {
-						UUID skin  = optional.get();
-						if (unit.getPlayerSentences().stream()
-								.anyMatch(ls -> ls.stream()
-										.anyMatch(s -> ((PlayerSentence) s).getUniqueId().equals(skin)))) {
-							return true;
-						}
-					}
-				}
-				return false;
-			}).findFirst();
+	public static Optional<Unit> findUnit(NPC npc) {
+		return findUnit(npc.getId());
 	}
 	public static Optional<Unit> findUnitByPlayerNPCId(Integer id) {
 		return units.values().stream().filter(u -> u.getPlayerNPCIds().contains(id)).findFirst();
+	}
+	public static Optional<Unit> findUnitByHelperNPCId(Integer id) {
+		return units.values().stream()
+			.filter(u -> u.getHelperSentences().stream()
+				.flatMap(ls -> ls.stream().map(s -> s.getId()))
+				.collect(Collectors.toList()).contains(id))
+			.findFirst();
+	}
+
+	@Deprecated
+	public static Optional<Unit> findDisplayedUnit(NPC npc) {
+		return units.values().stream().filter(unit -> {
+			if(unit.getHelperSentences().stream()
+				.anyMatch(ls -> ls.stream()
+				.anyMatch(s -> s.getId().equals(npc.getId())))
+			)
+			return true;
+			if(unit.getPlayerNPCIds().contains(npc.getId())) {
+				Optional<UUID> optional = NPCUtility.findSkinUUID(npc);
+				if (optional.isPresent()) {
+					UUID skin  = optional.get();
+					if (unit.getPlayerSentences().stream()
+						.anyMatch(ls -> ls.stream()
+						.anyMatch(s -> ((PlayerSentence) s).getUniqueId().equals(skin)))) {
+						return true;
+					}
+				}
+			}
+			return false;
+			}).findFirst();
 	}
 
 	public static Set<Integer> getAllIds() {

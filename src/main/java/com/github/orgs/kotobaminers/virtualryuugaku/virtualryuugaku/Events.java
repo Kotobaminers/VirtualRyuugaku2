@@ -93,15 +93,16 @@ public class Events implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerQuit(PlayerQuitEvent event) {
-		Bukkit.getScheduler().scheduleSyncDelayedTask(VRGManager.plugin, new Runnable() {
-			public void run() {
-				OnlinePlayerNPCs.updateOnlineNPCs();
-			}
-		}, 20L);
+	public void onPlayerJoin(PlayerJoinEvent event) {
+		OnlinePlayerNPCs.updateOnlineNPCsJoin();
 	}
 	@EventHandler
-	public void onPlayerJoin(PlayerJoinEvent event) {
-		OnlinePlayerNPCs.updateOnlineNPCs();
+	public void onPlayerQuit(PlayerQuitEvent event) {
+		OnlinePlayerNPCs.updateOnlineNPCsQuit(event.getPlayer());
+//		Bukkit.getScheduler().scheduleSyncDelayedTask(VRGManager.plugin, new Runnable() {
+//			public void run() {
+//				OnlinePlayerNPCs.updateOnlineNPCs();
+//			}
+//		}, 3L);
 	}
 }
