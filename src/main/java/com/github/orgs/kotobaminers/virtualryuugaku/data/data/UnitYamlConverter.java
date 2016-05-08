@@ -23,7 +23,7 @@ import com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities.Utility;
 import com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku.VRGManager;
 
 public class UnitYamlConverter {
-	enum UnitPath {CONVERSATION, EDITOR, LEARNER_NPC, LEARNER_QUESTION, KEY, Q, A, TYPE}
+	enum UnitPath {HELPER_SENTENCE, EDITOR, LEARNER_NPC, LEARNER_QUESTION, KEY, Q, A, TYPE}
 	enum LearnerSentencePath {LEARNER_SENTENCE, STAGE, NAME}
 	enum SentencePath {KANJI, KANA, EN}
 	enum ConfigPath {ONLINE_NPCS}
@@ -45,7 +45,6 @@ public class UnitYamlConverter {
 	}
 	private static void importUnit(YamlConfiguration config, String name) {
 		name = name.toUpperCase();
-
 		Optional<UnitType> unitType = Stream.of(config)
 			.filter(c -> c.isString(UnitPath.TYPE.toString()))
 			.map(c -> c.getString(UnitPath.TYPE.toString()))
@@ -55,8 +54,8 @@ public class UnitYamlConverter {
 		Unit unit = Unit.create(name, unitType.orElse(UnitType.NORMAL));
 
 		Optional<ConfigurationSection> conversationSection = Stream.of(config)
-			.filter(config2 -> config2.isConfigurationSection(UnitPath.CONVERSATION.toString()))
-			.map(config2 -> (ConfigurationSection) config2.get(UnitPath.CONVERSATION.toString()))
+			.filter(config2 -> config2.isConfigurationSection(UnitPath.HELPER_SENTENCE.toString()))
+			.map(config2 -> (ConfigurationSection) config2.get(UnitPath.HELPER_SENTENCE.toString()))
 			.findFirst();
 
 		Stream.of(config).filter(c -> c.isList(UnitPath.LEARNER_QUESTION.name()))
@@ -201,7 +200,7 @@ public class UnitYamlConverter {
 			List<String> ids = lh.stream().map(h -> h.getId().toString()).collect(Collectors.toList());
 			conversations.put(ids, sentence);
 		});
-		yaml.createSection(UnitPath.CONVERSATION.name(), conversations);
+		yaml.createSection(UnitPath.HELPER_SENTENCE.name(), conversations);
 
 		try {
 			yaml.save(file);

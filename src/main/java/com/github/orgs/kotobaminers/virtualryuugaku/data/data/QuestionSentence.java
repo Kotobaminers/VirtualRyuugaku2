@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.configuration.ConfigurationSection;
@@ -72,7 +71,7 @@ public class QuestionSentence extends HolographicSentence{
 	@Override
 	public void playEffect(Player player, Location location) {
 		Utility.lookAt(player, location);
-		player.getWorld().spigot().playEffect(location.add(0, 2, 0), Effect.NOTE, 25, 10, 0, 0, 0, 0, 1, 10);
+//		player.getWorld().spigot().playEffect(location.add(0, 2, 0), Effect.NOTE, 25, 10, 0, 0, 0, 0, 1, 10);
 		player.playSound(player.getLocation(), Sound.CHICKEN_EGG_POP, 1F, 1F);
 	}
 

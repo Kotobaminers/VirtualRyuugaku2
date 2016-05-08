@@ -91,7 +91,7 @@ public class Utility {
 		location.setPitch(50);
 		location.setYaw(0);
 		player.teleport(location);
-		player.getWorld().spigot().playEffect(player.getLocation(), Effect.ENDER_SIGNAL);
+//		player.getWorld().spigot().playEffect(player.getLocation(), Effect.ENDER_SIGNAL);
 		player.playSound(player.getLocation(), Sound.ENDERMAN_TELEPORT, 1F, 1F);
 	}
 

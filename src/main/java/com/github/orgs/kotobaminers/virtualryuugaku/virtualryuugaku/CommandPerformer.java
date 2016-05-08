@@ -462,13 +462,13 @@ public class CommandPerformer {
 		}
 		if(effect.isPresent()) {
 			Integer id = Arrays.asList(Effect.values()).indexOf(effect.get());
-			player.getWorld().spigot().playEffect(player.getLocation().clone().add(2,0,0), effect.get(), id, data, offsetX, offsetY, offsetZ, speed, count, 10);
+//			player.getWorld().spigot().playEffect(player.getLocation().clone().add(2,0,0), effect.get(), id, data, offsetX, offsetY, offsetZ, speed, count, 10);
 			player.sendMessage(effect.get().name() + " data" + data + " X" + offsetX + " Y" + offsetY + " Z" + offsetZ + " speed" + speed + " count" + count);
 		} else {
 			List<Effect> effects = Arrays.asList(Effect.values()).stream().sorted().collect(Collectors.toList());
 			Integer id = Integer.parseInt(params.get(0));
 			Effect playing = effects.get(id);
-			player.getWorld().spigot().playEffect(player.getLocation().clone().add(2,0,0), playing, id, data, offsetX, offsetY, offsetZ, speed, count, 10);
+//			player.getWorld().spigot().playEffect(player.getLocation().clone().add(2,0,0), playing, id, data, offsetX, offsetY, offsetZ, speed, count, 10);
 			player.sendMessage(playing.name());
 		}
 		return true;

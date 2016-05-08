@@ -7,7 +7,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -106,7 +105,7 @@ public class SentenceOptionSelector extends VRGGUI{
 					NPCUtility.findNPC(PlayerDataStorage.getPlayerData(player).getSelectId())
 						.ifPresent(npc -> {
 							NPCUtility.changeNPCAsEmpty(npc);
-							player.getWorld().spigot().playEffect(npc.getStoredLocation().clone().add(0,1,0), Effect.EXPLOSION, 22, 22, (float) 0.5, (float) 0.5, (float) 0.5, (float) 0, 20, 10);
+//							player.getWorld().spigot().playEffect(npc.getStoredLocation().clone().add(0,1,0), Effect.EXPLOSION, 22, 22, (float) 0.5, (float) 0.5, (float) 0.5, (float) 0, 20, 10);
 							player.playSound(player.getLocation(), Sound.CHICKEN_EGG_POP, 1f, 1f);
 						});
 					return;

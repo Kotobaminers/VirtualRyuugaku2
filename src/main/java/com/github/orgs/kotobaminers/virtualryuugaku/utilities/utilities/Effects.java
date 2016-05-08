@@ -21,7 +21,7 @@ public class Effects {
 		NPCUtility.findNPC(id).ifPresent(n -> {
 			Location location = n.getStoredLocation();
 			Utility.lookAt(player, location);
-			player.getWorld().spigot().playEffect(location.add(0, 2, 0), Effect.NOTE, 25, 10, 0, 0, 0, 0, 1, 10);
+//			player.getWorld().spigot().playEffect(location.add(0, 2, 0), Effect.NOTE, 25, 10, 0, 0, 0, 0, 1, 10);
 			player.playSound(player.getLocation(), Sound.NOTE_PIANO, 1, 1);}
 		);
 	}

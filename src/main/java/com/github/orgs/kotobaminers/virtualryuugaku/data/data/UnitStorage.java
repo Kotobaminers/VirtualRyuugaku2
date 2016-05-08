@@ -149,13 +149,13 @@ public class UnitStorage {
 				if (0 < hiddens.size()) {
 					Collections.shuffle(hiddens);
 					NPCUtility.renameNPCAsPlayer(npc, hiddens.get(0).getDisplayName(), hiddens.get(0).getUniqueId());
-					player.getWorld().spigot().playEffect(npc.getStoredLocation().clone().add(0,1,0), Effect.EXPLOSION, 22, 22, (float) 0.5, (float) 0.5, (float) 0.5, (float) 0, 20, 10);
+//					player.getWorld().spigot().playEffect(npc.getStoredLocation().clone().add(0,1,0), Effect.EXPLOSION, 22, 22, (float) 0.5, (float) 0.5, (float) 0.5, (float) 0, 20, 10);
 					player.playSound(player.getLocation(), Sound.CHICKEN_EGG_POP, 1f, 1f);
 					return true;
 				}
 			} else {
 				NPCUtility.renameNPCAsPlayer(npc, player.getName(), player.getUniqueId());
-				player.getWorld().spigot().playEffect(npc.getStoredLocation().clone().add(0,1,0), Effect.EXPLOSION, 22, 22, (float) 0.5, (float) 0.5, (float) 0.5, (float) 0, 20, 10);
+//				player.getWorld().spigot().playEffect(npc.getStoredLocation().clone().add(0,1,0), Effect.EXPLOSION, 22, 22, (float) 0.5, (float) 0.5, (float) 0.5, (float) 0, 20, 10);
 				player.playSound(player.getLocation(), Sound.CHICKEN_EGG_POP, 1f, 1f);
 				return true;
 			}
@@ -164,7 +164,7 @@ public class UnitStorage {
 			if (skin.isPresent()) {
 				if(!displayUUIDs.contains(skin.get())) {
 					NPCUtility.changeNPCAsEmpty(npc);
-					player.getWorld().spigot().playEffect(npc.getStoredLocation().clone().add(0,1,0), Effect.EXPLOSION, 22, 22, (float) 0.5, (float) 0.5, (float) 0.5, (float) 0, 20, 10);
+//					player.getWorld().spigot().playEffect(npc.getStoredLocation().clone().add(0,1,0), Effect.EXPLOSION, 22, 22, (float) 0.5, (float) 0.5, (float) 0.5, (float) 0, 20, 10);
 					player.playSound(player.getLocation(), Sound.CHICKEN_EGG_POP, 1f, 1f);
 					return true;
 				}
