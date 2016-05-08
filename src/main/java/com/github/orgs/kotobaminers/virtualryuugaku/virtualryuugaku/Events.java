@@ -1,6 +1,5 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.virtualryuugaku;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

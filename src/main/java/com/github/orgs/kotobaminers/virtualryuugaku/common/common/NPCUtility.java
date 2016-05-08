@@ -1,7 +1,6 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.common.common;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

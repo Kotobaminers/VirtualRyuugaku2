@@ -1,6 +1,5 @@
 package com.github.orgs.kotobaminers.virtualryuugaku.utilities.utilities;
 
-import org.bukkit.Effect;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.Sound;
