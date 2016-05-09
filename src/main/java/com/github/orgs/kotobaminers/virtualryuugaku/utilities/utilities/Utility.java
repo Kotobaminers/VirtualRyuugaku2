@@ -7,7 +7,6 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -15,10 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import net.citizensnpcs.api.npc.NPC;
-import net.minecraft.server.v1_8_R3.IChatBaseComponent.ChatSerializer;
-import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
-import net.minecraft.server.v1_8_R3.PacketPlayOutTitle.EnumTitleAction;
-import net.minecraft.server.v1_8_R3.PlayerConnection;
+
 
 public class Utility {
 	public static List<Integer> toListInteger(String string) {
@@ -95,6 +91,7 @@ public class Utility {
 
 	//TODO: This function requres external jar.
 	public static final void sendTitle(Player player, String title, String subtitle){
+		/*
 		PacketPlayOutTitle titlePacket = new PacketPlayOutTitle(
 				EnumTitleAction.TITLE,
 				ChatSerializer.a("{\"text\":\"" + title + "\",\"color\":\"gold\",\"bold\":true,\"obfuscated\":false}"),
@@ -106,6 +103,7 @@ public class Utility {
 		PlayerConnection connection = ((CraftPlayer) player).getHandle().playerConnection;
 		connection.sendPacket(titlePacket);
 		connection.sendPacket(subTitlePacket);
+		*/
 	}
 
 	public static final ItemStack setSkullOwner(ItemStack itemStack, String owner) {
